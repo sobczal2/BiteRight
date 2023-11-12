@@ -1,0 +1,12 @@
+[workspace]
+members = [
+  "api",
+  "config",
+  "domain",
+  "dtos",
+  "errors",
+  "persistence",
+  "services",
+  "utils",
+]
+resolver = "2"
