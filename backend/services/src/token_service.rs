@@ -1,10 +1,18 @@
-use chrono::{DateTime, Duration, NaiveDateTime, Utc};
-use jsonwebtoken::{encode, EncodingKey, Header};
+use std::sync::Arc;
+use axum::{async_trait, RequestPartsExt, TypedHeader};
+use axum::extract::FromRequestParts;
+use axum::headers::Authorization;
+use axum::headers::authorization::Bearer;
+use axum::http::request::Parts;
+use chrono::{Duration, Utc};
+use jsonwebtoken::{DecodingKey, encode, EncodingKey, Header};
 use rand::Rng;
-use errors::services::token_service::TokenServiceError;
 use serde::{Deserialize, Serialize};
+use config::AppConfig;
+use errors::services::token_service::TokenServiceError;
 use config::token_config::TokenConfig;
 use domain::refresh_token::RefreshToken;
+use errors::user::common::AuthError;
 
 pub struct TokenService {
     secret: String,
@@ -53,8 +61,43 @@ impl TokenService {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-struct Claims {
-    sub: i32,
-    exp: usize,
-    nbf: usize,
+pub struct Claims {
+    pub sub: i32,
+    pub exp: usize,
+    pub nbf: usize,
+}
+
+#[async_trait]
+impl<S> FromRequestParts<S> for Claims
+    where
+        S: Send + Sync,
+{
+    type Rejection = AuthError;
+
+    async fn from_request_parts(parts: &mut Parts, _state: &S) -> Result<Self, Self::Rejection> {
+        let TypedHeader(Authorization(bearer)) = parts
+            .extract::<TypedHeader<Authorization<Bearer>>>()
+            .await
+            .map_err(|_| AuthError::InvalidToken)?;
+
+        let app_config = parts.extensions.get::<Arc<AppConfig>>().ok_or(AuthError::Unknown)?;
+
+        let token_data = jsonwebtoken::decode::<Claims>(
+            bearer.token(),
+            &DecodingKey::from_secret(app_config.token_config.secret.as_bytes()),
+            &jsonwebtoken::Validation::default(),
+        ).map_err(|_| AuthError::InvalidToken)?;
+
+        let now = Utc::now().timestamp() as usize;
+
+        if token_data.claims.exp < now {
+            return Err(AuthError::InvalidToken);
+        }
+
+        if token_data.claims.nbf > now {
+            return Err(AuthError::InvalidToken);
+        }
+
+        Ok(token_data.claims)
+    }
 }

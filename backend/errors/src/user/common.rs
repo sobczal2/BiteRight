@@ -2,14 +2,6 @@ use axum::response::IntoResponse;
 use thiserror::Error;
 
 #[derive(Debug, Error)]
-pub enum TokenServiceError {
-    #[error("JWT generation error")]
-    JwtGenerationError,
-    #[error("JWT verification error")]
-    JwtVerificationError,
-}
-
-#[derive(Debug, Error)]
 pub enum AuthError {
     #[error("Invalid token")]
     InvalidToken,

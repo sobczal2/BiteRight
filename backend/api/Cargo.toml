@@ -16,3 +16,9 @@ tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
 utils = { path = "../utils" }
 endpoints = { path = "../endpoints" }
 services = { path = "../services" }
+axum-extra = { version = "0.8.0", features = ["cookie"] }
+errors = { path = "../errors" }
+tower = "0.4.13"
+futures = "0.3.29"
+futures-util = "0.3.29"
+dtos = { path = "../dtos" }
