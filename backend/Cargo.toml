@@ -2,11 +2,12 @@
 members = [
   "api",
   "config",
-  "domain",
   "dtos",
   "errors",
   "persistence",
   "services",
   "utils",
+  "endpoints",
+  "domain",
 ]
 resolver = "2"
