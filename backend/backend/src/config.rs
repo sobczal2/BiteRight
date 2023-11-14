@@ -2,7 +2,7 @@ use std::env;
 use config::{Config, Environment};
 use dotenvy::dotenv;
 use serde::Deserialize;
-use crate::errors::config_errors::ConfigError;
+use crate::errors::config::ConfigError;
 
 #[derive(Debug, Deserialize)]
 pub struct AppConfig {
@@ -14,7 +14,7 @@ pub struct AppConfig {
 #[derive(Debug, Deserialize)]
 pub struct DatabaseConfig {
     pub url: String,
-    pub pool_size: u32,
+    pub max_connections: u32,
 }
 
 #[derive(Debug, Deserialize)]
