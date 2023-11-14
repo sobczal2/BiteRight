@@ -11,3 +11,6 @@ members = [
   "domain",
 ]
 resolver = "2"
+exclude = [
+  "backend"
+]
