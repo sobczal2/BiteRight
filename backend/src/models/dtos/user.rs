@@ -1,5 +1,5 @@
-use crate::config::AppConfig;
-use crate::errors::models::AuthError;
+use std::sync::Arc;
+
 use axum::extract::FromRequestParts;
 use axum::headers::authorization::Bearer;
 use axum::headers::Authorization;
@@ -8,8 +8,10 @@ use axum::{async_trait, RequestPartsExt, TypedHeader};
 use jsonwebtoken::{decode, DecodingKey};
 use serde::{Deserialize, Serialize};
 use sqlx::types::chrono::Utc;
-use std::sync::Arc;
 use validator::Validate;
+
+use crate::config::AppConfig;
+use crate::errors::models::AuthError;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Claims {
@@ -80,4 +82,30 @@ pub struct SignUpResponse {
     pub user_id: i32,
     pub jwt: String,
     pub refresh_token: String,
+}
+
+#[derive(Debug, Deserialize, Validate)]
+pub struct SignInRequest {
+    #[validate(email(message = "Invalid email"))]
+    pub email: String,
+    #[validate(length(
+        min = 8,
+        max = 128,
+        message = "Password must be between 8 and 128 characters"
+    ))]
+    pub password: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct SignInResponse {
+    pub user_id: i32,
+    pub jwt: String,
+    pub refresh_token: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct MeResponse {
+    pub user_id: i32,
+    pub email: String,
+    pub name: String,
 }

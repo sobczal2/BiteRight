@@ -4,6 +4,7 @@ use crate::utils::db::create_pg_pool;
 use axum::Extension;
 use std::net::SocketAddr;
 use std::sync::Arc;
+use tower_http::trace::TraceLayer;
 
 mod config;
 mod db;
@@ -26,8 +27,9 @@ async fn main() -> anyhow::Result<()> {
     .await?;
 
     let router = create_router()
-        .with_state(app_config.clone())
-        .layer(Extension(pool));
+        .layer(Extension(app_config.clone()))
+        .layer(Extension(pool))
+        .layer(TraceLayer::new_for_http());
 
     let socket_addr = SocketAddr::new(app_config.host.address.parse()?, app_config.host.port);
 

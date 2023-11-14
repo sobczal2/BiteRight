@@ -16,7 +16,7 @@ use std::time::Duration;
 
 pub async fn sign_up(
     Extension(pool): Extension<PgPool>,
-    State(app_config): State<Arc<AppConfig>>,
+    Extension(app_config): Extension<Arc<AppConfig>>,
     ValidatedJson(sign_up_request): ValidatedJson<SignUpRequest>,
 ) -> Result<Json<SignUpResponse>, ApiError> {
     let mut tx = pool.begin().await.map_err(|_| ApiError::internal_error())?;

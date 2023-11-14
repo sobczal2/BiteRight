@@ -1,13 +1,13 @@
 use crate::models::entities::refresh_token::RefreshToken;
 use crate::models::query_objects::refresh_token::CreateRefreshTokenQuery;
-use sqlx::{query_as, Executor, Postgres};
+use sqlx::{query, query_as, Executor, Postgres};
 
-pub async fn create<'e, 'c: 'e, E>(
+pub async fn create<'e, E>(
     executor: E,
     create_user_query: CreateRefreshTokenQuery,
 ) -> Result<RefreshToken, sqlx::Error>
 where
-    E: 'e + Executor<'c, Database = Postgres>,
+    E: 'e + Executor<'e, Database = Postgres>,
 {
     let result = query_as!(
         RefreshToken,
@@ -29,4 +29,21 @@ where
         token: result.token,
         expiration: result.expiration,
     })
+}
+
+pub async fn delete_for_user<'e, E>(executor: E, user_id: i32) -> Result<(), sqlx::Error>
+where
+    E: 'e + Executor<'e, Database = Postgres>,
+{
+    query!(
+        r#"
+                DELETE FROM refresh_tokens
+                WHERE user_id = $1
+            "#,
+        user_id
+    )
+    .execute(executor)
+    .await?;
+
+    Ok(())
 }

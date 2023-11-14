@@ -24,6 +24,10 @@ impl ApiError {
         ApiError::new(StatusCode::BAD_REQUEST, message)
     }
 
+    pub fn unauthorized() -> Self {
+        ApiError::new(StatusCode::UNAUTHORIZED, "Unauthorized")
+    }
+
     pub fn new_with_json(status: StatusCode, message: serde_json::Value) -> Self {
         ApiError { status, message }
     }
