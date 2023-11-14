@@ -1,27 +1,27 @@
-use std::sync::Arc;
-use axum::{async_trait, RequestPartsExt, TypedHeader};
+use crate::config::AppConfig;
+use crate::errors::models::AuthError;
 use axum::extract::FromRequestParts;
-use axum::headers::Authorization;
 use axum::headers::authorization::Bearer;
+use axum::headers::Authorization;
 use axum::http::request::Parts;
+use axum::{async_trait, RequestPartsExt, TypedHeader};
 use jsonwebtoken::{decode, DecodingKey};
 use serde::{Deserialize, Serialize};
 use sqlx::types::chrono::Utc;
-use crate::config::AppConfig;
-use crate::errors::models::AuthError;
-
+use std::sync::Arc;
+use validator::Validate;
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct ClaimsDto {
+pub struct Claims {
     pub sub: i32,
     pub exp: usize,
     pub nbf: usize,
 }
 
 #[async_trait]
-impl<S> FromRequestParts<S> for ClaimsDto
-    where
-        S: Send + Sync,
+impl<S> FromRequestParts<S> for Claims
+where
+    S: Send + Sync,
 {
     type Rejection = AuthError;
 
@@ -31,13 +31,17 @@ impl<S> FromRequestParts<S> for ClaimsDto
             .await
             .map_err(|_| AuthError::InvalidToken)?;
 
-        let app_config = parts.extensions.get::<Arc<AppConfig>>().ok_or(AuthError::Unknown)?;
+        let app_config = parts
+            .extensions
+            .get::<Arc<AppConfig>>()
+            .ok_or(AuthError::Unknown)?;
 
-        let token_data = decode::<ClaimsDto>(
+        let token_data = decode::<Claims>(
             bearer.token(),
             &DecodingKey::from_secret(app_config.token.jwt_secret.as_bytes()),
             &jsonwebtoken::Validation::default(),
-        ).map_err(|_| AuthError::InvalidToken)?;
+        )
+        .map_err(|_| AuthError::InvalidToken)?;
 
         let now = Utc::now().timestamp() as usize;
 
@@ -53,15 +57,27 @@ impl<S> FromRequestParts<S> for ClaimsDto
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Validate)]
 pub struct SignUpRequest {
+    #[validate(email(message = "Invalid email"))]
     pub email: String,
+    #[validate(length(
+        min = 5,
+        max = 32,
+        message = "Name must be between 5 and 32 characters"
+    ))]
+    pub name: String,
+    #[validate(length(
+        min = 8,
+        max = 128,
+        message = "Password must be between 8 and 128 characters"
+    ))]
     pub password: String,
 }
 
 #[derive(Debug, Serialize)]
 pub struct SignUpResponse {
-    pub id: i32,
+    pub user_id: i32,
     pub jwt: String,
     pub refresh_token: String,
 }

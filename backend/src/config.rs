@@ -1,8 +1,8 @@
-use std::env;
+use crate::errors::config::ConfigError;
 use config::{Config, Environment};
 use dotenvy::dotenv;
 use serde::Deserialize;
-use crate::errors::config::ConfigError;
+use std::env;
 
 #[derive(Debug, Deserialize)]
 pub struct AppConfig {
@@ -36,10 +36,12 @@ impl AppConfig {
         dotenv().ok().ok_or(ConfigError::DotenvFileNotFound)?;
 
         let cfg = Config::builder()
-            .add_source(Environment::default()
-                .prefix("APP")
-                .try_parsing(true)
-                .separator("__"))
+            .add_source(
+                Environment::default()
+                    .prefix("APP")
+                    .try_parsing(true)
+                    .separator("__"),
+            )
             .set_override(
                 "database.url",
                 env::var("DATABASE_URL").map_err(|_| ConfigError::DatabaseUrlMissing)?,
@@ -47,7 +49,6 @@ impl AppConfig {
             .build()
             .map_err(ConfigError::ConfigError)?;
 
-        cfg.try_deserialize()
-            .map_err(ConfigError::ConfigError)
+        cfg.try_deserialize().map_err(ConfigError::ConfigError)
     }
 }

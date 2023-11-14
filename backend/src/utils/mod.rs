@@ -1,3 +1,3 @@
 pub mod db;
-mod token;
-mod password;
+pub mod password;
+pub mod token;

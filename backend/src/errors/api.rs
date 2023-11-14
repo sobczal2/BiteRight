@@ -1,6 +1,6 @@
-use axum::http::{StatusCode};
-use axum::Json;
+use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
+use axum::Json;
 use serde_json::json;
 
 pub struct ApiError {
@@ -16,11 +16,16 @@ impl ApiError {
         }
     }
 
+    pub fn internal_error() -> Self {
+        ApiError::new(StatusCode::INTERNAL_SERVER_ERROR, "Internal Server Error")
+    }
+
+    pub fn bad_request(message: &str) -> Self {
+        ApiError::new(StatusCode::BAD_REQUEST, message)
+    }
+
     pub fn new_with_json(status: StatusCode, message: serde_json::Value) -> Self {
-        ApiError {
-            status,
-            message,
-        }
+        ApiError { status, message }
     }
 }
 

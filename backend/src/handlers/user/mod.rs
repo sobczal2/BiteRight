@@ -1,3 +1,3 @@
-mod sign_up;
-mod sign_in;
-mod me;
+pub mod me;
+pub mod sign_in;
+pub mod sign_up;

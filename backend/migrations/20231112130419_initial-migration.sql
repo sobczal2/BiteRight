@@ -2,10 +2,10 @@
 CREATE TABLE users
 (
     user_id       SERIAL PRIMARY KEY,
-    name          VARCHAR(64) UNIQUE  NOT NULL,
+    name          VARCHAR(32) UNIQUE  NOT NULL,
     email         VARCHAR(320) UNIQUE NOT NULL,
     password_hash VARCHAR(128)        NOT NULL,
-    created_at    TIMESTAMP           NOT NULL DEFAULT NOW()
+    created_at    TIMESTAMP           NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
 );
 
 CREATE TABLE units
@@ -13,8 +13,8 @@ CREATE TABLE units
     unit_id      SERIAL PRIMARY KEY,
     name         VARCHAR(64) NOT NULL,
     abbreviation VARCHAR(16) NOT NULL,
-    created_at   TIMESTAMP   NOT NULL DEFAULT NOW(),
-    updated_at   TIMESTAMP   NOT NULL DEFAULT NOW()
+    created_at   TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
+    updated_at   TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
 );
 
 CREATE TABLE user_units
@@ -35,8 +35,8 @@ CREATE TABLE currencies
     currency_id  SERIAL PRIMARY KEY,
     name         VARCHAR(64) NOT NULL,
     abbreviation VARCHAR(16) NOT NULL,
-    created_at   TIMESTAMP   NOT NULL DEFAULT NOW(),
-    updated_at   TIMESTAMP   NOT NULL DEFAULT NOW()
+    created_at   TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
+    updated_at   TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
 );
 
 CREATE TABLE user_currencies
@@ -55,10 +55,10 @@ CREATE TABLE system_currencies
 CREATE TABLE categories
 (
     category_id SERIAL PRIMARY KEY,
-    name        VARCHAR(64)  NOT NULL,
+    name        VARCHAR(64) NOT NULL,
     photo_url   VARCHAR(256) NULL,
-    created_at  TIMESTAMP    NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMP    NOT NULL DEFAULT NOW()
+    created_at  TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
+    updated_at  TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
 );
 
 CREATE TABLE user_categories
@@ -80,12 +80,12 @@ CREATE TABLE products
     user_id         INTEGER REFERENCES users (user_id)          NOT NULL,
     name            VARCHAR(64)                                 NOT NULL,
     description     VARCHAR(1024)                               NOT NULL,
-    expiration_date TIMESTAMP                                   NULL,
-    created_at      TIMESTAMP                                   NOT NULL DEFAULT NOW(),
-    updated_at      TIMESTAMP                                   NOT NULL DEFAULT NOW(),
+    expiration_date TIMESTAMP NULL,
+    created_at      TIMESTAMP                                   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
+    updated_at      TIMESTAMP                                   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
     amount          FLOAT                                       NOT NULL,
     unit_id         INTEGER REFERENCES units (unit_id)          NOT NULL,
-    price           MONEY                                       NULL,
+    price           MONEY NULL,
     currency_id     INTEGER REFERENCES currencies (currency_id) NULL,
     amount_left     FLOAT                                       NOT NULL,
     category_id     INTEGER REFERENCES categories (category_id) NOT NULL
@@ -95,10 +95,10 @@ CREATE TABLE product_templates
 (
     product_template_id SERIAL PRIMARY KEY,
     name                VARCHAR(64)                                 NOT NULL,
-    expiration_span     INTERVAL                                    NOT NULL,
+    expiration_span INTERVAL NOT NULL,
     amount              FLOAT                                       NOT NULL,
     unit_id             INTEGER REFERENCES units (unit_id)          NOT NULL,
-    price               MONEY                                       NULL,
+    price               MONEY NULL,
     currency_id         INTEGER REFERENCES currencies (currency_id) NULL,
     category_id         INTEGER REFERENCES categories (category_id) NOT NULL
 );
@@ -116,3 +116,10 @@ CREATE TABLE system_product_templates
     product_template_id        INTEGER REFERENCES product_templates (product_template_id) NOT NULL
 );
 
+CREATE TABLE refresh_tokens
+(
+    refresh_token_id SERIAL PRIMARY KEY,
+    user_id          INTEGER REFERENCES users (user_id) NOT NULL,
+    token            VARCHAR(64)                        NOT NULL,
+    expiration       TIMESTAMP                          NOT NULL
+);

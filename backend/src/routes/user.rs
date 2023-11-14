@@ -1,10 +1,9 @@
-use axum::body::HttpBody;
+use crate::config::AppConfig;
+use crate::handlers::user::sign_up::sign_up;
+use axum::routing::post;
 use axum::Router;
+use std::sync::Arc;
 
-pub fn create_user_router<S, B>() -> Router<S, B>
-    where
-        B: HttpBody + Send + 'static,
-        S: Clone + Send + Sync + 'static
-{
-    Router::new()
+pub fn create_user_router() -> Router<Arc<AppConfig>> {
+    Router::new().route("/sign-up", post(sign_up))
 }
