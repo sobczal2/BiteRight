@@ -64,4 +64,38 @@ impl UserRepository {
 
         Ok(user)
     }
+
+    pub async fn find_by_email<'e, 'c: 'e, E>(&self, executor: E, email: String) -> Result<Option<User>, sqlx::Error>
+        where E: 'e + Executor<'c, Database=Postgres>
+    {
+        let user = query_as!(User,
+            r#"
+                SELECT user_id, name, email, password_hash, created_at
+                FROM users
+                WHERE email = $1
+            "#,
+            email
+        )
+            .fetch_optional(executor)
+            .await?;
+
+        Ok(user)
+    }
+
+    pub async fn find_by_id<'e, 'c: 'e, E>(&self, executor: E, user_id: i32) -> Result<Option<User>, sqlx::Error>
+        where E: 'e + Executor<'c, Database=Postgres>
+    {
+        let user = query_as!(User,
+            r#"
+                SELECT user_id, name, email, password_hash, created_at
+                FROM users
+                WHERE user_id = $1
+            "#,
+            user_id
+        )
+            .fetch_optional(executor)
+            .await?;
+
+        Ok(user)
+    }
 }
