@@ -12,16 +12,17 @@ use validator::Validate;
 
 use crate::config::AppConfig;
 use crate::errors::models::AuthError;
+use crate::models::entities::user::User;
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct Claims {
+pub struct ClaimsDto {
     pub sub: i32,
     pub exp: usize,
     pub nbf: usize,
 }
 
 #[async_trait]
-impl<S> FromRequestParts<S> for Claims
+impl<S> FromRequestParts<S> for ClaimsDto
 where
     S: Send + Sync,
 {
@@ -38,7 +39,7 @@ where
             .get::<Arc<AppConfig>>()
             .ok_or(AuthError::Unknown)?;
 
-        let token_data = decode::<Claims>(
+        let token_data = decode::<ClaimsDto>(
             bearer.token(),
             &DecodingKey::from_secret(app_config.token.jwt_secret.as_bytes()),
             &jsonwebtoken::Validation::default(),
@@ -56,6 +57,23 @@ where
         }
 
         Ok(token_data.claims)
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct UserDto {
+    pub user_id: i32,
+    pub email: String,
+    pub name: String,
+}
+
+impl From<User> for UserDto {
+    fn from(user: User) -> Self {
+        Self {
+            user_id: user.user_id,
+            email: user.email,
+            name: user.name,
+        }
     }
 }
 
@@ -105,7 +123,5 @@ pub struct SignInResponse {
 
 #[derive(Debug, Serialize)]
 pub struct MeResponse {
-    pub user_id: i32,
-    pub email: String,
-    pub name: String,
+    pub user: UserDto,
 }

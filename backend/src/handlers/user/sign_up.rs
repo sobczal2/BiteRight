@@ -2,17 +2,16 @@ use crate::config::AppConfig;
 use crate::db::{refresh_token, user};
 use crate::errors::api::ApiError;
 use crate::models::dtos::user::{SignUpRequest, SignUpResponse};
-use crate::models::dtos::ValidatedJson;
 use crate::models::query_objects::refresh_token::CreateRefreshTokenQuery;
 use crate::models::query_objects::user::CreateUserQuery;
 use crate::utils::password::hash_password;
 use crate::utils::token::{generate_jwt, generate_refresh_token};
-use axum::extract::State;
 use axum::{Extension, Json};
 use sqlx::types::chrono::Utc;
 use sqlx::PgPool;
 use std::sync::Arc;
 use std::time::Duration;
+use crate::models::dtos::common::ValidatedJson;
 
 pub async fn sign_up(
     Extension(pool): Extension<PgPool>,

@@ -22,3 +22,4 @@ argon2 = "0.5.2"
 rand = { version = "0.8.5", features = [] }
 validator = { version = "0.16.1", features = ["derive"] }
 tower-http = { version = "0.4.4", features = ["trace"] }
+serde_urlencoded = "0.7.1"

@@ -2,7 +2,6 @@ use crate::config::AppConfig;
 use crate::db::{refresh_token, user};
 use crate::errors::api::ApiError;
 use crate::models::dtos::user::{SignInRequest, SignInResponse};
-use crate::models::dtos::ValidatedJson;
 use crate::models::query_objects::refresh_token::CreateRefreshTokenQuery;
 use crate::utils::password::verify_password;
 use crate::utils::token::{generate_jwt, generate_refresh_token};
@@ -11,6 +10,7 @@ use sqlx::types::chrono::Utc;
 use sqlx::PgPool;
 use std::sync::Arc;
 use std::time::Duration;
+use crate::models::dtos::common::ValidatedJson;
 
 pub async fn sign_in(
     Extension(pool): Extension<PgPool>,
