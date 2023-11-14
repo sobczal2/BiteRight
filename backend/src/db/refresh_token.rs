@@ -1,6 +1,6 @@
 use crate::models::entities::refresh_token::RefreshToken;
 use crate::models::query_objects::refresh_token::CreateRefreshTokenQuery;
-use sqlx::{query, query_as, Executor, Postgres};
+use sqlx::{query_as, Executor, Postgres};
 
 pub async fn create<'e, 'c: 'e, E>(
     executor: E,
