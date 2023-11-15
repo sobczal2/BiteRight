@@ -7,7 +7,7 @@ use crate::handlers::user::sign_up::sign_up;
 
 pub fn create_user_router() -> Router {
     Router::new()
-        .route("/", get(me))
         .route("/sign-up", post(sign_up))
         .route("/sign-in", post(sign_in))
+        .route("/me", get(me))
 }

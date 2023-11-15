@@ -1,14 +1,13 @@
 use crate::models::entities::unit::Unit;
-use sqlx::{query, Executor, Postgres};
+use sqlx::{query, Postgres, Acquire, PgConnection};
+use crate::models::query_objects::unit::CreateUnitForUserQuery;
 
-pub async fn list_for_user<'e, E>(
-    executor: E,
+pub async fn list_units_for_user(
+    conn: &mut PgConnection,
     user_id: i32,
     page: i32,
     per_page: i32,
 ) -> Result<(Vec<Unit>, i32), sqlx::Error>
-where
-    E: 'e + Executor<'e, Database = Postgres>,
 {
     let records = query!(
         r#"
@@ -42,8 +41,8 @@ OFFSET $2 ROWS FETCH NEXT $3 ROWS ONLY
         (page * per_page) as i32,
         per_page as i32,
     )
-    .fetch_all(executor)
-    .await?;
+        .fetch_all(&mut *conn)
+        .await?;
 
     let count = if let Some(first_unit) = records.first() {
         first_unit.total_count.unwrap_or(0)
@@ -63,4 +62,41 @@ OFFSET $2 ROWS FETCH NEXT $3 ROWS ONLY
         .collect();
 
     Ok((units, count))
+}
+
+pub async fn create_units_for_user(
+    conn: &mut PgConnection,
+    create_unit_for_user_query: CreateUnitForUserQuery,
+) -> Result<Unit, sqlx::Error>
+{
+    let result = query!(
+        r#"
+INSERT INTO units (name, abbreviation)
+VALUES ($1, $2)
+RETURNING unit_id, name, abbreviation, created_at, updated_at
+        "#,
+        create_unit_for_user_query.name,
+        create_unit_for_user_query.abbreviation,
+    )
+        .fetch_one(&mut *conn)
+        .await?;
+
+    query!(
+        r#"
+INSERT INTO user_units (user_id, unit_id)
+VALUES ($1, $2)
+        "#,
+        create_unit_for_user_query.user_id,
+        result.unit_id,
+    )
+        .execute(&mut *conn)
+        .await?;
+
+    Ok(Unit {
+        unit_id: result.unit_id,
+        name: result.name,
+        abbreviation: result.abbreviation,
+        created_at: result.created_at,
+        updated_at: result.updated_at,
+    })
 }

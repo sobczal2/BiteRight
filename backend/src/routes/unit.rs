@@ -4,5 +4,5 @@ use crate::handlers::unit::list::list;
 
 pub fn create_unit_router() -> Router {
     Router::new()
-        .route("/", get(list))
+        .route("/list", get(list))
 }

@@ -9,15 +9,15 @@ use validator::Validate;
 use crate::errors::api::ApiError;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct PaginatedVecDto<T> {
-    pub vec: Vec<T>,
+pub struct PaginatedDto<T> {
+    pub items: Vec<T>,
     pub total: i32,
     pub page: i32,
     pub per_page: i32,
     pub total_pages: i32,
 }
 
-impl<T> PaginatedVecDto<T> {
+impl<T> PaginatedDto<T> {
     pub fn new(vec: Vec<T>, total: i32, page: i32, per_page: i32) -> Self {
         let total_pages = if total % per_page == 0 {
             total / per_page
@@ -26,7 +26,7 @@ impl<T> PaginatedVecDto<T> {
         };
 
         Self {
-            vec,
+            items: vec,
             total,
             page,
             per_page,
