@@ -11,7 +11,7 @@ use sqlx::types::chrono::Utc;
 use validator::Validate;
 
 use crate::config::AppConfig;
-use crate::errors::models::AuthError;
+use crate::errors::api::ApiError;
 use crate::models::entities::user::User;
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -26,34 +26,34 @@ impl<S> FromRequestParts<S> for ClaimsDto
 where
     S: Send + Sync,
 {
-    type Rejection = AuthError;
+    type Rejection = ApiError;
 
     async fn from_request_parts(parts: &mut Parts, _state: &S) -> Result<Self, Self::Rejection> {
         let TypedHeader(Authorization(bearer)) = parts
             .extract::<TypedHeader<Authorization<Bearer>>>()
             .await
-            .map_err(|_| AuthError::InvalidToken)?;
+            .map_err(|_| ApiError::bad_request("Invalid token"))?;
 
         let app_config = parts
             .extensions
             .get::<Arc<AppConfig>>()
-            .ok_or(AuthError::Unknown)?;
+            .ok_or(ApiError::internal_error())?;
 
         let token_data = decode::<ClaimsDto>(
             bearer.token(),
             &DecodingKey::from_secret(app_config.token.jwt_secret.as_bytes()),
             &jsonwebtoken::Validation::default(),
         )
-        .map_err(|_| AuthError::InvalidToken)?;
+        .map_err(|_| ApiError::bad_request("Invalid token"))?;
 
         let now = Utc::now().timestamp() as usize;
 
         if token_data.claims.exp < now {
-            return Err(AuthError::InvalidToken);
+            return Err(ApiError::bad_request("Invalid token"));
         }
 
         if token_data.claims.nbf > now {
-            return Err(AuthError::InvalidToken);
+            return Err(ApiError::bad_request("Invalid token"));
         }
 
         Ok(token_data.claims)

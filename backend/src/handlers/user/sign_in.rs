@@ -12,7 +12,7 @@ use std::time::Duration;
 use crate::models::dtos::common::ValidatedJson;
 use crate::models::query_objects::refresh_token::CreateRefreshTokenQuery;
 
-#[debug_handler]
+
 pub async fn sign_in(
     Extension(pool): Extension<PgPool>,
     Extension(app_config): Extension<Arc<AppConfig>>,

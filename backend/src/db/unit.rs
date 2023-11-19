@@ -64,7 +64,7 @@ OFFSET $2 ROWS FETCH NEXT $3 ROWS ONLY
     Ok((units, count))
 }
 
-pub async fn create_units_for_user(
+pub async fn create_unit_for_user(
     conn: &mut PgConnection,
     create_unit_for_user_query: CreateUnitForUserQuery,
 ) -> Result<Unit, sqlx::Error>
@@ -99,4 +99,113 @@ VALUES ($1, $2)
         created_at: result.created_at,
         updated_at: result.updated_at,
     })
+}
+
+pub async fn exists_unit_for_user_by_name(
+    conn: &mut PgConnection,
+    user_id: i32,
+    name: &String,
+) -> Result<bool, sqlx::Error>
+{
+    let result = query!(
+        r#"
+SELECT EXISTS (
+    SELECT 1
+    FROM units u
+         LEFT JOIN user_units uu ON u.unit_id = uu.unit_id
+         LEFT JOIN system_units su ON u.unit_id = su.unit_id
+    WHERE uu.user_id = $1
+        OR su.system_unit_id IS NOT NULL
+        AND LOWER(u.name) = LOWER($2)
+        FETCH FIRST ROW ONLY
+)
+        "#,
+        user_id,
+        name,
+    )
+        .fetch_one(&mut *conn)
+        .await?;
+    result.exists.ok_or(sqlx::Error::RowNotFound)
+}
+
+pub async fn exists_unit_for_user_by_abbreviation(
+    conn: &mut PgConnection,
+    user_id: i32,
+    abbreviation: &String,
+) -> Result<bool, sqlx::Error>
+{
+    let result = query!(
+        r#"
+SELECT EXISTS (
+    SELECT 1
+    FROM units u
+         LEFT JOIN user_units uu ON u.unit_id = uu.unit_id
+         LEFT JOIN system_units su ON u.unit_id = su.unit_id
+    WHERE uu.user_id = $1
+        OR su.system_unit_id IS NOT NULL
+        AND u.abbreviation = $2
+        FETCH FIRST ROW ONLY
+)
+        "#,
+        user_id,
+        abbreviation,
+    )
+        .fetch_one(&mut *conn)
+        .await?;
+    result.exists.ok_or(sqlx::Error::RowNotFound)
+}
+
+pub async fn exists_user_unit(
+    conn: &mut PgConnection,
+    user_id: i32,
+    unit_id: i32,
+) -> Result<bool, sqlx::Error>
+{
+    let result = query!(
+        r#"
+SELECT EXISTS (
+    SELECT 1
+    FROM user_units
+    WHERE user_id = $1
+      AND unit_id = $2
+        FETCH FIRST ROW ONLY
+)
+        "#,
+        user_id,
+        unit_id,
+    )
+        .fetch_one(&mut *conn)
+        .await?;
+    result.exists.ok_or(sqlx::Error::RowNotFound)
+}
+
+pub async fn delete_unit_for_user(
+    conn: &mut PgConnection,
+    user_id: i32,
+    unit_id: i32,
+) -> Result<(), sqlx::Error>
+{
+    query!(
+        r#"
+DELETE FROM user_units
+WHERE user_id = $1
+  AND unit_id = $2
+        "#,
+        user_id,
+        unit_id,
+    )
+        .execute(&mut *conn)
+        .await?;
+
+    query!(
+        r#"
+DELETE FROM units
+WHERE unit_id = $1
+        "#,
+        unit_id,
+    )
+        .execute(&mut *conn)
+        .await?;
+
+    Ok(())
 }

@@ -45,3 +45,6 @@ pub struct CreateRequest {
 pub struct CreateResponse {
     pub unit: UnitDto,
 }
+
+#[derive(Debug, Serialize)]
+pub struct DeleteResponse {}

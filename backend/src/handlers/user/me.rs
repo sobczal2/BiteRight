@@ -5,7 +5,7 @@ use crate::db::user;
 use crate::errors::api::ApiError;
 use crate::models::dtos::user::{ClaimsDto, MeResponse};
 
-#[debug_handler]
+
 pub async fn me(
     Extension(pool): Extension<PgPool>,
     claims: ClaimsDto,

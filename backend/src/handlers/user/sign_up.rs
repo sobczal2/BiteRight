@@ -13,7 +13,7 @@ use crate::models::dtos::common::ValidatedJson;
 use crate::models::query_objects::refresh_token::CreateRefreshTokenQuery;
 use crate::models::query_objects::user::CreateUserQuery;
 
-#[debug_handler]
+
 pub async fn sign_up(
     Extension(pool): Extension<PgPool>,
     Extension(app_config): Extension<Arc<AppConfig>>,

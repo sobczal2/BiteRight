@@ -28,6 +28,10 @@ impl ApiError {
         ApiError::new(StatusCode::UNAUTHORIZED, "Unauthorized")
     }
 
+    pub(crate) fn not_found(message: &str) -> ApiError {
+        ApiError::new(StatusCode::NOT_FOUND, message)
+    }
+
     pub fn new_with_json(status: StatusCode, message: serde_json::Value) -> Self {
         ApiError { status, message }
     }

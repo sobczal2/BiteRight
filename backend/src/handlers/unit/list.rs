@@ -6,7 +6,7 @@ use crate::models::dtos::user::ClaimsDto;
 use axum::{debug_handler, Extension, Json};
 use sqlx::PgPool;
 
-#[debug_handler]
+
 pub async fn list(
     Extension(pool): Extension<PgPool>,
     claims: ClaimsDto,
