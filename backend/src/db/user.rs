@@ -1,11 +1,11 @@
-use sqlx::{query, query_as, Executor, Postgres};
+use sqlx::{PgConnection, query_as};
+use sqlx::query;
+use sqlx::Acquire;
 
 use crate::models::entities::user::User;
 use crate::models::query_objects::user::CreateUserQuery;
 
-pub async fn exists_by_email<'e, E>(executor: E, email: String) -> Result<bool, sqlx::Error>
-where
-    E: 'e + Executor<'e, Database = Postgres>,
+pub async fn exists_user_by_email(conn: &mut PgConnection, email: String) -> Result<bool, sqlx::Error>
 {
     let result = query!(
         r#"
@@ -17,14 +17,12 @@ where
             "#,
         email
     )
-    .fetch_one(executor)
-    .await?;
+        .fetch_one(&mut *conn)
+        .await?;
     result.exists.ok_or(sqlx::Error::RowNotFound)
 }
 
-pub async fn exists_by_name<'e, E>(executor: E, name: String) -> Result<bool, sqlx::Error>
-where
-    E: 'e + Executor<'e, Database = Postgres>,
+pub async fn exists_user_by_name(conn: &mut PgConnection, name: String) -> Result<bool, sqlx::Error>
 {
     let result = query!(
         r#"
@@ -36,17 +34,15 @@ where
             "#,
         name
     )
-    .fetch_one(executor)
-    .await?;
+        .fetch_one(&mut *conn)
+        .await?;
     result.exists.ok_or(sqlx::Error::RowNotFound)
 }
 
-pub async fn create<'e, E>(
-    executor: E,
+pub async fn create_user(
+    conn: &mut PgConnection,
     create_user_query: CreateUserQuery,
 ) -> Result<User, sqlx::Error>
-where
-    E: 'e + Executor<'e, Database = Postgres>,
 {
     let result = query_as!(
         User,
@@ -59,8 +55,8 @@ where
         create_user_query.email,
         create_user_query.password_hash
     )
-    .fetch_one(executor)
-    .await?;
+        .fetch_one(&mut *conn)
+        .await?;
 
     Ok(User {
         user_id: result.user_id,
@@ -71,9 +67,7 @@ where
     })
 }
 
-pub async fn find_by_email<'e, E>(executor: E, email: String) -> Result<Option<User>, sqlx::Error>
-where
-    E: 'e + Executor<'e, Database = Postgres>,
+pub async fn find_user_by_email(conn: &mut PgConnection, email: String) -> Result<Option<User>, sqlx::Error>
 {
     let result = query_as!(
         User,
@@ -84,15 +78,13 @@ where
             "#,
         email
     )
-    .fetch_optional(executor)
-    .await?;
+        .fetch_optional(&mut *conn)
+        .await?;
 
     Ok(result)
 }
 
-pub async fn find_by_id<'e, E>(executor: E, user_id: i32) -> Result<Option<User>, sqlx::Error>
-where
-    E: 'e + Executor<'e, Database = Postgres>,
+pub async fn find_user_by_id(conn: &mut PgConnection, user_id: i32) -> Result<Option<User>, sqlx::Error>
 {
     let result = query_as!(
         User,
@@ -103,8 +95,8 @@ where
             "#,
         user_id
     )
-    .fetch_optional(executor)
-    .await?;
+        .fetch_optional(&mut *conn)
+        .await?;
 
     Ok(result)
 }

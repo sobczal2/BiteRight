@@ -1,15 +1,18 @@
-use axum::{Extension, Json};
+use axum::{debug_handler, Extension, Json};
 use sqlx::PgPool;
 
 use crate::db::user;
 use crate::errors::api::ApiError;
 use crate::models::dtos::user::{ClaimsDto, MeResponse};
 
+
 pub async fn me(
     Extension(pool): Extension<PgPool>,
     claims: ClaimsDto,
 ) -> Result<Json<MeResponse>, ApiError> {
-    let user = user::find_by_id(&pool, claims.sub)
+    let mut conn = pool.acquire().await.map_err(|_| ApiError::internal_error())?;
+
+    let user = user::find_user_by_id(&mut *conn, claims.sub)
         .await
         .map_err(|_| ApiError::internal_error())?;
 

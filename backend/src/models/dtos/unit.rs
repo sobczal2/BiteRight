@@ -1,4 +1,4 @@
-use crate::models::dtos::common::PaginatedVecDto;
+use crate::models::dtos::common::PaginatedDto;
 use crate::models::entities::unit::Unit;
 use serde::{Deserialize, Serialize};
 use validator::Validate;
@@ -30,5 +30,21 @@ pub struct ListRequest {
 
 #[derive(Debug, Serialize)]
 pub struct ListResponse {
-    pub units: PaginatedVecDto<UnitDto>,
+    pub units: PaginatedDto<UnitDto>,
 }
+
+#[derive(Debug, Deserialize, Validate)]
+pub struct CreateRequest {
+    #[validate(length(min = 1, max = 64))]
+    pub name: String,
+    #[validate(length(min = 1, max = 16))]
+    pub abbreviation: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct CreateResponse {
+    pub unit: UnitDto,
+}
+
+#[derive(Debug, Serialize)]
+pub struct DeleteResponse {}
