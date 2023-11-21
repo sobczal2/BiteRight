@@ -1,29 +1,31 @@
-use axum::{Extension, Json};
-use sqlx::PgPool;
-use crate::db::unit::{create_unit_for_user, exists_unit_for_user_by_abbreviation, exists_unit_for_user_by_name};
+use crate::db::unit::{
+    create_unit_for_user, exists_unit_for_user_by_abbreviation, exists_unit_for_user_by_name,
+};
 use crate::errors::api::ApiError;
 use crate::models::dtos::common::ValidatedJson;
 use crate::models::dtos::unit::{CreateRequest, CreateResponse};
 use crate::models::dtos::user::ClaimsDto;
 use crate::models::query_objects::unit::CreateUnitForUserQuery;
+use axum::{Extension, Json};
+use sqlx::PgPool;
 
 pub async fn create(
     Extension(pool): Extension<PgPool>,
     claims: ClaimsDto,
     ValidatedJson(create_request): ValidatedJson<CreateRequest>,
 ) -> Result<Json<CreateResponse>, ApiError> {
-    let mut tx = pool.begin().await.map_err(|_| ApiError::internal_error())?;
+    let mut tx = pool.begin().await?;
 
-    let exists = exists_unit_for_user_by_name(&mut tx, claims.sub, &create_request.name.to_lowercase())
-        .await
-        .map_err(|_| ApiError::internal_error())?;
+    let exists =
+        exists_unit_for_user_by_name(&mut tx, claims.sub, &create_request.name.to_lowercase())
+            .await?;
     if exists {
         return Err(ApiError::bad_request("Unit already exists"));
     }
 
-    let exists = exists_unit_for_user_by_abbreviation(&mut tx, claims.sub, &create_request.abbreviation)
-        .await
-        .map_err(|_| ApiError::internal_error())?;
+    let exists =
+        exists_unit_for_user_by_abbreviation(&mut tx, claims.sub, &create_request.abbreviation)
+            .await?;
     if exists {
         return Err(ApiError::bad_request("Unit already exists"));
     }
@@ -36,12 +38,9 @@ pub async fn create(
             abbreviation: create_request.abbreviation,
         },
     )
-        .await
-        .map_err(|_| ApiError::internal_error())?;
+    .await?;
 
-    tx.commit().await.map_err(|_| ApiError::internal_error())?;
+    tx.commit().await?;
 
-    Ok(Json(CreateResponse {
-        unit: unit.into(),
-    }))
+    Ok(Json(CreateResponse { unit: unit.into() }))
 }

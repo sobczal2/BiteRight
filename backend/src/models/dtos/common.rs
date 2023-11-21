@@ -1,12 +1,12 @@
-use axum::{async_trait, Json, RequestExt};
 use axum::extract::{FromRequest, FromRequestParts};
 use axum::http::{Request, StatusCode};
+use axum::{async_trait, Json, RequestExt};
 
-use serde::{Deserialize, Serialize};
+use crate::errors::api::ApiError;
 use serde::de::DeserializeOwned;
+use serde::{Deserialize, Serialize};
 use serde_json::json;
 use validator::Validate;
-use crate::errors::api::ApiError;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct PaginatedDto<T> {
@@ -39,11 +39,11 @@ pub struct ValidatedJson<T>(pub T);
 
 #[async_trait]
 impl<S, B, T> FromRequest<S, B> for ValidatedJson<T>
-    where
-        B: Send + 'static,
-        S: Send + Sync,
-        T: Validate + DeserializeOwned + Send + 'static,
-        Json<T>: FromRequest<(), B>,
+where
+    B: Send + 'static,
+    S: Send + Sync,
+    T: Validate + DeserializeOwned + Send + 'static,
+    Json<T>: FromRequest<(), B>,
 {
     type Rejection = ApiError;
 
@@ -64,13 +64,16 @@ pub struct ValidatedQuery<T>(pub T);
 
 #[async_trait]
 impl<S, T> FromRequestParts<S> for ValidatedQuery<T>
-    where
-        S: Send + Sync,
-        T: Validate + DeserializeOwned + Send + 'static,
+where
+    S: Send + Sync,
+    T: Validate + DeserializeOwned + Send + 'static,
 {
     type Rejection = ApiError;
 
-    async fn from_request_parts(parts: &mut axum::http::request::Parts, _state: &S) -> Result<Self, Self::Rejection> {
+    async fn from_request_parts(
+        parts: &mut axum::http::request::Parts,
+        _state: &S,
+    ) -> Result<Self, Self::Rejection> {
         let query = parts
             .uri
             .query()

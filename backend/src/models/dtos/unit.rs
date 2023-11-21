@@ -1,7 +1,7 @@
 use crate::models::dtos::common::PaginatedDto;
+use crate::models::query_objects::unit::FetchUnitQueryResult;
 use serde::{Deserialize, Serialize};
 use validator::Validate;
-use crate::models::query_objects::unit::FetchUnitQueryResult;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UnitDto {

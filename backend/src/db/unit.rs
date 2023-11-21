@@ -1,11 +1,12 @@
-use sqlx::{query, PgConnection, query_as_unchecked};
-use crate::models::query_objects::unit::{CreateUnitForUserQuery, FetchUnitQueryResult, ListUnitsForUserQuery};
+use crate::models::query_objects::unit::{
+    CreateUnitForUserQuery, FetchUnitQueryResult, ListUnitsForUserQuery,
+};
+use sqlx::{query, query_as_unchecked, PgConnection};
 
 pub async fn list_units_for_user(
     conn: &mut PgConnection,
     list_units_for_user_query: ListUnitsForUserQuery,
-) -> Result<(Vec<FetchUnitQueryResult>, i32), sqlx::Error>
-{
+) -> Result<(Vec<FetchUnitQueryResult>, i32), sqlx::Error> {
     let units = query_as_unchecked!(
         FetchUnitQueryResult,
         r#"
@@ -30,8 +31,8 @@ OFFSET $2 ROWS FETCH NEXT $3 ROWS ONLY
         (list_units_for_user_query.page * list_units_for_user_query.per_page) as i32,
         list_units_for_user_query.per_page as i32,
     )
-        .fetch_all(&mut *conn)
-        .await?;
+    .fetch_all(&mut *conn)
+    .await?;
 
     let count = query!(
         r#"
@@ -44,10 +45,10 @@ WHERE uu.user_id = $1
         "#,
         list_units_for_user_query.user_id,
     )
-        .fetch_one(&mut *conn)
-        .await?
-        .total_count
-        .unwrap_or(0);
+    .fetch_one(&mut *conn)
+    .await?
+    .total_count
+    .unwrap_or(0);
 
     Ok((units, count))
 }
@@ -55,8 +56,7 @@ WHERE uu.user_id = $1
 pub async fn create_unit_for_user(
     conn: &mut PgConnection,
     create_unit_for_user_query: CreateUnitForUserQuery,
-) -> Result<FetchUnitQueryResult, sqlx::Error>
-{
+) -> Result<FetchUnitQueryResult, sqlx::Error> {
     let result = query!(
         r#"
 INSERT INTO units (name, abbreviation)
@@ -66,8 +66,8 @@ RETURNING unit_id, name, abbreviation, created_at, updated_at
         create_unit_for_user_query.name,
         create_unit_for_user_query.abbreviation,
     )
-        .fetch_one(&mut *conn)
-        .await?;
+    .fetch_one(&mut *conn)
+    .await?;
 
     query!(
         r#"
@@ -77,8 +77,8 @@ VALUES ($1, $2)
         create_unit_for_user_query.user_id,
         result.unit_id,
     )
-        .execute(&mut *conn)
-        .await?;
+    .execute(&mut *conn)
+    .await?;
 
     Ok(FetchUnitQueryResult {
         unit_id: result.unit_id,
@@ -94,8 +94,7 @@ pub async fn exists_unit_for_user_by_name(
     conn: &mut PgConnection,
     user_id: i32,
     name: &String,
-) -> Result<bool, sqlx::Error>
-{
+) -> Result<bool, sqlx::Error> {
     let result = query!(
         r#"
 SELECT EXISTS (
@@ -112,8 +111,8 @@ SELECT EXISTS (
         user_id,
         name,
     )
-        .fetch_one(&mut *conn)
-        .await?;
+    .fetch_one(&mut *conn)
+    .await?;
     result.exists.ok_or(sqlx::Error::RowNotFound)
 }
 
@@ -121,8 +120,7 @@ pub async fn exists_unit_for_user_by_abbreviation(
     conn: &mut PgConnection,
     user_id: i32,
     abbreviation: &String,
-) -> Result<bool, sqlx::Error>
-{
+) -> Result<bool, sqlx::Error> {
     let result = query!(
         r#"
 SELECT EXISTS (SELECT 1
@@ -137,8 +135,8 @@ SELECT EXISTS (SELECT 1
         user_id,
         abbreviation,
     )
-        .fetch_one(&mut *conn)
-        .await?;
+    .fetch_one(&mut *conn)
+    .await?;
 
     result.exists.ok_or(sqlx::Error::RowNotFound)
 }
@@ -147,8 +145,7 @@ pub async fn exists_user_unit(
     conn: &mut PgConnection,
     user_id: i32,
     unit_id: i32,
-) -> Result<bool, sqlx::Error>
-{
+) -> Result<bool, sqlx::Error> {
     let result = query!(
         r#"
 SELECT EXISTS (SELECT 1
@@ -160,8 +157,8 @@ SELECT EXISTS (SELECT 1
         user_id,
         unit_id,
     )
-        .fetch_one(&mut *conn)
-        .await?;
+    .fetch_one(&mut *conn)
+    .await?;
     result.exists.ok_or(sqlx::Error::RowNotFound)
 }
 
@@ -169,8 +166,7 @@ pub async fn delete_unit_for_user(
     conn: &mut PgConnection,
     user_id: i32,
     unit_id: i32,
-) -> Result<(), sqlx::Error>
-{
+) -> Result<(), sqlx::Error> {
     query!(
         r#"
 DELETE
@@ -181,8 +177,8 @@ WHERE user_id = $1
         user_id,
         unit_id,
     )
-        .execute(&mut *conn)
-        .await?;
+    .execute(&mut *conn)
+    .await?;
 
     query!(
         r#"
@@ -192,8 +188,8 @@ WHERE unit_id = $1
         "#,
         unit_id,
     )
-        .execute(&mut *conn)
-        .await?;
+    .execute(&mut *conn)
+    .await?;
 
     Ok(())
 }

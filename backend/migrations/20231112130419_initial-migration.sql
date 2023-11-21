@@ -126,7 +126,7 @@ CREATE TABLE system_product_templates
 CREATE TABLE refresh_tokens
 (
     refresh_token_id SERIAL PRIMARY KEY,
-    user_id          INTEGER REFERENCES users (user_id) NOT NULL,
+    user_id          INTEGER REFERENCES users (user_id) UNIQUE NOT NULL,
     token            VARCHAR(64)                        NOT NULL,
     expiration       TIMESTAMP                          NOT NULL
 );

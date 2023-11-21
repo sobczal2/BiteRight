@@ -32,7 +32,7 @@ where
         let TypedHeader(Authorization(bearer)) = parts
             .extract::<TypedHeader<Authorization<Bearer>>>()
             .await
-            .map_err(|_| ApiError::bad_request("Invalid token"))?;
+            .map_err(|_| ApiError::unauthorized())?;
 
         let app_config = parts
             .extensions
@@ -44,16 +44,16 @@ where
             &DecodingKey::from_secret(app_config.token.jwt_secret.as_bytes()),
             &jsonwebtoken::Validation::default(),
         )
-        .map_err(|_| ApiError::bad_request("Invalid token"))?;
+        .map_err(|_| ApiError::unauthorized())?;
 
         let now = Utc::now().timestamp() as usize;
 
         if token_data.claims.exp < now {
-            return Err(ApiError::bad_request("Invalid token"));
+            return Err(ApiError::unauthorized());
         }
 
         if token_data.claims.nbf > now {
-            return Err(ApiError::bad_request("Invalid token"));
+            return Err(ApiError::unauthorized());
         }
 
         Ok(token_data.claims)
@@ -124,4 +124,18 @@ pub struct SignInResponse {
 #[derive(Debug, Serialize)]
 pub struct MeResponse {
     pub user: UserDto,
+}
+
+#[derive(Debug, Deserialize, Validate)]
+pub struct RefreshRequest {
+    #[validate(length(min = 64, max = 64, message = "Invalid refresh token"))]
+    pub refresh_token: String,
+    pub user_id: i32,
+}
+
+#[derive(Debug, Serialize)]
+pub struct RefreshResponse {
+    pub user_id: i32,
+    pub jwt: String,
+    pub refresh_token: String,
 }

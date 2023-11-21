@@ -20,4 +20,3 @@ pub struct FetchUnitQueryResult {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }
-

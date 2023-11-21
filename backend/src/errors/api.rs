@@ -37,6 +37,13 @@ impl ApiError {
     }
 }
 
+impl From<sqlx::Error> for ApiError {
+    fn from(err: sqlx::Error) -> Self {
+        tracing::error!("Database error: {}", err);
+        ApiError::internal_error()
+    }
+}
+
 impl IntoResponse for ApiError {
     fn into_response(self) -> Response {
         let body = Json(self.message).into_response();

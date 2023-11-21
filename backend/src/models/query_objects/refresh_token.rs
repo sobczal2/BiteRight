@@ -6,7 +6,7 @@ pub struct CreateRefreshTokenQuery {
     pub expiration: NaiveDateTime,
 }
 
-pub struct CreateRefreshTokenQueryResult {
+pub struct FetchRefreshTokenQueryResult {
     pub refresh_token_id: i32,
     pub user_id: i32,
     pub token: String,
