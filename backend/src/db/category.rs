@@ -1,4 +1,4 @@
-use sqlx::{PgConnection, query, query_as};
+use sqlx::{PgConnection, query, query_as_unchecked};
 use crate::models::query_objects::category::{CreateCategoryForUserQuery, FetchCategoryQueryResult, ListCategoriesForUserQuery};
 
 pub async fn list_categories_for_user(
@@ -6,12 +6,16 @@ pub async fn list_categories_for_user(
     list_categories_for_user_query: ListCategoriesForUserQuery,
 ) -> Result<(Vec<FetchCategoryQueryResult>, i32), sqlx::Error>
 {
-    let categories = query_as!(
+    let categories = query_as_unchecked!(
         FetchCategoryQueryResult,
         r#"
 SELECT c.category_id,
        c.name,
-       COALESCE(p.name, NULL) as photo_name,
+       p.name as photo_name,
+       CASE
+           WHEN uc.user_id IS NOT NULL THEN TRUE
+           ELSE FALSE
+           END as can_modify,
        c.created_at,
        c.updated_at
 FROM categories c
@@ -82,6 +86,7 @@ VALUES ($1, $2)
         category_id: result.category_id,
         name: result.name,
         photo_name: None,
+        can_modify: true,
         created_at: result.created_at,
         updated_at: result.updated_at,
     })
@@ -111,4 +116,60 @@ SELECT EXISTS(
         .await?;
 
     result.exists.ok_or(sqlx::Error::RowNotFound)
+}
+
+pub async fn exists_user_category(
+    conn: &mut PgConnection,
+    user_id: i32,
+    category_id: i32,
+) -> Result<bool, sqlx::Error>
+{
+    let result = query!(
+        r#"
+SELECT EXISTS(SELECT 1
+              FROM user_categories
+              WHERE user_id = $1
+                AND category_id = $2)
+        "#,
+        user_id,
+        category_id,
+    )
+        .fetch_one(&mut *conn)
+        .await?;
+
+    result.exists.ok_or(sqlx::Error::RowNotFound)
+}
+
+
+pub async fn delete_category_for_user(
+    conn: &mut PgConnection,
+    user_id: i32,
+    category_id: i32,
+) -> Result<(), sqlx::Error>
+{
+    query!(
+        r#"
+DELETE
+FROM user_categories
+WHERE user_id = $1
+  AND category_id = $2
+        "#,
+        user_id,
+        category_id,
+    )
+        .execute(&mut *conn)
+        .await?;
+
+    query!(
+        r#"
+DELETE
+FROM categories
+WHERE category_id = $1
+        "#,
+        category_id,
+    )
+        .execute(&mut *conn)
+        .await?;
+
+    Ok(())
 }

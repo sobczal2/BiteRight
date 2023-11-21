@@ -9,6 +9,7 @@ pub struct CategoryDto {
     pub category_id: i32,
     pub name: String,
     pub photo_url: String,
+    pub can_modify: bool,
 }
 
 impl CategoryDto {
@@ -17,6 +18,7 @@ impl CategoryDto {
             category_id: fetch_category_query_result.category_id,
             name: fetch_category_query_result.name,
             photo_url: assets_config.get_photo_url(fetch_category_query_result.photo_name),
+            can_modify: fetch_category_query_result.can_modify,
         }
     }
 }

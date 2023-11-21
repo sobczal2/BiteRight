@@ -85,3 +85,6 @@ impl<S, T> FromRequestParts<S> for ValidatedQuery<T>
         Ok(Self(query))
     }
 }
+
+#[derive(Debug, Serialize)]
+pub struct EmptyResponse;

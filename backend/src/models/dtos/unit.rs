@@ -8,6 +8,7 @@ pub struct UnitDto {
     pub unit_id: i32,
     pub name: String,
     pub abbreviation: String,
+    pub can_modify: bool,
 }
 
 impl From<FetchUnitQueryResult> for UnitDto {
@@ -16,6 +17,7 @@ impl From<FetchUnitQueryResult> for UnitDto {
             unit_id: unit.unit_id,
             name: unit.name,
             abbreviation: unit.abbreviation,
+            can_modify: unit.can_modify,
         }
     }
 }
@@ -45,6 +47,3 @@ pub struct CreateRequest {
 pub struct CreateResponse {
     pub unit: UnitDto,
 }
-
-#[derive(Debug, Serialize)]
-pub struct DeleteResponse {}

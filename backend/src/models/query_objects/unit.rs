@@ -16,6 +16,7 @@ pub struct FetchUnitQueryResult {
     pub unit_id: i32,
     pub name: String,
     pub abbreviation: String,
+    pub can_modify: bool,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }

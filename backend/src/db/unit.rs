@@ -1,4 +1,4 @@
-use sqlx::{query, PgConnection, query_as};
+use sqlx::{query, PgConnection, query_as_unchecked};
 use crate::models::query_objects::unit::{CreateUnitForUserQuery, FetchUnitQueryResult, ListUnitsForUserQuery};
 
 pub async fn list_units_for_user(
@@ -6,12 +6,16 @@ pub async fn list_units_for_user(
     list_units_for_user_query: ListUnitsForUserQuery,
 ) -> Result<(Vec<FetchUnitQueryResult>, i32), sqlx::Error>
 {
-    let units = query_as!(
+    let units = query_as_unchecked!(
         FetchUnitQueryResult,
         r#"
 SELECT u.unit_id,
        u.name,
        u.abbreviation,
+       CASE
+           WHEN uu.user_id IS NOT NULL THEN TRUE
+           ELSE FALSE
+           END AS can_modify,
        u.created_at,
        u.updated_at
 FROM units u
@@ -80,6 +84,7 @@ VALUES ($1, $2)
         unit_id: result.unit_id,
         name: result.name,
         abbreviation: result.abbreviation,
+        can_modify: true,
         created_at: result.created_at,
         updated_at: result.updated_at,
     })
@@ -134,7 +139,7 @@ SELECT EXISTS (SELECT 1
     )
         .fetch_one(&mut *conn)
         .await?;
-    
+
     result.exists.ok_or(sqlx::Error::RowNotFound)
 }
 
