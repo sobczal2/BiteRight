@@ -18,7 +18,7 @@ pub async fn list(
     let mut tx = pool.begin().await.map_err(|_| ApiError::internal_error())?;
 
     let (categories, total_count) =
-        list_categories_for_user(&mut *tx,
+        list_categories_for_user(&mut tx,
                                  ListCategoriesForUserQuery {
                                      user_id: claims.sub,
                                      page: list_request.page,

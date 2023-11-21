@@ -13,7 +13,7 @@ pub async fn delete(
 ) -> Result<Json<DeleteResponse>, ApiError> {
     let mut tx = pool.begin().await.map_err(|_| ApiError::internal_error())?;
 
-    let exists = exists_user_unit(&mut *tx, claims.sub, unit_id)
+    let exists = exists_user_unit(&mut tx, claims.sub, unit_id)
         .await
         .map_err(|_| ApiError::internal_error())?;
 
@@ -21,7 +21,7 @@ pub async fn delete(
         return Err(ApiError::not_found("Unit not found"));
     }
 
-    delete_unit_for_user(&mut *tx, claims.sub, unit_id)
+    delete_unit_for_user(&mut tx, claims.sub, unit_id)
         .await
         .map_err(|_| ApiError::internal_error())?;
 

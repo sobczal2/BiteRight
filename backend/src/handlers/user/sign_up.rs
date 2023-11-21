@@ -4,9 +4,9 @@ use crate::errors::api::ApiError;
 use crate::models::dtos::user::{SignUpRequest, SignUpResponse};
 use crate::utils::password::hash_password;
 use crate::utils::token::{generate_jwt, generate_refresh_token};
-use axum::{debug_handler, Extension, Json};
+use axum::{Extension, Json};
 use sqlx::types::chrono::Utc;
-use sqlx::{Acquire, PgPool};
+use sqlx::PgPool;
 use std::sync::Arc;
 use std::time::Duration;
 use crate::models::dtos::common::ValidatedJson;
@@ -21,14 +21,14 @@ pub async fn sign_up(
 ) -> Result<Json<SignUpResponse>, ApiError> {
     let mut tx = pool.begin().await.map_err(|_| ApiError::internal_error())?;
 
-    let exists = user::exists_user_by_email(&mut *tx, sign_up_request.email.clone())
+    let exists = user::exists_user_by_email(&mut tx, sign_up_request.email.clone())
         .await
         .map_err(|_| ApiError::internal_error())?;
     if exists {
         return Err(ApiError::bad_request("Email already exists"));
     }
 
-    let exists = user::exists_user_by_name(&mut *tx, sign_up_request.name.clone())
+    let exists = user::exists_user_by_name(&mut tx, sign_up_request.name.clone())
         .await
         .map_err(|_| ApiError::internal_error())?;
     if exists {
@@ -39,7 +39,7 @@ pub async fn sign_up(
         hash_password(&sign_up_request.password).map_err(|_| ApiError::internal_error())?;
 
     let user = user::create_user(
-        &mut *tx,
+        &mut tx,
         CreateUserQuery {
             email: sign_up_request.email.clone(),
             name: sign_up_request.name.clone(),
@@ -57,7 +57,7 @@ pub async fn sign_up(
     let expiration =
         Utc::now() + Duration::from_secs(app_config.token.refresh_token_expiration_seconds);
     let refresh_token = refresh_token::create_refresh_token(
-        &mut *tx,
+        &mut tx,
         CreateRefreshTokenQuery {
             user_id: user.user_id,
             token: refresh_token,

@@ -4,7 +4,7 @@ use crate::errors::api::ApiError;
 use crate::models::dtos::user::{SignInRequest, SignInResponse};
 use crate::utils::password::verify_password;
 use crate::utils::token::{generate_jwt, generate_refresh_token};
-use axum::{debug_handler, Extension, Json};
+use axum::{Extension, Json};
 use sqlx::types::chrono::Utc;
 use sqlx::PgPool;
 use std::sync::Arc;
@@ -20,7 +20,7 @@ pub async fn sign_in(
 ) -> Result<Json<SignInResponse>, ApiError> {
     let mut tx = pool.begin().await.map_err(|_| ApiError::internal_error())?;
 
-    let user = user::find_user_by_email(&mut *tx, sign_in_request.email.clone())
+    let user = user::find_user_by_email(&mut tx, sign_in_request.email.clone())
         .await
         .map_err(|_| ApiError::internal_error())?;
 
@@ -39,7 +39,7 @@ pub async fn sign_in(
     let jwt =
         generate_jwt(user.user_id, &app_config.token).map_err(|_| ApiError::internal_error())?;
 
-    refresh_token::delete_refresh_tokens_for_user(&mut *tx, user.user_id)
+    refresh_token::delete_refresh_tokens_for_user(&mut tx, user.user_id)
         .await
         .map_err(|_| ApiError::internal_error())?;
 
@@ -48,7 +48,7 @@ pub async fn sign_in(
     let expiration =
         Utc::now() + Duration::from_secs(app_config.token.refresh_token_expiration_seconds);
     let refresh_token = refresh_token::create_refresh_token(
-        &mut *tx,
+        &mut tx,
         CreateRefreshTokenQuery {
             user_id: user.user_id,
             token: refresh_token,

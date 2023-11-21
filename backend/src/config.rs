@@ -76,8 +76,8 @@ impl AppConfig {
                 env::var("DATABASE_URL").map_err(|_| ConfigError::DatabaseUrlMissing)?,
             )?
             .build()
-            .map_err(ConfigError::ConfigError)?;
+            .map_err(ConfigError::Config)?;
 
-        cfg.try_deserialize().map_err(ConfigError::ConfigError)
+        cfg.try_deserialize().map_err(ConfigError::Config)
     }
 }

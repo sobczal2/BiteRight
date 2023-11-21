@@ -17,7 +17,7 @@ pub async fn create(
 ) -> Result<Json<CreateResponse>, ApiError> {
     let mut tx = pool.begin().await.map_err(|_| ApiError::internal_error())?;
 
-    let exists = exists_category_for_user_by_name(&mut *tx, claims.sub, &create_request.name)
+    let exists = exists_category_for_user_by_name(&mut tx, claims.sub, &create_request.name)
         .await
         .map_err(|_| ApiError::internal_error())?;
 
@@ -26,7 +26,7 @@ pub async fn create(
     }
 
     let category = create_category_for_user(
-        &mut *tx,
+        &mut tx,
         CreateCategoryForUserQuery {
             user_id: claims.sub,
             name: create_request.name.to_lowercase(),

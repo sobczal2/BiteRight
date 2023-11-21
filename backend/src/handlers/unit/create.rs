@@ -14,14 +14,14 @@ pub async fn create(
 ) -> Result<Json<CreateResponse>, ApiError> {
     let mut tx = pool.begin().await.map_err(|_| ApiError::internal_error())?;
 
-    let exists = exists_unit_for_user_by_name(&mut *tx, claims.sub, &create_request.name.to_lowercase())
+    let exists = exists_unit_for_user_by_name(&mut tx, claims.sub, &create_request.name.to_lowercase())
         .await
         .map_err(|_| ApiError::internal_error())?;
     if exists {
         return Err(ApiError::bad_request("Unit already exists"));
     }
 
-    let exists = exists_unit_for_user_by_abbreviation(&mut *tx, claims.sub, &create_request.abbreviation)
+    let exists = exists_unit_for_user_by_abbreviation(&mut tx, claims.sub, &create_request.abbreviation)
         .await
         .map_err(|_| ApiError::internal_error())?;
     if exists {
@@ -29,7 +29,7 @@ pub async fn create(
     }
 
     let unit = create_unit_for_user(
-        &mut *tx,
+        &mut tx,
         CreateUnitForUserQuery {
             user_id: claims.sub,
             name: create_request.name.to_lowercase(),
