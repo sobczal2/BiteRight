@@ -1,7 +1,7 @@
 use crate::models::dtos::common::PaginatedDto;
-use crate::models::entities::unit::Unit;
 use serde::{Deserialize, Serialize};
 use validator::Validate;
+use crate::models::query_objects::unit::FetchUnitQueryResult;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UnitDto {
@@ -10,8 +10,8 @@ pub struct UnitDto {
     pub abbreviation: String,
 }
 
-impl From<Unit> for UnitDto {
-    fn from(unit: Unit) -> Self {
+impl From<FetchUnitQueryResult> for UnitDto {
+    fn from(unit: FetchUnitQueryResult) -> Self {
         Self {
             unit_id: unit.unit_id,
             name: unit.name,

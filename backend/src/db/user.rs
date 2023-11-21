@@ -1,19 +1,15 @@
 use sqlx::{PgConnection, query_as};
 use sqlx::query;
-use sqlx::Acquire;
 
-use crate::models::entities::user::User;
-use crate::models::query_objects::user::CreateUserQuery;
+use crate::models::query_objects::user::{CreateUserQuery, FetchUserQueryResult};
 
 pub async fn exists_user_by_email(conn: &mut PgConnection, email: String) -> Result<bool, sqlx::Error>
 {
     let result = query!(
         r#"
-                SELECT EXISTS (
-                    SELECT 1
-                    FROM users
-                    WHERE email = $1
-                )
+SELECT EXISTS (SELECT 1
+               FROM users
+               WHERE email = $1)
             "#,
         email
     )
@@ -26,11 +22,9 @@ pub async fn exists_user_by_name(conn: &mut PgConnection, name: String) -> Resul
 {
     let result = query!(
         r#"
-                SELECT EXISTS (
-                    SELECT 1
-                    FROM users
-                    WHERE name = $1
-                )
+SELECT EXISTS (SELECT 1
+               FROM users
+               WHERE name = $1)
             "#,
         name
     )
@@ -42,14 +36,14 @@ pub async fn exists_user_by_name(conn: &mut PgConnection, name: String) -> Resul
 pub async fn create_user(
     conn: &mut PgConnection,
     create_user_query: CreateUserQuery,
-) -> Result<User, sqlx::Error>
+) -> Result<FetchUserQueryResult, sqlx::Error>
 {
     let result = query_as!(
-        User,
+        FetchUserQueryResult,
         r#"
-                INSERT INTO users (name, email, password_hash)
-                VALUES ($1, $2, $3)
-                RETURNING user_id, name, email, password_hash, created_at
+INSERT INTO users (name, email, password_hash)
+VALUES ($1, $2, $3)
+RETURNING user_id, name, email, password_hash, created_at
             "#,
         create_user_query.name,
         create_user_query.email,
@@ -58,7 +52,7 @@ pub async fn create_user(
         .fetch_one(&mut *conn)
         .await?;
 
-    Ok(User {
+    Ok(FetchUserQueryResult {
         user_id: result.user_id,
         name: result.name,
         email: result.email,
@@ -67,14 +61,14 @@ pub async fn create_user(
     })
 }
 
-pub async fn find_user_by_email(conn: &mut PgConnection, email: String) -> Result<Option<User>, sqlx::Error>
+pub async fn find_user_by_email(conn: &mut PgConnection, email: String) -> Result<Option<FetchUserQueryResult>, sqlx::Error>
 {
     let result = query_as!(
-        User,
+        FetchUserQueryResult,
         r#"
-                SELECT user_id, name, email, password_hash, created_at
-                FROM users
-                WHERE email = $1
+SELECT user_id, name, email, password_hash, created_at
+FROM users
+WHERE email = $1
             "#,
         email
     )
@@ -84,14 +78,14 @@ pub async fn find_user_by_email(conn: &mut PgConnection, email: String) -> Resul
     Ok(result)
 }
 
-pub async fn find_user_by_id(conn: &mut PgConnection, user_id: i32) -> Result<Option<User>, sqlx::Error>
+pub async fn find_user_by_id(conn: &mut PgConnection, user_id: i32) -> Result<Option<FetchUserQueryResult>, sqlx::Error>
 {
     let result = query_as!(
-        User,
+        FetchUserQueryResult,
         r#"
-                SELECT user_id, name, email, password_hash, created_at
-                FROM users
-                WHERE user_id = $1
+SELECT user_id, name, email, password_hash, created_at
+FROM users
+WHERE user_id = $1
             "#,
         user_id
     )
