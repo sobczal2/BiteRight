@@ -9,4 +9,5 @@ pub fn create_user_router() -> Router {
         .route("/sign-up", axum::routing::post(sign_up))
         .route("/sign-in", axum::routing::post(sign_in))
         .route("/me", axum::routing::get(me))
+        .route("/refresh", axum::routing::post(refresh))
 }
