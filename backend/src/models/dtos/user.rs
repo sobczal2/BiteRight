@@ -12,7 +12,7 @@ use validator::Validate;
 
 use crate::config::AppConfig;
 use crate::errors::api::ApiError;
-use crate::models::entities::user::User;
+use crate::models::query_objects::user::FetchUserQueryResult;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ClaimsDto {
@@ -67,8 +67,8 @@ pub struct UserDto {
     pub name: String,
 }
 
-impl From<User> for UserDto {
-    fn from(user: User) -> Self {
+impl From<FetchUserQueryResult> for UserDto {
+    fn from(user: FetchUserQueryResult) -> Self {
         Self {
             user_id: user.user_id,
             email: user.email,

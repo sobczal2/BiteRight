@@ -5,3 +5,10 @@ pub struct CreateRefreshTokenQuery {
     pub token: String,
     pub expiration: NaiveDateTime,
 }
+
+pub struct CreateRefreshTokenQueryResult {
+    pub refresh_token_id: i32,
+    pub user_id: i32,
+    pub token: String,
+    pub expiration: NaiveDateTime,
+}

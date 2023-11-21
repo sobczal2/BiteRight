@@ -1,21 +1,23 @@
 use crate::models::dtos::common::PaginatedDto;
-use crate::models::entities::unit::Unit;
 use serde::{Deserialize, Serialize};
 use validator::Validate;
+use crate::models::query_objects::unit::FetchUnitQueryResult;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UnitDto {
     pub unit_id: i32,
     pub name: String,
     pub abbreviation: String,
+    pub can_modify: bool,
 }
 
-impl From<Unit> for UnitDto {
-    fn from(unit: Unit) -> Self {
+impl From<FetchUnitQueryResult> for UnitDto {
+    fn from(unit: FetchUnitQueryResult) -> Self {
         Self {
             unit_id: unit.unit_id,
             name: unit.name,
             abbreviation: unit.abbreviation,
+            can_modify: unit.can_modify,
         }
     }
 }
@@ -45,6 +47,3 @@ pub struct CreateRequest {
 pub struct CreateResponse {
     pub unit: UnitDto,
 }
-
-#[derive(Debug, Serialize)]
-pub struct DeleteResponse {}

@@ -8,6 +8,13 @@ CREATE TABLE users
     created_at    TIMESTAMP           NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
 );
 
+CREATE TABLE photos
+(
+    photo_id   SERIAL PRIMARY KEY,
+    name       VARCHAR(32) NOT NULL,
+    created_at TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
+);
+
 CREATE TABLE units
 (
     unit_id      SERIAL PRIMARY KEY,
@@ -56,7 +63,7 @@ CREATE TABLE categories
 (
     category_id SERIAL PRIMARY KEY,
     name        VARCHAR(64) NOT NULL,
-    photo_url   VARCHAR(256) NULL,
+    photo_id    INTEGER REFERENCES photos (photo_id) NULL,
     created_at  TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
     updated_at  TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
 );

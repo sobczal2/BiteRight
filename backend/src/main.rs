@@ -26,7 +26,7 @@ async fn main() -> anyhow::Result<()> {
     )
     .await?;
 
-    let router = create_router()
+    let router = create_router(&app_config)
         .layer(Extension(app_config.clone()))
         .layer(Extension(pool))
         .layer(TraceLayer::new_for_http());

@@ -1,65 +1,53 @@
-use crate::models::entities::unit::Unit;
-use sqlx::{query, Postgres, Acquire, PgConnection};
-use crate::models::query_objects::unit::CreateUnitForUserQuery;
+use sqlx::{query, PgConnection, query_as_unchecked};
+use crate::models::query_objects::unit::{CreateUnitForUserQuery, FetchUnitQueryResult, ListUnitsForUserQuery};
 
 pub async fn list_units_for_user(
     conn: &mut PgConnection,
-    user_id: i32,
-    page: i32,
-    per_page: i32,
-) -> Result<(Vec<Unit>, i32), sqlx::Error>
+    list_units_for_user_query: ListUnitsForUserQuery,
+) -> Result<(Vec<FetchUnitQueryResult>, i32), sqlx::Error>
 {
-    let records = query!(
+    let units = query_as_unchecked!(
+        FetchUnitQueryResult,
         r#"
-WITH unit_data AS (
-    SELECT u.unit_id,
-           u.name,
-           u.abbreviation,
-           u.created_at,
-           u.updated_at
-    FROM units u
-             LEFT JOIN user_units uu ON u.unit_id = uu.unit_id
-             LEFT JOIN system_units su ON u.unit_id = su.unit_id
-    WHERE uu.user_id = $1
-       OR su.system_unit_id IS NOT NULL
-),
-unit_count AS (
-    SELECT COUNT(*) as total_count FROM unit_data
-)
-SELECT
-    unit_id,
-    name,
-    abbreviation,
-    created_at,
-    updated_at,
-    (SELECT total_count FROM unit_count)::INT as total_count
-FROM unit_data
+SELECT u.unit_id,
+       u.name,
+       u.abbreviation,
+       CASE
+           WHEN uu.user_id IS NOT NULL THEN TRUE
+           ELSE FALSE
+           END AS can_modify,
+       u.created_at,
+       u.updated_at
+FROM units u
+         LEFT JOIN user_units uu ON u.unit_id = uu.unit_id
+         LEFT JOIN system_units su ON u.unit_id = su.unit_id
+WHERE uu.user_id = $1
+   OR su.system_unit_id IS NOT NULL
 ORDER BY unit_id
 OFFSET $2 ROWS FETCH NEXT $3 ROWS ONLY
         "#,
-        user_id,
-        (page * per_page) as i32,
-        per_page as i32,
+        list_units_for_user_query.user_id,
+        (list_units_for_user_query.page * list_units_for_user_query.per_page) as i32,
+        list_units_for_user_query.per_page as i32,
     )
         .fetch_all(&mut *conn)
         .await?;
 
-    let count = if let Some(first_unit) = records.first() {
-        first_unit.total_count.unwrap_or(0)
-    } else {
-        0
-    };
-
-    let units = records
-        .into_iter()
-        .map(|r| Unit {
-            unit_id: r.unit_id,
-            name: r.name,
-            abbreviation: r.abbreviation,
-            created_at: r.created_at,
-            updated_at: r.updated_at,
-        })
-        .collect();
+    let count = query!(
+        r#"
+SELECT COUNT(*)::INT as total_count
+FROM units u
+         LEFT JOIN user_units uu ON u.unit_id = uu.unit_id
+         LEFT JOIN system_units su ON u.unit_id = su.unit_id
+WHERE uu.user_id = $1
+   OR su.system_unit_id IS NOT NULL
+        "#,
+        list_units_for_user_query.user_id,
+    )
+        .fetch_one(&mut *conn)
+        .await?
+        .total_count
+        .unwrap_or(0);
 
     Ok((units, count))
 }
@@ -67,7 +55,7 @@ OFFSET $2 ROWS FETCH NEXT $3 ROWS ONLY
 pub async fn create_unit_for_user(
     conn: &mut PgConnection,
     create_unit_for_user_query: CreateUnitForUserQuery,
-) -> Result<Unit, sqlx::Error>
+) -> Result<FetchUnitQueryResult, sqlx::Error>
 {
     let result = query!(
         r#"
@@ -92,10 +80,11 @@ VALUES ($1, $2)
         .execute(&mut *conn)
         .await?;
 
-    Ok(Unit {
+    Ok(FetchUnitQueryResult {
         unit_id: result.unit_id,
         name: result.name,
         abbreviation: result.abbreviation,
+        can_modify: true,
         created_at: result.created_at,
         updated_at: result.updated_at,
     })
@@ -110,14 +99,14 @@ pub async fn exists_unit_for_user_by_name(
     let result = query!(
         r#"
 SELECT EXISTS (
-    SELECT 1
-    FROM units u
-         LEFT JOIN user_units uu ON u.unit_id = uu.unit_id
-         LEFT JOIN system_units su ON u.unit_id = su.unit_id
-    WHERE uu.user_id = $1
-        OR su.system_unit_id IS NOT NULL
-        AND LOWER(u.name) = LOWER($2)
-        FETCH FIRST ROW ONLY
+           SELECT 1
+           FROM units u
+                    LEFT JOIN user_units uu ON u.unit_id = uu.unit_id
+                    LEFT JOIN system_units su ON u.unit_id = su.unit_id
+           WHERE (uu.user_id = $1
+              OR su.system_unit_id IS NOT NULL)
+               AND u.name = $2
+               FETCH FIRST ROW ONLY
 )
         "#,
         user_id,
@@ -136,22 +125,21 @@ pub async fn exists_unit_for_user_by_abbreviation(
 {
     let result = query!(
         r#"
-SELECT EXISTS (
-    SELECT 1
-    FROM units u
-         LEFT JOIN user_units uu ON u.unit_id = uu.unit_id
-         LEFT JOIN system_units su ON u.unit_id = su.unit_id
-    WHERE uu.user_id = $1
-        OR su.system_unit_id IS NOT NULL
-        AND u.abbreviation = $2
-        FETCH FIRST ROW ONLY
-)
+SELECT EXISTS (SELECT 1
+               FROM units u
+                        LEFT JOIN user_units uu ON u.unit_id = uu.unit_id
+                        LEFT JOIN system_units su ON u.unit_id = su.unit_id
+               WHERE (uu.user_id = $1
+                  OR su.system_unit_id IS NOT NULL)
+                   AND u.abbreviation = $2
+                   FETCH FIRST ROW ONLY)
         "#,
         user_id,
         abbreviation,
     )
         .fetch_one(&mut *conn)
         .await?;
+
     result.exists.ok_or(sqlx::Error::RowNotFound)
 }
 
@@ -163,13 +151,11 @@ pub async fn exists_user_unit(
 {
     let result = query!(
         r#"
-SELECT EXISTS (
-    SELECT 1
-    FROM user_units
-    WHERE user_id = $1
-      AND unit_id = $2
-        FETCH FIRST ROW ONLY
-)
+SELECT EXISTS (SELECT 1
+               FROM user_units
+               WHERE user_id = $1
+                 AND unit_id = $2
+                   FETCH FIRST ROW ONLY)
         "#,
         user_id,
         unit_id,
@@ -187,7 +173,8 @@ pub async fn delete_unit_for_user(
 {
     query!(
         r#"
-DELETE FROM user_units
+DELETE
+FROM user_units
 WHERE user_id = $1
   AND unit_id = $2
         "#,
@@ -199,7 +186,8 @@ WHERE user_id = $1
 
     query!(
         r#"
-DELETE FROM units
+DELETE
+FROM units
 WHERE unit_id = $1
         "#,
         unit_id,

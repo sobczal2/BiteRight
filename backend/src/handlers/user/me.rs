@@ -1,4 +1,4 @@
-use axum::{debug_handler, Extension, Json};
+use axum::{Extension, Json};
 use sqlx::PgPool;
 
 use crate::db::user;
@@ -12,7 +12,7 @@ pub async fn me(
 ) -> Result<Json<MeResponse>, ApiError> {
     let mut conn = pool.acquire().await.map_err(|_| ApiError::internal_error())?;
 
-    let user = user::find_user_by_id(&mut *conn, claims.sub)
+    let user = user::find_user_by_id(&mut conn, claims.sub)
         .await
         .map_err(|_| ApiError::internal_error())?;
 

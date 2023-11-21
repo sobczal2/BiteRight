@@ -1,19 +1,18 @@
-use crate::models::entities::refresh_token::RefreshToken;
 use sqlx::{PgConnection, query_as};
 use sqlx::query;
-use crate::models::query_objects::refresh_token::CreateRefreshTokenQuery;
+use crate::models::query_objects::refresh_token::{CreateRefreshTokenQuery, CreateRefreshTokenQueryResult};
 
 pub async fn create_refresh_token(
     conn: &mut PgConnection,
     create_refresh_token_query: CreateRefreshTokenQuery,
-) -> Result<RefreshToken, sqlx::Error>
+) -> Result<CreateRefreshTokenQueryResult, sqlx::Error>
 {
     let result = query_as!(
-        RefreshToken,
+        CreateRefreshTokenQueryResult,
         r#"
-                INSERT INTO refresh_tokens (user_id, token, expiration)
-                VALUES ($1, $2, $3)
-                RETURNING refresh_token_id, user_id, token, expiration
+INSERT INTO refresh_tokens (user_id, token, expiration)
+VALUES ($1, $2, $3)
+RETURNING refresh_token_id, user_id, token, expiration
             "#,
         create_refresh_token_query.user_id,
         create_refresh_token_query.token,
@@ -22,7 +21,7 @@ pub async fn create_refresh_token(
     .fetch_one(&mut *conn)
     .await?;
 
-    Ok(RefreshToken {
+    Ok(CreateRefreshTokenQueryResult {
         refresh_token_id: result.refresh_token_id,
         user_id: result.user_id,
         token: result.token,
@@ -34,8 +33,8 @@ pub async fn delete_refresh_tokens_for_user(conn: &mut PgConnection, user_id: i3
 {
     query!(
         r#"
-                DELETE FROM refresh_tokens
-                WHERE user_id = $1
+DELETE FROM refresh_tokens
+WHERE user_id = $1
             "#,
         user_id
     )
