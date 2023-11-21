@@ -1,8 +1,8 @@
-use serde::{Deserialize, Serialize};
-use validator::Validate;
 use crate::config::AssetsConfig;
 use crate::models::dtos::common::PaginatedDto;
 use crate::models::query_objects::category::FetchCategoryQueryResult;
+use serde::{Deserialize, Serialize};
+use validator::Validate;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CategoryDto {
@@ -13,7 +13,10 @@ pub struct CategoryDto {
 }
 
 impl CategoryDto {
-    pub fn from_query_result(fetch_category_query_result: FetchCategoryQueryResult, assets_config: &AssetsConfig) -> Self {
+    pub fn from_query_result(
+        fetch_category_query_result: FetchCategoryQueryResult,
+        assets_config: &AssetsConfig,
+    ) -> Self {
         Self {
             category_id: fetch_category_query_result.category_id,
             name: fetch_category_query_result.name,

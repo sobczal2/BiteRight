@@ -1,7 +1,7 @@
-use axum::Router;
 use crate::handlers::category::create::create;
-use crate::handlers::category::list::list;
 use crate::handlers::category::delete::delete;
+use crate::handlers::category::list::list;
+use axum::Router;
 
 pub fn create_category_router() -> Router {
     Router::new()

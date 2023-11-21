@@ -50,7 +50,12 @@ impl AssetsConfig {
     pub fn get_photo_url(&self, photo_name: Option<String>) -> String {
         let photo_dir = PathBuf::from("/assets/photos");
         match photo_name {
-            Some(photo_name) => photo_dir.clone().join(photo_name).to_str().unwrap().to_string(),
+            Some(photo_name) => photo_dir
+                .clone()
+                .join(photo_name)
+                .to_str()
+                .unwrap()
+                .to_string(),
             None => photo_dir.join("default.webp").to_str().unwrap().to_string(),
         }
     }

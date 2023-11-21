@@ -1,6 +1,11 @@
 use crate::config::AppConfig;
+use crate::db::refresh_token::create_refresh_token;
+use crate::db::user::{create_user, exists_user_by_email, exists_user_by_name};
 use crate::errors::api::ApiError;
+use crate::models::dtos::common::ValidatedJson;
 use crate::models::dtos::user::{SignUpRequest, SignUpResponse};
+use crate::models::query_objects::refresh_token::CreateRefreshTokenQuery;
+use crate::models::query_objects::user::CreateUserQuery;
 use crate::utils::password::hash_password;
 use crate::utils::token::{generate_jwt, generate_refresh_token};
 use axum::{Extension, Json};
@@ -8,12 +13,6 @@ use sqlx::types::chrono::Utc;
 use sqlx::PgPool;
 use std::sync::Arc;
 use std::time::Duration;
-use crate::db::refresh_token::create_refresh_token;
-use crate::db::user::{create_user, exists_user_by_email, exists_user_by_name};
-use crate::models::dtos::common::ValidatedJson;
-use crate::models::query_objects::refresh_token::CreateRefreshTokenQuery;
-use crate::models::query_objects::user::CreateUserQuery;
-
 
 pub async fn sign_up(
     Extension(pool): Extension<PgPool>,
@@ -22,14 +21,12 @@ pub async fn sign_up(
 ) -> Result<Json<SignUpResponse>, ApiError> {
     let mut tx = pool.begin().await?;
 
-    let exists = exists_user_by_email(&mut tx, sign_up_request.email.clone())
-        .await?;
+    let exists = exists_user_by_email(&mut tx, sign_up_request.email.clone()).await?;
     if exists {
         return Err(ApiError::bad_request("Email already exists"));
     }
 
-    let exists = exists_user_by_name(&mut tx, sign_up_request.name.clone())
-        .await?;
+    let exists = exists_user_by_name(&mut tx, sign_up_request.name.clone()).await?;
     if exists {
         return Err(ApiError::bad_request("Name already exists"));
     }
@@ -45,7 +42,7 @@ pub async fn sign_up(
             password_hash: hashed_password,
         },
     )
-        .await?;
+    .await?;
 
     let jwt =
         generate_jwt(user.user_id, &app_config.token).map_err(|_| ApiError::internal_error())?;
@@ -63,7 +60,7 @@ pub async fn sign_up(
             expiration: expiration.naive_utc(),
         },
     )
-        .await?;
+    .await?;
 
     tx.commit().await?;
 
