@@ -13,7 +13,7 @@ pub async fn list(
     claims: ClaimsDto,
     ValidatedQuery(list_request): ValidatedQuery<ListRequest>,
 ) -> Result<Json<ListResponse>, ApiError> {
-    let mut tx = pool.begin().await.map_err(|_| ApiError::internal_error())?;
+    let mut tx = pool.begin().await?;
 
     let (units, total_count) =
         list_units_for_user(&mut tx,
@@ -22,12 +22,11 @@ pub async fn list(
                                 page: list_request.page,
                                 per_page: list_request.per_page,
                             })
-            .await
-            .map_err(|_| ApiError::internal_error())?;
+            .await?;
 
     let units = units.into_iter().map(|u| u.into()).collect();
 
-    tx.commit().await.map_err(|_| ApiError::internal_error())?;
+    tx.commit().await?;
 
     Ok(Json(ListResponse {
         units: PaginatedDto::new(units, total_count, list_request.page, list_request.per_page),

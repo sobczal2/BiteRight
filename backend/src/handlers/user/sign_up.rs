@@ -1,5 +1,4 @@
 use crate::config::AppConfig;
-use crate::db::{refresh_token, user};
 use crate::errors::api::ApiError;
 use crate::models::dtos::user::{SignUpRequest, SignUpResponse};
 use crate::utils::password::hash_password;
@@ -9,6 +8,8 @@ use sqlx::types::chrono::Utc;
 use sqlx::PgPool;
 use std::sync::Arc;
 use std::time::Duration;
+use crate::db::refresh_token::create_refresh_token;
+use crate::db::user::{create_user, exists_user_by_email, exists_user_by_name};
 use crate::models::dtos::common::ValidatedJson;
 use crate::models::query_objects::refresh_token::CreateRefreshTokenQuery;
 use crate::models::query_objects::user::CreateUserQuery;
@@ -19,18 +20,16 @@ pub async fn sign_up(
     Extension(app_config): Extension<Arc<AppConfig>>,
     ValidatedJson(sign_up_request): ValidatedJson<SignUpRequest>,
 ) -> Result<Json<SignUpResponse>, ApiError> {
-    let mut tx = pool.begin().await.map_err(|_| ApiError::internal_error())?;
+    let mut tx = pool.begin().await?;
 
-    let exists = user::exists_user_by_email(&mut tx, sign_up_request.email.clone())
-        .await
-        .map_err(|_| ApiError::internal_error())?;
+    let exists = exists_user_by_email(&mut tx, sign_up_request.email.clone())
+        .await?;
     if exists {
         return Err(ApiError::bad_request("Email already exists"));
     }
 
-    let exists = user::exists_user_by_name(&mut tx, sign_up_request.name.clone())
-        .await
-        .map_err(|_| ApiError::internal_error())?;
+    let exists = exists_user_by_name(&mut tx, sign_up_request.name.clone())
+        .await?;
     if exists {
         return Err(ApiError::bad_request("Name already exists"));
     }
@@ -38,7 +37,7 @@ pub async fn sign_up(
     let hashed_password =
         hash_password(&sign_up_request.password).map_err(|_| ApiError::internal_error())?;
 
-    let user = user::create_user(
+    let user = create_user(
         &mut tx,
         CreateUserQuery {
             email: sign_up_request.email.clone(),
@@ -46,8 +45,7 @@ pub async fn sign_up(
             password_hash: hashed_password,
         },
     )
-        .await
-        .map_err(|_| ApiError::internal_error())?;
+        .await?;
 
     let jwt =
         generate_jwt(user.user_id, &app_config.token).map_err(|_| ApiError::internal_error())?;
@@ -56,7 +54,8 @@ pub async fn sign_up(
 
     let expiration =
         Utc::now() + Duration::from_secs(app_config.token.refresh_token_expiration_seconds);
-    let refresh_token = refresh_token::create_refresh_token(
+
+    let refresh_token = create_refresh_token(
         &mut tx,
         CreateRefreshTokenQuery {
             user_id: user.user_id,
@@ -64,10 +63,9 @@ pub async fn sign_up(
             expiration: expiration.naive_utc(),
         },
     )
-        .await
-        .map_err(|_| ApiError::internal_error())?;
+        .await?;
 
-    tx.commit().await.map_err(|_| ApiError::internal_error())?;
+    tx.commit().await?;
 
     Ok(Json(SignUpResponse {
         user_id: user.user_id,

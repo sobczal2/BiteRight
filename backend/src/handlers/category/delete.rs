@@ -11,11 +11,10 @@ pub async fn delete(
     Path(category_id): Path<i32>,
     claims: ClaimsDto,
 ) -> Result<Json<EmptyResponse>, ApiError> {
-    let mut tx = pool.begin().await.map_err(|_| ApiError::internal_error())?;
+    let mut tx = pool.begin().await?;
 
     let exists = exists_user_category(&mut tx, claims.sub, category_id)
-        .await
-        .map_err(|_| ApiError::internal_error())?;
+        .await?;
 
     if !exists {
         return Err(ApiError::not_found("Category not found"));
@@ -24,10 +23,9 @@ pub async fn delete(
     // TODO: delete photo
 
     delete_category_for_user(&mut tx, claims.sub, category_id)
-        .await
-        .map_err(|_| ApiError::internal_error())?;
+        .await?;
 
-    tx.commit().await.map_err(|_| ApiError::internal_error())?;
+    tx.commit().await?;
 
     Ok(Json(EmptyResponse {}))
 }

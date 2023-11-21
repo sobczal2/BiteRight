@@ -15,7 +15,7 @@ pub async fn list(
     Extension(app_config): Extension<Arc<AppConfig>>,
     ValidatedQuery(list_request): ValidatedQuery<ListRequest>,
 ) -> Result<Json<ListResponse>, ApiError> {
-    let mut tx = pool.begin().await.map_err(|_| ApiError::internal_error())?;
+    let mut tx = pool.begin().await?;
 
     let (categories, total_count) =
         list_categories_for_user(&mut tx,
@@ -24,12 +24,11 @@ pub async fn list(
                                      page: list_request.page,
                                      per_page: list_request.per_page,
                                  })
-            .await
-            .map_err(|_| ApiError::internal_error())?;
+            .await?;
 
     let categories = categories.into_iter().map(|c| CategoryDto::from_query_result(c, &app_config.assets)).collect();
 
-    tx.commit().await.map_err(|_| ApiError::internal_error())?;
+    tx.commit().await?;
 
     Ok(Json(ListResponse {
         categories: PaginatedDto::new(categories, total_count, list_request.page, list_request.per_page),

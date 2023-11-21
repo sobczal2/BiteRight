@@ -11,21 +11,19 @@ pub async fn delete(
     Path(unit_id): Path<i32>,
     claims: ClaimsDto,
 ) -> Result<Json<EmptyResponse>, ApiError> {
-    let mut tx = pool.begin().await.map_err(|_| ApiError::internal_error())?;
+    let mut tx = pool.begin().await?;
 
     let exists = exists_user_unit(&mut tx, claims.sub, unit_id)
-        .await
-        .map_err(|_| ApiError::internal_error())?;
+        .await?;
 
     if !exists {
         return Err(ApiError::not_found("Unit not found"));
     }
 
     delete_unit_for_user(&mut tx, claims.sub, unit_id)
-        .await
-        .map_err(|_| ApiError::internal_error())?;
+        .await?;
 
-    tx.commit().await.map_err(|_| ApiError::internal_error())?;
+    tx.commit().await?;
 
     Ok(Json(EmptyResponse {}))
 }
