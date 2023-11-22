@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.ui.components.common.forms
 
+import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,6 +33,7 @@ fun BiteRightButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
+            shape = MaterialTheme.shapes.extraSmall
         ) {
             Text(
                 text = text, style = MaterialTheme.typography.bodyLarge
@@ -40,7 +42,7 @@ fun BiteRightButton(
     }
 }
 
-@Preview(uiMode = UI_MODE_NIGHT_NO)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun SubmitButtonPreview() {
     BiteRightTheme {

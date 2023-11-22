@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.ui.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -17,16 +19,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sobczal2.biteright.ui.components.common.Logo
-import com.sobczal2.biteright.ui.components.common.SpacerType
-import com.sobczal2.biteright.ui.components.common.VSpacer
 import com.sobczal2.biteright.ui.components.common.forms.BiteRightButton
+import com.sobczal2.biteright.ui.theme.BiteRightTheme
+import com.sobczal2.biteright.ui.theme.spacing
 import com.sobczal2.biteright.viewmodel.screens.SignInViewModel
 
 @Composable
 fun SignInScreen(
-    signInViewModel: SignInViewModel = viewModel()
+    signInViewModel: SignInViewModel = hiltViewModel()
 ) {
     val state by signInViewModel.state.collectAsState()
     Column(
@@ -41,13 +44,14 @@ fun SignInScreen(
                 .fillMaxWidth()
                 .height(200.dp)
         )
-        VSpacer(type = SpacerType.ExtraLarge)
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
         TextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth(),
             value = state.email,
             onValueChange = { email -> signInViewModel.onEmailChanged(email) },
             label = { Text(text = "email") })
-        VSpacer(type = SpacerType.Small)
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = state.password,
@@ -57,18 +61,25 @@ fun SignInScreen(
                 mask = '*'
             )
         )
-        VSpacer(type = SpacerType.Large)
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
         BiteRightButton(
             text = "Sign in",
             loading = state.loading,
             enabled = state.submitEnabled,
             onClick = { signInViewModel.onSignInClicked() }
         )
+
+        if (state.error.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+            Text(text = state.error)
+        }
     }
 }
 
-@Preview
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun SignInScreenPreview() {
-    SignInScreen()
+    BiteRightTheme {
+        SignInScreen()
+    }
 }
