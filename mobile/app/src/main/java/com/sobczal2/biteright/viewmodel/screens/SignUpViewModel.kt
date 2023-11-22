@@ -22,10 +22,16 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
     fun onPasswordChanged(password: String) {
         _state.value = _state.value.copy(password = password)
     }
+
+    fun onSignUpClicked() {
+        _state.value = _state.value.copy(loading = true)
+    }
 }
 
 data class SignUpState(
     val name: String = "",
     val email: String = "",
     val password: String = "",
+    val loading: Boolean = false,
+    val submitEnabled: Boolean = true
 )

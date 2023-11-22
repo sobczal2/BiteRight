@@ -1,14 +1,14 @@
 package com.sobczal2.biteright.ui.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,38 +17,47 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.sobczal2.biteright.Routes
+import com.sobczal2.biteright.ui.components.common.Logo
+import com.sobczal2.biteright.ui.components.common.forms.BiteRightButton
+import com.sobczal2.biteright.ui.theme.BiteRightTheme
+import com.sobczal2.biteright.ui.theme.spacing
 
 @Composable
 fun WelcomeScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(50.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = "BiteRight",
-            style = MaterialTheme.typography.headlineLarge
+        Logo(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            navController.navigate(Routes.SignUp)
-        }) {
-            Text(text = "Sign up")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = {
-            navController.navigate(Routes.SignIn)
-        }) {
-            Text(text = "Sign in")
-        }
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
+        BiteRightButton(
+            text = "Sign up",
+            loading = false,
+            enabled = true,
+            onClick = { navController.navigate(Routes.SignUp) }
+        )
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+        BiteRightButton(
+            text = "Sign in",
+            loading = false,
+            enabled = true,
+            onClick = { navController.navigate(Routes.SignIn) }
+        )
     }
 }
 
-@Preview
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun WelcomeScreenPreview() {
-    val navController = rememberNavController()
-    WelcomeScreen(navController = navController)
+    BiteRightTheme {
+        val navController = rememberNavController()
+        WelcomeScreen(navController = navController)
+    }
 }
