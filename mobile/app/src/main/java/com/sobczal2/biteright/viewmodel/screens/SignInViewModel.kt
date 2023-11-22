@@ -18,9 +18,15 @@ class SignInViewModel @Inject constructor() : ViewModel() {
     fun onPasswordChanged(password: String) {
         _state.value = _state.value.copy(password = password)
     }
+
+    fun onSignInClicked() {
+        _state.value = _state.value.copy(loading = true)
+    }
 }
 
 data class SignInState(
     val email: String = "",
     val password: String = "",
+    val loading: Boolean = false,
+    val submitEnabled: Boolean = true
 )

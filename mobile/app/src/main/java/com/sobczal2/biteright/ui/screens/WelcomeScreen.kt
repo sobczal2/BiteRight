@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -17,32 +18,39 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.sobczal2.biteright.Routes
+import com.sobczal2.biteright.ui.components.common.Logo
+import com.sobczal2.biteright.ui.components.common.SpacerType
+import com.sobczal2.biteright.ui.components.common.VSpacer
+import com.sobczal2.biteright.ui.components.common.forms.BiteRightButton
 
 @Composable
 fun WelcomeScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(50.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = "BiteRight",
-            style = MaterialTheme.typography.headlineLarge
+        Logo(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            navController.navigate(Routes.SignUp)
-        }) {
-            Text(text = "Sign up")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = {
-            navController.navigate(Routes.SignIn)
-        }) {
-            Text(text = "Sign in")
-        }
+        VSpacer(type = SpacerType.ExtraLarge)
+        BiteRightButton(
+            text = "Sign up",
+            loading = false,
+            enabled = true,
+            onClick = { navController.navigate(Routes.SignUp) }
+        )
+        VSpacer(type = SpacerType.Medium)
+        BiteRightButton(
+            text = "Sign in",
+            loading = false,
+            enabled = true,
+            onClick = { navController.navigate(Routes.SignIn) }
+        )
     }
 }
 
