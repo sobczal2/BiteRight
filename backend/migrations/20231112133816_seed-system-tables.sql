@@ -42,7 +42,7 @@ VALUES ((SELECT category_id FROM categories WHERE name = 'dairy')),
        ((SELECT category_id FROM categories WHERE name = 'vegetables')),
        ((SELECT category_id FROM categories WHERE name = 'meats'));
 
-INSERT INTO product_templates (name, expiration_span, amount, unit_id, price, currency_id, category_id)
+INSERT INTO templates (name, expiration_span, amount, unit_id, price, currency_id, category_id)
 VALUES ('Milk', INTERVAL '10 days', 1.0, (SELECT unit_id FROM units WHERE abbreviation = 'L'), 2.50,
         (SELECT currency_id FROM currencies WHERE abbreviation = 'USD'),
         (SELECT category_id FROM categories WHERE name = 'dairy')),
@@ -56,8 +56,8 @@ VALUES ('Milk', INTERVAL '10 days', 1.0, (SELECT unit_id FROM units WHERE abbrev
         (SELECT currency_id FROM currencies WHERE abbreviation = 'USD'),
         (SELECT category_id FROM categories WHERE name = 'meats'));
 
-INSERT INTO system_product_templates (product_template_id)
-VALUES ((SELECT product_template_id FROM product_templates WHERE name = 'Milk')),
-       ((SELECT product_template_id FROM product_templates WHERE name = 'Bread')),
-       ((SELECT product_template_id FROM product_templates WHERE name = 'Apples')),
-       ((SELECT product_template_id FROM product_templates WHERE name = 'Chicken Breast'));
+INSERT INTO system_templates (template_id)
+VALUES ((SELECT template_id FROM templates WHERE name = 'Milk')),
+       ((SELECT template_id FROM templates WHERE name = 'Bread')),
+       ((SELECT template_id FROM templates WHERE name = 'Apples')),
+       ((SELECT template_id FROM templates WHERE name = 'Chicken Breast'));

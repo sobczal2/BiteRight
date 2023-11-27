@@ -31,8 +31,8 @@ OFFSET $2 ROWS FETCH NEXT $3 ROWS ONLY
         (list_units_for_user_query.page * list_units_for_user_query.per_page) as i32,
         list_units_for_user_query.per_page as i32,
     )
-    .fetch_all(&mut *conn)
-    .await?;
+        .fetch_all(&mut *conn)
+        .await?;
 
     let count = query!(
         r#"
@@ -45,10 +45,10 @@ WHERE uu.user_id = $1
         "#,
         list_units_for_user_query.user_id,
     )
-    .fetch_one(&mut *conn)
-    .await?
-    .total_count
-    .unwrap_or(0);
+        .fetch_one(&mut *conn)
+        .await?
+        .total_count
+        .unwrap_or(0);
 
     Ok((units, count))
 }
@@ -66,8 +66,8 @@ RETURNING unit_id, name, abbreviation, created_at, updated_at
         create_unit_for_user_query.name,
         create_unit_for_user_query.abbreviation,
     )
-    .fetch_one(&mut *conn)
-    .await?;
+        .fetch_one(&mut *conn)
+        .await?;
 
     query!(
         r#"
@@ -77,8 +77,8 @@ VALUES ($1, $2)
         create_unit_for_user_query.user_id,
         result.unit_id,
     )
-    .execute(&mut *conn)
-    .await?;
+        .execute(&mut *conn)
+        .await?;
 
     Ok(FetchUnitQueryResult {
         unit_id: result.unit_id,
@@ -111,8 +111,8 @@ SELECT EXISTS (
         user_id,
         name,
     )
-    .fetch_one(&mut *conn)
-    .await?;
+        .fetch_one(&mut *conn)
+        .await?;
     result.exists.ok_or(sqlx::Error::RowNotFound)
 }
 
@@ -135,8 +135,8 @@ SELECT EXISTS (SELECT 1
         user_id,
         abbreviation,
     )
-    .fetch_one(&mut *conn)
-    .await?;
+        .fetch_one(&mut *conn)
+        .await?;
 
     result.exists.ok_or(sqlx::Error::RowNotFound)
 }
@@ -157,8 +157,8 @@ SELECT EXISTS (SELECT 1
         user_id,
         unit_id,
     )
-    .fetch_one(&mut *conn)
-    .await?;
+        .fetch_one(&mut *conn)
+        .await?;
     result.exists.ok_or(sqlx::Error::RowNotFound)
 }
 
@@ -177,8 +177,8 @@ WHERE user_id = $1
         user_id,
         unit_id,
     )
-    .execute(&mut *conn)
-    .await?;
+        .execute(&mut *conn)
+        .await?;
 
     query!(
         r#"
@@ -188,8 +188,8 @@ WHERE unit_id = $1
         "#,
         unit_id,
     )
-    .execute(&mut *conn)
-    .await?;
+        .execute(&mut *conn)
+        .await?;
 
     Ok(())
 }
