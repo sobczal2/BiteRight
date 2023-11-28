@@ -27,7 +27,7 @@ pub struct FetchTemplateQueryResult {
     pub price: Option<PgMoney>,
     pub currency_id: Option<i32>,
     pub category_id: i32,
-    pub can_modify: bool,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
+    pub can_modify: bool,
 }

@@ -10,9 +10,9 @@ pub struct FetchCategoryQueryResult {
     pub category_id: i32,
     pub name: String,
     pub photo_name: Option<String>,
-    pub can_modify: bool,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
+    pub can_modify: bool,
 }
 
 pub struct CreateCategoryForUserQuery {

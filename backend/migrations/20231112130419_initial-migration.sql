@@ -40,11 +40,12 @@ CREATE TABLE system_units
 
 CREATE TABLE currencies
 (
-    currency_id  SERIAL PRIMARY KEY,
-    name         VARCHAR(64) NOT NULL,
-    abbreviation VARCHAR(16) NOT NULL,
-    created_at   TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
-    updated_at   TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
+    currency_id SERIAL PRIMARY KEY,
+    name        VARCHAR(64) NOT NULL,
+    code        VARCHAR(16) NOT NULL,
+    symbol      VARCHAR(8) NULL,
+    created_at  TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
+    updated_at  TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
 );
 
 CREATE TABLE user_currencies

@@ -7,13 +7,14 @@ use crate::models::dtos::unit::{CreateRequest, CreateResponse};
 use crate::models::dtos::user::ClaimsDto;
 use crate::models::query_objects::unit::CreateUnitForUserQuery;
 use axum::{Extension, Json};
+use axum::http::StatusCode;
 use sqlx::PgPool;
 
 pub async fn create(
     Extension(pool): Extension<PgPool>,
     claims: ClaimsDto,
     ValidatedJson(create_request): ValidatedJson<CreateRequest>,
-) -> Result<Json<CreateResponse>, ApiError> {
+) -> Result<(StatusCode, Json<CreateResponse>), ApiError> {
     let mut tx = pool.begin().await?;
 
     let exists =
@@ -38,9 +39,18 @@ pub async fn create(
             abbreviation: create_request.abbreviation,
         },
     )
-    .await?;
+        .await?;
 
     tx.commit().await?;
 
-    Ok(Json(CreateResponse { unit: unit.into() }))
+    Ok(
+        (
+            StatusCode::CREATED,
+            Json(
+                CreateResponse {
+                    unit: unit.into()
+                }
+            )
+        )
+    )
 }

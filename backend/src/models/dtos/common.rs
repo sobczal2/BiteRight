@@ -88,6 +88,3 @@ where
         Ok(Self(query))
     }
 }
-
-#[derive(Debug, Serialize)]
-pub struct EmptyResponse;

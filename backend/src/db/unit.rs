@@ -13,12 +13,12 @@ pub async fn list_units_for_user(
 SELECT u.unit_id,
        u.name,
        u.abbreviation,
+       u.created_at,
+       u.updated_at,
        CASE
            WHEN uu.user_id IS NOT NULL THEN TRUE
            ELSE FALSE
-           END AS can_modify,
-       u.created_at,
-       u.updated_at
+           END AS can_modify
 FROM units u
          LEFT JOIN user_units uu ON u.unit_id = uu.unit_id
          LEFT JOIN system_units su ON u.unit_id = su.unit_id
@@ -36,7 +36,7 @@ OFFSET $2 ROWS FETCH NEXT $3 ROWS ONLY
 
     let count = query!(
         r#"
-SELECT COUNT(*)::INT as total_count
+SELECT COUNT(*)::INT as count
 FROM units u
          LEFT JOIN user_units uu ON u.unit_id = uu.unit_id
          LEFT JOIN system_units su ON u.unit_id = su.unit_id
@@ -47,7 +47,7 @@ WHERE uu.user_id = $1
     )
         .fetch_one(&mut *conn)
         .await?
-        .total_count
+        .count
         .unwrap_or(0);
 
     Ok((units, count))
@@ -84,9 +84,9 @@ VALUES ($1, $2)
         unit_id: result.unit_id,
         name: result.name,
         abbreviation: result.abbreviation,
-        can_modify: true,
         created_at: result.created_at,
         updated_at: result.updated_at,
+        can_modify: true,
     })
 }
 
@@ -180,16 +180,30 @@ WHERE user_id = $1
         .execute(&mut *conn)
         .await?;
 
-    query!(
+    Ok(())
+}
+
+pub async fn exists_unit_for_user(
+    conn: &mut PgConnection,
+    user_id: i32,
+    unit_id: i32,
+) -> Result<bool, sqlx::Error> {
+    let result = query!(
         r#"
-DELETE
-FROM units
-WHERE unit_id = $1
+SELECT EXISTS (SELECT 1
+               FROM units u
+                        LEFT JOIN user_units uu ON u.unit_id = uu.unit_id
+                        LEFT JOIN system_units su ON u.unit_id = su.unit_id
+               WHERE (uu.user_id = $1
+                   OR su.system_unit_id IS NOT NULL)
+                 AND u.unit_id = $2
+                   FETCH FIRST ROW ONLY)
         "#,
+        user_id,
         unit_id,
     )
-        .execute(&mut *conn)
+        .fetch_one(&mut *conn)
         .await?;
 
-    Ok(())
+    result.exists.ok_or(sqlx::Error::RowNotFound)
 }

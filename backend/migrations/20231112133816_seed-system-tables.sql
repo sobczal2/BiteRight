@@ -13,19 +13,19 @@ VALUES ((SELECT unit_id FROM units WHERE abbreviation = 'kg')),
        ((SELECT unit_id FROM units WHERE abbreviation = 'g'));
 
 
-INSERT INTO currencies (name, abbreviation)
-VALUES ('US Dollar', 'USD'),
-       ('Euro', 'EUR'),
-       ('British Pound', 'GBP'),
-       ('Japanese Yen', 'JPY'),
-       ('Polish Zloty', 'PLN');
+INSERT INTO currencies (name, code, symbol)
+VALUES ('US Dollar', 'USD', '$'),
+       ('Euro', 'EUR', '€'),
+       ('British Pound', 'GBP', '£'),
+       ('Japanese Yen', 'JPY', '¥'),
+       ('Polish Zloty', 'PLN', 'zł');
 
 INSERT INTO system_currencies (currency_id)
-VALUES ((SELECT currency_id FROM currencies WHERE abbreviation = 'USD')),
-       ((SELECT currency_id FROM currencies WHERE abbreviation = 'EUR')),
-       ((SELECT currency_id FROM currencies WHERE abbreviation = 'GBP')),
-       ((SELECT currency_id FROM currencies WHERE abbreviation = 'JPY')),
-       ((SELECT currency_id FROM currencies WHERE abbreviation = 'PLN'));
+VALUES ((SELECT currency_id FROM currencies WHERE code = 'USD')),
+       ((SELECT currency_id FROM currencies WHERE code = 'EUR')),
+       ((SELECT currency_id FROM currencies WHERE code = 'GBP')),
+       ((SELECT currency_id FROM currencies WHERE code = 'JPY')),
+       ((SELECT currency_id FROM currencies WHERE code = 'PLN'));
 
 INSERT INTO categories (name)
 VALUES ('dairy'),
@@ -44,16 +44,16 @@ VALUES ((SELECT category_id FROM categories WHERE name = 'dairy')),
 
 INSERT INTO templates (name, expiration_span, amount, unit_id, price, currency_id, category_id)
 VALUES ('Milk', INTERVAL '10 days', 1.0, (SELECT unit_id FROM units WHERE abbreviation = 'L'), 2.50,
-        (SELECT currency_id FROM currencies WHERE abbreviation = 'USD'),
+        (SELECT currency_id FROM currencies WHERE code = 'USD'),
         (SELECT category_id FROM categories WHERE name = 'dairy')),
        ('Bread', INTERVAL '5 days', 1.0, (SELECT unit_id FROM units WHERE abbreviation = 'pcs'), 3.00,
-        (SELECT currency_id FROM currencies WHERE abbreviation = 'USD'),
+        (SELECT currency_id FROM currencies WHERE code = 'USD'),
         (SELECT category_id FROM categories WHERE name = 'bakery')),
        ('Apples', INTERVAL '20 days', 1.0, (SELECT unit_id FROM units WHERE abbreviation = 'kg'), 4.00,
-        (SELECT currency_id FROM currencies WHERE abbreviation = 'USD'),
+        (SELECT currency_id FROM currencies WHERE code = 'USD'),
         (SELECT category_id FROM categories WHERE name = 'fruits')),
        ('Chicken Breast', INTERVAL '7 days', 0.5, (SELECT unit_id FROM units WHERE abbreviation = 'kg'), 5.00,
-        (SELECT currency_id FROM currencies WHERE abbreviation = 'USD'),
+        (SELECT currency_id FROM currencies WHERE code = 'USD'),
         (SELECT category_id FROM categories WHERE name = 'meats'));
 
 INSERT INTO system_templates (template_id)
