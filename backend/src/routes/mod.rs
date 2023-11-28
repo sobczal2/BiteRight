@@ -12,6 +12,7 @@ mod category;
 mod unit;
 mod user;
 mod template;
+mod currency;
 
 pub fn create_router(app_config: &AppConfig) -> Router {
     Router::new()
@@ -19,5 +20,6 @@ pub fn create_router(app_config: &AppConfig) -> Router {
         .nest("/unit", create_unit_router())
         .nest("/category", create_category_router())
         .nest("/template", create_template_router())
+        .nest("/currency", currency::create_currency_router())
         .nest("/assets", create_assets_router(&app_config.assets))
 }

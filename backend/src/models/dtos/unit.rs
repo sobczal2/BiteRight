@@ -24,9 +24,9 @@ impl From<FetchUnitQueryResult> for UnitDto {
 
 #[derive(Debug, Deserialize, Validate)]
 pub struct ListRequest {
-    #[validate(range(min = 0, max = 1000))]
+    #[validate(range(min = 0, message = "Page must be greater than or equal to 0"))]
     pub page: i32,
-    #[validate(range(min = 1))]
+    #[validate(range(min = 1, max = 1000, message = "Per page must be between 1 and 1000"))]
     pub per_page: i32,
 }
 

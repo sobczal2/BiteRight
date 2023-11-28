@@ -1,12 +1,16 @@
 use axum::{Extension, Json};
 use axum::http::StatusCode;
 use sqlx::PgPool;
+use sqlx::postgres::types::{PgInterval, PgMoney};
+use crate::db::currency::exists_currency_for_user;
 use crate::db::template::{create_template_for_user, exists_template_for_user_by_name};
 use crate::db::unit::exists_unit_for_user;
 use crate::errors::api::ApiError;
 use crate::models::dtos::common::ValidatedJson;
 use crate::models::dtos::template::{CreateRequest, CreateResponse};
 use crate::models::dtos::user::ClaimsDto;
+use crate::models::query_objects::template::CreateTemplateForUserQuery;
+use crate::utils::regex::PRICE_REGEX;
 
 pub async fn create(
     Extension(pool): Extension<PgPool>,
@@ -32,33 +36,45 @@ pub async fn create(
     if !unit_exists {
         return Err(ApiError::bad_request("Unit does not exist"));
     }
-    
-    // TODO
-    // match (create_request.price, create_request.currency_id) { 
-    //     (Some(price), Some(currency_id)) => {
-    //         let price = price.parse::<f64>().map_err(|_| ApiError::bad_request("Invalid price"))?;
-    //         let currency_exists = exists_currency_for_user(
-    //             &mut tx,
-    //             claims.sub,
-    //             currency_id,
-    //         )
-    //             .await?;
-    //         if !currency_exists {
-    //             return Err(ApiError::bad_request("Currency does not exist"));
-    //         }
-    //     },
-    //     (Some(_), None) => {
-    //         return Err(ApiError::bad_request("Currency ID must be specified if price is specified"));
-    //     },
-    //     (None, Some(_)) => {
-    //         return Err(ApiError::bad_request("Price must be specified if currency ID is specified"));
-    //     },
-    //     (None, None) => {},
-    // }
+
+    let expiration_span = PgInterval::try_from(create_request.expiration_span)
+        .map_err(|_| ApiError::bad_request("Invalid expiration span"))?;
+
+    let price: Option<PgMoney> = match (create_request.price, create_request.currency_id) {
+        (Some(price), Some(currency_id)) => {
+            let exists = exists_currency_for_user(
+                &mut tx,
+                claims.sub,
+                currency_id,
+            )
+                .await?;
+            if !exists {
+                return Err(ApiError::bad_request("Currency does not exist"));
+            }
+
+            if !PRICE_REGEX.is_match(&price) {
+                return Err(ApiError::bad_request("Invalid price"));
+            }
+
+            Some(PgMoney::try_from((price.parse::<f64>().unwrap() * 100.0) as i64)
+                .map_err(|_| ApiError::bad_request("Invalid price"))?)
+        },
+        (None, None) => None,
+        _ => return Err(ApiError::bad_request("Price and currency ID must be both present or both absent")),
+    };
 
     let template = create_template_for_user(
         &mut tx,
-        create_request.into_create_query(claims.sub).map_err(|_| ApiError::internal_error())?,
+        CreateTemplateForUserQuery {
+            user_id: claims.sub,
+            name: create_request.name,
+            expiration_span,
+            amount: create_request.amount,
+            unit_id: create_request.unit_id,
+            price,
+            currency_id: create_request.currency_id,
+            category_id: create_request.category_id,
+        }
     )
         .await?;
 

@@ -53,3 +53,28 @@ WHERE uc.user_id = $1
 
     Ok((currencies, count))
 }
+
+pub async fn exists_currency_for_user(
+    conn: &mut PgConnection,
+    user_id: i32,
+    currency_id: i32,
+) -> Result<bool, sqlx::Error> {
+    let result = query!(
+        r#"
+SELECT EXISTS(SELECT 1
+              FROM currencies c
+                       LEFT JOIN user_currencies uc ON c.currency_id = uc.currency_id
+                       LEFT JOIN system_currencies sc ON c.currency_id = sc.currency_id
+              WHERE (uc.user_id = $1
+                  OR sc.system_currency_id IS NOT NULL)
+                AND c.currency_id = $2
+                  FETCH FIRST ROW ONLY)
+        "#,
+        user_id,
+        currency_id,
+    )
+        .fetch_one(&mut *conn)
+        .await?;
+
+    result.exists.ok_or(sqlx::Error::RowNotFound)
+}

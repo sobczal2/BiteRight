@@ -47,7 +47,6 @@ pub struct CreateRequest {
     pub amount: f64,
     #[validate(range(min = 1, message = "Unit ID must be greater than or equal to 1"))]
     pub unit_id: i32,
-    #[validate(custom = "validate_price")]
     pub price: Option<String>,
     #[validate(range(min = 1, message = "Currency ID must be greater than or equal to 1"))]
     pub currency_id: Option<i32>,
@@ -79,36 +78,6 @@ fn validate_price(price: &String) -> Result<(), ValidationError> {
     Err(ValidationError::new("Price must be a valid price"))
 }
 
-impl CreateRequest {
-    pub fn into_create_query(self, user_id: i32) -> Result<CreateTemplateForUserQuery, ()> {
-        let expiration_span = PgInterval {
-            months: 0,
-            days: 0,
-            microseconds: self.expiration_span.as_micros() as i64,
-        };
-
-        let price = match self.price {
-            Some(price) => Some(
-                PgMoney(
-                    (price.parse::<f64>().map_err(|_| ())? * 100.0) as i64,
-                ),
-            ),
-            None => None,
-        };
-
-        Ok(CreateTemplateForUserQuery {
-            name: self.name.to_lowercase(),
-            expiration_span,
-            amount: self.amount,
-            unit_id: self.unit_id,
-            price,
-            currency_id: self.currency_id,
-            category_id: self.category_id,
-            user_id,
-        })
-    }
-}
-
 #[derive(Debug, Serialize)]
 pub struct CreateResponse {
     pub template: TemplateDto,
@@ -116,9 +85,9 @@ pub struct CreateResponse {
 
 #[derive(Debug, Deserialize, Validate)]
 pub struct ListRequest {
-    #[validate(range(min = 0, max = 1000, message = "Page must be between 0 and 1000"))]
+    #[validate(range(min = 0, message = "Page must be greater than or equal to 0"))]
     pub page: i32,
-    #[validate(range(min = 1, message = "Per page must be greater than or equal to 1"))]
+    #[validate(range(min = 1, max = 1000, message = "Per page must be between 1 and 1000"))]
     pub per_page: i32,
 }
 
