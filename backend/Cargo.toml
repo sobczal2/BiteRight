@@ -23,3 +23,5 @@ rand = { version = "0.8.5", features = [] }
 validator = { version = "0.16.1", features = ["derive"] }
 tower-http = { version = "0.4.4", features = ["fs", "trace"] }
 serde_urlencoded = "0.7.1"
+regex = "1.10.2"
+lazy_static = { version = "1.4.0", features = [] }

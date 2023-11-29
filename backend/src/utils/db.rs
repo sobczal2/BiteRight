@@ -13,3 +13,9 @@ pub async fn create_pg_pool(
         .map_err(|_| UtilError::CreatePool)?;
     Ok(pool)
 }
+
+pub fn get_skip_and_take(page: i32, per_page: i32) -> (i32, i32) {
+    let skip = page * per_page;
+    let take = per_page;
+    (skip, take)
+}

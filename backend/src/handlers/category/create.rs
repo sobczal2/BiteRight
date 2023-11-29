@@ -8,13 +8,14 @@ use crate::models::query_objects::category::CreateCategoryForUserQuery;
 use axum::{Extension, Json};
 use sqlx::PgPool;
 use std::sync::Arc;
+use axum::http::StatusCode;
 
 pub async fn create(
     Extension(pool): Extension<PgPool>,
     claims: ClaimsDto,
     Extension(app_config): Extension<Arc<AppConfig>>,
     ValidatedJson(create_request): ValidatedJson<CreateRequest>,
-) -> Result<Json<CreateResponse>, ApiError> {
+) -> Result<(StatusCode, Json<CreateResponse>), ApiError> {
     let mut tx = pool.begin().await?;
 
     let exists =
@@ -32,11 +33,18 @@ pub async fn create(
             photo_id: None,
         },
     )
-    .await?;
+        .await?;
 
     tx.commit().await?;
 
-    Ok(Json(CreateResponse {
-        category: CategoryDto::from_query_result(category, &app_config.assets),
-    }))
+    Ok(
+        (
+            StatusCode::CREATED,
+            Json(
+                CreateResponse {
+                    category: CategoryDto::from_query_result(category, &app_config.assets),
+                }
+            )
+        )
+    )
 }

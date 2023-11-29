@@ -2,11 +2,13 @@ use crate::models::query_objects::category::{
     CreateCategoryForUserQuery, FetchCategoryQueryResult, ListCategoriesForUserQuery,
 };
 use sqlx::{query, query_as_unchecked, PgConnection};
+use crate::utils::db::get_skip_and_take;
 
 pub async fn list_categories_for_user(
     conn: &mut PgConnection,
     list_categories_for_user_query: ListCategoriesForUserQuery,
 ) -> Result<(Vec<FetchCategoryQueryResult>, i32), sqlx::Error> {
+    let (skip, take) = get_skip_and_take(list_categories_for_user_query.page, list_categories_for_user_query.per_page);
     let categories = query_as_unchecked!(
         FetchCategoryQueryResult,
         r#"
@@ -29,8 +31,8 @@ ORDER BY name
 OFFSET $2 ROWS FETCH NEXT $3 ROWS ONLY
             "#,
         list_categories_for_user_query.user_id,
-        (list_categories_for_user_query.page * list_categories_for_user_query.per_page) as i32,
-        list_categories_for_user_query.per_page as i32,
+        skip,
+        take,
     )
     .fetch_all(&mut *conn)
     .await?;
@@ -86,9 +88,9 @@ VALUES ($1, $2)
         category_id: result.category_id,
         name: result.name,
         photo_name: None,
-        can_modify: true,
         created_at: result.created_at,
         updated_at: result.updated_at,
+        can_modify: true,
     })
 }
 
@@ -151,17 +153,6 @@ WHERE user_id = $1
   AND category_id = $2
         "#,
         user_id,
-        category_id,
-    )
-    .execute(&mut *conn)
-    .await?;
-
-    query!(
-        r#"
-DELETE
-FROM categories
-WHERE category_id = $1
-        "#,
         category_id,
     )
     .execute(&mut *conn)

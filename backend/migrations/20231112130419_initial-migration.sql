@@ -5,7 +5,8 @@ CREATE TABLE users
     name          VARCHAR(32) UNIQUE  NOT NULL,
     email         VARCHAR(320) UNIQUE NOT NULL,
     password_hash VARCHAR(128)        NOT NULL,
-    created_at    TIMESTAMP           NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
+    created_at    TIMESTAMP           NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
+    updated_at    TIMESTAMP           NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
 );
 
 CREATE TABLE photos
@@ -39,11 +40,12 @@ CREATE TABLE system_units
 
 CREATE TABLE currencies
 (
-    currency_id  SERIAL PRIMARY KEY,
-    name         VARCHAR(64) NOT NULL,
-    abbreviation VARCHAR(16) NOT NULL,
-    created_at   TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
-    updated_at   TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
+    currency_id SERIAL PRIMARY KEY,
+    name        VARCHAR(64) NOT NULL,
+    code        VARCHAR(16) NOT NULL,
+    symbol      VARCHAR(8) NULL,
+    created_at  TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
+    updated_at  TIMESTAMP   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
 );
 
 CREATE TABLE user_currencies
@@ -88,45 +90,47 @@ CREATE TABLE products
     name            VARCHAR(64)                                 NOT NULL,
     description     VARCHAR(1024)                               NOT NULL,
     expiration_date TIMESTAMP NULL,
-    created_at      TIMESTAMP                                   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
-    updated_at      TIMESTAMP                                   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
     amount          FLOAT                                       NOT NULL,
     unit_id         INTEGER REFERENCES units (unit_id)          NOT NULL,
     price           MONEY NULL,
     currency_id     INTEGER REFERENCES currencies (currency_id) NULL,
     amount_left     FLOAT                                       NOT NULL,
-    category_id     INTEGER REFERENCES categories (category_id) NOT NULL
+    category_id     INTEGER REFERENCES categories (category_id) NOT NULL,
+    created_at      TIMESTAMP                                   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
+    updated_at      TIMESTAMP                                   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
 );
 
-CREATE TABLE product_templates
+CREATE TABLE templates
 (
-    product_template_id SERIAL PRIMARY KEY,
-    name                VARCHAR(64)                                 NOT NULL,
+    template_id SERIAL PRIMARY KEY,
+    name        VARCHAR(64)                                 NOT NULL,
     expiration_span INTERVAL NOT NULL,
-    amount              FLOAT                                       NOT NULL,
-    unit_id             INTEGER REFERENCES units (unit_id)          NOT NULL,
-    price               MONEY NULL,
-    currency_id         INTEGER REFERENCES currencies (currency_id) NULL,
-    category_id         INTEGER REFERENCES categories (category_id) NOT NULL
+    amount      FLOAT                                       NOT NULL,
+    unit_id     INTEGER REFERENCES units (unit_id)          NOT NULL,
+    price       MONEY NULL,
+    currency_id INTEGER REFERENCES currencies (currency_id) NULL,
+    category_id INTEGER REFERENCES categories (category_id) NOT NULL,
+    created_at  TIMESTAMP                                   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC'),
+    updated_at  TIMESTAMP                                   NOT NULL DEFAULT (NOW() AT TIME ZONE 'UTC')
 );
 
-CREATE TABLE user_product_templates
+CREATE TABLE user_templates
 (
-    user_id             INTEGER REFERENCES users (user_id)                         NOT NULL,
-    product_template_id INTEGER REFERENCES product_templates (product_template_id) NOT NULL,
-    PRIMARY KEY (user_id, product_template_id)
+    user_id     INTEGER REFERENCES users (user_id)         NOT NULL,
+    template_id INTEGER REFERENCES templates (template_id) NOT NULL,
+    PRIMARY KEY (user_id, template_id)
 );
 
-CREATE TABLE system_product_templates
+CREATE TABLE system_templates
 (
-    system_product_template_id SERIAL PRIMARY KEY,
-    product_template_id        INTEGER REFERENCES product_templates (product_template_id) NOT NULL
+    system_template_id SERIAL PRIMARY KEY,
+    template_id        INTEGER REFERENCES templates (template_id) NOT NULL
 );
 
 CREATE TABLE refresh_tokens
 (
     refresh_token_id SERIAL PRIMARY KEY,
     user_id          INTEGER REFERENCES users (user_id) UNIQUE NOT NULL,
-    token            VARCHAR(64)                        NOT NULL,
-    expiration       TIMESTAMP                          NOT NULL
+    token            VARCHAR(64)                               NOT NULL,
+    expiration       TIMESTAMP                                 NOT NULL
 );
