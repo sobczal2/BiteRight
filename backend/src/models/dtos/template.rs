@@ -1,39 +1,34 @@
-use std::time::Duration;
 use serde::{Deserialize, Serialize};
-use sqlx::postgres::types::{PgInterval, PgMoney};
-use validator::{Validate, ValidationError};
+use validator::{Validate};
 use crate::models::dtos::common::PaginatedDto;
-use crate::models::query_objects::template::{CreateTemplateForUserQuery, FetchTemplateQueryResult};
-use crate::utils::regex::PRICE_REGEX;
+use crate::models::query_objects::template::{FetchTemplateQueryResult};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TemplateDto {
     pub template_id: i32,
     pub name: String,
-    pub expiration_span: Duration,
+    pub expiration_span_seconds: i64,
     pub amount: f64,
     pub unit_id: i32,
-    pub price: Option<String>,
+    pub price_cents: Option<i64>,
     pub currency_id: Option<i32>,
     pub category_id: i32,
     pub can_modify: bool,
 }
 
-impl TryFrom<FetchTemplateQueryResult> for TemplateDto {
-    type Error = ();
-
-    fn try_from(template: FetchTemplateQueryResult) -> Result<Self, Self::Error> {
-        Ok(Self {
-            template_id: template.template_id,
-            name: template.name,
-            expiration_span: Duration::from_micros(template.expiration_span.microseconds as u64),
-            amount: template.amount,
-            unit_id: template.unit_id,
-            price: template.price.map(|price| price.0.to_string()),
-            currency_id: template.currency_id,
-            category_id: template.category_id,
-            can_modify: template.can_modify,
-        })
+impl From<FetchTemplateQueryResult> for TemplateDto {
+    fn from(fetch_template_query_result: FetchTemplateQueryResult) -> Self {
+        TemplateDto {
+            template_id: fetch_template_query_result.template_id,
+            name: fetch_template_query_result.name,
+            expiration_span_seconds: fetch_template_query_result.expiration_span.microseconds / 1_000_000,
+            amount: fetch_template_query_result.amount,
+            unit_id: fetch_template_query_result.unit_id,
+            price_cents: fetch_template_query_result.price.map(|p| p.0),
+            currency_id: fetch_template_query_result.currency_id,
+            category_id: fetch_template_query_result.category_id,
+            can_modify: fetch_template_query_result.can_modify,
+        }
     }
 }
 
@@ -41,41 +36,18 @@ impl TryFrom<FetchTemplateQueryResult> for TemplateDto {
 pub struct CreateRequest {
     #[validate(length(min = 1, max = 64, message = "Name must be between 1 and 64 characters"))]
     pub name: String,
-    #[validate(custom = "validate_expiration_span")]
-    pub expiration_span: Duration,
+    #[validate(range(min = 0, message = "Expiration span must be greater than or equal to 0"))]
+    pub expiration_span_seconds: i64,
     #[validate(range(min = 0.0, message = "Amount must be greater than or equal to 0"))]
     pub amount: f64,
     #[validate(range(min = 1, message = "Unit ID must be greater than or equal to 1"))]
     pub unit_id: i32,
-    pub price: Option<String>,
+    #[validate(range(min = 0.0, message = "Price must be greater than or equal to 0"))]
+    pub price_cents: Option<i64>,
     #[validate(range(min = 1, message = "Currency ID must be greater than or equal to 1"))]
     pub currency_id: Option<i32>,
     #[validate(range(min = 1, message = "Category ID must be greater than or equal to 1"))]
     pub category_id: i32,
-}
-
-fn validate_expiration_span(expiration_span: &Duration) -> Result<(), ValidationError> {
-    if expiration_span.as_secs() < 1 {
-        return Err(ValidationError::new("Expiration span must be at least 1 second"));
-    }
-
-    if expiration_span.as_secs() > 60 * 60 * 24 * 365 * 100 {
-        return Err(ValidationError::new("Expiration span must be less than 100 years"));
-    }
-
-    Ok(())
-}
-
-fn validate_price(price: &String) -> Result<(), ValidationError> {
-    if price.len() > 64 {
-        return Err(ValidationError::new("Price must be less than 64 characters"));
-    }
-
-    if PRICE_REGEX.is_match(price) {
-        return Ok(());
-    }
-
-    Err(ValidationError::new("Price must be a valid price"))
 }
 
 #[derive(Debug, Serialize)]

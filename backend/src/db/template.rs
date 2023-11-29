@@ -1,4 +1,4 @@
-use sqlx::{PgConnection, query, query_as, query_as_unchecked};
+use sqlx::{PgConnection, query, query_as_unchecked};
 use crate::models::query_objects::template::{CreateTemplateForUserQuery, FetchTemplateQueryResult, ListTemplatesForUserQuery};
 use crate::utils::db::get_skip_and_take;
 

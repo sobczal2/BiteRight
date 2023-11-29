@@ -10,7 +10,6 @@ use crate::models::dtos::common::ValidatedJson;
 use crate::models::dtos::template::{CreateRequest, CreateResponse};
 use crate::models::dtos::user::ClaimsDto;
 use crate::models::query_objects::template::CreateTemplateForUserQuery;
-use crate::utils::regex::PRICE_REGEX;
 
 pub async fn create(
     Extension(pool): Extension<PgPool>,
@@ -26,7 +25,7 @@ pub async fn create(
     if exists {
         return Err(ApiError::bad_request("Template already exists"));
     }
-    
+
     let unit_exists = exists_unit_for_user(
         &mut tx,
         claims.sub,
@@ -37,11 +36,14 @@ pub async fn create(
         return Err(ApiError::bad_request("Unit does not exist"));
     }
 
-    let expiration_span = PgInterval::try_from(create_request.expiration_span)
-        .map_err(|_| ApiError::bad_request("Invalid expiration span"))?;
+    let expiration_span = PgInterval {
+        months: 0,
+        days: 0,
+        microseconds: create_request.expiration_span_seconds * 1_000_000,
+    };
 
-    let price: Option<PgMoney> = match (create_request.price, create_request.currency_id) {
-        (Some(price), Some(currency_id)) => {
+    let price: Option<PgMoney> = match (create_request.price_cents, create_request.currency_id) {
+        (Some(price_cents), Some(currency_id)) => {
             let exists = exists_currency_for_user(
                 &mut tx,
                 claims.sub,
@@ -52,13 +54,8 @@ pub async fn create(
                 return Err(ApiError::bad_request("Currency does not exist"));
             }
 
-            if !PRICE_REGEX.is_match(&price) {
-                return Err(ApiError::bad_request("Invalid price"));
-            }
-
-            Some(PgMoney::try_from((price.parse::<f64>().unwrap() * 100.0) as i64)
-                .map_err(|_| ApiError::bad_request("Invalid price"))?)
-        },
+            Some(price_cents.into())
+        }
         (None, None) => None,
         _ => return Err(ApiError::bad_request("Price and currency ID must be both present or both absent")),
     };
@@ -74,7 +71,7 @@ pub async fn create(
             price,
             currency_id: create_request.currency_id,
             category_id: create_request.category_id,
-        }
+        },
     )
         .await?;
 

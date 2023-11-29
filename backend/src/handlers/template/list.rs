@@ -28,9 +28,8 @@ pub async fn list(
 
     let templates = templates
         .into_iter()
-        .map(|t| TemplateDto::try_from(t))
-        .collect::<Result<Vec<TemplateDto>, ()>>()
-        .map_err(|_| ApiError::internal_error())?;
+        .map(|t| t.into())
+        .collect();
     
     Ok(Json(ListResponse {
         templates: PaginatedDto::new(
