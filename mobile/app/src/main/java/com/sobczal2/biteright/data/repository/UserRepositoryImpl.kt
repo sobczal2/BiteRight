@@ -4,6 +4,7 @@ import com.sobczal2.biteright.data.local.UserSPDataSource
 import com.sobczal2.biteright.data.remote.UserApiDataSource
 import com.sobczal2.biteright.domain.repository.UserRepository
 import com.sobczal2.biteright.dto.user.SignInRequest
+import com.sobczal2.biteright.dto.user.SignUpRequest
 import com.sobczal2.biteright.dto.user.UserDto
 import javax.inject.Inject
 
@@ -21,8 +22,7 @@ class UserRepositoryImpl @Inject constructor(
             } else {
                 Result.failure(Exception(response.errorBody()?.string()))
             }
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Result.failure(e)
         }
     }
@@ -34,18 +34,38 @@ class UserRepositoryImpl @Inject constructor(
 
             if (response.isSuccessful) {
                 val signInResponse = response.body()!!
-                userSPDataSource.save(signInResponse.userId, signInResponse.jwt, signInResponse.refreshToken)
+                userSPDataSource.save(
+                    signInResponse.userId,
+                    signInResponse.jwt,
+                    signInResponse.refreshToken
+                )
                 Result.success(Unit)
             } else {
                 Result.failure(Exception(response.errorBody()?.string()))
             }
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    override suspend fun signUp(email: String, password: String, name: String): Result<Unit> {
-        TODO("Not yet implemented")
+    override suspend fun signUp(email: String, name: String, password: String): Result<Unit> {
+        return try {
+            val signUpRequest = SignUpRequest(email, name, password)
+            val response = userApiDataSource.signUp(signUpRequest)
+
+            if (response.isSuccessful) {
+                val signUpResponse = response.body()!!
+                userSPDataSource.save(
+                    signUpResponse.userId,
+                    signUpResponse.jwt,
+                    signUpResponse.refreshToken
+                )
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception(response.errorBody()?.string()))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

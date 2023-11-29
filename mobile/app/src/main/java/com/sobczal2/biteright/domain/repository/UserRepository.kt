@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
     suspend fun me(): Result<UserDto>
     suspend fun signIn(email: String, password: String): Result<Unit>
-    suspend fun signUp(email: String, password: String, name: String): Result<Unit>
+    suspend fun signUp(email: String, name: String, password: String): Result<Unit>
 }

@@ -16,10 +16,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.sobczal2.biteright.Routes
 import com.sobczal2.biteright.ui.components.common.Logo
 import com.sobczal2.biteright.ui.components.common.forms.BiteRightButton
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
@@ -28,7 +32,8 @@ import com.sobczal2.biteright.viewmodel.screens.SignUpViewModel
 
 @Composable
 fun SignUpScreen(
-    signUpViewModel: SignUpViewModel = viewModel()
+    navController: NavController,
+    signUpViewModel: SignUpViewModel = hiltViewModel()
 ) {
     val state by signUpViewModel.state.collectAsState()
     Column(
@@ -45,14 +50,14 @@ fun SignUpScreen(
         )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
         TextField(modifier = Modifier.fillMaxWidth(),
-            value = state.name,
-            onValueChange = { name -> signUpViewModel.onNameChanged(name) },
-            label = { Text(text = "name") })
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-        TextField(modifier = Modifier.fillMaxWidth(),
             value = state.email,
             onValueChange = { email -> signUpViewModel.onEmailChanged(email) },
             label = { Text(text = "email") })
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+        TextField(modifier = Modifier.fillMaxWidth(),
+            value = state.name,
+            onValueChange = { name -> signUpViewModel.onNameChanged(name) },
+            label = { Text(text = "name") })
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
         TextField(
             modifier = Modifier.fillMaxWidth(),
@@ -68,8 +73,17 @@ fun SignUpScreen(
             text = "Sign up",
             loading = state.loading,
             enabled = state.submitEnabled,
-            onClick = { signUpViewModel.onSignUpClicked() }
+            onClick = {
+                signUpViewModel.onSignUpClicked(
+                    onSuccess = { navController.navigate(Routes.Home) }
+                )
+            }
         )
+
+        if (state.error.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+            Text(text = state.error)
+        }
     }
 }
 
@@ -77,6 +91,6 @@ fun SignUpScreen(
 @Composable
 fun SignUpScreenPreview() {
     BiteRightTheme {
-        SignUpScreen()
+        SignUpScreen(navController = NavController(LocalContext.current))
     }
 }

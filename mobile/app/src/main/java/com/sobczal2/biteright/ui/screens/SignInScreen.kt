@@ -16,11 +16,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.sobczal2.biteright.Routes
 import com.sobczal2.biteright.ui.components.common.Logo
 import com.sobczal2.biteright.ui.components.common.forms.BiteRightButton
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
@@ -29,6 +32,7 @@ import com.sobczal2.biteright.viewmodel.screens.SignInViewModel
 
 @Composable
 fun SignInScreen(
+    navController: NavController,
     signInViewModel: SignInViewModel = hiltViewModel()
 ) {
     val state by signInViewModel.state.collectAsState()
@@ -66,7 +70,11 @@ fun SignInScreen(
             text = "Sign in",
             loading = state.loading,
             enabled = state.submitEnabled,
-            onClick = { signInViewModel.onSignInClicked() }
+            onClick = {
+                signInViewModel.onSignInClicked(
+                    onSuccess = { navController.navigate(Routes.Home) }
+                )
+            }
         )
 
         if (state.error.isNotEmpty()) {
@@ -80,6 +88,6 @@ fun SignInScreen(
 @Composable
 fun SignInScreenPreview() {
     BiteRightTheme {
-        SignInScreen()
+        SignInScreen(navController = NavController(LocalContext.current))
     }
 }
