@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.ui.screens
 
+import BiteRightErrorLabel
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,16 +50,43 @@ fun SignUpScreen(
                 .height(200.dp)
         )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
-        TextField(modifier = Modifier.fillMaxWidth(),
+        BiteRightErrorLabel(
+            enabled = state.error.email.isNotEmpty(),
+            text = state.error.email,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = MaterialTheme.spacing.small)
+        )
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
             value = state.email,
             onValueChange = { email -> signUpViewModel.onEmailChanged(email) },
-            label = { Text(text = "email") })
+            label = { Text(text = "email") },
+            isError = state.error.email.isNotEmpty()
+        )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-        TextField(modifier = Modifier.fillMaxWidth(),
+        BiteRightErrorLabel(
+            enabled = state.error.name.isNotEmpty(),
+            text = state.error.name,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = MaterialTheme.spacing.small)
+        )
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
             value = state.name,
             onValueChange = { name -> signUpViewModel.onNameChanged(name) },
-            label = { Text(text = "name") })
+            label = { Text(text = "name") },
+            isError = state.error.name.isNotEmpty()
+        )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+        BiteRightErrorLabel(
+            enabled = state.error.password.isNotEmpty(),
+            text = state.error.password,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = MaterialTheme.spacing.small)
+        )
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = state.password,
@@ -66,9 +94,17 @@ fun SignUpScreen(
             label = { Text(text = "password") },
             visualTransformation = PasswordVisualTransformation(
                 mask = '*'
-            )
+            ),
+            isError = state.error.password.isNotEmpty()
         )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+        BiteRightErrorLabel(
+            enabled = state.error.unknown.isNotEmpty(),
+            text = state.error.unknown,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = MaterialTheme.spacing.small)
+        )
         BiteRightButton(
             text = "Sign up",
             loading = state.loading,
@@ -79,11 +115,6 @@ fun SignUpScreen(
                 )
             }
         )
-
-        if (state.error.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            Text(text = state.error)
-        }
     }
 }
 

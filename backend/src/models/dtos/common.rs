@@ -2,7 +2,7 @@ use axum::extract::{FromRequest, FromRequestParts};
 use axum::http::{Request, StatusCode};
 use axum::{async_trait, Json, RequestExt};
 
-use crate::errors::api::ApiError;
+use crate::errors::api::{ApiError, ApiErrorMessage};
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -54,7 +54,10 @@ where
             .map_err(|_| ApiError::new(StatusCode::BAD_REQUEST, "Invalid JSON"))?;
 
         data.validate().map_err(|err| {
-            ApiError::new_with_json(StatusCode::BAD_REQUEST, json!({ "errors": err }))
+            ApiError::new_with_api_error_message(
+                StatusCode::BAD_REQUEST,
+                err.into(),
+            )
         })?;
         Ok(Self(data))
     }
@@ -83,7 +86,10 @@ where
             .map_err(|_| ApiError::new(StatusCode::BAD_REQUEST, "Invalid query"))?;
 
         query.validate().map_err(|err| {
-            ApiError::new_with_json(StatusCode::BAD_REQUEST, json!({ "errors": err }))
+            ApiError::new_with_api_error_message(
+                StatusCode::BAD_REQUEST,
+                err.into(),
+            )
         })?;
         Ok(Self(query))
     }

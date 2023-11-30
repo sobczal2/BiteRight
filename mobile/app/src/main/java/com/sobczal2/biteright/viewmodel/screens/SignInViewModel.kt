@@ -29,12 +29,12 @@ class SignInViewModel @Inject constructor(
 
         viewModelScope.launch {
             val result = userRepository.signIn(_state.value.email, _state.value.password)
-            if (result.isSuccess) {
-                _state.value = _state.value.copy(loading = false, submitEnabled = true, error = "Success")
-                onSuccess()
-            } else {
-                _state.value = _state.value.copy(loading = false, submitEnabled = true, error = result.exceptionOrNull()?.message ?: "Unknown error")
-            }
+//            if (result.isSuccess) {
+//                _state.value = _state.value.copy(loading = false, submitEnabled = true, error = "Success")
+//                onSuccess()
+//            } else {
+//                _state.value = _state.value.copy(loading = false, submitEnabled = true, error = result.exceptionOrNull()?.message ?: "Unknown error")
+//            }
         }
     }
 }

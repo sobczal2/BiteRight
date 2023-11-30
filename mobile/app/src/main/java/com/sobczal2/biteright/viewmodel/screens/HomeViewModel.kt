@@ -19,9 +19,9 @@ class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val user = userRepository.me()
-            user.onSuccess {
-                _state.value = _state.value.copy(email = it.email, name = it.name)
-            }
+//            user.onSuccess {
+//                _state.value = _state.value.copy(email = it.email, name = it.name)
+//            }
         }
     }
 }

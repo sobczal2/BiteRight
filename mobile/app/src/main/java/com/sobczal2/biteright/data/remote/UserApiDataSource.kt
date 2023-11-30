@@ -19,4 +19,7 @@ interface UserApiDataSource {
 
     @GET("user/me")
     suspend fun me(): Response<MeResponse>
+
+    @POST("user/refresh")
+    suspend fun refresh(@Body refreshToken: String): Response<SignInResponse>
 }
