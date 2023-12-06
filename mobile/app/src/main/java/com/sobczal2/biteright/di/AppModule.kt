@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.di
 
+import JwtInterceptor
 import android.content.Context
 import androidx.core.content.ContextCompat.getString
 import com.sobczal2.biteright.R
@@ -11,6 +12,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -21,11 +23,12 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(@ApplicationContext context: Context): Retrofit {
+    fun provideRetrofit(@ApplicationContext context: Context, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(
                 getString(context, R.string.api_url)
             )
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -37,7 +40,16 @@ object AppModule {
     }
 
     @Provides
+    @Singleton
     fun provideUserSPDataSource(@ApplicationContext context: Context): UserSPDataSource {
         return UserSPDataSourceImpl(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(userSPDataSource: UserSPDataSource): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(JwtInterceptor(userSPDataSource))
+            .build()
     }
 }

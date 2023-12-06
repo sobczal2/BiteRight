@@ -39,3 +39,18 @@ data class SignInResponse(
 data class MeResponse(
     val user: UserDto,
 )
+
+data class RefreshRequest(
+    @SerializedName("refresh_token")
+    val refreshToken: String,
+    @SerializedName("user_id")
+    val userId: Int,
+)
+
+data class RefreshResponse(
+    @SerializedName("user_id")
+    val userId: Int,
+    val jwt: String,
+    @SerializedName("refresh_token")
+    val refreshToken: String,
+)

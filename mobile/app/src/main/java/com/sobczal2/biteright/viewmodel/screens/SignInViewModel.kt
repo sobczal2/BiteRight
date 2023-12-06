@@ -24,16 +24,17 @@ class SignInViewModel @Inject constructor(
         _state.value = _state.value.copy(password = password)
     }
 
-    fun onSignInClicked() {
+    fun onSignInClicked(onSuccess: () -> Unit) {
         _state.value = _state.value.copy(loading = true, submitEnabled = false)
 
         viewModelScope.launch {
             val result = userRepository.signIn(_state.value.email, _state.value.password)
-            if (result.isSuccess) {
-                _state.value = _state.value.copy(loading = false, submitEnabled = true, error = "Success")
-            } else {
-                _state.value = _state.value.copy(loading = false, submitEnabled = true, error = result.exceptionOrNull()?.message ?: "Unknown error")
-            }
+//            if (result.isSuccess) {
+//                _state.value = _state.value.copy(loading = false, submitEnabled = true, error = "Success")
+//                onSuccess()
+//            } else {
+//                _state.value = _state.value.copy(loading = false, submitEnabled = true, error = result.exceptionOrNull()?.message ?: "Unknown error")
+//            }
         }
     }
 }
