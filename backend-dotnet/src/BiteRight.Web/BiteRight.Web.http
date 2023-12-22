@@ -1,0 +1,6 @@
+@BiteRight.Web_HostAddress = http://localhost:5072
+
+GET {{BiteRight.Web_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

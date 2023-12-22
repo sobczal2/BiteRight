@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Auth0.ManagementApi" Version="7.25.1" />
+      <PackageReference Include="MediatR" Version="12.2.0" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BiteRight.Domain\BiteRight.Domain.csproj" />
+      <ProjectReference Include="..\BiteRight.Options\BiteRight.Options.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Domain\Services\" />
+    </ItemGroup>
+
+</Project>
