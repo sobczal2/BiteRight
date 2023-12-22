@@ -54,17 +54,17 @@ public class Username : ValueObject
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw UsernameNotValidException.CreateEmpty();
+            throw new UsernameEmptyException();
         }
 
         if (!ValidLength.IsMatch(value))
         {
-            throw UsernameNotValidException.CreateInvalidLength(value, MinLength, MaxLength);
+            throw new UsernameLengthNotValidException(MinLength, MaxLength);
         }
 
         if (!ValidCharacters.IsMatch(value))
         {
-            throw UsernameNotValidException.CreateInvalidCharacters(value, ValidCharacters.ToString());
+            throw new UsernameCharactersNotValidException(ValidCharacters.ToString());
         }
     }
 }

@@ -4,7 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>disable</ImplicitUsings>
-        <InvariantGlobalization>true</InvariantGlobalization>
+        <InvariantGlobalization>false</InvariantGlobalization>
         <UserSecretsId>ddb8ed06-5995-4fed-9efa-8c0371194def</UserSecretsId>
     </PropertyGroup>
 
@@ -27,6 +27,40 @@
         <ProjectReference Include="..\BiteRight.Application\BiteRight.Application.csproj"/>
         <ProjectReference Include="..\BiteRight.Infrastructure\BiteRight.Infrastructure.csproj"/>
         <ProjectReference Include="..\BiteRight.Options\BiteRight.Options.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\BiteRight\Application\Commannds\Users\Onboard.en.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Onboard.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\BiteRight\Application\Commannds\Users\Onboard.pl.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Onboard.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resources\BiteRight\Application\Commannds\Users\Onboard.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Onboard.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\BiteRight\Application\Commannds\Users\Onboard.pl.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Onboard.pl.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\BiteRight\Application\Commannds\Users\Onboard.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Onboard.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\BiteRight\Application\Commannds\Users\Onboard.pl.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Onboard.pl.resx</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>

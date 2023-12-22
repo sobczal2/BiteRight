@@ -5,7 +5,7 @@ using BiteRight.Domain.Users;
 using BiteRight.Domain.Users.Exceptions;
 using BiteRight.Infrastructure.Database;
 using FluentValidation;
-using MediatR;
+using Microsoft.Extensions.Localization;
 
 namespace BiteRight.Application.Commands.Users.Onboard;
 
@@ -17,6 +17,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly AppDbContext _appDbContext;
     private readonly IUserService _userService;
+    private readonly IStringLocalizer<Resources.Resources.Onboard.Onboard> _localizer;
 
     public OnboardHandler(
         IIdentityManager identityManager,
@@ -24,7 +25,8 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
         IIdentityAccessor identityAccessor,
         IDateTimeProvider dateTimeProvider,
         AppDbContext appDbContext,
-        IUserService userService
+        IUserService userService,
+        IStringLocalizer<Resources.Resources.Onboard.Onboard> localizer
     )
     {
         _identityManager = identityManager;
@@ -33,6 +35,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
         _dateTimeProvider = dateTimeProvider;
         _appDbContext = appDbContext;
         _userService = userService;
+        _localizer = localizer;
     }
 
     protected override async Task<OnboardResponse> HandleImpl(
@@ -49,7 +52,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
         {
             throw ValidationException(
                 nameof(OnboardRequest.Username),
-                "Username already in use"
+                _localizer[nameof(Resources.Resources.Onboard.Onboard.username_in_use)]
             );
         }
 
@@ -57,7 +60,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
         if (!isEmailAvailable)
         {
             throw ValidationException(
-                "Email already in use"
+                _localizer[nameof(Resources.Resources.Onboard.Onboard.email_in_use)]
             );
         }
 
@@ -83,9 +86,20 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
     {
         return exception switch
         {
-            UsernameNotValidException usernameNotValidException => ValidationException(
+            EmailNotValidException _ => ValidationException(
+                _localizer[nameof(Resources.Resources.Onboard.Onboard.email_not_valid)]
+            ),
+            UsernameEmptyException _ => ValidationException(
                 nameof(OnboardRequest.Username),
-                usernameNotValidException.Message
+                _localizer[nameof(Resources.Resources.Onboard.Onboard.username_empty)]
+            ),
+            UsernameLengthNotValidException usernameLengthNotValidException => ValidationException(
+                nameof(OnboardRequest.Username),
+                string.Format(_localizer[nameof(Resources.Resources.Onboard.Onboard.username_length_not_valid)], usernameLengthNotValidException.MinLength, usernameLengthNotValidException.MaxLength)
+            ),
+            UsernameCharactersNotValidException usernameCharactersNotValidException => ValidationException(
+                nameof(OnboardRequest.Username),
+                string.Format(_localizer[nameof(Resources.Resources.Onboard.Onboard.username_characters_not_valid)], usernameCharactersNotValidException.ValidCharacters)
             ),
             _ => base.MapExceptionToValidationException(exception)
         };

@@ -1,6 +1,8 @@
+using System.Globalization;
 using BiteRight.Web.Middleware;
 using BiteRight.Web.Registration;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
@@ -33,6 +35,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseRequestLocalization();
 
 app.UseHttpsRedirection();
 

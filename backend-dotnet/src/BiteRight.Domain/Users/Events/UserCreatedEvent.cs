@@ -4,6 +4,9 @@ namespace BiteRight.Domain.Users.Events;
 
 public class UserCreatedEvent : DomainEvent
 {
+    public UserId UserId { get; }
+    public IdentityId IdentityId { get; }
+
     public UserCreatedEvent(
         DateTime occurredOn,
         Guid correlationId,
@@ -12,5 +15,7 @@ public class UserCreatedEvent : DomainEvent
     )
         : base(occurredOn, correlationId)
     {
+        UserId = userId;
+        IdentityId = identityId;
     }
 }

@@ -1,12 +1,16 @@
 using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 namespace BiteRight.Application.Commands.Users.Onboard;
 
 public class OnboardValidator : AbstractValidator<OnboardRequest>
 {
-    public OnboardValidator()
+    public OnboardValidator(
+        IStringLocalizer<Resources.Resources.Onboard.Onboard> localizer
+        )
     {
         RuleFor(x => x.Username)
-            .NotEmpty();
+            .NotEmpty()
+            .WithMessage(_ => localizer[nameof(Resources.Resources.Onboard.Onboard.username_empty)]);
     }
 }

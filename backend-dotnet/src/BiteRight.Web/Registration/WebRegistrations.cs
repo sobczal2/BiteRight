@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Security.Claims;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Options;
@@ -6,8 +7,11 @@ using BiteRight.Web.Authorization;
 using BiteRight.Web.Filters;
 using BiteRight.Web.Middleware;
 using BiteRight.Web.Providers;
+using BiteRight.Web.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -27,6 +31,7 @@ public static class WebRegistrations
         AddAuth(services, configuration);
         AddMiddlewares(services);
         AddCommon(services);
+        AddLocalization(services);
     }
 
     private static void AddControllers(
@@ -67,6 +72,8 @@ public static class WebRegistrations
                     []
                 }
             });
+            
+            opt.OperationFilter<CultureQueryParameterFilter>();
         });
     }
 
@@ -117,5 +124,23 @@ public static class WebRegistrations
         services.AddHttpContextAccessor();
         services.AddSingleton<ICorrelationIdAccessor, HttpContextCorrelationIdAccessor>();
         services.AddSingleton<IIdentityAccessor, HttpContextIdentityAccessor>();
+    }
+    
+    private static void AddLocalization(
+        IServiceCollection services
+    )
+    {
+        services.AddLocalization(opt => opt.ResourcesPath = "");
+        services.Configure<RequestLocalizationOptions>(opt =>
+        {
+            var supportedCultures = new[]
+            {
+                new CultureInfo("en"),
+                new CultureInfo("pl")
+            };
+            opt.DefaultRequestCulture = new RequestCulture("en");
+            opt.SupportedCultures = supportedCultures;
+            opt.SupportedUICultures = supportedCultures;
+        });
     }
 }

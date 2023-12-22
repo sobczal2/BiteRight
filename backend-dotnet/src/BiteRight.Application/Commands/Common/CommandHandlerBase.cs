@@ -8,26 +8,27 @@ public abstract class CommandHandlerBase<TRequest, TResponse> : IRequestHandler<
     where TRequest : IRequest<TResponse>
     where TResponse : class
 {
-    public Task<TResponse> Handle(
+    public async Task<TResponse> Handle(
         TRequest request,
         CancellationToken cancellationToken
     )
     {
         try
         {
-            return HandleImpl(request, cancellationToken);
+            return await HandleImpl(request, cancellationToken);
         }
         catch (Exception exception)
         {
-            return Task.FromException<TResponse>(exception);
+            throw MapExceptionToValidationException(exception);
         }
     }
-    
+
+
     protected abstract Task<TResponse> HandleImpl(
         TRequest request,
         CancellationToken cancellationToken
     );
-    
+
     protected virtual ValidationException MapExceptionToValidationException(
         Exception exception
     )
@@ -35,20 +36,26 @@ public abstract class CommandHandlerBase<TRequest, TResponse> : IRequestHandler<
         return exception switch
         {
             ValidationException validationException => validationException,
-            AggregateException aggregateException => MapExceptionToValidationException(aggregateException.InnerException),
+            AggregateException { InnerExceptions: [_, ..] innerExceptions } =>
+                MapExceptionToValidationException(innerExceptions.First()),
             _ => throw exception
         };
     }
-    
-    protected ValidationException ValidationException(string propertyName, string errorMessage)
+
+    protected ValidationException ValidationException(
+        string propertyName,
+        string errorMessage
+    )
     {
         return new ValidationException(new List<ValidationFailure>
         {
             new(propertyName, errorMessage)
         });
     }
-    
-    protected ValidationException ValidationException(string errorMessage)
+
+    protected ValidationException ValidationException(
+        string errorMessage
+    )
     {
         return new ValidationException(errorMessage);
     }

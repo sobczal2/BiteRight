@@ -14,11 +14,13 @@
       <PackageReference Include="FluentValidation" Version="11.8.1" />
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.1" />
       <PackageReference Include="MediatR" Version="12.2.0" />
+      <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\BiteRight.Domain\BiteRight.Domain.csproj" />
       <ProjectReference Include="..\BiteRight.Infrastructure\BiteRight.Infrastructure.csproj" />
+      <ProjectReference Include="..\BiteRight.Resources\BiteRight.Resources.csproj" />
     </ItemGroup>
 
 </Project>

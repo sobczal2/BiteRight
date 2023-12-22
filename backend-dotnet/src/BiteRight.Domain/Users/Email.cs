@@ -27,7 +27,7 @@ public class Email : ValueObject
     {
         if(!MailAddress.TryCreate(value, out var mailAddress))
         {
-            throw EmailNotValidException.CreateInvalidFormat(value);
+            throw new EmailNotValidException();
         }
 
         return new Email(mailAddress);

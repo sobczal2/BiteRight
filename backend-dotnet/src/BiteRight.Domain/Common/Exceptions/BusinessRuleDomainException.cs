@@ -2,10 +2,9 @@ namespace BiteRight.Domain.Common.Exceptions;
 
 public class BusinessRuleDomainException : DomainException
 {
-    public BusinessRuleDomainException(
-        string message
-    )
-        : base(message)
+
+    public BusinessRuleDomainException()
+        : base("Business rule violation")
     {
     }
 }
