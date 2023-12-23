@@ -15,12 +15,15 @@ import dagger.hilt.android.AndroidEntryPoint
 class BiteRightActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val auth0Manager = Auth0Manager(this)
+
         setContent {
             BiteRightTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    BiteRightRouter()
+                    BiteRightRouter(auth0Manager)
                 }
             }
         }

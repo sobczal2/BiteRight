@@ -6,20 +6,20 @@ import javax.inject.Inject
 
 
 class UserSPDataSourceImpl @Inject constructor(
-    private val context: Context
+    context: Context
 ) : UserSPDataSource {
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("user", Context.MODE_PRIVATE)
-    override fun save(userId: Int, jwt: String, refreshToken: String) {
+    override fun save(userId: String, jwt: String, refreshToken: String) {
         sharedPreferences.edit()
-            .putInt("userId", userId)
+            .putString("userId", userId)
             .putString("jwt", jwt)
             .putString("refreshToken", refreshToken)
             .apply()
     }
 
-    override fun getUserId(): Int? {
-        return sharedPreferences.getInt("userId", -1).takeIf { it != -1 }
+    override fun getUserId(): String? {
+        return sharedPreferences.getString("userId", null)
     }
 
     override fun getJwt(): String? {
