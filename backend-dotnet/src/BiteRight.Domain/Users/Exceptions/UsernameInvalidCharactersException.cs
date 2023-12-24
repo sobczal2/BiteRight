@@ -2,11 +2,11 @@ using BiteRight.Domain.Common.Exceptions;
 
 namespace BiteRight.Domain.Users.Exceptions;
 
-public class UsernameCharactersNotValidException : BusinessRuleDomainException
+public class UsernameInvalidCharactersException : BusinessRuleDomainException
 {
     public string ValidCharacters { get; }
     
-    public UsernameCharactersNotValidException(
+    public UsernameInvalidCharactersException(
         string validCharacters
     )
     {

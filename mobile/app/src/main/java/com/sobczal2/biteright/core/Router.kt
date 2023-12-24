@@ -1,4 +1,4 @@
-package com.sobczal2.biteright
+package com.sobczal2.biteright.core
 
 import android.content.Context
 import androidx.compose.runtime.Composable

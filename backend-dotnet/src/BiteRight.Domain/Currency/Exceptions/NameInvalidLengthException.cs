@@ -1,13 +1,13 @@
 using BiteRight.Domain.Common.Exceptions;
 
-namespace BiteRight.Domain.Users.Exceptions;
+namespace BiteRight.Domain.Currency.Exceptions;
 
-public class UsernameLengthNotValidException : BusinessRuleDomainException
+public class NameInvalidLengthException : BusinessRuleDomainException
 {
     public int MinLength { get; }
     public int MaxLength { get; }
-
-    public UsernameLengthNotValidException(
+    
+    public NameInvalidLengthException(
         int minLength,
         int maxLength
     )

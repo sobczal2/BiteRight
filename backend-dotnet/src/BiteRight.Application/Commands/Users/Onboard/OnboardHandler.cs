@@ -93,11 +93,11 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
                 nameof(OnboardRequest.Username),
                 _localizer[nameof(Resources.Resources.Onboard.Onboard.username_empty)]
             ),
-            UsernameLengthNotValidException usernameLengthNotValidException => ValidationException(
+            UsernameInvalidLengthException usernameLengthNotValidException => ValidationException(
                 nameof(OnboardRequest.Username),
                 string.Format(_localizer[nameof(Resources.Resources.Onboard.Onboard.username_length_not_valid)], usernameLengthNotValidException.MinLength, usernameLengthNotValidException.MaxLength)
             ),
-            UsernameCharactersNotValidException usernameCharactersNotValidException => ValidationException(
+            UsernameInvalidCharactersException usernameCharactersNotValidException => ValidationException(
                 nameof(OnboardRequest.Username),
                 string.Format(_localizer[nameof(Resources.Resources.Onboard.Onboard.username_characters_not_valid)], usernameCharactersNotValidException.ValidCharacters)
             ),

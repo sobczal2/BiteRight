@@ -1,4 +1,5 @@
 using BiteRight.Domain.Common;
+using BiteRight.Domain.Currency;
 using BiteRight.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +8,8 @@ namespace BiteRight.Infrastructure.Database;
 public class AppDbContext : DbContext
 {
     private readonly IDomainEventPublisher _domainEventPublisher;
-    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = default!;
+    public DbSet<Currency> Currencies { get; set; } = default!;
     
     public AppDbContext(
         DbContextOptions<AppDbContext> options,
@@ -32,7 +34,7 @@ public class AppDbContext : DbContext
         var domainEventHolders = ChangeTracker
             .Entries<IDomainEventHolder>()
             .Select(x => x.Entity)
-            .Where(x => x.DomainEvents.Any());
+            .Where(x => x.DomainEvents.Count != 0);
         
         var result = await base.SaveChangesAsync(cancellationToken);
         

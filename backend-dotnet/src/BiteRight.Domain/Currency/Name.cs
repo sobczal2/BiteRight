@@ -1,14 +1,14 @@
 using System.Text.RegularExpressions;
 using BiteRight.Domain.Common;
-using BiteRight.Domain.Users.Exceptions;
+using BiteRight.Domain.Currency.Exceptions;
 
-namespace BiteRight.Domain.Users;
+namespace BiteRight.Domain.Currency;
 
-public class Username : ValueObject
+public class Name : ValueObject
 {
-    public string Value { get; }
-
-    private Username(
+    public string Value { get; private set; }
+    
+    private Name(
         string value
     )
     {
@@ -19,52 +19,53 @@ public class Username : ValueObject
     {
         yield return Value;
     }
-
-    public static Username Create(
+    
+    public static Name Create(
         string value
     )
     {
         Validate(value);
 
-        return new Username(value);
+        return new Name(value);
     }
     
-    public static Username CreateSkipValidation(
+    public static Name CreateSkipValidation(
         string value
     )
     {
-        return new Username(value);
+        return new Name(value);
     }
     
     private const int MinLength = 3;
-    private const int MaxLength = 30;
-
+    private const int MaxLength = 64;
+    
     private static readonly Regex ValidCharacters = new(
-        @"^[a-zA-Z0-9_]+$",
+        @"^[a-zA-Z0-9_ ]+$",
         RegexOptions.Compiled
     );
+    
     private static readonly Regex ValidLength = new(
         @"^.{" + MinLength + "," + MaxLength + "}$",
         RegexOptions.Compiled
     );
-
+    
     private static void Validate(
         string value
     )
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new UsernameEmptyException();
+            throw new NameEmptyException();
         }
-
+        
         if (!ValidLength.IsMatch(value))
         {
-            throw new UsernameInvalidLengthException(MinLength, MaxLength);
+            throw new NameInvalidLengthException(MinLength, MaxLength);
         }
-
+        
         if (!ValidCharacters.IsMatch(value))
         {
-            throw new UsernameInvalidCharactersException(ValidCharacters.ToString());
+            throw new NameInvalidCharactersException(ValidCharacters.ToString());
         }
     }
 }
