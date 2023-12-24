@@ -44,11 +44,6 @@ public class Name : ValueObject
         RegexOptions.Compiled
     );
     
-    private static readonly Regex ValidLength = new(
-        @"^.{" + MinLength + "," + MaxLength + "}$",
-        RegexOptions.Compiled
-    );
-    
     private static void Validate(
         string value
     )
@@ -58,7 +53,7 @@ public class Name : ValueObject
             throw new NameEmptyException();
         }
         
-        if (!ValidLength.IsMatch(value))
+        if (value.Length is < MinLength or > MaxLength)
         {
             throw new NameInvalidLengthException(MinLength, MaxLength);
         }

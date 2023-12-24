@@ -5,6 +5,7 @@ namespace BiteRight.Domain.Abstracts.Common;
 public interface IIdentityManager
 {
     Task<(Email email, bool isVerified)> GetEmail(
-        IdentityId identityId
+        IdentityId identityId,
+        CancellationToken cancellationToken = default
     );
 }

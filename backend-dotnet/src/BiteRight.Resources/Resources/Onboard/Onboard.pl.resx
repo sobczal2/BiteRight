@@ -36,4 +36,7 @@
     <data name="email_not_valid" xml:space="preserve">
         <value>Email nie jest poprawny</value>
     </data>
+    <data name="user_already_exists" xml:space="preserve">
+        <value>Użytkownik już istnieje</value>
+    </data>
 </root>

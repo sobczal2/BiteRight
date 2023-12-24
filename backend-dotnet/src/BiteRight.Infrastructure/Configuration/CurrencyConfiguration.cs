@@ -10,7 +10,7 @@ public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
         EntityTypeBuilder<Currency> builder
     )
     {
-        builder.ToTable("Currencies", "Currency");
+        builder.ToTable("currencies", "currency");
         builder.Ignore(currency => currency.DomainEvents);
         builder.HasKey(currency => currency.Id);
         builder.Property(currency => currency.Id)
@@ -23,6 +23,16 @@ public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
             .HasConversion(
                 code => code.Value,
                 value => Code.CreateSkipValidation(value)
+            );
+        builder.Property(currency => currency.Name)
+            .HasConversion(
+                name => name.Value,
+                value => Name.CreateSkipValidation(value)
+            );
+        builder.Property(currency => currency.Symbol)
+            .HasConversion(
+                symbol => symbol.Value,
+                value => Symbol.CreateSkipValidation(value)
             );
     }
 }

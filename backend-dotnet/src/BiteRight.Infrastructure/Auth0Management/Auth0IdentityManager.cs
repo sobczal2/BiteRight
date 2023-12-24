@@ -23,7 +23,9 @@ public class Auth0IdentityManager : IIdentityManager
         _dateTimeProvider = dateTimeProvider;
     }
 
-    private async Task EnsureManagementApiToken()
+    private async Task EnsureManagementApiToken(
+        CancellationToken cancellationToken = default
+    )
     {
         if (_managementApiTokenExpiresAt is null ||
             _managementApiTokenExpiresAt < DateTime.UtcNow - TimeSpan.FromSeconds(30))
@@ -37,40 +39,41 @@ public class Auth0IdentityManager : IIdentityManager
                 ["client_secret"] = _auth0Options.ManagementApiClientSecret,
                 ["audience"] = _auth0Options.GetManagementApiAudience()
             });
-            var response = await client.SendAsync(request);
+            var response = await client.SendAsync(request, cancellationToken);
             response.EnsureSuccessStatusCode();
-            
+
             var getTokenResponse = JsonSerializer.Deserialize<Auth0GetTokenResponse>(
-                await response.Content.ReadAsStringAsync()
+                await response.Content.ReadAsStringAsync(cancellationToken)
             );
-            
+
             if (getTokenResponse is null)
             {
                 throw new InvalidOperationException("Failed to deserialize token response.");
             }
-            
+
             _managementApiClient = new ManagementApiClient(
                 getTokenResponse.AccessToken,
                 new Uri(_auth0Options.GetManagementApiAudience())
             );
-            
+
             _managementApiTokenExpiresAt = _dateTimeProvider.UtcNow.AddSeconds(getTokenResponse.ExpiresIn);
         }
     }
 
     public async Task<(Email email, bool isVerified)> GetEmail(
-        IdentityId identityId
+        IdentityId identityId,
+        CancellationToken cancellationToken = default
     )
     {
-        await EnsureManagementApiToken();
-        
-        var user = await _managementApiClient!.Users.GetAsync(identityId.Value);
-        
+        await EnsureManagementApiToken(cancellationToken);
+
+        var user = await _managementApiClient!.Users.GetAsync(identityId.Value, cancellationToken: cancellationToken);
+
         if (user is null)
         {
             throw new InvalidOperationException("User not found.");
         }
-        
+
         return (Email.Create(user.Email), user.EmailVerified ?? false);
     }
 }

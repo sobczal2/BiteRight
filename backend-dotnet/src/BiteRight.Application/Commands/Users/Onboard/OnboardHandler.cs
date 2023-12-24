@@ -5,6 +5,7 @@ using BiteRight.Domain.Users;
 using BiteRight.Domain.Users.Exceptions;
 using BiteRight.Infrastructure.Database;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace BiteRight.Application.Commands.Users.Onboard;
@@ -44,10 +45,22 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
     )
     {
         var currentIdentityId = _identityAccessor.RequireCurrent();
-        var (email, isVerified) = await _identityManager.GetEmail(currentIdentityId);
+        var existingUser = await _appDbContext.Users.FirstOrDefaultAsync(
+            x => x.IdentityId == currentIdentityId,
+            cancellationToken
+        );
+        
+        if (existingUser != null)
+        {
+            throw ValidationException(
+                _localizer[nameof(Resources.Resources.Onboard.Onboard.user_already_exists)]
+            );
+        }
+        
+        var (email, isVerified) = await _identityManager.GetEmail(currentIdentityId, cancellationToken);
         var username = Username.Create(request.Username);
 
-        var isUsernameAvailable = await _userService.IsUsernameAvailable(username);
+        var isUsernameAvailable = await _userService.IsUsernameAvailable(username, cancellationToken);
         if (!isUsernameAvailable)
         {
             throw ValidationException(
@@ -56,7 +69,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
             );
         }
 
-        var isEmailAvailable = await _userService.IsEmailAvailable(email);
+        var isEmailAvailable = await _userService.IsEmailAvailable(email, cancellationToken);
         if (!isEmailAvailable)
         {
             throw ValidationException(

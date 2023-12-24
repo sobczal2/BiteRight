@@ -38,7 +38,6 @@ public class ErrorResponse
     )
     {
         var errors = exception.Errors.ToDictionary(error => error.PropertyName, error => new[] { error.ErrorMessage });
-
-        return new ErrorResponse("Validation failed", errors);
+        return new ErrorResponse(exception.Message, errors);
     }
 }

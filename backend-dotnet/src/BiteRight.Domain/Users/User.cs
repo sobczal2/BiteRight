@@ -8,7 +8,6 @@ public class User : AggregateRoot<UserId>
     public IdentityId IdentityId { get; private set; }
     public Username Username { get; private set; }
     public Email Email { get; private set; }
-    public bool IsEmailVerified { get; private set; }
     public DateTime JoinedAt { get; private set; }
 
     // EF Core
@@ -17,7 +16,6 @@ public class User : AggregateRoot<UserId>
         IdentityId = default!;
         Username = default!;
         Email = default!;
-        IsEmailVerified = default!;
         JoinedAt = default!;
     }
 
@@ -34,7 +32,6 @@ public class User : AggregateRoot<UserId>
         IdentityId = identityId;
         Username = username;
         Email = email;
-        IsEmailVerified = isEmailVerified;
         JoinedAt = joinedAt;
     }
 
@@ -64,10 +61,5 @@ public class User : AggregateRoot<UserId>
         );
         
         return user;
-    }
-
-    public void SetEmailVerified()
-    {
-        IsEmailVerified = true;
     }
 }

@@ -10,7 +10,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         EntityTypeBuilder<User> builder
     )
     {
-        builder.ToTable("Users", "User");
+        builder.ToTable("users", "user");
         builder.Ignore(user => user.DomainEvents);
         builder.HasKey(user => user.Id);
         builder.Property(user => user.Id)

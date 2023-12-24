@@ -72,7 +72,7 @@ public static class WebRegistrations
                     []
                 }
             });
-            
+
             opt.OperationFilter<CultureQueryParameterFilter>();
         });
     }
@@ -101,12 +101,17 @@ public static class WebRegistrations
             });
 
         services.AddAuthorizationBuilder()
-            .SetDefaultPolicy(new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
-                .RequireAuthenticatedUser()
-                .AddRequirements(new NamePresentRequirement())
-                .Build());
+            .AddPolicy(
+                Policies.UserExists,
+                policy => policy.Requirements.Add(new UserExistsRequirement())
+            )
+            .AddPolicy(
+                Policies.NamePresent,
+                policy => policy.Requirements.Add(new NamePresentRequirement())
+            );
 
-        services.AddSingleton<IAuthorizationHandler, NamePresentRequirementHandler>();
+        services.AddScoped<IAuthorizationHandler, NamePresentRequirementHandler>();
+        services.AddScoped<IAuthorizationHandler, UserExistsRequirementHandler>();
     }
 
     private static void AddMiddlewares(
@@ -125,7 +130,7 @@ public static class WebRegistrations
         services.AddSingleton<ICorrelationIdAccessor, HttpContextCorrelationIdAccessor>();
         services.AddSingleton<IIdentityAccessor, HttpContextIdentityAccessor>();
     }
-    
+
     private static void AddLocalization(
         IServiceCollection services
     )

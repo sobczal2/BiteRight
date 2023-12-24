@@ -80,5 +80,11 @@ namespace BiteRight.Resources.Resources.Onboard {
                 return ResourceManager.GetString("email_not_valid", resourceCulture);
             }
         }
+        
+        public static string user_already_exists {
+            get {
+                return ResourceManager.GetString("user_already_exists", resourceCulture);
+            }
+        }
     }
 }

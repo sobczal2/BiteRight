@@ -17,18 +17,20 @@ public class UserService : IUserService
     }
 
     public async Task<bool> IsEmailAvailable(
-        Email email
+        Email email,
+        CancellationToken cancellationToken = default
     )
     {
         return !await _dbContext.Users
-            .AnyAsync(user => user.Email == email);
+            .AnyAsync(user => user.Email == email, cancellationToken);
     }
 
     public async Task<bool> IsUsernameAvailable(
-        Username username
+        Username username,
+        CancellationToken cancellationToken = default
     )
     {
         return !await _dbContext.Users
-            .AnyAsync(user => user.Username == username);
+            .AnyAsync(user => user.Username == username, cancellationToken);
     }
 }

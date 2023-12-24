@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using BiteRight.Application.Commands.Users.Onboard;
+using BiteRight.Application.Queries.Currencies.List;
 using BiteRight.Web.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -7,19 +7,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BiteRight.Web.Controllers;
 
-public class UsersController : WebController
+public class CurrenciesController : WebController
 {
-    public UsersController(
+    protected CurrenciesController(
         IMediator mediator
     )
         : base(mediator)
     {
     }
     
-    [HttpPost("onboard")]
-    [AuthorizeNamePresent]
-    public async Task<IActionResult> Onboard(OnboardRequest request)
+    [HttpGet]
+    [AuthorizeUserExists]
+    public async Task<IActionResult> List()
     {
+        var request = new ListRequest();
         var response = await Mediator.Send(request);
         return Ok(response);
     }
