@@ -1,10 +1,10 @@
 using BiteRight.Domain.Abstracts.Common;
-using BiteRight.Domain.Abstracts.Services;
+using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Common;
 using BiteRight.Infrastructure.Auth0Management;
 using BiteRight.Infrastructure.Common;
 using BiteRight.Infrastructure.Database;
-using BiteRight.Infrastructure.Domain;
+using BiteRight.Infrastructure.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +23,7 @@ public static class InfrastructureRegistrations
         AddDatabase(services, configuration, environment);
         AddCommon(services);
         AddAuth0Management(services);
-        AddServices(services);
+        AddRepositories(services);
     }
     
     private static void AddDatabase(
@@ -60,10 +60,12 @@ public static class InfrastructureRegistrations
         services.AddSingleton<IIdentityManager, Auth0IdentityManager>();
     }
     
-    private static void AddServices(
+    private static void AddRepositories(
         IServiceCollection services
     )
     {
-        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IUserRepository, EfCoreUserRepository>();
+        services.AddScoped<ILanguageRepository, CachedEfCoreLanguageRepository>();
+        services.AddScoped<ICategoryRepository, EfCoreCategoryRepository>();
     }
 }

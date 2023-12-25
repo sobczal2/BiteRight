@@ -1,4 +1,5 @@
 using BiteRight.Application.Dtos.Countries;
+using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Infrastructure.Database;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -8,12 +9,15 @@ namespace BiteRight.Application.Queries.Countries.List;
 public class ListHandler : IRequestHandler<ListRequest, ListResponse>
 {
     private readonly AppDbContext _appDbContext;
+    private readonly ILanguageProvider _languageProvider;
 
     public ListHandler(
-        AppDbContext appDbContext
+        AppDbContext appDbContext,
+        ILanguageProvider languageProvider
     )
     {
         _appDbContext = appDbContext;
+        _languageProvider = languageProvider;
     }
 
     public async Task<ListResponse> Handle(
@@ -22,18 +26,15 @@ public class ListHandler : IRequestHandler<ListRequest, ListResponse>
     )
     {
         var countries = await _appDbContext
-            .Database
-            .SqlQuery<CountryDto>(
-                $"""
-                 SELECT
-                    id,
-                    native_name,
-                    english_name,
-                    alpha2code,
-                    official_language_id
-                 FROM country.countries
-                 """
-            )
+            .Countries
+            .Select(country => new CountryDto
+            {
+                Id = country.Id,
+                NativeName = country.NativeName,
+                EnglishName = country.EnglishName,
+                Alpha2Code = country.Alpha2Code,
+                OfficialLanguageId = country.OfficialLanguageId
+            })
             .ToListAsync(cancellationToken);
 
         return new ListResponse(countries);

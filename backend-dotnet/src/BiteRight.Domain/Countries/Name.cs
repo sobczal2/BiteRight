@@ -62,4 +62,11 @@ public class Name : ValueObject
             throw new NameInvalidCharactersException(ValidCharacters.ToString());
         }
     }
+    
+    public static implicit operator string(
+        Name name
+    )
+    {
+        return name.Value;
+    }
 }

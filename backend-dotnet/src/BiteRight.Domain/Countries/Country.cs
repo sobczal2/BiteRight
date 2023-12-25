@@ -40,11 +40,12 @@ public class Country : AggregateRoot<CountryId>
         Name englishName,
         Alpha2Code alpha2Code,
         LanguageId officialLanguageId,
-        IDomainEventFactory domainEventFactory
+        IDomainEventFactory domainEventFactory,
+        CountryId? id = null
     )
     {
         var country = new Country(
-            new CountryId(Guid.NewGuid()),
+            id ?? new CountryId(),
             nativeName,
             englishName,
             alpha2Code,

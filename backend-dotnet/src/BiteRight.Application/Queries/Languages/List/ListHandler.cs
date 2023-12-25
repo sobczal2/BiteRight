@@ -23,16 +23,13 @@ public class ListHandler : IRequestHandler<ListRequest, ListResponse>
     )
     {
         var languages = await _appDbContext
-            .Database
-            .SqlQuery<LanguageDto>(
-                $"""
-                 SELECT
-                    id,
-                    name,
-                    code
-                 FROM language.languages
-                 """
-            )
+            .Languages
+            .Select(language => new LanguageDto
+            {
+                Id = language.Id,
+                Name = language.Name,
+                Code = language.Code
+            })
             .ToListAsync(cancellationToken);
 
         return new ListResponse(languages);

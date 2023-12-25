@@ -24,6 +24,7 @@ public class TransactionMiddleware : IMiddleware
         try
         {
             await next(context);
+            await _dbContext.SaveChangesAsync(context.RequestAborted);
             await _dbContext.Database.CommitTransactionAsync(context.RequestAborted);
         }
         catch

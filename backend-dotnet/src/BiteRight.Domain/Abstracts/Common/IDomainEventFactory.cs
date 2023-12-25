@@ -1,3 +1,5 @@
+using BiteRight.Domain.Categories;
+using BiteRight.Domain.Categories.Events;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Countries;
 using BiteRight.Domain.Countries.Events;
@@ -20,5 +22,9 @@ public interface IDomainEventFactory
 
     CountryCreatedEvent CreateCountryCreatedEvent(
         CountryId countryId
+    );
+    
+    CategoryCreatedEvent CreateCategoryCreatedEvent(
+        CategoryId categoryId
     );
 }

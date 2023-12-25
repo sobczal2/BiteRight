@@ -1,4 +1,6 @@
 using BiteRight.Domain.Abstracts.Common;
+using BiteRight.Domain.Categories;
+using BiteRight.Domain.Categories.Events;
 using BiteRight.Domain.Countries;
 using BiteRight.Domain.Countries.Events;
 using BiteRight.Domain.Languages;
@@ -52,6 +54,17 @@ public class MediatorDomainEventFactory : IDomainEventFactory
             _dateTimeProvider.UtcNow,
             _correlationIdAccessor.CorrelationId,
             countryId
+        );
+    }
+
+    public CategoryCreatedEvent CreateCategoryCreatedEvent(
+        CategoryId categoryId
+    )
+    {
+        return new CategoryCreatedEvent(
+            _dateTimeProvider.UtcNow,
+            _correlationIdAccessor.CorrelationId,
+            categoryId
         );
     }
 }

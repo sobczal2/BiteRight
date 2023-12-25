@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Infrastructure.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -7,13 +8,13 @@ namespace BiteRight.Web.Authorization;
 
 public class UserExistsRequirementHandler : AuthorizationHandler<UserExistsRequirement>
 {
-    private readonly AppDbContext _appDbContext;
+    private readonly IUserRepository _userRepository;
 
     public UserExistsRequirementHandler(
-        AppDbContext appDbContext
+        IUserRepository userRepository
     )
     {
-        _appDbContext = appDbContext;
+        _userRepository = userRepository;
     }
 
     protected override async Task HandleRequirementAsync(
@@ -27,9 +28,7 @@ public class UserExistsRequirementHandler : AuthorizationHandler<UserExistsRequi
             return;
         }
         
-        var user = await _appDbContext
-            .Users
-            .FirstOrDefaultAsync(x => x.IdentityId == userId);
+        var user = await _userRepository.FindByIdentityId(userId);
 
         if (user is null)
         {

@@ -1,4 +1,6 @@
 using BiteRight.Domain.Abstracts.Common;
+using BiteRight.Domain.Categories;
+using BiteRight.Domain.Categories.Events;
 using BiteRight.Domain.Countries;
 using BiteRight.Domain.Countries.Events;
 using BiteRight.Domain.Languages;
@@ -40,6 +42,17 @@ public class SeedDomainEventFactory : IDomainEventFactory
             DateTime.UtcNow,
             Guid.NewGuid(),
             countryId
+        );
+    }
+
+    public CategoryCreatedEvent CreateCategoryCreatedEvent(
+        CategoryId categoryId
+    )
+    {
+        return new CategoryCreatedEvent(
+            DateTime.UtcNow,
+            Guid.NewGuid(),
+            categoryId
         );
     }
 }

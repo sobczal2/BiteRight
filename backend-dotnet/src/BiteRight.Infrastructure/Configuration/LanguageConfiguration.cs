@@ -30,6 +30,7 @@ public class LanguageConfiguration : IEntityTypeConfiguration<Language>
                 name => name.Value,
                 value => Name.CreateSkipValidation(value)
             );
+        
         builder.HasData(GetSeedData());
     }
 
@@ -43,18 +44,21 @@ public class LanguageConfiguration : IEntityTypeConfiguration<Language>
     public static Language Polish { get; } = Language.Create(
         Name.Create("Polski"),
         Code.Create("pl"),
-        new SeedDomainEventFactory()
+        new SeedDomainEventFactory(),
+        new LanguageId(new Guid("24D48691-7325-4703-B69F-8DB933A6736D"))
     );
 
     public static Language English { get; } = Language.Create(
         Name.Create("English"),
         Code.Create("en"),
-        new SeedDomainEventFactory()
+        new SeedDomainEventFactory(),
+        new LanguageId(new Guid("454FAF9A-644C-445C-89E3-B57203957C1A"))
     );
 
     public static Language German { get; } = Language.Create(
         Name.Create("Deutsch"),
         Code.Create("de"),
-        new SeedDomainEventFactory()
+        new SeedDomainEventFactory(),
+        new LanguageId(new Guid("C1DD0A3B-70D3-4AA1-B53E-4C08A03B57C3"))
     );
 }

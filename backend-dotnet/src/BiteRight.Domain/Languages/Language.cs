@@ -29,11 +29,12 @@ public class Language : AggregateRoot<LanguageId>
     public static Language Create(
         Name name,
         Code code,
-        IDomainEventFactory domainEventFactory
+        IDomainEventFactory domainEventFactory,
+        LanguageId? id = null
     )
     {
         var language = new Language(
-            new LanguageId(Guid.NewGuid()),
+            id ?? new LanguageId(),
             name,
             code
         );

@@ -32,6 +32,7 @@ public static class WebRegistrations
         AddMiddlewares(services);
         AddCommon(services);
         AddLocalization(services);
+        AddOptions(services, configuration);
     }
 
     private static void AddControllers(
@@ -80,7 +81,7 @@ public static class WebRegistrations
 
     private static void AddAuth(
         IServiceCollection services,
-        IConfiguration configuration
+        ConfigurationManager configuration
     )
     {
         var auth0Options = configuration.GetSection("Auth0").Get<Auth0Options>();
@@ -129,7 +130,10 @@ public static class WebRegistrations
     {
         services.AddHttpContextAccessor();
         services.AddSingleton<ICorrelationIdAccessor, HttpContextCorrelationIdAccessor>();
-        services.AddSingleton<IIdentityAccessor, HttpContextIdentityAccessor>();
+        services.AddScoped<IIdentityProvider, HttpContextIdentityProvider>();
+        services.AddScoped<ICultureProvider, UiCultureProvider>();
+        services.AddScoped<ILanguageProvider, CultureLanguageProvider>();
+        services.AddMemoryCache();
     }
 
     private static void AddLocalization(
@@ -149,5 +153,14 @@ public static class WebRegistrations
             opt.SupportedCultures = supportedCultures;
             opt.SupportedUICultures = supportedCultures;
         });
+    }
+    
+    private static void AddOptions(
+        IServiceCollection services,
+        IConfiguration configuration
+    )
+    {
+        services.Configure<Auth0Options>(configuration.GetSection(Auth0Options.SectionName));
+        services.Configure<CacheOptions>(configuration.GetSection(CacheOptions.SectionName));
     }
 }

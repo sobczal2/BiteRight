@@ -1,3 +1,4 @@
+using BiteRight.Domain.Categories;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Countries;
 using BiteRight.Domain.Languages;
@@ -12,6 +13,8 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; } = default!;
     public DbSet<Country> Countries { get; set; } = default!;
     public DbSet<Language> Languages { get; set; } = default!;
+    public DbSet<Category> Categories { get; set; } = default!;
+    public DbSet<CategoryTranslation> CategoryTranslations { get; set; } = default!;
     
     public AppDbContext(
         DbContextOptions<AppDbContext> options,

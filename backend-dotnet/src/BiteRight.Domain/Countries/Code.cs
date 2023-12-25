@@ -62,4 +62,11 @@ public class Alpha2Code : ValueObject
             throw new Alpha2CodeInvalidCharactersException(ValidCharacters.ToString());
         }
     }
+    
+    public static implicit operator string(
+        Alpha2Code alpha2Code
+    )
+    {
+        return alpha2Code.Value;
+    }
 }

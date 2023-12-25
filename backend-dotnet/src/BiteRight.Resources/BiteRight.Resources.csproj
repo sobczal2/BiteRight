@@ -23,6 +23,38 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Onboard.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Common\Common.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Common.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Common\Common.en.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Common.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Common\Common.de.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Common.de.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Common\Common.pl.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Common.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Categories\Categories.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Categories.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Categories\Categories.en.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Categories.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Categories\Categories.pl.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Categories.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Categories\Categories.de.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Categories.de.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -45,6 +77,46 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Onboard.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Common\Common.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Common.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Common\Common.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Common.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Common\Common.de.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Common.de.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Common\Common.pl.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Common.pl.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Categories\Categories.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Categories.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Categories\Categories.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Categories.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Categories\Categories.pl.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Categories.pl.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Categories\Categories.de.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Categories.de.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 
