@@ -2,7 +2,12 @@ namespace BiteRight.Domain.Common;
 
 public class GuidId : Id<Guid>
 {
-    public GuidId(
+    protected GuidId()
+        : base(Guid.NewGuid())
+    {
+    }
+
+    protected GuidId(
         Guid value
     )
         : base(value)

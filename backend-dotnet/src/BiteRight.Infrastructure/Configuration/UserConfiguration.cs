@@ -16,13 +16,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(user => user.Id)
             .HasConversion(
                 id => id.Value,
-                value => new UserId(value)
+                value => value
             )
             .ValueGeneratedNever();
         builder.Property(user => user.IdentityId)
             .HasConversion(
-                id => id.Value,
-                value => IdentityId.Create(value)
+                identityId => identityId.Value,
+                value => value
             );
         builder.HasIndex(user => user.IdentityId)
             .IsUnique();

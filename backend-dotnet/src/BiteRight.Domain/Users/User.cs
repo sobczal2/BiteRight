@@ -24,7 +24,6 @@ public class User : AggregateRoot<UserId>
         IdentityId identityId,
         Username username,
         Email email,
-        bool isEmailVerified,
         DateTime joinedAt
     )
         : base(id)
@@ -39,7 +38,6 @@ public class User : AggregateRoot<UserId>
         IdentityId identityId,
         Username username,
         Email email,
-        bool isEmailVerified,
         IDomainEventFactory domainEventFactory,
         IDateTimeProvider dateTimeProvider
     )
@@ -49,17 +47,15 @@ public class User : AggregateRoot<UserId>
             identityId,
             username,
             email,
-            isEmailVerified,
             dateTimeProvider.UtcNow
         );
-        
+
         user.AddDomainEvent(
             domainEventFactory.CreateUserCreatedEvent(
-                user.Id,
                 user.IdentityId
             )
         );
-        
+
         return user;
     }
 }

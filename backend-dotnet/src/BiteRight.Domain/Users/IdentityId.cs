@@ -24,4 +24,11 @@ public class IdentityId : Id<string>
     {
         return id.Value;
     }
+    
+    public static implicit operator IdentityId(
+        string id
+    )
+    {
+        return new(id);
+    }
 }

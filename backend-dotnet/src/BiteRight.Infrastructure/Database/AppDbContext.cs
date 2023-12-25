@@ -1,5 +1,6 @@
 using BiteRight.Domain.Common;
-using BiteRight.Domain.Currency;
+using BiteRight.Domain.Countries;
+using BiteRight.Domain.Languages;
 using BiteRight.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,8 @@ public class AppDbContext : DbContext
 {
     private readonly IDomainEventPublisher _domainEventPublisher;
     public DbSet<User> Users { get; set; } = default!;
-    public DbSet<Currency> Currencies { get; set; } = default!;
+    public DbSet<Country> Countries { get; set; } = default!;
+    public DbSet<Language> Languages { get; set; } = default!;
     
     public AppDbContext(
         DbContextOptions<AppDbContext> options,

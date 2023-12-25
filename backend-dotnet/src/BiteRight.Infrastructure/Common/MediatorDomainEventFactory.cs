@@ -1,4 +1,8 @@
 using BiteRight.Domain.Abstracts.Common;
+using BiteRight.Domain.Countries;
+using BiteRight.Domain.Countries.Events;
+using BiteRight.Domain.Languages;
+using BiteRight.Domain.Languages.Events;
 using BiteRight.Domain.Users;
 using BiteRight.Domain.Users.Events;
 
@@ -19,15 +23,35 @@ public class MediatorDomainEventFactory : IDomainEventFactory
     }
 
     public UserCreatedEvent CreateUserCreatedEvent(
-        UserId userId,
         IdentityId identityId
     )
     {
         return new UserCreatedEvent(
             _dateTimeProvider.UtcNow,
             _correlationIdAccessor.CorrelationId,
-            userId,
             identityId
+        );
+    }
+
+    public LanguageCreatedEvent CreateLanguageCreatedEvent(
+        LanguageId languageId
+    )
+    {
+        return new LanguageCreatedEvent(
+            _dateTimeProvider.UtcNow,
+            _correlationIdAccessor.CorrelationId,
+            languageId
+        );
+    }
+
+    public CountryCreatedEvent CreateCountryCreatedEvent(
+        CountryId countryId
+    )
+    {
+        return new CountryCreatedEvent(
+            _dateTimeProvider.UtcNow,
+            _correlationIdAccessor.CorrelationId,
+            countryId
         );
     }
 }

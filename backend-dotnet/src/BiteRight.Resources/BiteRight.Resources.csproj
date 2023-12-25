@@ -11,6 +11,14 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Onboard.pl.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Onboard\Onboard.en.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Onboard.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Onboard\Onboard.de.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Onboard.de.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
       <EmbeddedResource Update="Resources\Onboard\Onboard.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Onboard.Designer.cs</LastGenOutput>
@@ -18,15 +26,25 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Resources\Onboard\Onboard.Designer.cs">
+      <Compile Update="Resources\Onboard\Onboard.en.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>Onboard.resx</DependentUpon>
+        <DependentUpon>Onboard.en.resx</DependentUpon>
       </Compile>
       <Compile Update="Resources\Onboard\Onboard.pl.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Onboard.pl.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Onboard\Onboard.de.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Onboard.de.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Onboard\Onboard.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Onboard.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 

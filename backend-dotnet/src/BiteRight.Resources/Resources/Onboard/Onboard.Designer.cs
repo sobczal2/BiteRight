@@ -45,21 +45,21 @@ namespace BiteRight.Resources.Resources.Onboard {
             }
         }
         
-        public static string username_in_use {
-            get {
-                return ResourceManager.GetString("username_in_use", resourceCulture);
-            }
-        }
-        
         public static string email_in_use {
             get {
                 return ResourceManager.GetString("email_in_use", resourceCulture);
             }
         }
         
-        public static string username_empty {
+        public static string email_not_valid {
             get {
-                return ResourceManager.GetString("username_empty", resourceCulture);
+                return ResourceManager.GetString("email_not_valid", resourceCulture);
+            }
+        }
+        
+        public static string email_not_verified {
+            get {
+                return ResourceManager.GetString("email_not_verified", resourceCulture);
             }
         }
         
@@ -69,15 +69,21 @@ namespace BiteRight.Resources.Resources.Onboard {
             }
         }
         
-        public static string username_length_not_valid {
+        public static string username_empty {
             get {
-                return ResourceManager.GetString("username_length_not_valid", resourceCulture);
+                return ResourceManager.GetString("username_empty", resourceCulture);
             }
         }
         
-        public static string email_not_valid {
+        public static string username_in_use {
             get {
-                return ResourceManager.GetString("email_not_valid", resourceCulture);
+                return ResourceManager.GetString("username_in_use", resourceCulture);
+            }
+        }
+        
+        public static string username_length_not_valid {
+            get {
+                return ResourceManager.GetString("username_length_not_valid", resourceCulture);
             }
         }
         

@@ -48,6 +48,7 @@ public static class WebRegistrations
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(opt =>
         {
+            opt.CustomSchemaIds(type => type.FullName);
             opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Description = "JWT Authorization header using the Bearer scheme.",
@@ -141,7 +142,8 @@ public static class WebRegistrations
             var supportedCultures = new[]
             {
                 new CultureInfo("en"),
-                new CultureInfo("pl")
+                new CultureInfo("pl"),
+                new CultureInfo("de")
             };
             opt.DefaultRequestCulture = new RequestCulture("en");
             opt.SupportedCultures = supportedCultures;

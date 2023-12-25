@@ -40,6 +40,7 @@ public static class InfrastructureRegistrations
             }
             
             opt.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+            opt.UseSnakeCaseNamingConvention();
         });
     }
     

@@ -39,4 +39,7 @@
     <data name="user_already_exists" xml:space="preserve">
         <value>Użytkownik już istnieje</value>
     </data>
+    <data name="email_not_verified" xml:space="preserve">
+        <value>Email nie jest zweryfikowany</value>
+    </data>
 </root>

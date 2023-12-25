@@ -35,5 +35,7 @@ public class UserExistsRequirementHandler : AuthorizationHandler<UserExistsRequi
         {
             return;
         }
+        
+        context.Succeed(requirement);
     }
 }

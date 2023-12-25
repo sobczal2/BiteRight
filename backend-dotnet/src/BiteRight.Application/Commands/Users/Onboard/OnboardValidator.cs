@@ -11,6 +11,6 @@ public class OnboardValidator : AbstractValidator<OnboardRequest>
     {
         RuleFor(x => x.Username)
             .NotEmpty()
-            .WithMessage(_ => localizer[nameof(Resources.Resources.Onboard.Onboard.username_empty)]);
+            .WithMessage(_ => localizer[nameof(Resources.Resources.Onboard.Onboard_en.username_empty)]);
     }
 }

@@ -22,55 +22,144 @@ namespace BiteRight.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("BiteRight.Domain.Currency.Currency", b =>
+            modelBuilder.Entity("BiteRight.Domain.Countries.Country", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Alpha2Code")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("alpha2code");
+
+                    b.Property<string>("EnglishName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("english_name");
+
+                    b.Property<string>("NativeName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("native_name");
+
+                    b.Property<Guid>("OfficialLanguageId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("official_language_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_countries");
+
+                    b.ToTable("countries", "country");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("fcf39857-7d3a-47cd-9860-4904d29017ef"),
+                            Alpha2Code = "pl",
+                            EnglishName = "Poland",
+                            NativeName = "Polska",
+                            OfficialLanguageId = new Guid("d0cc3ba0-b282-4e37-ae5e-06103000a2ce")
+                        },
+                        new
+                        {
+                            Id = new Guid("9359cc21-dc4a-45ab-84f4-dc049868ef1a"),
+                            Alpha2Code = "en",
+                            EnglishName = "England",
+                            NativeName = "England",
+                            OfficialLanguageId = new Guid("cd590129-82a0-4e30-a6ea-6f140db30dbc")
+                        },
+                        new
+                        {
+                            Id = new Guid("ebd7857a-1f4b-4a2c-9de0-d7abec20025b"),
+                            Alpha2Code = "de",
+                            EnglishName = "Germany",
+                            NativeName = "Deutschland",
+                            OfficialLanguageId = new Guid("5573f2d0-01bc-4328-8dfd-524a622cc06d")
+                        },
+                        new
+                        {
+                            Id = new Guid("ad6d2f06-07d0-4b72-8f7e-2ed4f4fbdb96"),
+                            Alpha2Code = "us",
+                            EnglishName = "United States of America",
+                            NativeName = "United States of America",
+                            OfficialLanguageId = new Guid("cd590129-82a0-4e30-a6ea-6f140db30dbc")
+                        });
+                });
+
+            modelBuilder.Entity("BiteRight.Domain.Languages.Language", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("code");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
-                    b.Property<string>("Symbol")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.HasKey("Id")
+                        .HasName("pk_languages");
 
-                    b.HasKey("Id");
+                    b.ToTable("languages", "language");
 
-                    b.ToTable("currencies", "currency");
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("d0cc3ba0-b282-4e37-ae5e-06103000a2ce"),
+                            Code = "pl",
+                            Name = "Polski"
+                        },
+                        new
+                        {
+                            Id = new Guid("cd590129-82a0-4e30-a6ea-6f140db30dbc"),
+                            Code = "en",
+                            Name = "English"
+                        },
+                        new
+                        {
+                            Id = new Guid("5573f2d0-01bc-4328-8dfd-524a622cc06d"),
+                            Code = "de",
+                            Name = "Deutsch"
+                        });
                 });
 
             modelBuilder.Entity("BiteRight.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("email");
 
                     b.Property<string>("IdentityId")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsEmailVerified")
-                        .HasColumnType("boolean");
+                        .HasColumnType("text")
+                        .HasColumnName("identity_id");
 
                     b.Property<DateTime>("JoinedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("joined_at");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("username");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_users");
 
                     b.HasIndex("IdentityId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_identity_id");
 
                     b.ToTable("users", "user");
                 });
