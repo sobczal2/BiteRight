@@ -1,55 +1,65 @@
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Common;
+using BiteRight.Domain.Languages;
 
 namespace BiteRight.Domain.Categories;
 
 public class Category : AggregateRoot<CategoryId>
 {
-    public Name Name { get; }
     public Photo? Photo { get; }
-    
+    public IEnumerable<CategoryTranslation> Translations { get; }
+
     // EF Core
     private Category()
     {
-        Name = default!;
         Photo = default!;
+        Translations = default!;
     }
-    
+
     private Category(
         CategoryId id,
-        Name name,
-        Photo photo
+        Photo? photo
     )
         : base(id)
     {
-        Name = name;
         Photo = photo;
+        Translations = new List<CategoryTranslation>();
     }
-    
+
     public static Category Create(
-        Name name,
-        Photo photo,
-        IDomainEventFactory domainEventFactory,
+        Photo? photo,
+        IDomainEventFactory? domainEventFactory = null,
         CategoryId? id = null
     )
     {
         var category = new Category(
             id ?? new CategoryId(),
-            name,
             photo
         );
-        
-        category.AddDomainEvent(
-            domainEventFactory.CreateCategoryCreatedEvent(
-                category.Id
-            )
-        );
-        
+
+        if (domainEventFactory is not null)
+        {
+            category.AddDomainEvent(
+                domainEventFactory.CreateCategoryCreatedEvent(
+                    category.Id
+                )
+            );
+        }
+
         return category;
     }
-    
+
     public Uri GetPhotoUri()
     {
         return Photo?.GetUri() ?? Photo.Default.GetUri();
+    }
+
+    public string GetName(
+        LanguageId languageId
+    )
+    {
+        return Translations
+            .SingleOrDefault(t => Equals(t.LanguageId, languageId))
+            ?.Name ?? throw new InvalidOperationException();
     }
 }

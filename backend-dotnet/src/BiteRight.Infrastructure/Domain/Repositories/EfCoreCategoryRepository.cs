@@ -25,31 +25,29 @@ public class EfCoreCategoryRepository : ICategoryRepository
         CancellationToken cancellationToken = default
     )
     {
-        var categories = await _appDbContext
-            .Database
-            .SqlQuery<Category>(
-                $"""
-                 SELECT c.id, ct.name, ct.photo FROM categories c
-                 LEFT JOIN category_translations ct ON c.id = ct.category_id
-                 WHERE ct.language_id = {languageId.Value}
-                    AND ct.name ILIKE '%{name}%'
-                 LIMIT {pageSize}
-                 OFFSET {pageNumber * pageSize}
-                 """
-            )
+        IQueryable<Category> query = _appDbContext.Categories
+            .Include(category =>
+                category.Translations.Where(translation => Equals(translation.LanguageId, languageId)));
+
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            query = query.Where(category =>
+                category.Translations.Any(translation =>
+                    ((string)translation.Name).ToLower().Contains(name.ToLower())
+                    && Equals(translation.LanguageId, languageId)
+                )
+            );
+        }
+
+        var totalCount = await query.CountAsync(cancellationToken);
+
+        var categories = await query
+            .OrderBy(category =>
+                (string)category.Translations.First(translation => translation.LanguageId == languageId).Name)
+            .Skip(pageNumber * pageSize)
+            .Take(pageSize)
             .ToListAsync(cancellationToken);
-        
-        var totalCount = await _appDbContext
-            .Database
-            .SqlQuery<int>(
-                $"""
-                 SELECT COUNT(*) FROM categories c
-                 LEFT JOIN category_translations ct ON c.id = ct.category_id
-                 WHERE ct.language_id = {languageId.Value}
-                    AND ct.name ILIKE '%{name}%'
-                 """
-                ).FirstOrDefaultAsync(cancellationToken);
-        
+
         return (categories, totalCount);
     }
 }

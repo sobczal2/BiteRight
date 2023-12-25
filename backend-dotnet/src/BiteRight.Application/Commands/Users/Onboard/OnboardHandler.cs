@@ -15,7 +15,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
     private readonly IIdentityProvider _identityProvider;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IUserRepository _userRepository;
-    private readonly IStringLocalizer<Resources.Resources.Onboard.Users> _localizer;
+    private readonly IStringLocalizer<Resources.Resources.Users.Users> _localizer;
 
     public OnboardHandler(
         IIdentityManager identityManager,
@@ -23,7 +23,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
         IIdentityProvider identityProvider,
         IDateTimeProvider dateTimeProvider,
         IUserRepository userRepository,
-        IStringLocalizer<Resources.Resources.Onboard.Users> localizer
+        IStringLocalizer<Resources.Resources.Users.Users> localizer
     )
     {
         _identityManager = identityManager;
@@ -45,7 +45,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
         if (existingUser != null)
         {
             throw ValidationException(
-                _localizer[nameof(Resources.Resources.Onboard.Users.user_already_exists)]
+                _localizer[nameof(Resources.Resources.Users.Users.user_already_exists)]
             );
         }
         
@@ -54,7 +54,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
         if (!isVerified)
         {
             throw ValidationException(
-                _localizer[nameof(Resources.Resources.Onboard.Users.email_not_verified)]
+                _localizer[nameof(Resources.Resources.Users.Users.email_not_verified)]
             );
         }
         var username = Username.Create(request.Username);
@@ -64,7 +64,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
         {
             throw ValidationException(
                 nameof(OnboardRequest.Username),
-                _localizer[nameof(Resources.Resources.Onboard.Users.username_in_use)]
+                _localizer[nameof(Resources.Resources.Users.Users.username_in_use)]
             );
         }
 
@@ -72,7 +72,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
         if (existsByEmail)
         {
             throw ValidationException(
-                _localizer[nameof(Resources.Resources.Onboard.Users.email_in_use)]
+                _localizer[nameof(Resources.Resources.Users.Users.email_in_use)]
             );
         }
 
@@ -96,19 +96,19 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
         return exception switch
         {
             EmailNotValidException _ => ValidationException(
-                _localizer[nameof(Resources.Resources.Onboard.Users.email_not_valid)]
+                _localizer[nameof(Resources.Resources.Users.Users.email_not_valid)]
             ),
             UsernameEmptyException _ => ValidationException(
                 nameof(OnboardRequest.Username),
-                _localizer[nameof(Resources.Resources.Onboard.Users.username_empty)]
+                _localizer[nameof(Resources.Resources.Users.Users.username_empty)]
             ),
             UsernameInvalidLengthException usernameLengthNotValidException => ValidationException(
                 nameof(OnboardRequest.Username),
-                string.Format(_localizer[nameof(Resources.Resources.Onboard.Users.username_length_not_valid)], usernameLengthNotValidException.MinLength, usernameLengthNotValidException.MaxLength)
+                string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_length_not_valid)], usernameLengthNotValidException.MinLength, usernameLengthNotValidException.MaxLength)
             ),
             UsernameInvalidCharactersException usernameCharactersNotValidException => ValidationException(
                 nameof(OnboardRequest.Username),
-                string.Format(_localizer[nameof(Resources.Resources.Onboard.Users.username_characters_not_valid)], usernameCharactersNotValidException.ValidCharacters)
+                string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_characters_not_valid)], usernameCharactersNotValidException.ValidCharacters)
             ),
             _ => base.MapExceptionToValidationException(exception)
         };

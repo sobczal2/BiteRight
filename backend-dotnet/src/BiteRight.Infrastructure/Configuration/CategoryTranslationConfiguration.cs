@@ -35,12 +35,12 @@ public class CategoryTranslationConfiguration : IEntityTypeConfiguration<Categor
                 name => name.Value,
                 value => Name.CreateSkipValidation(value)
             );
-        builder.HasOne<Category>()
+        builder.HasOne(ct => ct.Category)
+            .WithMany(c => c.Translations)
+            .HasForeignKey(ct => ct.CategoryId);
+        builder.HasOne(ct => ct.Language)
             .WithMany()
-            .HasForeignKey(categoryTranslation => categoryTranslation.CategoryId);
-        builder.HasOne<Language>()
-            .WithMany()
-            .HasForeignKey(categoryTranslation => categoryTranslation.LanguageId);
+            .HasForeignKey(ct => ct.LanguageId);
         
         builder.HasData(GetSeedData());
     }

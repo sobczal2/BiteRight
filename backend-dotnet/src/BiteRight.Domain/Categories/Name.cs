@@ -59,4 +59,11 @@ public class Name : ValueObject
     {
         return name.Value;
     }
+    
+    public static implicit operator Name(
+        string value
+    )
+    {
+        return Create(value);
+    }
 }

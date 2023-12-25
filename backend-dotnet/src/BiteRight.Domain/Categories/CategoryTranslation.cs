@@ -6,7 +6,9 @@ namespace BiteRight.Domain.Categories;
 public class CategoryTranslation : Entity<CategoryTranslationId>
 {
     public CategoryId CategoryId { get; private set; }
+    public Category Category { get; private set; } = default!;
     public LanguageId LanguageId { get; private set; }
+    public Language Language { get; private set; } = default!;
     public Name Name { get; private set; }
     
     // EF Core

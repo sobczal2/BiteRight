@@ -20,6 +20,6 @@ public class Photo : Entity<PhotoId>
 
     public Uri GetUri()
     {
-        return new Uri($"photos/{Id}.webp");
+        return new Uri($"photos/{Id}.webp", UriKind.Relative);
     }
 }

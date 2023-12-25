@@ -25,11 +25,12 @@ public class SearchHandler : IRequestHandler<SearchRequest, SearchResponse>
         CancellationToken cancellationToken
     )
     {
+        var languageId = await _languageProvider.RequireCurrentId(cancellationToken);
         var categories = await _categoryRepository.Search(
             request.Query,
             request.PaginationParams.PageNumber,
             request.PaginationParams.PageSize,
-            await _languageProvider.RequireCurrentId(cancellationToken),
+            languageId,
             cancellationToken
         );
 
@@ -40,7 +41,7 @@ public class SearchHandler : IRequestHandler<SearchRequest, SearchResponse>
             categories.Categories.Select(category => new CategoryDto
             {
                 Id = category.Id,
-                Name = category.Name,
+                Name = category.GetName(languageId),
                 PhotoUri = category.GetPhotoUri(),
             })
         );
