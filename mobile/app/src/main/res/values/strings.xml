@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">BiteRight</string>
-    <string name="api_url">http://10.0.2.2:8080/</string>
-    <string name="get_started" />
+    <string name="app_name" translatable="false">BiteRight</string>
+    <string name="api_url" translatable="false">http://10.0.2.2:8080/</string>
+    <string name="get_started" >Get started</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="email_not_verified">Please verify your email</string>
 </resources>

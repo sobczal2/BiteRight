@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BiteRight</string>
+    <string name="get_started">Get started</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="email_not_verified">Please verify your email</string>
 </resources>

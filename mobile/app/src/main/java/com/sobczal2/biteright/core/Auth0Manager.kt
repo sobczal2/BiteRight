@@ -16,14 +16,17 @@ class Auth0Manager(private val context: Context) {
 
     fun login(
         onSuccess: (Credentials) -> Unit,
-        onFailure: (AuthenticationException) -> Unit
+        onFailure: (String) -> Unit
     ) {
         WebAuthProvider
             .login(auth0)
             .withScheme(context.getString(R.string.com_auth0_scheme))
             .start(context, object : Callback<Credentials, AuthenticationException> {
                 override fun onFailure(error: AuthenticationException) {
-                    onFailure(error)
+                    when(error.getDescription()) {
+                        "email_not_verified" -> onFailure(context.getString(R.string.email_not_verified))
+                        else -> onFailure(context.getString(R.string.unknown_error))
+                    }
                 }
 
                 override fun onSuccess(result: Credentials) {
