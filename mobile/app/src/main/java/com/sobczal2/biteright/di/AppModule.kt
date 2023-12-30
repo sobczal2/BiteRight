@@ -3,6 +3,7 @@ package com.sobczal2.biteright.di
 import JwtInterceptor
 import android.content.Context
 import androidx.core.content.ContextCompat.getString
+import com.auth0.android.Auth0
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.data.local.UserSPDataSource
 import com.sobczal2.biteright.data.local.UserSPDataSourceImpl

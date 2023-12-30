@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{73239344-A684-44DB-88E6-32DA4A8281ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiteRight.Web", "src\BiteRight.Web\BiteRight.Web.csproj", "{8F071042-BFE0-4338-825A-6FB4720DFCC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiteRight.Infrastructure", "src\BiteRight.Infrastructure\BiteRight.Infrastructure.csproj", "{4B2D259B-5F0B-4B98-8E65-A7909D95A65A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiteRight.Domain", "src\BiteRight.Domain\BiteRight.Domain.csproj", "{42E9B5EA-A59B-4B0B-968F-607623AFA046}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiteRight.Application", "src\BiteRight.Application\BiteRight.Application.csproj", "{B2D1E5B1-EBA6-4405-B04A-90887A0AFE45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiteRight.Options", "src\BiteRight.Options\BiteRight.Options.csproj", "{3DC98A53-23DB-4EF6-8D25-1A81A49209DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiteRight.Resources", "src\BiteRight.Resources\BiteRight.Resources.csproj", "{9C68EF18-DE0F-4079-B5A8-E1758E013A8C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8F071042-BFE0-4338-825A-6FB4720DFCC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F071042-BFE0-4338-825A-6FB4720DFCC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F071042-BFE0-4338-825A-6FB4720DFCC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F071042-BFE0-4338-825A-6FB4720DFCC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B2D259B-5F0B-4B98-8E65-A7909D95A65A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B2D259B-5F0B-4B98-8E65-A7909D95A65A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B2D259B-5F0B-4B98-8E65-A7909D95A65A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B2D259B-5F0B-4B98-8E65-A7909D95A65A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42E9B5EA-A59B-4B0B-968F-607623AFA046}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42E9B5EA-A59B-4B0B-968F-607623AFA046}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42E9B5EA-A59B-4B0B-968F-607623AFA046}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42E9B5EA-A59B-4B0B-968F-607623AFA046}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2D1E5B1-EBA6-4405-B04A-90887A0AFE45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2D1E5B1-EBA6-4405-B04A-90887A0AFE45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2D1E5B1-EBA6-4405-B04A-90887A0AFE45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2D1E5B1-EBA6-4405-B04A-90887A0AFE45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DC98A53-23DB-4EF6-8D25-1A81A49209DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DC98A53-23DB-4EF6-8D25-1A81A49209DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DC98A53-23DB-4EF6-8D25-1A81A49209DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DC98A53-23DB-4EF6-8D25-1A81A49209DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C68EF18-DE0F-4079-B5A8-E1758E013A8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C68EF18-DE0F-4079-B5A8-E1758E013A8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C68EF18-DE0F-4079-B5A8-E1758E013A8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C68EF18-DE0F-4079-B5A8-E1758E013A8C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8F071042-BFE0-4338-825A-6FB4720DFCC2} = {73239344-A684-44DB-88E6-32DA4A8281ED}
+		{4B2D259B-5F0B-4B98-8E65-A7909D95A65A} = {73239344-A684-44DB-88E6-32DA4A8281ED}
+		{42E9B5EA-A59B-4B0B-968F-607623AFA046} = {73239344-A684-44DB-88E6-32DA4A8281ED}
+		{B2D1E5B1-EBA6-4405-B04A-90887A0AFE45} = {73239344-A684-44DB-88E6-32DA4A8281ED}
+		{3DC98A53-23DB-4EF6-8D25-1A81A49209DD} = {73239344-A684-44DB-88E6-32DA4A8281ED}
+		{9C68EF18-DE0F-4079-B5A8-E1758E013A8C} = {73239344-A684-44DB-88E6-32DA4A8281ED}
+	EndGlobalSection
+EndGlobal
