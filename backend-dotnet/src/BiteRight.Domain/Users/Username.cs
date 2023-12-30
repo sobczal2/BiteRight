@@ -63,4 +63,11 @@ public class Username : ValueObject
             throw new UsernameInvalidCharactersException(ValidCharacters.ToString());
         }
     }
+    
+    public static implicit operator string(
+        Username username
+    )
+    {
+        return username.Value;
+    }
 }

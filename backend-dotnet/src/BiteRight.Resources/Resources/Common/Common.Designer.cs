@@ -62,5 +62,17 @@ namespace BiteRight.Resources.Resources.Common {
                 return ResourceManager.GetString("pagination_params_null", resourceCulture);
             }
         }
+        
+        public static string unknown_error {
+            get {
+                return ResourceManager.GetString("unknown_error", resourceCulture);
+            }
+        }
+        
+        public static string not_found {
+            get {
+                return ResourceManager.GetString("not_found", resourceCulture);
+            }
+        }
     }
 }

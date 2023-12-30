@@ -39,7 +39,7 @@ public static class WebRegistrations
         IServiceCollection services
     )
     {
-        services.AddControllers(opt => { opt.Filters.Add<ValidationExceptionFilter>(); });
+        services.AddControllers(opt => { opt.Filters.Add<ApplicationExceptionFilter>(); });
     }
 
     private static void AddSwagger(
@@ -76,6 +76,7 @@ public static class WebRegistrations
             });
 
             opt.OperationFilter<CultureQueryParameterFilter>();
+            opt.OperationFilter<ProducesInternalServerErrorResponseFilter>();
         });
     }
 

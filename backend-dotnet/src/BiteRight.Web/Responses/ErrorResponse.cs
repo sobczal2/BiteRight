@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using BiteRight.Application.Common.Exceptions;
 using FluentValidation;
 
 namespace BiteRight.Web.Responses;

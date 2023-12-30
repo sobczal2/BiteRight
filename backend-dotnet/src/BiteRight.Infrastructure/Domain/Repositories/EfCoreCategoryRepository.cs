@@ -33,7 +33,9 @@ public class EfCoreCategoryRepository : ICategoryRepository
         {
             query = query.Where(category =>
                 category.Translations.Any(translation =>
+#pragma warning disable CA1862
                     ((string)translation.Name).ToLower().Contains(name.ToLower())
+#pragma warning restore CA1862
                     && Equals(translation.LanguageId, languageId)
                 )
             );

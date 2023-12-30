@@ -27,4 +27,10 @@
     <data name="pagination_params_null" xml:space="preserve">
         <value>Parametry paginacji są wymagane</value>
     </data>
+    <data name="unknown_error" xml:space="preserve">
+        <value>Wystąpił nieznany błąd</value>
+    </data>
+    <data name="not_found" xml:space="preserve">
+        <value>Nie znaleziono</value>
+    </data>
 </root>

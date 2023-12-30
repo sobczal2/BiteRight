@@ -39,4 +39,6 @@ public class Email : ValueObject
     {
         return new Email(new MailAddress(value));
     }
+    
+    public static implicit operator string(Email email) => email.Value;
 }
