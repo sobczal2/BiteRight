@@ -1,14 +1,14 @@
 using System.Text.RegularExpressions;
 using BiteRight.Domain.Common;
-using BiteRight.Domain.Languages.Exceptions;
+using BiteRight.Domain.Product.Exceptions;
 
-namespace BiteRight.Domain.Languages;
+namespace BiteRight.Domain.Product;
 
-public class Name : ValueObject
+public class Description : ValueObject
 {
     public string Value { get; }
 
-    private Name(
+    private Description(
         string value
     )
     {
@@ -20,24 +20,24 @@ public class Name : ValueObject
         yield return Value;
     }
     
-    public static Name Create(
+    public static Description Create(
         string value
     )
     {
         Validate(value);
         
-        return new Name(value);
+        return new Description(value);
     }
     
-    public static Name CreateSkipValidation(
+    public static Description CreateSkipValidation(
         string value
     )
     {
-        return new Name(value);
+        return new Description(value);
     }
     
     private const int MinLength = 3;
-    private const int MaxLength = 30;
+    private const int MaxLength = 64;
     
     private static readonly Regex ValidCharacters = new(
         @"^[a-zA-Z\s]+$",
@@ -48,26 +48,21 @@ public class Name : ValueObject
         string value
     )
     {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new NameEmptyException();
-        }
-        
         if (value.Length is < MinLength or > MaxLength)
         {
-            throw new NameInvalidLengthException(MinLength, MaxLength);
+            throw new DescriptionInvalidLengthException(MinLength, MaxLength);
         }
         
         if (!ValidCharacters.IsMatch(value))
         {
-            throw new NameInvalidCharactersException(ValidCharacters.ToString());
+            throw new DescriptionInvalidCharactersException(ValidCharacters.ToString());
         }
     }
     
     public static implicit operator string(
-        Name name
+        Description description
     )
     {
-        return name.Value;
+        return description.Value;
     }
 }
