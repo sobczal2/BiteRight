@@ -4,6 +4,11 @@ namespace BiteRight.Domain.Categories;
 
 public class Photo : Entity<PhotoId>
 {
+    // EF Core
+    private Photo()
+    {
+    }
+
     private Photo(
         PhotoId id
     )

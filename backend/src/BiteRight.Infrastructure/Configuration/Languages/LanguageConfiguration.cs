@@ -3,12 +3,12 @@ using BiteRight.Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BiteRight.Infrastructure.Configuration;
+namespace BiteRight.Infrastructure.Configuration.Languages;
 
-public class LanguageConfiguration : IEntityTypeConfiguration<Language>
+public class LanguageConfiguration : IEntityTypeConfiguration<BiteRight.Domain.Languages.Language>
 {
     public void Configure(
-        EntityTypeBuilder<Language> builder
+        EntityTypeBuilder<BiteRight.Domain.Languages.Language> builder
     )
     {
         builder.ToTable("languages", "language");
@@ -25,12 +25,17 @@ public class LanguageConfiguration : IEntityTypeConfiguration<Language>
                 code => code.Value,
                 value => Code.CreateSkipValidation(value)
             );
-        builder.Property(language => language.Name)
+        builder.Property(language => language.NativeName)
             .HasConversion(
                 name => name.Value,
                 value => Name.CreateSkipValidation(value)
             );
-        
+        builder.Property(language => language.EnglishName)
+            .HasConversion(
+                name => name.Value,
+                value => Name.CreateSkipValidation(value)
+            );
+
         builder.HasData(GetSeedData());
     }
 
@@ -41,22 +46,25 @@ public class LanguageConfiguration : IEntityTypeConfiguration<Language>
         yield return German;
     }
 
-    public static Language Polish { get; } = Language.Create(
+    public static BiteRight.Domain.Languages.Language Polish { get; } = BiteRight.Domain.Languages.Language.Create(
         Name.Create("Polski"),
+        Name.Create("Polish"),
         Code.Create("pl"),
         new SeedDomainEventFactory(),
         new LanguageId(new Guid("24D48691-7325-4703-B69F-8DB933A6736D"))
     );
 
-    public static Language English { get; } = Language.Create(
+    public static BiteRight.Domain.Languages.Language English { get; } = BiteRight.Domain.Languages.Language.Create(
+        Name.Create("English"),
         Name.Create("English"),
         Code.Create("en"),
         new SeedDomainEventFactory(),
         new LanguageId(new Guid("454FAF9A-644C-445C-89E3-B57203957C1A"))
     );
 
-    public static Language German { get; } = Language.Create(
+    public static BiteRight.Domain.Languages.Language German { get; } = BiteRight.Domain.Languages.Language.Create(
         Name.Create("Deutsch"),
+        Name.Create("German"),
         Code.Create("de"),
         new SeedDomainEventFactory(),
         new LanguageId(new Guid("C1DD0A3B-70D3-4AA1-B53E-4C08A03B57C3"))

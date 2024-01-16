@@ -3,7 +3,7 @@ using BiteRight.Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BiteRight.Infrastructure.Configuration;
+namespace BiteRight.Infrastructure.Configuration.Categories;
 
 public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
@@ -20,11 +20,15 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
                 value => value
             )
             .ValueGeneratedNever();
-        builder.Property(category => category.Photo)
+        builder.Property(category => category.PhotoId)
             .HasConversion(
-                photo => photo!.Id.Value,
-                value => Photo.Create(value)
+                photoId => photoId!.Value,
+                value => value
             );
+        builder.HasOne(category => category.Photo)
+            .WithOne()
+            .HasForeignKey<Category>(category => category.PhotoId)
+            .OnDelete(DeleteBehavior.Restrict);
         
         builder.HasData(GetSeedData());
     }

@@ -6,4 +6,5 @@ public class UserDto
     public string Username { get; set; } = default!;
     public string Email { get; set; } = default!;
     public DateTime JoinedAt { get; set; }
+    public ProfileDto Profile { get; set; } = default!;
 }

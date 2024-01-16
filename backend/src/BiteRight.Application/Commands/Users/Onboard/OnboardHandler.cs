@@ -1,8 +1,15 @@
 using BiteRight.Application.Commands.Common;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
+using BiteRight.Domain.Countries;
+using BiteRight.Domain.Currencies;
+using BiteRight.Domain.Languages;
 using BiteRight.Domain.Users;
 using BiteRight.Domain.Users.Exceptions;
+using BiteRight.Infrastructure.Configuration;
+using BiteRight.Infrastructure.Configuration.Countries;
+using BiteRight.Infrastructure.Configuration.Currencies;
+using BiteRight.Infrastructure.Configuration.Languages;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
@@ -75,11 +82,18 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
                 _localizer[nameof(Resources.Resources.Users.Users.email_in_use)]
             );
         }
+        
+        var profile = Profile.Create(
+            CountryConfiguration.USA.Id,
+            LanguageConfiguration.English.Id,
+            CurrencyConfiguration.USD.Id
+        );
 
         var user = User.Create(
             currentIdentityId,
             Username.Create(request.Username),
             email,
+            profile,
             _domainEventFactory,
             _dateTimeProvider
         );

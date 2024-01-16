@@ -38,6 +38,9 @@ public class ApplicationExceptionFilter : IExceptionFilter
             case NotFoundException exception:
                 HandleNotFoundException(context, exception);
                 break;
+            case InternalErrorException exception:
+                HandleInternalErrorException(context, exception);
+                break;
             default:
                 HandleUnknownException(context);
                 break;
@@ -64,6 +67,20 @@ public class ApplicationExceptionFilter : IExceptionFilter
         context.ExceptionHandled = true;
     }
 
+    private void HandleInternalErrorException(
+        ExceptionContext context,
+        InternalErrorException exception
+    )
+    {
+        _logger.LogError(exception, "Internal error");
+        var response = ErrorResponse.FromMessage(_localizer[nameof(Resources.Resources.Common.Common.internal_error)]);
+        context.Result = new ObjectResult(response)
+        {
+            StatusCode = 500
+        };
+        context.ExceptionHandled = true;
+    }
+    
     private void HandleUnknownException(
         ExceptionContext context
     )

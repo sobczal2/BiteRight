@@ -2,12 +2,12 @@ using BiteRight.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BiteRight.Infrastructure.Configuration;
+namespace BiteRight.Infrastructure.Configuration.Users;
 
-public class UserConfiguration : IEntityTypeConfiguration<User>
+public class UserConfiguration : IEntityTypeConfiguration<BiteRight.Domain.Users.User>
 {
     public void Configure(
-        EntityTypeBuilder<User> builder
+        EntityTypeBuilder<BiteRight.Domain.Users.User> builder
     )
     {
         builder.ToTable("users", "user");
@@ -36,5 +36,14 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 email => email.Value,
                 value => Email.CreateSkipValidation(value)
             );
+        builder.Property(user => user.JoinedAt)
+            .HasConversion(
+                joinedAt => joinedAt,
+                value => value
+            );
+        builder.HasOne(user => user.Profile)
+            .WithOne()
+            .HasForeignKey<User>(user => user.ProfileId) 
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

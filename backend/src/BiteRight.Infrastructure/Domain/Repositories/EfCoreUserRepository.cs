@@ -30,6 +30,7 @@ public class EfCoreUserRepository : IUserRepository
     {
         return await _appDbContext
             .Users
+            .Include(user => user.Profile)
             .FirstOrDefaultAsync(
                 user => user.IdentityId == identityId,
                 cancellationToken

@@ -2,26 +2,26 @@ using BiteRight.Domain.Common;
 
 namespace BiteRight.Domain.Categories;
 
-public class CategoryTranslationId : GuidId
+public class TranslationId : GuidId
 {
-    public CategoryTranslationId()
+    public TranslationId()
     {
     }
 
-    public CategoryTranslationId(
+    public TranslationId(
         Guid value
     )
         : base(value)
     {
     }
 
-    public static implicit operator CategoryTranslationId(
+    public static implicit operator TranslationId(
         Guid id
     )
         => new(id);
 
     public static implicit operator Guid(
-        CategoryTranslationId id
+        TranslationId id
     )
         => id.Value;
 }

@@ -1,45 +1,56 @@
 using BiteRight.Domain.Common;
+using BiteRight.Domain.Currencies;
 using BiteRight.Domain.Product.Exceptions;
 
 namespace BiteRight.Domain.Product;
 
-public class Price : ValueObject
+public class Price : Entity<PriceId>
 {
     public decimal Value { get; }
+    public CurrencyId CurrencyId { get; }
+    public virtual Currency Currency { get; }
 
-    // TODO: add currency
+    // EF Core
+    private Price()
+    {
+        Value = default!;
+        CurrencyId = default!;
+        Currency = default!;
+    }
+
     private Price(
-        decimal value
+        decimal value,
+        CurrencyId currencyId
     )
     {
         Value = value;
+        CurrencyId = currencyId;
     }
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
-    }
-    
+
     public static Price Create(
-        decimal value
+        decimal value,
+        CurrencyId currencyId
     )
     {
-        Validate(value);
-        
-        return new Price(value);
+        Validate(value, currencyId);
+
+        return new Price(value, currencyId);
     }
-    
+
     public static Price CreateSkipValidation(
-        decimal value
+        decimal value,
+        CurrencyId currencyId
     )
     {
-        return new Price(value);
+        return new Price(value, currencyId);
     }
-    
+
     private const decimal MinValue = 0.00m;
     private const decimal MaxValue = 1e6m;
-    
+
     private static void Validate(
-        decimal value
+        decimal value,
+        CurrencyId currencyId
     )
     {
         if (value is < MinValue or > MaxValue)
@@ -47,6 +58,8 @@ public class Price : ValueObject
             throw new PriceInvalidValueException(MinValue, MaxValue);
         }
     }
-    
-    public static implicit operator decimal(Price price) => price.Value;
+
+    public static implicit operator decimal(
+        Price price
+    ) => price.Value;
 }

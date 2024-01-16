@@ -74,5 +74,11 @@ namespace BiteRight.Resources.Resources.Common {
                 return ResourceManager.GetString("not_found", resourceCulture);
             }
         }
+        
+        public static string internal_error {
+            get {
+                return ResourceManager.GetString("internal_error", resourceCulture);
+            }
+        }
     }
 }

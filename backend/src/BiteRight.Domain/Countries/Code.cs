@@ -39,7 +39,7 @@ public class Alpha2Code : ValueObject
     private const int ExactLength = 2;
     
     private static readonly Regex ValidCharacters = new(
-        @"^[a-z]+$",
+        @"^[A-Z]+$",
         RegexOptions.Compiled
     );
     

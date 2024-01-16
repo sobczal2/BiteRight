@@ -67,5 +67,7 @@ public static class InfrastructureRegistrations
         services.AddScoped<IUserRepository, EfCoreUserRepository>();
         services.AddScoped<ILanguageRepository, CachedEfCoreLanguageRepository>();
         services.AddScoped<ICategoryRepository, EfCoreCategoryRepository>();
+        services.AddScoped<ICurrencyRepository, CachedEfCoreCurrencyRepository>();
+        services.AddScoped<ICountryRepository, CachedEfCoreCountryRepository>();
     }
 }

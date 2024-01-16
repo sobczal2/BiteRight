@@ -1,4 +1,3 @@
-using BiteRight.Application.Dtos.Countries;
 using BiteRight.Application.Dtos.Languages;
 using BiteRight.Infrastructure.Database;
 using MediatR;
@@ -27,7 +26,7 @@ public class ListHandler : IRequestHandler<ListRequest, ListResponse>
             .Select(language => new LanguageDto
             {
                 Id = language.Id,
-                Name = language.Name,
+                Name = language.EnglishName,
                 Code = language.Code
             })
             .ToListAsync(cancellationToken);

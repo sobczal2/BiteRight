@@ -6,12 +6,14 @@ namespace BiteRight.Domain.Categories;
 
 public class Category : AggregateRoot<CategoryId>
 {
-    public Photo? Photo { get; }
-    public IEnumerable<CategoryTranslation> Translations { get; }
+    public PhotoId? PhotoId { get; private set; }
+    public virtual Photo? Photo { get; }
+    public IEnumerable<Translation> Translations { get; }
 
     // EF Core
     private Category()
     {
+        PhotoId = default!;
         Photo = default!;
         Translations = default!;
     }
@@ -23,7 +25,8 @@ public class Category : AggregateRoot<CategoryId>
         : base(id)
     {
         Photo = photo;
-        Translations = new List<CategoryTranslation>();
+        PhotoId = photo?.Id;
+        Translations = new List<Translation>();
     }
 
     public static Category Create(

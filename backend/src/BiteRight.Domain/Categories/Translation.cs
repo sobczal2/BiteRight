@@ -3,7 +3,7 @@ using BiteRight.Domain.Languages;
 
 namespace BiteRight.Domain.Categories;
 
-public class CategoryTranslation : Entity<CategoryTranslationId>
+public class Translation : Entity<TranslationId>
 {
     public CategoryId CategoryId { get; private set; }
     public Category Category { get; private set; } = default!;
@@ -12,15 +12,15 @@ public class CategoryTranslation : Entity<CategoryTranslationId>
     public Name Name { get; private set; }
     
     // EF Core
-    private CategoryTranslation()
+    private Translation()
     {
         CategoryId = default!;
         Name = default!;
         LanguageId = default!;
     }
     
-    private CategoryTranslation(
-        CategoryTranslationId id,
+    private Translation(
+        TranslationId id,
         CategoryId categoryId,
         Name name,
         LanguageId languageId
@@ -32,14 +32,14 @@ public class CategoryTranslation : Entity<CategoryTranslationId>
         LanguageId = languageId;
     }
     
-    public static CategoryTranslation Create(
+    public static Translation Create(
         CategoryId categoryId,
         Name name,
         LanguageId languageId,
-        CategoryTranslationId? id = null
+        TranslationId? id = null
     )
         => new(
-            id ?? new CategoryTranslationId(),
+            id ?? new TranslationId(),
             categoryId,
             name,
             languageId
