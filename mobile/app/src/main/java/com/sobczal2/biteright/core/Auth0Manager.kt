@@ -15,15 +15,15 @@ class Auth0Manager(private val context: Context) {
     )
 
     fun login(
-        onSuccess: (Credentials) -> Unit,
-        onFailure: (String) -> Unit
+        onSuccess: (credentials: Credentials) -> Unit,
+        onFailure: (errorMessage: String) -> Unit
     ) {
         WebAuthProvider
             .login(auth0)
             .withScheme(context.getString(R.string.com_auth0_scheme))
             .start(context, object : Callback<Credentials, AuthenticationException> {
                 override fun onFailure(error: AuthenticationException) {
-                    when(error.getDescription()) {
+                    when (error.getDescription()) {
                         "email_not_verified" -> onFailure(context.getString(R.string.email_not_verified))
                         else -> onFailure(context.getString(R.string.unknown_error))
                     }
@@ -33,9 +33,5 @@ class Auth0Manager(private val context: Context) {
                     onSuccess(result)
                 }
             })
-    }
-
-    fun logout() {
-
     }
 }

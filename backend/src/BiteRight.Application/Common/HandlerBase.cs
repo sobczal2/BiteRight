@@ -2,11 +2,10 @@ using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 
-namespace BiteRight.Application.Commands.Common;
+namespace BiteRight.Application.Common;
 
-public abstract class CommandHandlerBase<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
+public abstract class HandlerBase<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
-    where TResponse : class
 {
     public async Task<TResponse> Handle(
         TRequest request,
@@ -58,5 +57,17 @@ public abstract class CommandHandlerBase<TRequest, TResponse> : IRequestHandler<
     )
     {
         return new ValidationException(errorMessage);
+    }
+}
+
+public abstract class HandlerBase<TRequest> : HandlerBase<TRequest, Unit>
+    where TRequest : IRequest<Unit>
+{
+    protected override Task<Unit> HandleImpl(
+        TRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        return Task.FromResult(Unit.Value);
     }
 }

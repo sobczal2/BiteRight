@@ -49,8 +49,8 @@ public class User : AggregateRoot<UserId>
         Username username,
         Email email,
         Profile profile,
-        IDomainEventFactory domainEventFactory,
-        IDateTimeProvider dateTimeProvider
+        IDateTimeProvider dateTimeProvider,
+        IDomainEventFactory domainEventFactory
     )
     {
         var user = new User(
@@ -69,5 +69,25 @@ public class User : AggregateRoot<UserId>
         );
 
         return user;
+    }
+    
+    public void UpdateProfile(
+        CountryId countryId,
+        LanguageId languageId,
+        CurrencyId currencyId,
+        IDomainEventFactory domainEventFactory
+    )
+    {
+        Profile.Update(
+            countryId,
+            languageId,
+            currencyId
+        );
+
+        AddDomainEvent(
+            domainEventFactory.CreateUserProfileUpdatedEvent(
+                IdentityId
+            )
+        );
     }
 }

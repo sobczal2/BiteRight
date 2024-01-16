@@ -38,4 +38,8 @@ public interface IDomainEventFactory
     ProductCreatedEvent CreateProductCreatedEvent(
         ProductId productId
     );
+    
+    UserProfileUpdatedEvent CreateUserProfileUpdatedEvent(
+        IdentityId identityId
+    );
 }

@@ -6,6 +6,7 @@ public class ProfileDto
     public string CountryName { get; set; } = default!;
     public Guid LanguageId { get; set; }
     public string LanguageName { get; set; } = default!;
+    public string LanguageCode { get; set; } = default!;
     public Guid CurrencyId { get; set; }
     public string CurrencyName { get; set; } = default!;
 }

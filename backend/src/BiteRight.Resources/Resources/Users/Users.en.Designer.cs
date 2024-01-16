@@ -8,6 +8,9 @@
 //------------------------------------------------------------------------------
 
 namespace BiteRight.Resources.Resources.Users {
+    using System;
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -87,6 +90,24 @@ namespace BiteRight.Resources.Resources.Users {
         public static string email_not_verified {
             get {
                 return ResourceManager.GetString("email_not_verified", resourceCulture);
+            }
+        }
+        
+        public static string language_not_found {
+            get {
+                return ResourceManager.GetString("language_not_found", resourceCulture);
+            }
+        }
+        
+        public static string currency_not_found {
+            get {
+                return ResourceManager.GetString("currency_not_found", resourceCulture);
+            }
+        }
+        
+        public static string country_not_found {
+            get {
+                return ResourceManager.GetString("country_not_found", resourceCulture);
             }
         }
     }

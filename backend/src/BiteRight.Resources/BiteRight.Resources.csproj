@@ -7,21 +7,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Resources\Onboard\Onboard.pl.resx">
+      <EmbeddedResource Update="Resources\Users\Users.pl.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Onboard.pl.Designer.cs</LastGenOutput>
+        <LastGenOutput>Users.pl.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Onboard\Onboard.en.resx">
+      <EmbeddedResource Update="Resources\Users\Users.en.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Onboard.en.Designer.cs</LastGenOutput>
+        <LastGenOutput>Users.en.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Onboard\Onboard.de.resx">
+      <EmbeddedResource Update="Resources\Users\Users.de.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Onboard.de.Designer.cs</LastGenOutput>
+        <LastGenOutput>Users.de.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Onboard\Onboard.resx">
+      <EmbeddedResource Update="Resources\Users\Users.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Onboard.Designer.cs</LastGenOutput>
+        <LastGenOutput>Users.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="Resources\Common\Common.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
@@ -58,25 +58,25 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Resources\Onboard\Onboard.en.Designer.cs">
+      <Compile Update="Resources\Users\Users.en.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>Onboard.en.resx</DependentUpon>
+        <DependentUpon>Users.en.resx</DependentUpon>
       </Compile>
-      <Compile Update="Resources\Onboard\Onboard.pl.Designer.cs">
+      <Compile Update="Resources\Users\Users.pl.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>Onboard.pl.resx</DependentUpon>
+        <DependentUpon>Users.pl.resx</DependentUpon>
       </Compile>
-      <Compile Update="Resources\Onboard\Onboard.de.Designer.cs">
+      <Compile Update="Resources\Users\Users.de.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>Onboard.de.resx</DependentUpon>
+        <DependentUpon>Users.de.resx</DependentUpon>
       </Compile>
-      <Compile Update="Resources\Onboard\Onboard.Designer.cs">
+      <Compile Update="Resources\Users\Users.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>Onboard.resx</DependentUpon>
+        <DependentUpon>Users.resx</DependentUpon>
       </Compile>
       <Compile Update="Resources\Common\Common.Designer.cs">
         <DesignTime>True</DesignTime>

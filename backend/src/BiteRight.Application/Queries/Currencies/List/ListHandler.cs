@@ -27,7 +27,7 @@ public class ListHandler : IRequestHandler<ListRequest, ListResponse>
                 Id = currency.Id,
                 Name = currency.Name,
                 Symbol = currency.Symbol,
-                Code = currency.ISO4217Code,
+                ISO4217Code = currency.ISO4217Code,
             })
             .ToListAsync(cancellationToken);
         

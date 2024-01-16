@@ -7,4 +7,5 @@ public class CountryDto
     public string EnglishName { get; set; } = default!;
     public string Alpha2Code { get; set; } = default!;
     public Guid OfficialLanguageId { get; set; }
+    public Guid CurrencyId { get; set; }
 }

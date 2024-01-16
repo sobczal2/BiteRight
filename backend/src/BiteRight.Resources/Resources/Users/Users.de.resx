@@ -42,4 +42,13 @@
     <data name="user_already_exists" xml:space="preserve">
         <value>Benutzer existiert bereits</value>
     </data>
+    <data name="language_not_found" xml:space="preserve">
+        <value>Sprache nicht gefunden</value>
+    </data>
+    <data name="currency_not_found" xml:space="preserve">
+        <value>Währung nicht gefunden</value>
+    </data>
+    <data name="country_not_found" xml:space="preserve">
+        <value>Land nicht gefunden</value>
+    </data>
 </root>

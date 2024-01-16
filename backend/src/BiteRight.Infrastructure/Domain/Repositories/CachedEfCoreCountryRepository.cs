@@ -46,4 +46,14 @@ public class CachedEfCoreCountryRepository : ICountryRepository
 
         return countryToFind;
     }
+
+    public Task<bool> ExistsById(
+        CountryId id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return _appDbContext.Countries
+            .Where(country => country.Id == id)
+            .AnyAsync(cancellationToken);
+    }
 }

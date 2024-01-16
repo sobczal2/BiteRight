@@ -1,13 +1,13 @@
 package com.sobczal2.biteright.di
 
-import android.content.Context
-import com.auth0.android.Auth0
+import com.auth0.android.authentication.storage.CredentialsManager
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.sobczal2.biteright.data.remote.UserApiDataSource
 import com.sobczal2.biteright.data.repository.UserRepositoryImpl
 import com.sobczal2.biteright.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -17,7 +17,10 @@ object RepositoriesModule {
     @Singleton
     @Provides
     fun provideUserRepository(
+        credentialsManager: CredentialsManager,
+        userApiDataSource: UserApiDataSource,
+        objectMapper: ObjectMapper
     ): UserRepository {
-        return UserRepositoryImpl()
+        return UserRepositoryImpl(credentialsManager, userApiDataSource, objectMapper)
     }
 }

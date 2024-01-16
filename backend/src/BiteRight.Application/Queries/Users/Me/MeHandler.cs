@@ -54,6 +54,7 @@ public class MeHandler : IRequestHandler<MeRequest, MeResponse>
         var userDto = new UserDto
         {
             Id = user.Id,
+            IdentityId = user.IdentityId,
             Username = user.Username,
             Email = user.Email,
             JoinedAt = user.JoinedAt,
@@ -65,6 +66,7 @@ public class MeHandler : IRequestHandler<MeRequest, MeResponse>
                 CurrencyName = currency.Name,
                 LanguageId = language.Id,
                 LanguageName = language.NativeName,
+                LanguageCode = language.Code
             }
         };
         

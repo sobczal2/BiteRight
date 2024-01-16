@@ -93,4 +93,15 @@ public class MediatorDomainEventFactory : IDomainEventFactory
             productId
         );
     }
+
+    public UserProfileUpdatedEvent CreateUserProfileUpdatedEvent(
+        IdentityId identityId
+    )
+    {
+        return new UserProfileUpdatedEvent(
+            _dateTimeProvider.UtcNow,
+            _correlationIdAccessor.CorrelationId,
+            identityId
+        );
+    }
 }

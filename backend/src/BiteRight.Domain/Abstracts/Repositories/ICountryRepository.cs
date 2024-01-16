@@ -8,4 +8,9 @@ public interface ICountryRepository
         CountryId id,
         CancellationToken cancellationToken = default
     );
+    
+    Task<bool> ExistsById(
+        CountryId id,
+        CancellationToken cancellationToken = default
+    );
 }

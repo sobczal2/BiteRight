@@ -46,4 +46,14 @@ public class CachedEfCoreCurrencyRepository : ICurrencyRepository
 
         return currencyToFind;
     }
+
+    public Task<bool> ExistsById(
+        CurrencyId id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return _appDbContext.Currencies
+            .Where(currency => currency.Id == id)
+            .AnyAsync(cancellationToken);
+    }
 }

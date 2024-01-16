@@ -8,19 +8,19 @@ namespace BiteRight.Web.Responses;
 public class ErrorResponse
 {
     public string Message { get; set; }
-    public Dictionary<string, string[]> Errors { get; set; }
+    public Dictionary<string, List<string>> Errors { get; set; }
 
     public ErrorResponse(
         string message
     )
     {
         Message = message;
-        Errors = new Dictionary<string, string[]>();
+        Errors = new Dictionary<string, List<string>>();
     }
 
     public ErrorResponse(
         string message,
-        Dictionary<string, string[]> errors
+        Dictionary<string, List<string>> errors
     )
     {
         Message = message;
@@ -38,7 +38,8 @@ public class ErrorResponse
         ValidationException exception
     )
     {
-        var errors = exception.Errors.ToDictionary(error => error.PropertyName, error => new[] { error.ErrorMessage });
+        var errors = exception.Errors.ToDictionary(error => error.PropertyName,
+            error => new List<string> { error.ErrorMessage });
         return new ErrorResponse(exception.Message, errors);
     }
 }

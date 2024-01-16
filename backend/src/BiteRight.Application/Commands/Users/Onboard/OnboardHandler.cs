@@ -1,21 +1,18 @@
-using BiteRight.Application.Commands.Common;
+using BiteRight.Application.Common;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
-using BiteRight.Domain.Countries;
-using BiteRight.Domain.Currencies;
-using BiteRight.Domain.Languages;
 using BiteRight.Domain.Users;
 using BiteRight.Domain.Users.Exceptions;
-using BiteRight.Infrastructure.Configuration;
 using BiteRight.Infrastructure.Configuration.Countries;
 using BiteRight.Infrastructure.Configuration.Currencies;
 using BiteRight.Infrastructure.Configuration.Languages;
 using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.Localization;
 
 namespace BiteRight.Application.Commands.Users.Onboard;
 
-public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse>
+public class OnboardHandler : HandlerBase<OnboardRequest>
 {
     private readonly IIdentityManager _identityManager;
     private readonly IDomainEventFactory _domainEventFactory;
@@ -41,7 +38,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
         _localizer = localizer;
     }
 
-    protected override async Task<OnboardResponse> HandleImpl(
+    protected override async Task<Unit> HandleImpl(
         OnboardRequest request,
         CancellationToken cancellationToken
     )
@@ -94,13 +91,13 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
             Username.Create(request.Username),
             email,
             profile,
-            _domainEventFactory,
-            _dateTimeProvider
+            _dateTimeProvider,
+            _domainEventFactory
         );
 
         _userRepository.Add(user);
 
-        return new OnboardResponse();
+        return Unit.Value;
     }
 
     protected override ValidationException MapExceptionToValidationException(

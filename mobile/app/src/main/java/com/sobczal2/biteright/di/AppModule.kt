@@ -4,10 +4,13 @@ import JwtInterceptor
 import android.content.Context
 import androidx.core.content.ContextCompat.getString
 import com.auth0.android.Auth0
+import com.auth0.android.authentication.AuthenticationAPIClient
+import com.auth0.android.authentication.storage.CredentialsManager
+import com.auth0.android.authentication.storage.SharedPreferencesStorage
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.sobczal2.biteright.R
-import com.sobczal2.biteright.data.local.UserSPDataSource
-import com.sobczal2.biteright.data.local.UserSPDataSourceImpl
 import com.sobczal2.biteright.data.remote.UserApiDataSource
+import com.sobczal2.biteright.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,9 +25,20 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(credentialsManager: CredentialsManager): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(JwtInterceptor(credentialsManager))
+            .build()
+    }
+
     @Provides
     @Singleton
-    fun provideRetrofit(@ApplicationContext context: Context, okHttpClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(
+        @ApplicationContext context: Context,
+        okHttpClient: OkHttpClient
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(
                 getString(context, R.string.api_url)
@@ -40,17 +54,25 @@ object AppModule {
         return retrofit.create(UserApiDataSource::class.java)
     }
 
-    @Provides
     @Singleton
-    fun provideUserSPDataSource(@ApplicationContext context: Context): UserSPDataSource {
-        return UserSPDataSourceImpl(context)
+    @Provides
+    fun provideAuth0(@ApplicationContext context: Context): Auth0 {
+        return Auth0(
+            getString(context, R.string.com_auth0_client_id),
+            getString(context, R.string.com_auth0_domain)
+        )
     }
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(userSPDataSource: UserSPDataSource): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(JwtInterceptor(userSPDataSource))
-            .build()
+    fun provideCredentialsManager(@ApplicationContext context: Context, auth0: Auth0): CredentialsManager {
+        val apiClient = AuthenticationAPIClient(auth0)
+        return CredentialsManager(apiClient, SharedPreferencesStorage(context))
+    }
+
+    @Singleton
+    @Provides
+    fun provideObjectMapper(): ObjectMapper {
+        return ObjectMapper()
     }
 }

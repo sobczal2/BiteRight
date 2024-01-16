@@ -45,4 +45,15 @@ public class Profile : Entity<ProfileId>
             id ?? new ProfileId()
         );
     }
+    
+    public void Update(
+        CountryId countryId,
+        LanguageId languageId,
+        CurrencyId currencyId
+    )
+    {
+        CountryId = countryId;
+        LanguageId = languageId;
+        CurrencyId = currencyId;
+    }
 }

@@ -30,7 +30,8 @@ public class ListHandler : IRequestHandler<ListRequest, ListResponse>
                 NativeName = country.NativeName,
                 EnglishName = country.EnglishName,
                 Alpha2Code = country.Alpha2Code,
-                OfficialLanguageId = country.OfficialLanguageId
+                OfficialLanguageId = country.OfficialLanguageId,
+                CurrencyId = country.CurrencyId
             })
             .ToListAsync(cancellationToken);
 

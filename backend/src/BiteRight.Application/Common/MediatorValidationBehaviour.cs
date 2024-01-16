@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using FluentValidation;
 using MediatR;
 
@@ -7,13 +8,13 @@ public class MediatorValidationBehaviour<TRequest, TResponse> : IPipelineBehavio
     where TRequest : notnull
     where TResponse : notnull
 {
-    private readonly IValidator<TRequest> _validator;
+    private readonly IValidator<TRequest>? _validator;
 
     public MediatorValidationBehaviour(
-        IValidator<TRequest> validator
+        IEnumerable<IValidator<TRequest>> validators
     )
     {
-        _validator = validator;
+        _validator = validators.FirstOrDefault();
     }
 
     public Task<TResponse> Handle(
@@ -22,7 +23,7 @@ public class MediatorValidationBehaviour<TRequest, TResponse> : IPipelineBehavio
         CancellationToken cancellationToken
     )
     {
-        _validator.ValidateAndThrow(request);
+        _validator?.ValidateAndThrow(request);
         
         return next();
     }

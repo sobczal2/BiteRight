@@ -81,4 +81,15 @@ public class SeedDomainEventFactory : IDomainEventFactory
             productId
         );
     }
+
+    public UserProfileUpdatedEvent CreateUserProfileUpdatedEvent(
+        IdentityId identityId
+    )
+    {
+        return new UserProfileUpdatedEvent(
+            DateTime.UtcNow,
+            Guid.NewGuid(),
+            identityId
+        );
+    }
 }

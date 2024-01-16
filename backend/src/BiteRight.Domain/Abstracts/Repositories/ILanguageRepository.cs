@@ -13,4 +13,9 @@ public interface ILanguageRepository
         LanguageId id,
         CancellationToken cancellationToken = default
     );
+    
+    Task<bool> ExistsById(
+        LanguageId id,
+        CancellationToken cancellationToken = default
+    );
 }

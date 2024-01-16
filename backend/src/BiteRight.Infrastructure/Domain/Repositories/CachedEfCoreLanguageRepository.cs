@@ -63,4 +63,14 @@ public class CachedEfCoreLanguageRepository : ILanguageRepository
 
         return languageToFind;
     }
+
+    public Task<bool> ExistsById(
+        LanguageId id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return _appDbContext.Languages
+            .Where(language => language.Id == id)
+            .AnyAsync(cancellationToken);
+    }
 }
