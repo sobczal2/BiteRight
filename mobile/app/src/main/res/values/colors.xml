@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="light_primary">#ff7fdc8a</color>
-    <color name="light_secondary">#ffed9ca9</color>
-    <color name="light_background">#ffffffff</color>
-    <color name="light_surface">#ffdbdece</color>
-    <color name="light_error">#ff9b1c27</color>
-</resources>

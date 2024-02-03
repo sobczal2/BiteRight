@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="Theme.BiteRight" parent="android:Theme.Material.NoActionBar">
-        <item name="android:windowSplashScreenBackground">@color/light_background</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_logo_square</item>
-    </style>
-</resources>

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name" translatable="false">BiteRight</string>
+    <string name="welcome_main_button_text">Get started</string>
+</resources>
