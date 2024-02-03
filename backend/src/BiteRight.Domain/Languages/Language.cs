@@ -5,29 +5,34 @@ namespace BiteRight.Domain.Languages;
 
 public class Language : AggregateRoot<LanguageId>
 {
-    public Name Name { get; }
+    public Name NativeName { get; }
+    public Name EnglishName { get; }
     public Code Code { get; }
 
     // EF Core
     private Language()
     {
-        Name = default!;
+        NativeName = default!;
+        EnglishName = default!;
         Code = default!;
     }
 
     private Language(
         LanguageId id,
-        Name name,
+        Name nativeName,
+        Name englishName,
         Code code
     )
         : base(id)
     {
-        Name = name;
+        NativeName = nativeName;
+        EnglishName = englishName;
         Code = code;
     }
 
     public static Language Create(
-        Name name,
+        Name nativeName,
+        Name englishName,
         Code code,
         IDomainEventFactory domainEventFactory,
         LanguageId? id = null
@@ -35,7 +40,8 @@ public class Language : AggregateRoot<LanguageId>
     {
         var language = new Language(
             id ?? new LanguageId(),
-            name,
+            nativeName,
+            englishName,
             code
         );
 

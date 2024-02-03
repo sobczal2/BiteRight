@@ -3,8 +3,12 @@ using BiteRight.Domain.Categories;
 using BiteRight.Domain.Categories.Events;
 using BiteRight.Domain.Countries;
 using BiteRight.Domain.Countries.Events;
+using BiteRight.Domain.Currencies;
+using BiteRight.Domain.Currencies.Events;
 using BiteRight.Domain.Languages;
 using BiteRight.Domain.Languages.Events;
+using BiteRight.Domain.Product;
+using BiteRight.Domain.Product.Events;
 using BiteRight.Domain.Users;
 using BiteRight.Domain.Users.Events;
 
@@ -65,6 +69,39 @@ public class MediatorDomainEventFactory : IDomainEventFactory
             _dateTimeProvider.UtcNow,
             _correlationIdAccessor.CorrelationId,
             categoryId
+        );
+    }
+
+    public CurrencyCreatedEvent CreateCurrencyCreatedEvent(
+        CurrencyId currencyId
+    )
+    {
+        return new CurrencyCreatedEvent(
+            _dateTimeProvider.UtcNow,
+            _correlationIdAccessor.CorrelationId,
+            currencyId
+        );
+    }
+
+    public ProductCreatedEvent CreateProductCreatedEvent(
+        ProductId productId
+    )
+    {
+        return new ProductCreatedEvent(
+            _dateTimeProvider.UtcNow,
+            _correlationIdAccessor.CorrelationId,
+            productId
+        );
+    }
+
+    public UserProfileUpdatedEvent CreateUserProfileUpdatedEvent(
+        IdentityId identityId
+    )
+    {
+        return new UserProfileUpdatedEvent(
+            _dateTimeProvider.UtcNow,
+            _correlationIdAccessor.CorrelationId,
+            identityId
         );
     }
 }

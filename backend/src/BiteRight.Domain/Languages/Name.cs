@@ -7,8 +7,8 @@ namespace BiteRight.Domain.Languages;
 public class Name : ValueObject
 {
     public string Value { get; }
-    
-    public Name(
+
+    private Name(
         string value
     )
     {

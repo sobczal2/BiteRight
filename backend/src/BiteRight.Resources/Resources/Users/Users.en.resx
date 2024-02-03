@@ -42,4 +42,13 @@
     <data name="email_not_verified" xml:space="preserve">
         <value>Email is not verified</value>
     </data>
+    <data name="language_not_found" xml:space="preserve">
+        <value>Language not found</value>
+    </data>
+    <data name="currency_not_found" xml:space="preserve">
+        <value>Currency not found</value>
+    </data>
+    <data name="country_not_found" xml:space="preserve">
+        <value>Country not found</value>
+    </data>
 </root>

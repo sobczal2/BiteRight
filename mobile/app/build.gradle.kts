@@ -81,6 +81,7 @@ dependencies {
     implementation("io.arrow-kt:arrow-fx-coroutines:1.2.0")
     implementation("com.auth0.android:auth0:2.10.2")
     implementation("com.auth0.android:jwtdecode:2.0.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
 }
 
 kapt {

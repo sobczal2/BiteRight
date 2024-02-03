@@ -1,5 +1,8 @@
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Common;
+using BiteRight.Domain.Countries;
+using BiteRight.Domain.Currencies;
+using BiteRight.Domain.Languages;
 
 namespace BiteRight.Domain.Users;
 
@@ -9,6 +12,8 @@ public class User : AggregateRoot<UserId>
     public Username Username { get; private set; }
     public Email Email { get; private set; }
     public DateTime JoinedAt { get; private set; }
+    public ProfileId ProfileId { get; private set; }
+    public virtual Profile Profile { get; private set; }
 
     // EF Core
     private User()
@@ -17,6 +22,8 @@ public class User : AggregateRoot<UserId>
         Username = default!;
         Email = default!;
         JoinedAt = default!;
+        Profile = default!;
+        ProfileId = default!;
     }
 
     private User(
@@ -24,7 +31,8 @@ public class User : AggregateRoot<UserId>
         IdentityId identityId,
         Username username,
         Email email,
-        DateTime joinedAt
+        DateTime joinedAt,
+        Profile profile
     )
         : base(id)
     {
@@ -32,14 +40,17 @@ public class User : AggregateRoot<UserId>
         Username = username;
         Email = email;
         JoinedAt = joinedAt;
+        Profile = profile;
+        ProfileId = profile.Id;
     }
 
     public static User Create(
         IdentityId identityId,
         Username username,
         Email email,
-        IDomainEventFactory domainEventFactory,
-        IDateTimeProvider dateTimeProvider
+        Profile profile,
+        IDateTimeProvider dateTimeProvider,
+        IDomainEventFactory domainEventFactory
     )
     {
         var user = new User(
@@ -47,7 +58,8 @@ public class User : AggregateRoot<UserId>
             identityId,
             username,
             email,
-            dateTimeProvider.UtcNow
+            dateTimeProvider.UtcNow,
+            profile
         );
 
         user.AddDomainEvent(
@@ -57,5 +69,25 @@ public class User : AggregateRoot<UserId>
         );
 
         return user;
+    }
+    
+    public void UpdateProfile(
+        CountryId countryId,
+        LanguageId languageId,
+        CurrencyId currencyId,
+        IDomainEventFactory domainEventFactory
+    )
+    {
+        Profile.Update(
+            countryId,
+            languageId,
+            currencyId
+        );
+
+        AddDomainEvent(
+            domainEventFactory.CreateUserProfileUpdatedEvent(
+                IdentityId
+            )
+        );
     }
 }

@@ -33,4 +33,7 @@
     <data name="not_found" xml:space="preserve">
         <value>Nicht gefunden</value>
     </data>
+    <data name="internal_error" xml:space="preserve">
+        <value>Interner Fehler</value>
+    </data>
 </root>

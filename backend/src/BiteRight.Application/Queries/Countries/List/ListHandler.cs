@@ -9,15 +9,12 @@ namespace BiteRight.Application.Queries.Countries.List;
 public class ListHandler : IRequestHandler<ListRequest, ListResponse>
 {
     private readonly AppDbContext _appDbContext;
-    private readonly ILanguageProvider _languageProvider;
 
     public ListHandler(
-        AppDbContext appDbContext,
-        ILanguageProvider languageProvider
+        AppDbContext appDbContext
     )
     {
         _appDbContext = appDbContext;
-        _languageProvider = languageProvider;
     }
 
     public async Task<ListResponse> Handle(
@@ -33,7 +30,8 @@ public class ListHandler : IRequestHandler<ListRequest, ListResponse>
                 NativeName = country.NativeName,
                 EnglishName = country.EnglishName,
                 Alpha2Code = country.Alpha2Code,
-                OfficialLanguageId = country.OfficialLanguageId
+                OfficialLanguageId = country.OfficialLanguageId,
+                CurrencyId = country.CurrencyId
             })
             .ToListAsync(cancellationToken);
 

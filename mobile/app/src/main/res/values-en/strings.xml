@@ -3,4 +3,6 @@
     <string name="get_started">Get started</string>
     <string name="unknown_error">Unknown error</string>
     <string name="email_not_verified">Please verify your email</string>
+    <string name="next">Go next</string>
+    <string name="username">Username</string>
 </resources>

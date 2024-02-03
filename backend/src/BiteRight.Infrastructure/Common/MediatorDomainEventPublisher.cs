@@ -19,6 +19,7 @@ public class MediatorDomainEventPublisher : IDomainEventPublisher
         CancellationToken cancellationToken = default
     ) where T : DomainEvent
     {
-        return _mediator.Publish(domainEvent, cancellationToken);
+        var notification = new MediatorDomainEventNotification<T>(domainEvent);
+        return _mediator.Publish(notification, cancellationToken);
     }
 }

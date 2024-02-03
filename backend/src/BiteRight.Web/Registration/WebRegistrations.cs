@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Security.Claims;
+using System.Text.Json;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Options;
 using BiteRight.Web.Authorization;
@@ -39,7 +40,8 @@ public static class WebRegistrations
         IServiceCollection services
     )
     {
-        services.AddControllers(opt => { opt.Filters.Add<ApplicationExceptionFilter>(); });
+        services.AddControllers(opt => { opt.Filters.Add<ApplicationExceptionFilter>(); })
+            .AddJsonOptions(opt => { opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; });
     }
 
     private static void AddSwagger(
@@ -155,7 +157,7 @@ public static class WebRegistrations
             opt.SupportedUICultures = supportedCultures;
         });
     }
-    
+
     private static void AddOptions(
         IServiceCollection services,
         IConfiguration configuration

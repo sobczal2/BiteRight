@@ -1,6 +1,7 @@
 using BiteRight.Domain.Categories;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Countries;
+using BiteRight.Domain.Currencies;
 using BiteRight.Domain.Languages;
 using BiteRight.Domain.Users;
 using Microsoft.EntityFrameworkCore;
@@ -14,8 +15,10 @@ public class AppDbContext : DbContext
     public DbSet<Country> Countries { get; set; } = default!;
     public DbSet<Language> Languages { get; set; } = default!;
     public DbSet<Category> Categories { get; set; } = default!;
-    public DbSet<CategoryTranslation> CategoryTranslations { get; set; } = default!;
-    
+    public DbSet<Translation> CategoryTranslations { get; set; } = default!;
+    public DbSet<Currency> Currencies { get; set; } = default!;
+    public DbSet<Profile> Profiles { get; set; } = default!;
+
     public AppDbContext(
         DbContextOptions<AppDbContext> options,
         IDomainEventPublisher domainEventPublisher
@@ -40,18 +43,19 @@ public class AppDbContext : DbContext
             .Entries<IDomainEventHolder>()
             .Select(x => x.Entity)
             .Where(x => x.DomainEvents.Count != 0);
-        
+
         var result = await base.SaveChangesAsync(cancellationToken);
-        
+
         foreach (var domainEventHolder in domainEventHolders)
         {
             foreach (var domainEvent in domainEventHolder.DomainEvents)
             {
                 await _domainEventPublisher.PublishAsync(domainEvent, cancellationToken);
             }
+
             domainEventHolder.ClearDomainEvents();
         }
-        
+
         return result;
     }
 }
