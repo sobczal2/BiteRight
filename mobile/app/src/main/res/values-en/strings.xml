@@ -6,4 +6,6 @@
     <string name="next">Next</string>
     <string name="username">Username</string>
     <string name="network_error">Network error</string>
+    <string name="loading">Loading...</string>
+    <string name="login_canceled">Login has been cancelled</string>
 </resources>

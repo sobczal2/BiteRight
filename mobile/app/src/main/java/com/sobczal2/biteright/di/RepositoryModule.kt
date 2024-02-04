@@ -1,6 +1,6 @@
 package com.sobczal2.biteright.di
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.gson.Gson
 import com.sobczal2.biteright.data.api.UserApi
 import com.sobczal2.biteright.repositories.abstractions.UserRepository
 import com.sobczal2.biteright.repositories.implementations.UserRepositoryImpl
@@ -17,8 +17,8 @@ object RepositoryModule {
     @Provides
     fun provideUserRepository(
         userApi: UserApi,
-        objectMapper: ObjectMapper
+        gson: Gson
     ): UserRepository {
-        return UserRepositoryImpl(userApi, objectMapper)
+        return UserRepositoryImpl(userApi, gson)
     }
 }

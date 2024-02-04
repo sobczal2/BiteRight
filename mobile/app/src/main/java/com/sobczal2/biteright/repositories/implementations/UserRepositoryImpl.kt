@@ -4,51 +4,49 @@ import android.util.Log
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import com.google.gson.Gson
 import com.sobczal2.biteright.data.api.ApiError
 import com.sobczal2.biteright.data.api.UserApi
 import com.sobczal2.biteright.data.api.requests.OnboardRequest
 import com.sobczal2.biteright.dto.users.UserDto
 import com.sobczal2.biteright.repositories.abstractions.UserRepository
 import com.sobczal2.biteright.repositories.common.ApiRepositoryError
-import com.sobczal2.biteright.repositories.common.NetworkRepositoryError
 import com.sobczal2.biteright.repositories.common.RepositoryError
-import com.sobczal2.biteright.repositories.common.UnknownRepositoryError
-import retrofit2.HttpException
-import retrofit2.awaitResponse
-import java.io.IOException
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val userApi: UserApi,
-    private val objectMapper: ObjectMapper
+    private val gson: Gson
 ) : UserRepository {
     override suspend fun me(): Either<UserDto, RepositoryError> {
-        try {
-            val response = userApi.me().awaitResponse()
+        return try {
+            val response = userApi.me()
             if (response.isSuccessful) {
-                return response.body()!!.user.left()
+                response.body()!!.user.left()
+            } else {
+                val errorBody = response.errorBody()?.string()
+                val apiError = gson.fromJson(errorBody, ApiError::class.java)
+                ApiRepositoryError(apiError, response.code()).right()
             }
         } catch (e: Exception) {
             Log.e("UserRepositoryImpl", "Error while fetching user", e)
-            return RepositoryError.fromRetrofitException(e, objectMapper).right()
+            RepositoryError.fromRetrofitException(e, gson).right()
         }
-
-        return UnknownRepositoryError().right()
     }
 
     override suspend fun onboard(onboardRequest: OnboardRequest): Either<Unit, RepositoryError> {
-        try {
-            val response = userApi.onboard(onboardRequest).awaitResponse()
+        return try {
+            val response = userApi.onboard(onboardRequest)
             if (response.isSuccessful) {
-                return Unit.left()
+                Unit.left()
+            } else {
+                val errorBody = response.errorBody()?.string()
+                val apiError = gson.fromJson(errorBody, ApiError::class.java)
+                ApiRepositoryError(apiError, response.code()).right()
             }
         } catch (e: Exception) {
             Log.e("UserRepositoryImpl", "Error while onboarding user", e)
-            return RepositoryError.fromRetrofitException(e, objectMapper).right()
+            RepositoryError.fromRetrofitException(e, gson).right()
         }
-
-        return UnknownRepositoryError().right()
     }
 }

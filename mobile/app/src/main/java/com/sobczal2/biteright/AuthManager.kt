@@ -10,10 +10,14 @@ import com.auth0.android.authentication.storage.SharedPreferencesStorage
 import com.auth0.android.callback.Callback
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 class AuthManager(
-    private val context: Context
+    @ApplicationContext val context: Context
 ) {
+    private var onLogoutCallback: (() -> Unit)? = null
+
     private val auth0 = Auth0(
         context.getString(R.string.com_auth0_client_id),
         context.getString(R.string.com_auth0_domain)
@@ -29,15 +33,23 @@ class AuthManager(
 
     fun login(
         onSuccess: (credentials: Credentials) -> Unit,
-        onFailure: (errorStringId: Int) -> Unit
+        onFailure: (errorStringId: Int) -> Unit,
+        activityContext: Context
     ) {
         WebAuthProvider
             .login(auth0)
-            .withScheme(context.getString(R.string.com_auth0_scheme))
-            .start(context, object : Callback<Credentials, AuthenticationException> {
+            .withScheme(activityContext.getString(R.string.com_auth0_scheme))
+            .start(activityContext, object : Callback<Credentials, AuthenticationException> {
                 override fun onFailure(error: AuthenticationException) {
-                    when (error.getDescription()) {
-                        "email_not_verified" -> onFailure(R.string.verify_your_email)
+                    when (error.getCode()) {
+                        "access_denied" -> {
+                            when (error.getDescription()) {
+                                "email_not_verified" -> onFailure(R.string.verify_your_email)
+                                else -> onFailure(R.string.unknown_error)
+
+                            }
+                        }
+                        "a0.authentication_canceled" -> onFailure(R.string.login_canceled)
                         else -> onFailure(R.string.unknown_error)
                     }
                 }
@@ -51,5 +63,10 @@ class AuthManager(
 
     fun logout() {
         credentialsManager.clearCredentials()
+        onLogoutCallback?.invoke()
+    }
+
+    fun subscribeToLogoutEvent(onLogout: () -> Unit) {
+        this.onLogoutCallback = onLogout
     }
 }

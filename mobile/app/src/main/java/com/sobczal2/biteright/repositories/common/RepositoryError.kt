@@ -1,7 +1,6 @@
 package com.sobczal2.biteright.repositories.common
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import com.google.gson.Gson
 import com.sobczal2.biteright.data.api.ApiError
 import com.sobczal2.biteright.util.ResourceIdOrString
 import java.io.IOException
@@ -10,7 +9,7 @@ interface RepositoryError {
     val message: ResourceIdOrString
 
     companion object {
-        fun fromRetrofitException(e: Exception, objectMapper: ObjectMapper): RepositoryError =
+        fun fromRetrofitException(e: Exception, gson: Gson): RepositoryError =
             when (e) {
                 is retrofit2.HttpException -> {
                     when (e.code()) {
@@ -20,8 +19,9 @@ interface RepositoryError {
                                 if (it.errorBody() == null) {
                                     NetworkRepositoryError()
                                 } else {
-                                    val apiError = objectMapper.readValue<ApiError>(
-                                        it.errorBody()!!.string()
+                                    val apiError = gson.fromJson(
+                                        it.errorBody()!!.string(),
+                                        ApiError::class.java
                                     )
                                     ApiRepositoryError(apiError, it.code())
                                 }

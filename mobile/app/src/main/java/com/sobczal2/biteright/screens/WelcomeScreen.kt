@@ -1,5 +1,7 @@
 package com.sobczal2.biteright.screens
 
+import android.app.Activity
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,33 +33,17 @@ import kotlinx.coroutines.launch
 @Composable
 fun WelcomeScreen(
     viewModel: WelcomeViewModel = hiltViewModel(),
-    authManager: AuthManager,
-    navigateToStart: () -> Unit = {},
+    navigateToHome: () -> Unit = {}
 ) {
     val state = viewModel.state.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
+
+    val context = LocalContext.current
 
     WelcomeScreenContent(
-        onGetStartedClick = {
-            coroutineScope.launch {
-                val loginResult = CompletableDeferred<Either<Unit, Int>>()
-
-                authManager.login(
-                    onSuccess = {
-                        loginResult.complete(Unit.left())
-                    },
-                    onFailure = { errorStringId ->
-                        loginResult.complete(errorStringId.right())
-                    }
-                )
-
-                val result = loginResult.await()
-                viewModel.onGetStartedClick { result }
-                if (result.isLeft()) {
-                    navigateToStart()
-                }
-            }
-        },
+        onGetStartedClick = { viewModel.onGetStartedClick(
+            context = context,
+            onSuccess = navigateToHome
+        ) },
         state = state.value
     )
 }

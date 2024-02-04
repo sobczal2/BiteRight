@@ -23,29 +23,6 @@ class StartViewModel @Inject constructor(
     private val _state = MutableStateFlow(StartScreenState())
     val state = _state.asStateFlow()
 
-    suspend fun isOnboarded(): Boolean {
-        val meResult = userRepository.me()
-
-        return meResult.fold(
-            {
-                true
-            },
-            { repositoryError ->
-                if (repositoryError is ApiRepositoryError && repositoryError.apiErrorCode == 404) {
-                    false
-                } else {
-                    _state.update {
-                        it.copy(
-                            loading = false,
-                            error = repositoryError.message
-                        )
-                    }
-                    false
-                }
-            }
-        )
-    }
-
     fun onUsernameChange(username: String) {
         _state.update {
             it.copy(
@@ -53,6 +30,18 @@ class StartViewModel @Inject constructor(
                 error = null
             )
         }
+
+        validateUsername(username).let { isValid ->
+            _state.update {
+                it.copy(
+                    canContinue = isValid
+                )
+            }
+        }
+    }
+
+    private fun validateUsername(username: String): Boolean {
+        return username.length in 3..30
     }
 
     fun onNextClick(onSuccess: () -> Unit) {

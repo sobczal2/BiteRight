@@ -35,7 +35,7 @@ class TokenInterceptor(private val authManager: AuthManager) : Interceptor {
                 }
 
                 override fun onSuccess(result: Credentials) {
-                    continuation.resumeWith(Result.success(result.accessToken))
+                    continuation.resumeWith(Result.success(result.idToken))
                 }
             })
         }
