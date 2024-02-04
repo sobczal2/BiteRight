@@ -42,11 +42,9 @@ public class MeHandler : IRequestHandler<MeRequest, MeResponse>
             throw new NotFoundException();
         }
         
-        var country = await _countryRepository.FindById(user.Profile.CountryId, cancellationToken);
         var currency = await _currencyRepository.FindById(user.Profile.CurrencyId, cancellationToken);
-        var language = await _languageRepository.FindById(user.Profile.LanguageId, cancellationToken);
         
-        if (country == null || currency == null || language == null)
+        if (currency == null)
         {
             throw new InternalErrorException();
         }
@@ -60,13 +58,8 @@ public class MeHandler : IRequestHandler<MeRequest, MeResponse>
             JoinedAt = user.JoinedAt,
             Profile = new ProfileDto
             {
-                CountryId = country.Id,
-                CountryName = country.NativeName,
                 CurrencyId = currency.Id,
                 CurrencyName = currency.Name,
-                LanguageId = language.Id,
-                LanguageName = language.NativeName,
-                LanguageCode = language.Code
             }
         };
         

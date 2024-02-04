@@ -71,8 +71,6 @@ public class UpdateProfileHandler : HandlerBase<UpdateProfileRequest>
         }
         
         user.UpdateProfile(
-            request.CountryId,
-            request.LanguageId,
             request.CurrencyId,
             _domainEventFactory
         );

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="get_started">Get started</string>
+    <string name="verify_your_email">Verify your email</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="next">Next</string>
+    <string name="username">Username</string>
+    <string name="network_error">Network error</string>
+</resources>

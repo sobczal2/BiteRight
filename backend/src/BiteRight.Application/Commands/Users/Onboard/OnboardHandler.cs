@@ -81,8 +81,6 @@ public class OnboardHandler : HandlerBase<OnboardRequest>
         }
         
         var profile = Profile.Create(
-            CountryConfiguration.USA.Id,
-            LanguageConfiguration.English.Id,
             CurrencyConfiguration.USD.Id
         );
 

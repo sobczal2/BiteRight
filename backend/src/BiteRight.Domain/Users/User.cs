@@ -72,15 +72,11 @@ public class User : AggregateRoot<UserId>
     }
     
     public void UpdateProfile(
-        CountryId countryId,
-        LanguageId languageId,
         CurrencyId currencyId,
         IDomainEventFactory domainEventFactory
     )
     {
         Profile.Update(
-            countryId,
-            languageId,
             currencyId
         );
 

@@ -21,24 +21,6 @@ public class ProfileConfiguration : IEntityTypeConfiguration<Profile>
                 value => value
             )
             .ValueGeneratedNever();
-        builder.Property(profile => profile.CountryId)
-            .HasConversion(
-                countryId => countryId.Value,
-                value => value
-            );
-        builder.HasOne<Country>()
-            .WithMany()
-            .HasForeignKey(profile => profile.CountryId)
-            .OnDelete(DeleteBehavior.Restrict);
-        builder.Property(profile => profile.LanguageId)
-            .HasConversion(
-                languageId => languageId.Value,
-                value => value
-            );
-        builder.HasOne<Language>()
-            .WithMany()
-            .HasForeignKey(profile => profile.LanguageId)
-            .OnDelete(DeleteBehavior.Restrict);
         builder.Property(profile => profile.CurrencyId)
             .HasConversion(
                 currencyId => currencyId.Value,

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="get_started">Rozpocznij</string>
+    <string name="verify_your_email">Zweryfikuj adres email</string>
+    <string name="unknown_error">Nieznany błąd</string>
+</resources>

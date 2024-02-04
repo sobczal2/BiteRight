@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="com_auth0_scheme" translatable="false">app</string>
+    <string name="com_auth0_domain" translatable="false">biteright.eu.auth0.com</string>
+    <string name="com_auth0_client_id" translatable="false">Lp8U1a8iJFGw947FtHCteWLUUhHIxosE</string>
+</resources>
