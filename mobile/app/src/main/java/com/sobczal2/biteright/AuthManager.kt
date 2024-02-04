@@ -5,12 +5,10 @@ import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.AuthenticationException
 import com.auth0.android.authentication.storage.CredentialsManager
-import com.auth0.android.authentication.storage.CredentialsManagerException
 import com.auth0.android.authentication.storage.SharedPreferencesStorage
 import com.auth0.android.callback.Callback
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
-import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 class AuthManager(
@@ -46,9 +44,9 @@ class AuthManager(
                             when (error.getDescription()) {
                                 "email_not_verified" -> onFailure(R.string.verify_your_email)
                                 else -> onFailure(R.string.unknown_error)
-
                             }
                         }
+
                         "a0.authentication_canceled" -> onFailure(R.string.login_canceled)
                         else -> onFailure(R.string.unknown_error)
                     }

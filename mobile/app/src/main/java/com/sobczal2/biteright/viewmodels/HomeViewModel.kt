@@ -1,8 +1,6 @@
 package com.sobczal2.biteright.viewmodels
 
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.sobczal2.biteright.AuthManager
 import com.sobczal2.biteright.repositories.abstractions.UserRepository
 import com.sobczal2.biteright.repositories.common.ApiRepositoryError
@@ -11,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

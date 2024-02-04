@@ -1,22 +1,17 @@
 package com.sobczal2.biteright.viewmodels
 
-import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.auth0.android.Auth0
-import com.auth0.android.authentication.storage.CredentialsManager
-import com.auth0.android.provider.WebAuthProvider
 import com.sobczal2.biteright.AuthManager
 import com.sobczal2.biteright.state.WelcomeScreenState
 import com.sobczal2.biteright.util.ResourceIdOrString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ActivityContext
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

@@ -2,13 +2,9 @@ package com.sobczal2.biteright.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.right
-import com.sobczal2.biteright.R
 import com.sobczal2.biteright.data.api.requests.OnboardRequest
 import com.sobczal2.biteright.repositories.abstractions.UserRepository
-import com.sobczal2.biteright.repositories.common.ApiRepositoryError
 import com.sobczal2.biteright.state.StartScreenState
-import com.sobczal2.biteright.state.WelcomeScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

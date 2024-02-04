@@ -2,7 +2,6 @@ package com.sobczal2.biteright.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.core.content.res.TypedArrayUtils.getResourceId
 
 class ResourceIdOrString {
     private var resourceId: Int? = null

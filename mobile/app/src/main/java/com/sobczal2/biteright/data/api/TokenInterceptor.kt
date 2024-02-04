@@ -1,6 +1,5 @@
 package com.sobczal2.biteright.data.api
 
-import com.auth0.android.authentication.storage.CredentialsManager
 import com.auth0.android.authentication.storage.CredentialsManagerException
 import com.auth0.android.callback.Callback
 import com.auth0.android.result.Credentials
