@@ -13,7 +13,7 @@ interface RepositoryError {
             when (e) {
                 is retrofit2.HttpException -> {
                     when (e.code()) {
-                        404 -> ApiRepositoryError(ApiError("Not found"), 404)
+                        404 -> ApiRepositoryError(ApiError("Not found"), 404, emptyMap())
                         400 -> {
                             e.response()?.let {
                                 if (it.errorBody() == null) {
@@ -23,7 +23,7 @@ interface RepositoryError {
                                         it.errorBody()!!.string(),
                                         ApiError::class.java
                                     )
-                                    ApiRepositoryError(apiError, it.code())
+                                    ApiRepositoryError(apiError, it.code(), apiError.errors)
                                 }
                             }
 

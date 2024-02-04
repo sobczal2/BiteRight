@@ -26,7 +26,7 @@ class UserRepositoryImpl @Inject constructor(
             } else {
                 val errorBody = response.errorBody()?.string()
                 val apiError = gson.fromJson(errorBody, ApiError::class.java)
-                ApiRepositoryError(apiError, response.code()).right()
+                ApiRepositoryError(apiError, response.code(), apiError.errors).right()
             }
         } catch (e: Exception) {
             Log.e("UserRepositoryImpl", "Error while fetching user", e)
@@ -42,7 +42,7 @@ class UserRepositoryImpl @Inject constructor(
             } else {
                 val errorBody = response.errorBody()?.string()
                 val apiError = gson.fromJson(errorBody, ApiError::class.java)
-                ApiRepositoryError(apiError, response.code()).right()
+                ApiRepositoryError(apiError, response.code(), apiError.errors).right()
             }
         } catch (e: Exception) {
             Log.e("UserRepositoryImpl", "Error while onboarding user", e)

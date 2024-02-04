@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sobczal2.biteright.data.api.requests.OnboardRequest
 import com.sobczal2.biteright.repositories.abstractions.UserRepository
+import com.sobczal2.biteright.repositories.common.ApiRepositoryError
 import com.sobczal2.biteright.state.StartScreenState
+import com.sobczal2.biteright.util.asResourceIdOrStringMap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,7 +25,7 @@ class StartViewModel @Inject constructor(
         _state.update {
             it.copy(
                 username = username,
-                error = null
+                formErrors = null,
             )
         }
 
@@ -58,10 +60,25 @@ class StartViewModel @Inject constructor(
                     onSuccess()
                 },
                 { repositoryError ->
+                    if (repositoryError is ApiRepositoryError) {
+                        _state.update {
+                            it.copy(
+                                formErrors = repositoryError.apiErrors.asResourceIdOrStringMap()
+                            )
+                        }
+                    } else {
+                        _state.update {
+                            it.copy(
+                                formErrors = mapOf(
+                                    "username" to listOf("Unknown error")
+                                ).asResourceIdOrStringMap()
+                            )
+                        }
+                    }
+
                     _state.update {
                         it.copy(
                             loading = false,
-                            error = repositoryError.message,
                         )
                     }
                 }

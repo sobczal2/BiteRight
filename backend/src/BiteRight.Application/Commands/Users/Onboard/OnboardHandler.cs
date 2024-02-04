@@ -67,7 +67,7 @@ public class OnboardHandler : HandlerBase<OnboardRequest>
         if (existsByUsername)
         {
             throw ValidationException(
-                nameof(OnboardRequest.Username),
+                _localizer[nameof(Resources.Resources.Users.Users.username)],
                 _localizer[nameof(Resources.Resources.Users.Users.username_in_use)]
             );
         }
@@ -108,15 +108,15 @@ public class OnboardHandler : HandlerBase<OnboardRequest>
                 _localizer[nameof(Resources.Resources.Users.Users.email_not_valid)]
             ),
             UsernameEmptyException _ => ValidationException(
-                nameof(OnboardRequest.Username),
+                _localizer[nameof(Resources.Resources.Users.Users.username)],
                 _localizer[nameof(Resources.Resources.Users.Users.username_empty)]
             ),
             UsernameInvalidLengthException usernameLengthNotValidException => ValidationException(
-                nameof(OnboardRequest.Username),
+                _localizer[nameof(Resources.Resources.Users.Users.username)],
                 string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_length_not_valid)], usernameLengthNotValidException.MinLength, usernameLengthNotValidException.MaxLength)
             ),
             UsernameInvalidCharactersException usernameCharactersNotValidException => ValidationException(
-                nameof(OnboardRequest.Username),
+                _localizer[nameof(Resources.Resources.Users.Users.username)],
                 string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_characters_not_valid)], usernameCharactersNotValidException.ValidCharacters)
             ),
             _ => base.MapExceptionToValidationException(exception)

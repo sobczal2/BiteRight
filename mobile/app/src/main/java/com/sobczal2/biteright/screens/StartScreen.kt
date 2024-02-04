@@ -3,6 +3,7 @@ package com.sobczal2.biteright.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -18,9 +19,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.state.StartScreenState
+import com.sobczal2.biteright.ui.components.ErrorBoxWrapped
 import com.sobczal2.biteright.ui.components.FullScreenLoader
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
-import com.sobczal2.biteright.util.asString
+import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.viewmodels.StartViewModel
 
 
@@ -47,7 +49,9 @@ fun StartScreenContent(
     onNextClick: () -> Unit = {}
 ) {
     Surface(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(MaterialTheme.dimension.lg)
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -74,11 +78,7 @@ fun StartScreenContent(
                     )
                 }
             }
-            state.error?.let {
-                Text(
-                    text = it.asString(), style = MaterialTheme.typography.bodySmall
-                )
-            }
+            ErrorBoxWrapped(errors = state.formErrors)
         }
     }
 }

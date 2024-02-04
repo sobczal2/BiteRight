@@ -110,5 +110,11 @@ namespace BiteRight.Resources.Resources.Users {
                 return ResourceManager.GetString("country_not_found", resourceCulture);
             }
         }
+        
+        public static string username {
+            get {
+                return ResourceManager.GetString("username", resourceCulture);
+            }
+        }
     }
 }

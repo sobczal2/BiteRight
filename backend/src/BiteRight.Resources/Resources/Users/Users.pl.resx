@@ -51,4 +51,7 @@
     <data name="country_not_found" xml:space="preserve">
         <value>Nie znaleziono kraju</value>
     </data>
+    <data name="username" xml:space="preserve">
+        <value>Nazwa użytkownika</value>
+    </data>
 </root>
