@@ -7,6 +7,7 @@ import com.sobczal2.biteright.AuthManager
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.data.api.LanguageInterceptor
 import com.sobczal2.biteright.data.api.TokenInterceptor
+import com.sobczal2.biteright.data.api.UnauthorizedInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,6 +39,7 @@ object AppModule {
                     level = HttpLoggingInterceptor.Level.BODY
                 }
             )
+            .addInterceptor(UnauthorizedInterceptor(authManager))
             .build()
     }
 

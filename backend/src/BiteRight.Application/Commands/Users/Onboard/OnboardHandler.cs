@@ -104,19 +104,19 @@ public class OnboardHandler : HandlerBase<OnboardRequest>
     {
         return exception switch
         {
-            EmailNotValidException _ => ValidationException(
+            EmailNotValidException => ValidationException(
                 _localizer[nameof(Resources.Resources.Users.Users.email_not_valid)]
             ),
-            UsernameEmptyException _ => ValidationException(
-                _localizer[nameof(Resources.Resources.Users.Users.username)],
+            UsernameEmptyException => ValidationException(
+                nameof(OnboardRequest.Username),
                 _localizer[nameof(Resources.Resources.Users.Users.username_empty)]
             ),
             UsernameInvalidLengthException usernameLengthNotValidException => ValidationException(
-                _localizer[nameof(Resources.Resources.Users.Users.username)],
+                nameof(OnboardRequest.Username),
                 string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_length_not_valid)], usernameLengthNotValidException.MinLength, usernameLengthNotValidException.MaxLength)
             ),
             UsernameInvalidCharactersException usernameCharactersNotValidException => ValidationException(
-                _localizer[nameof(Resources.Resources.Users.Users.username)],
+                nameof(OnboardRequest.Username),
                 string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_characters_not_valid)], usernameCharactersNotValidException.ValidCharacters)
             ),
             _ => base.MapExceptionToValidationException(exception)

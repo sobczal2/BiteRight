@@ -3,6 +3,7 @@ using BiteRight.Application.Common.Exceptions;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Infrastructure.Database;
+using BiteRight.Resources.Resources.Currencies;
 using MediatR;
 using Microsoft.Extensions.Localization;
 
@@ -13,7 +14,8 @@ public class UpdateProfileHandler : HandlerBase<UpdateProfileRequest>
     private readonly ILanguageRepository _languageRepository;
     private readonly ICurrencyRepository _currencyRepository;
     private readonly ICountryRepository _countryRepository;
-    private readonly IStringLocalizer<Resources.Resources.Users.Users> _localizer;
+    private readonly IStringLocalizer<Resources.Resources.Users.Users> _usersLocalizer;
+    private readonly IStringLocalizer<Currencies> _currenciesLocalizer;
     private readonly IUserRepository _userRepository;
     private readonly IIdentityProvider _identityProvider;
     private readonly IDomainEventFactory _domainEventFactory;
@@ -23,7 +25,8 @@ public class UpdateProfileHandler : HandlerBase<UpdateProfileRequest>
         ILanguageRepository languageRepository,
         ICurrencyRepository currencyRepository,
         ICountryRepository countryRepository,
-        IStringLocalizer<Resources.Resources.Users.Users> localizer,
+        IStringLocalizer<Resources.Resources.Users.Users> usersLocalizer,
+        IStringLocalizer<Resources.Resources.Currencies.Currencies> currenciesLocalizer,
         IUserRepository userRepository,
         IIdentityProvider identityProvider,
         IDomainEventFactory domainEventFactory,
@@ -33,7 +36,8 @@ public class UpdateProfileHandler : HandlerBase<UpdateProfileRequest>
         _languageRepository = languageRepository;
         _currencyRepository = currencyRepository;
         _countryRepository = countryRepository;
-        _localizer = localizer;
+        _usersLocalizer = usersLocalizer;
+        _currenciesLocalizer = currenciesLocalizer;
         _userRepository = userRepository;
         _identityProvider = identityProvider;
         _domainEventFactory = domainEventFactory;
@@ -48,19 +52,19 @@ public class UpdateProfileHandler : HandlerBase<UpdateProfileRequest>
         var languageExists = await _languageRepository.ExistsById(request.LanguageId, cancellationToken);
         if (!languageExists)
         {
-            throw ValidationException(_localizer[nameof(Resources.Resources.Users.Users.language_not_found)]);
+            throw ValidationException(_usersLocalizer[nameof(Resources.Resources.Users.Users.language_not_found)]);
         }
 
         var currencyExists = await _currencyRepository.ExistsById(request.CurrencyId, cancellationToken);
         if (!currencyExists)
         {
-            throw ValidationException(_localizer[nameof(Resources.Resources.Users.Users.currency_not_found)]);
+            throw ValidationException(_usersLocalizer[nameof(Resources.Resources.Currencies.Currencies.currency_not_found)]);
         }
 
         var countryExists = await _countryRepository.ExistsById(request.CountryId, cancellationToken);
         if (!countryExists)
         {
-            throw ValidationException(_localizer[nameof(Resources.Resources.Users.Users.country_not_found)]);
+            throw ValidationException(_usersLocalizer[nameof(Resources.Resources.Users.Users.country_not_found)]);
         }
         
         var user = await _userRepository.FindByIdentityId(_identityProvider.RequireCurrent(), cancellationToken);

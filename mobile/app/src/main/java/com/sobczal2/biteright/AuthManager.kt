@@ -1,6 +1,7 @@
 package com.sobczal2.biteright
 
 import android.content.Context
+import android.util.Log
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.AuthenticationException
@@ -10,6 +11,9 @@ import com.auth0.android.callback.Callback
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AuthManager(
     @ApplicationContext val context: Context
@@ -53,6 +57,7 @@ class AuthManager(
                 }
 
                 override fun onSuccess(result: Credentials) {
+                    Log.d("AuthManager", "Login successful: $result")
                     onSuccess(result)
                     credentialsManager.saveCredentials(result)
                 }
@@ -61,7 +66,9 @@ class AuthManager(
 
     fun logout() {
         credentialsManager.clearCredentials()
-        onLogoutCallback?.invoke()
+        CoroutineScope(Dispatchers.Main).launch {
+            onLogoutCallback?.invoke()
+        }
     }
 
     fun subscribeToLogoutEvent(onLogout: () -> Unit) {

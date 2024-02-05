@@ -45,10 +45,10 @@
     <data name="language_not_found" xml:space="preserve">
         <value>Sprache nicht gefunden</value>
     </data>
-    <data name="currency_not_found" xml:space="preserve">
-        <value>Währung nicht gefunden</value>
-    </data>
     <data name="country_not_found" xml:space="preserve">
         <value>Land nicht gefunden</value>
+    </data>
+    <data name="username" xml:space="preserve">
+        <value>Benutzername</value>
     </data>
 </root>

@@ -55,6 +55,38 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Categories.de.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Products\Products.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Products.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Products\Products.en.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Products.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Products\Products.pl.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Products.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Products\Products.de.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Products.de.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Currencies\Currencies.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Currencies.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Currencies\Currencies.de.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Currencies.de.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Currencies\Currencies.en.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Currencies.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Currencies\Currencies.pl.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Currencies.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -117,6 +149,46 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Categories.de.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Products\Products.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Products.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Products\Products.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Products.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Products\Products.pl.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Products.pl.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Products\Products.de.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Products.de.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Currencies\Currencies.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Currencies.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Currencies\Currencies.de.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Currencies.de.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Currencies\Currencies.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Currencies.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Currencies\Currencies.pl.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Currencies.pl.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 
