@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import com.sobczal2.biteright.R
 
 @Composable
-fun FullScreenLoader(modifier: Modifier = Modifier) {
+fun BigLoader(modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier
             .fillMaxSize()

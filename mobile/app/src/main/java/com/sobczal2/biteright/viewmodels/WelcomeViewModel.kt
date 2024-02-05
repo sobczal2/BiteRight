@@ -47,7 +47,7 @@ class WelcomeViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             loading = false,
-                            error = ResourceIdOrString(
+                            generalError = ResourceIdOrString(
                                 resourceId = errorStringId
                             )
                         )

@@ -17,17 +17,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="656647fa-75dd-4f3b-89da-2c91dd013bac" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/ErrorBox.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/theme/Dimension.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/BiteRightLogo.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/ValidatedTextField.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/logo.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/common/ApiRepositoryError.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/common/ApiRepositoryError.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/common/RepositoryError.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/common/RepositoryError.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/implementations/UserRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/implementations/UserRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/HomeScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/StartScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/StartScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/WelcomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/WelcomeScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/state/StartScreenState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/state/StartScreenState.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/util/ResourceIdOrString.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/util/ResourceIdOrString.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/state/WelcomeScreenState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/state/WelcomeScreenState.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/FullScreenLoader.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/FullScreenLoader.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/theme/Color.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/theme/Color.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/theme/Theme.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/theme/BiteRightTheme.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/StartViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/StartViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/WelcomeViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/WelcomeViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-en/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-en/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,8 +96,8 @@
         <option value="Kotlin Object" />
         <option value="resourceFile" />
         <option value="Kotlin Data Class" />
-        <option value="Kotlin Class" />
         <option value="Kotlin File" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -102,16 +108,22 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/rewrite-mobile&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "feat/rewrite-mobile",
+    "last_opened_file_path": "/home/sobczal/Devel/rust/BiteRight/mobile/app/src/main/res/drawable",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="BiteRight.app.main" />

@@ -4,5 +4,5 @@ import com.sobczal2.biteright.util.ResourceIdOrString
 
 data class WelcomeScreenState(
     val loading: Boolean = false,
-    val error: ResourceIdOrString? = null
+    val generalError: ResourceIdOrString? = null
 )

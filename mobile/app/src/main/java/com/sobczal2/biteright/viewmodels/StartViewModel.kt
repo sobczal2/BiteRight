@@ -2,11 +2,13 @@ package com.sobczal2.biteright.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sobczal2.biteright.R
 import com.sobczal2.biteright.data.api.requests.OnboardRequest
 import com.sobczal2.biteright.repositories.abstractions.UserRepository
 import com.sobczal2.biteright.repositories.common.ApiRepositoryError
 import com.sobczal2.biteright.state.StartScreenState
-import com.sobczal2.biteright.util.asResourceIdOrStringMap
+import com.sobczal2.biteright.util.ResourceIdOrString
+import com.sobczal2.biteright.util.asResourceIdOrString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,24 +27,47 @@ class StartViewModel @Inject constructor(
         _state.update {
             it.copy(
                 username = username,
-                formErrors = null,
             )
         }
 
-        validateUsername(username).let { isValid ->
-            _state.update {
-                it.copy(
-                    canContinue = isValid
-                )
-            }
+        clearErrors()
+    }
+
+    private fun clearErrors() {
+        _state.update {
+            it.copy(
+                usernameError = null,
+                generalError = null
+            )
         }
     }
 
-    private fun validateUsername(username: String): Boolean {
-        return username.length in 3..30
+    private fun triggerValidation() {
+        if (_state.value.username.length !in 3..30) {
+            _state.update {
+                it.copy(
+                    usernameError = ResourceIdOrString(R.string.username_length_error)
+                )
+            }
+            return
+        }
+        if (!Regex("^[a-zA-Z0-9_]+\$").matches(_state.value.username)) {
+            _state.update {
+                it.copy(
+                    usernameError = ResourceIdOrString(R.string.username_invalid_characters_error)
+                )
+            }
+            return
+        }
     }
 
     fun onNextClick(onSuccess: () -> Unit) {
+        triggerValidation()
+
+        if (_state.value.usernameError != null) {
+            return
+        }
+
         _state.update {
             it.copy(
                 loading = true
@@ -60,18 +85,17 @@ class StartViewModel @Inject constructor(
                     onSuccess()
                 },
                 { repositoryError ->
-                    if (repositoryError is ApiRepositoryError) {
+                    if (repositoryError is ApiRepositoryError && repositoryError.apiErrors.any { it.key == "username" }) {
                         _state.update {
                             it.copy(
-                                formErrors = repositoryError.apiErrors.asResourceIdOrStringMap()
+                                usernameError = repositoryError.apiErrors["username"]!!.first()
+                                    .asResourceIdOrString()
                             )
                         }
                     } else {
                         _state.update {
                             it.copy(
-                                formErrors = mapOf(
-                                    "username" to listOf("Unknown error")
-                                ).asResourceIdOrStringMap()
+                                generalError = repositoryError.message
                             )
                         }
                     }
