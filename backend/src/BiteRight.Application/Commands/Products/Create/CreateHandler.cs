@@ -12,7 +12,7 @@ using Name = BiteRight.Domain.Products.Name;
 
 namespace BiteRight.Application.Commands.Products.Create;
 
-public class CreateHandler : HandlerBase<CreateRequest, CreateResponse>
+public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
 {
     private readonly IDomainEventFactory _domainEventFactory;
     private readonly IIdentityProvider _identityProvider;
@@ -20,7 +20,8 @@ public class CreateHandler : HandlerBase<CreateRequest, CreateResponse>
     private readonly IUserRepository _userRepository;
     private readonly ICurrencyRepository _currencyRepository;
     private readonly IProductRepository _productRepository;
-    private readonly AppDbContext _dbContext;
+    private readonly ICategoryRepository _categoryRepository;
+    private readonly ILanguageProvider _languageProvider;
     private readonly IStringLocalizer<Resources.Resources.Products.Products> _productsLocalizer;
     private readonly IStringLocalizer<Resources.Resources.Currencies.Currencies> _currenciesLocalizer;
 
@@ -31,10 +32,13 @@ public class CreateHandler : HandlerBase<CreateRequest, CreateResponse>
         IUserRepository userRepository,
         ICurrencyRepository currencyRepository,
         IProductRepository productRepository,
-        AppDbContext dbContext,
+        ICategoryRepository categoryRepository,
+        AppDbContext appDbContext,
+        ILanguageProvider languageProvider,
         IStringLocalizer<Resources.Resources.Products.Products> productsLocalizer,
         IStringLocalizer<Resources.Resources.Currencies.Currencies> currenciesLocalizer
     )
+        : base(appDbContext)
     {
         _domainEventFactory = domainEventFactory;
         _identityProvider = identityProvider;
@@ -42,7 +46,8 @@ public class CreateHandler : HandlerBase<CreateRequest, CreateResponse>
         _userRepository = userRepository;
         _currencyRepository = currencyRepository;
         _productRepository = productRepository;
-        _dbContext = dbContext;
+        _categoryRepository = categoryRepository;
+        _languageProvider = languageProvider;
         _productsLocalizer = productsLocalizer;
         _currenciesLocalizer = currenciesLocalizer;
     }
@@ -69,40 +74,42 @@ public class CreateHandler : HandlerBase<CreateRequest, CreateResponse>
             price = Price.Create(request.Price.Value, currency);
         }
 
-        ExpirationDate expirationDate;
-
-        switch (request.ExpirationDateKind)
+        var expirationDate = request.ExpirationDateKind switch
         {
-            case ExpirationDateKindDto.Infinite:
-                expirationDate = ExpirationDate.CreateInfinite();
-                break;
-            case ExpirationDateKindDto.BestBefore:
-                expirationDate = ExpirationDate.CreateBestBefore(request.ExpirationDate!.Value);
-                break;
-            case ExpirationDateKindDto.UseBy:
-                expirationDate = ExpirationDate.CreateUseBy(request.ExpirationDate!.Value);
-                break;
-            default:
-                expirationDate = ExpirationDate.CreateUnknown(request.ExpirationDate);
-                break;
-        }
+            ExpirationDateKindDto.Infinite => ExpirationDate.CreateInfinite(),
+            ExpirationDateKindDto.BestBefore => ExpirationDate.CreateBestBefore(request.ExpirationDate!.Value),
+            ExpirationDateKindDto.UseBy => ExpirationDate.CreateUseBy(request.ExpirationDate!.Value),
+            ExpirationDateKindDto.Unknown => ExpirationDate.CreateUnknown(request.ExpirationDate),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
+        var languageId = await _languageProvider.RequireCurrentId(cancellationToken);
+
+        var category = await _categoryRepository.FindById(request.CategoryId, languageId, cancellationToken)
+                       ?? throw ValidationException(
+                           _productsLocalizer[
+                               nameof(Resources.Resources.Categories.Categories.category_not_found)]
+                       );
 
         var addedDateTime = AddedDateTime.Create(_dateTimeProvider.UtcNow);
+
         var usage = Usage.CreateFull();
+
         var product = Product.Create(
             name,
             description,
             price,
             expirationDate,
+            category.Id,
             addedDateTime,
             usage,
-            user,
+            user.Id,
             _domainEventFactory
         );
 
         _productRepository.Add(product);
 
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await AppDbContext.SaveChangesAsync(cancellationToken);
 
         return new CreateResponse(product.Id);
     }
@@ -136,7 +143,6 @@ public class CreateHandler : HandlerBase<CreateRequest, CreateResponse>
                 nameof(CreateRequest.Description),
                 string.Format(
                     _productsLocalizer[nameof(Resources.Resources.Products.Products.description_length_not_valid)],
-                    e.MinLength,
                     e.MaxLength
                 )
             ),
@@ -159,6 +165,7 @@ public class CreateHandler : HandlerBase<CreateRequest, CreateResponse>
                 nameof(CreateRequest.ExpirationDateKind),
                 _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_infinite)]
             ),
+            _ => base.MapExceptionToValidationException(exception)
         };
     }
 }

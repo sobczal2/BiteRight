@@ -11,7 +11,7 @@ public class User : AggregateRoot<UserId>
     public IdentityId IdentityId { get; private set; }
     public Username Username { get; private set; }
     public Email Email { get; private set; }
-    public DateTime JoinedAt { get; private set; }
+    public JoinedAt JoinedAt { get; private set; }
     public ProfileId ProfileId { get; private set; }
     public virtual Profile Profile { get; private set; }
 
@@ -31,7 +31,7 @@ public class User : AggregateRoot<UserId>
         IdentityId identityId,
         Username username,
         Email email,
-        DateTime joinedAt,
+        JoinedAt joinedAt,
         Profile profile
     )
         : base(id)
@@ -58,7 +58,7 @@ public class User : AggregateRoot<UserId>
             identityId,
             username,
             email,
-            dateTimeProvider.UtcNow,
+            JoinedAt.Create(dateTimeProvider.UtcNow),
             profile
         );
 
@@ -70,7 +70,7 @@ public class User : AggregateRoot<UserId>
 
         return user;
     }
-    
+
     public void UpdateProfile(
         CurrencyId currencyId,
         IDomainEventFactory domainEventFactory

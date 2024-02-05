@@ -26,7 +26,7 @@ public class ProfileConfiguration : IEntityTypeConfiguration<Profile>
                 currencyId => currencyId.Value,
                 value => value
             );
-        builder.HasOne<Currency>()
+        builder.HasOne(profile => profile.Currency)
             .WithMany()
             .HasForeignKey(profile => profile.CurrencyId)
             .OnDelete(DeleteBehavior.Restrict);

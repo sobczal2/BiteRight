@@ -2,13 +2,13 @@ using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Products.Exceptions;
 
-namespace BiteRight.Domain.Products;
+namespace BiteRight.Domain.Users;
 
-public class AddedDateTime : ValueObject
+public class JoinedAt : ValueObject
 {
     public DateTime Value { get; }
 
-    private AddedDateTime(
+    private JoinedAt(
         DateTime value
     )
     {
@@ -20,23 +20,23 @@ public class AddedDateTime : ValueObject
         yield return Value;
     }
 
-    public static AddedDateTime Create(
+    public static JoinedAt Create(
         DateTime value
     )
     {
         Validate(value);
 
-        return new AddedDateTime(value);
+        return new JoinedAt(value);
     }
 
-    public static AddedDateTime CreateSkipValidation(
+    public static JoinedAt CreateSkipValidation(
         DateTime value
     )
     {
-        return new AddedDateTime(value);
+        return new JoinedAt(value);
     }
 
-    public static AddedDateTime CreateNow(
+    public static JoinedAt CreateNow(
         IDateTimeProvider dateTimeProvider
     )
     {
@@ -53,12 +53,12 @@ public class AddedDateTime : ValueObject
         }
     }
     
-    public static implicit operator DateTime(AddedDateTime addedDateTime)
+    public static implicit operator DateTime(JoinedAt joinedAt)
     {
-        return addedDateTime.Value;
+        return joinedAt.Value;
     }
     
-    public static implicit operator AddedDateTime(DateTime value)
+    public static implicit operator JoinedAt(DateTime value)
     {
         return Create(value);
     }

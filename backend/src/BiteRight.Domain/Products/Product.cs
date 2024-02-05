@@ -1,4 +1,5 @@
 using BiteRight.Domain.Abstracts.Common;
+using BiteRight.Domain.Categories;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Users;
 
@@ -10,6 +11,8 @@ public class Product : AggregateRoot<ProductId>
     public Description Description { get; }
     public Price? Price { get; }
     public ExpirationDate ExpirationDate { get; }
+    public CategoryId CategoryId { get; }
+    public virtual Category Category { get; }
     public AddedDateTime AddedDateTime { get; }
     public Usage Usage { get; }
     public UserId UserId { get; }
@@ -22,6 +25,8 @@ public class Product : AggregateRoot<ProductId>
         Description = default!;
         Price = default!;
         ExpirationDate = default!;
+        CategoryId = default!;
+        Category = default!;
         AddedDateTime = default!;
         Usage = default!;
         UserId = default!;
@@ -34,9 +39,10 @@ public class Product : AggregateRoot<ProductId>
         Description description,
         Price? price,
         ExpirationDate expirationDate,
+        CategoryId categoryId,
         AddedDateTime addedDateTime,
         Usage usage,
-        User user
+        UserId userId
     )
         : base(id)
     {
@@ -44,10 +50,12 @@ public class Product : AggregateRoot<ProductId>
         Description = description;
         Price = price;
         ExpirationDate = expirationDate;
+        CategoryId = categoryId;
+        Category = default!;
         AddedDateTime = addedDateTime;
         Usage = usage;
-        UserId = user.Id;
-        User = user;
+        UserId = userId;
+        User = default!;
     }
 
     public static Product Create(
@@ -55,9 +63,10 @@ public class Product : AggregateRoot<ProductId>
         Description description,
         Price? price,
         ExpirationDate expirationDate,
+        CategoryId categoryId,
         AddedDateTime addedDateTime,
         Usage usage,
-        User user,
+        UserId userId,
         IDomainEventFactory domainEventFactory,
         ProductId? id = null
     )
@@ -68,9 +77,10 @@ public class Product : AggregateRoot<ProductId>
             description,
             price,
             expirationDate,
+            categoryId,
             addedDateTime,
             usage,
-            user
+            userId
         );
 
         product.AddDomainEvent(domainEventFactory.CreateProductCreatedEvent(product.Id));

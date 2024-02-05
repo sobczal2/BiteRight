@@ -43,11 +43,19 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
                 officialLanguageId => officialLanguageId.Value,
                 value => value
             );
+        builder.HasOne(country => country.OfficialLanguage)
+            .WithMany()
+            .HasForeignKey(country => country.OfficialLanguageId)
+            .OnDelete(DeleteBehavior.Restrict);
         builder.Property(country => country.CurrencyId)
             .HasConversion(
                 currencyId => currencyId.Value,
                 value => value
             );
+        builder.HasOne(country => country.Currency)
+            .WithMany()
+            .HasForeignKey(country => country.CurrencyId)
+            .OnDelete(DeleteBehavior.Restrict);
         
         builder.HasData(GetSeedData());
     }

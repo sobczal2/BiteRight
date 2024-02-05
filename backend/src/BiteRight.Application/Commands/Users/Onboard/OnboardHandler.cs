@@ -6,13 +6,14 @@ using BiteRight.Domain.Users.Exceptions;
 using BiteRight.Infrastructure.Configuration.Countries;
 using BiteRight.Infrastructure.Configuration.Currencies;
 using BiteRight.Infrastructure.Configuration.Languages;
+using BiteRight.Infrastructure.Database;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Localization;
 
 namespace BiteRight.Application.Commands.Users.Onboard;
 
-public class OnboardHandler : HandlerBase<OnboardRequest>
+public class OnboardHandler : CommandHandlerBase<OnboardRequest>
 {
     private readonly IIdentityManager _identityManager;
     private readonly IDomainEventFactory _domainEventFactory;
@@ -27,8 +28,9 @@ public class OnboardHandler : HandlerBase<OnboardRequest>
         IIdentityProvider identityProvider,
         IDateTimeProvider dateTimeProvider,
         IUserRepository userRepository,
-        IStringLocalizer<Resources.Resources.Users.Users> localizer
-    )
+        IStringLocalizer<Resources.Resources.Users.Users> localizer,
+        AppDbContext appAppDbContext
+    ) : base(appAppDbContext)
     {
         _identityManager = identityManager;
         _domainEventFactory = domainEventFactory;

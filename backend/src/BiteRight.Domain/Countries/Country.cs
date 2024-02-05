@@ -7,12 +7,14 @@ namespace BiteRight.Domain.Countries;
 
 public class Country : AggregateRoot<CountryId>
 {
-    public Name NativeName { get; }
-    public Name EnglishName { get; }
-    public Alpha2Code Alpha2Code { get; }
+    public Name NativeName { get; private set; }
+    public Name EnglishName { get; private set; }
+    public Alpha2Code Alpha2Code { get; private set; }
     public LanguageId OfficialLanguageId { get; private set; }
+    public virtual Language OfficialLanguage { get; private set; }
     public CurrencyId CurrencyId { get; private set; }
-    
+    public virtual Currency Currency { get; private set; }
+
     // EF Core
     private Country()
     {
@@ -20,9 +22,11 @@ public class Country : AggregateRoot<CountryId>
         EnglishName = default!;
         Alpha2Code = default!;
         OfficialLanguageId = default!;
+        OfficialLanguage = default!;
         CurrencyId = default!;
+        Currency = default!;
     }
-    
+
     private Country(
         CountryId id,
         Name nativeName,
@@ -37,9 +41,11 @@ public class Country : AggregateRoot<CountryId>
         NativeName = nativeName;
         Alpha2Code = alpha2Code;
         OfficialLanguageId = officialLanguageId;
+        OfficialLanguage = default!;
         CurrencyId = currencyId;
+        Currency = default!;
     }
-    
+
     public static Country Create(
         Name nativeName,
         Name englishName,
@@ -58,13 +64,13 @@ public class Country : AggregateRoot<CountryId>
             officialLanguageId,
             currencyId
         );
-        
+
         country.AddDomainEvent(
             domainEventFactory.CreateCountryCreatedEvent(
                 country.Id
             )
         );
-        
+
         return country;
     }
 }

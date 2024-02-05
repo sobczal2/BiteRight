@@ -12,4 +12,10 @@ public interface ICategoryRepository
         LanguageId languageId,
         CancellationToken cancellationToken = default
     );
+    
+    Task<Category?> FindById(
+        Guid id,
+        LanguageId languageId,
+        CancellationToken cancellationToken = default
+    );
 }

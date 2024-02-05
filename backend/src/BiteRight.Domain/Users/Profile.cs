@@ -8,11 +8,14 @@ namespace BiteRight.Domain.Users;
 public class Profile : Entity<ProfileId>
 {
     public CurrencyId CurrencyId { get; private set; }
+    public virtual Currency Currency { get; private set; }
+    
     
     // EF Core
     private Profile()
     {
         CurrencyId = default!;
+        Currency = default!;
     }
     
     private Profile(
@@ -21,6 +24,7 @@ public class Profile : Entity<ProfileId>
     ) : base(id)
     {
         CurrencyId = currencyId;
+        Currency = default!;
     }
     
     public static Profile Create(

@@ -8,7 +8,8 @@ public class CreateValidator : AbstractValidator<CreateRequest>
 {
     public CreateValidator(
         IStringLocalizer<Resources.Resources.Products.Products> productsLocalizer,
-        IStringLocalizer<Resources.Resources.Currencies.Currencies> currenciesLocalizer
+        IStringLocalizer<Resources.Resources.Currencies.Currencies> currenciesLocalizer,
+        IStringLocalizer<Resources.Resources.Categories.Categories> categoriesLocalizer
     )
     {
         RuleFor(x => x.Name)
@@ -34,5 +35,13 @@ public class CreateValidator : AbstractValidator<CreateRequest>
             .When(x => x.ExpirationDateKind != ExpirationDateKindDto.Infinite &&
                        x.ExpirationDateKind != ExpirationDateKindDto.Unknown)
             .WithMessage(_ => currenciesLocalizer[nameof(Resources.Resources.Currencies.Currencies.expiration_date_empty)]);
+        
+        RuleFor(x => x.ExpirationDateKind)
+            .IsInEnum()
+            .WithMessage(_ => productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_kind_invalid)]);
+        
+        RuleFor(x => x.CategoryId)
+            .NotEmpty()
+            .WithMessage(_ => categoriesLocalizer[nameof(Resources.Resources.Categories.Categories.category_empty)]);
     }
 }

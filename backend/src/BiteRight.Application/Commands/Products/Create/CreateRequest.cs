@@ -9,5 +9,6 @@ public record CreateRequest(
     decimal? Price,
     Guid? CurrencyId,
     DateOnly? ExpirationDate,
-    ExpirationDateKindDto ExpirationDateKind
+    ExpirationDateKindDto ExpirationDateKind,
+    Guid CategoryId
 ) : IRequest<CreateResponse>;

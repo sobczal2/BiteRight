@@ -51,7 +51,6 @@ public class Category : AggregateRoot<CategoryId>
 
         return category;
     }
-
     public Uri GetPhotoUri()
     {
         return Photo?.GetUri() ?? Photo.Default.GetUri();

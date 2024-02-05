@@ -5,11 +5,12 @@ namespace BiteRight.Domain.Currencies;
 
 public class Currency : AggregateRoot<CurrencyId>
 {
-    public Name Name { get; }
-    public Symbol Symbol { get; }
+    public Name Name { get; private set; }
+    public Symbol Symbol { get; private set; }
+
     // ReSharper disable once InconsistentNaming
-    public ISO4217Code ISO4217Code { get; }
-    
+    public ISO4217Code ISO4217Code { get; private set; }
+
     // EF Core
     private Currency()
     {
@@ -17,7 +18,7 @@ public class Currency : AggregateRoot<CurrencyId>
         Symbol = default!;
         ISO4217Code = default!;
     }
-    
+
     private Currency(
         CurrencyId id,
         Name name,
@@ -30,7 +31,7 @@ public class Currency : AggregateRoot<CurrencyId>
         Symbol = symbol;
         ISO4217Code = iso4217Code;
     }
-    
+
     public static Currency Create(
         Name name,
         Symbol symbol,
@@ -45,13 +46,13 @@ public class Currency : AggregateRoot<CurrencyId>
             symbol,
             iso4217Code
         );
-        
+
         currency.AddDomainEvent(
             domainEventFactory.CreateCurrencyCreatedEvent(
                 currency.Id
             )
         );
-        
+
         return currency;
     }
 }

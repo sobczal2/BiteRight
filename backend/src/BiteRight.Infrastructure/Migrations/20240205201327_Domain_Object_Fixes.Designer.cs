@@ -3,6 +3,7 @@ using System;
 using BiteRight.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BiteRight.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240205201327_Domain_Object_Fixes")]
+    partial class Domain_Object_Fixes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -413,7 +416,7 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("AddedDateTime")
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("added_date_time");
 
                     b.Property<Guid>("CategoryId")
@@ -486,7 +489,7 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnName("identity_id");
 
                     b.Property<DateTime>("JoinedAt")
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("joined_at");
 
                     b.Property<Guid>("ProfileId")
@@ -589,15 +592,22 @@ namespace BiteRight.Infrastructure.Migrations
 
                             b1.Property<int>("Kind")
                                 .HasColumnType("integer")
-                                .HasColumnName("expiration_date_kind");
+                                .HasColumnName("ExpirationDate_Kind");
 
                             b1.Property<DateOnly>("Value")
                                 .HasColumnType("date")
-                                .HasColumnName("expiration_date_value");
+                                .HasColumnName("ExpirationDate_Value");
 
                             b1.HasKey("ProductId");
 
-                            b1.ToTable("products", "product");
+                            b1.ToTable("products", "product", t =>
+                                {
+                                    t.Property("Kind")
+                                        .HasColumnName("expiration_date_Kind");
+
+                                    t.Property("Value")
+                                        .HasColumnName("expiration_date_Value");
+                                });
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductId")
@@ -612,15 +622,22 @@ namespace BiteRight.Infrastructure.Migrations
 
                             b1.Property<Guid>("CurrencyId")
                                 .HasColumnType("uuid")
-                                .HasColumnName("price_currency_id");
+                                .HasColumnName("Price_CurrencyId");
 
                             b1.Property<decimal>("Value")
                                 .HasColumnType("numeric")
-                                .HasColumnName("price_value");
+                                .HasColumnName("Price_Value");
 
                             b1.HasKey("ProductId");
 
-                            b1.ToTable("products", "product");
+                            b1.ToTable("products", "product", t =>
+                                {
+                                    t.Property("CurrencyId")
+                                        .HasColumnName("price_CurrencyId");
+
+                                    t.Property("Value")
+                                        .HasColumnName("price_Value");
+                                });
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductId")

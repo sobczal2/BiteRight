@@ -36,21 +36,21 @@ public class Description : ValueObject
         return new Description(value);
     }
     
-    private const int MinLength = 3;
-    private const int MaxLength = 64;
+    private const int MaxLength = 512;
     
     private static readonly Regex ValidCharacters = new(
-        @"^[a-zA-Z\s]+$",
+        @"^[a-zA-Z0-9\s.,\-()!?\[\]{};:'""/+=%&*<>$@#_~]*$",
         RegexOptions.Compiled
     );
+
     
     private static void Validate(
         string value
     )
     {
-        if (value.Length is < MinLength or > MaxLength)
+        if (value.Length > MaxLength)
         {
-            throw new DescriptionInvalidLengthException(MinLength, MaxLength);
+            throw new DescriptionInvalidLengthException(MaxLength);
         }
         
         if (!ValidCharacters.IsMatch(value))

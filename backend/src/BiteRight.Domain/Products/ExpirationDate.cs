@@ -7,6 +7,13 @@ public class ExpirationDate : ValueObject
 {
     public DateOnly Value { get; }
     public ExpirationDateKind Kind { get; }
+    
+    // EF Core
+    private ExpirationDate()
+    {
+        Value = default!;
+        Kind = default!;
+    }
 
     private ExpirationDate(
         DateOnly value,

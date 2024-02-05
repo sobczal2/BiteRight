@@ -21,4 +21,10 @@
     <data name="query_too_long" xml:space="preserve">
         <value>Query length cannot exceed {0} characters</value>
     </data>
+    <data name="category_empty" xml:space="preserve">
+        <value>Category can't be empty</value>
+    </data>
+    <data name="category_not_found" xml:space="preserve">
+        <value>Category not found</value>
+    </data>
 </root>

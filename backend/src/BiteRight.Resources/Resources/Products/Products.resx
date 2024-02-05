@@ -34,7 +34,7 @@
         <value>Name contains illegal characters. Allowed characters: {0}</value>
     </data>
     <data name="description_length_not_valid" xml:space="preserve">
-        <value>Description must be between {0} and {1} characters long</value>
+        <value>Description's length cannot exceed {0} characters</value>
     </data>
     <data name="description_characters_not_valid" xml:space="preserve">
         <value>Description contains illegal characters. Allowed characters: {0}</value>
@@ -44,5 +44,8 @@
     </data>
     <data name="expiration_date_infinite" xml:space="preserve">
         <value>Expiration date has invalid value for infinity kind</value>
+    </data>
+    <data name="expiration_date_kind_invalid" xml:space="preserve">
+        <value>Expiration date kind has invalid value</value>
     </data>
 </root>

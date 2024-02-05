@@ -4,7 +4,7 @@ using BiteRight.Domain.Products.Exceptions;
 
 namespace BiteRight.Domain.Products;
 
-public class Price : Entity<PriceId>
+public class Price : ValueObject
 {
     public decimal Value { get; }
     public CurrencyId CurrencyId { get; }
@@ -16,6 +16,12 @@ public class Price : Entity<PriceId>
         Value = default!;
         CurrencyId = default!;
         Currency = default!;
+    }
+    
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
+        yield return CurrencyId;
     }
 
     private Price(
