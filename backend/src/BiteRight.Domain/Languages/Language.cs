@@ -5,9 +5,9 @@ namespace BiteRight.Domain.Languages;
 
 public class Language : AggregateRoot<LanguageId>
 {
-    public Name NativeName { get; }
-    public Name EnglishName { get; }
-    public Code Code { get; }
+    public Name NativeName { get; private set; }
+    public Name EnglishName { get; private set; }
+    public Code Code { get; private set; }
 
     // EF Core
     private Language()

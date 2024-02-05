@@ -99,15 +99,15 @@ namespace BiteRight.Resources.Resources.Users {
             }
         }
         
-        public static string currency_not_found {
-            get {
-                return ResourceManager.GetString("currency_not_found", resourceCulture);
-            }
-        }
-        
         public static string country_not_found {
             get {
                 return ResourceManager.GetString("country_not_found", resourceCulture);
+            }
+        }
+        
+        public static string username {
+            get {
+                return ResourceManager.GetString("username", resourceCulture);
             }
         }
     }

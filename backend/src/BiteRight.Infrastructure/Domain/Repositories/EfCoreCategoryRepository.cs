@@ -52,4 +52,16 @@ public class EfCoreCategoryRepository : ICategoryRepository
 
         return (categories, totalCount);
     }
+
+    public async Task<Category?> FindById(
+        Guid id,
+        LanguageId languageId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return await _appDbContext.Categories
+            .Include(category =>
+                category.Translations.Where(translation => Equals(translation.LanguageId, languageId)))
+            .FirstOrDefaultAsync(category => category.Id == id, cancellationToken);
+    }
 }

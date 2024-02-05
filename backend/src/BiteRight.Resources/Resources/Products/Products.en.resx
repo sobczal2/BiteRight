@@ -1,0 +1,44 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="name_empty" xml:space="preserve">
+        <value>Name can't be empty</value>
+    </data>
+    <data name="description_null" xml:space="preserve">
+        <value>Description can't be null</value>
+    </data>
+    <data name="price_empty" xml:space="preserve">
+        <value>Price can't be empty if currency is not empty</value>
+    </data>
+    <data name="name_length_not_valid" xml:space="preserve">
+        <value>Name must be between {0} and {1} characters long</value>
+    </data>
+    <data name="name_characters_not_valid" xml:space="preserve">
+        <value>Name contains illegal characters. Allowed characters: {0}</value>
+    </data>
+    <data name="description_length_not_valid" xml:space="preserve">
+        <value>Description's length cannot exceed {0} characters</value>
+    </data>
+    <data name="description_characters_not_valid" xml:space="preserve">
+        <value>Description contains illegal characters. Allowed characters: {0}</value>
+    </data>
+    <data name="price_not_valid" xml:space="preserve">
+        <value>Price must be between {0} and {1}</value>
+    </data>
+    <data name="expiration_date_infinite" xml:space="preserve">
+        <value>Expiration date has invalid value for infinity kind</value>
+    </data>
+    <data name="expiration_date_kind_invalid" xml:space="preserve">
+        <value>Expiration date kind has invalid value</value>
+    </data>
+</root>

@@ -7,20 +7,10 @@ namespace BiteRight.Application.Common;
 public abstract class HandlerBase<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    public async Task<TResponse> Handle(
+    public abstract Task<TResponse> Handle(
         TRequest request,
         CancellationToken cancellationToken
-    )
-    {
-        try
-        {
-            return await HandleImpl(request, cancellationToken);
-        }
-        catch (Exception exception)
-        {
-            throw MapExceptionToValidationException(exception);
-        }
-    }
+    );
 
 
     protected abstract Task<TResponse> HandleImpl(
@@ -61,13 +51,4 @@ public abstract class HandlerBase<TRequest, TResponse> : IRequestHandler<TReques
 }
 
 public abstract class HandlerBase<TRequest> : HandlerBase<TRequest, Unit>
-    where TRequest : IRequest<Unit>
-{
-    protected override Task<Unit> HandleImpl(
-        TRequest request,
-        CancellationToken cancellationToken
-    )
-    {
-        return Task.FromResult(Unit.Value);
-    }
-}
+    where TRequest : IRequest<Unit>;

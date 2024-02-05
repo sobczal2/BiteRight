@@ -124,7 +124,6 @@ public static class WebRegistrations
     )
     {
         services.AddScoped<CorrelationIdMiddleware>();
-        services.AddScoped<TransactionMiddleware>();
     }
 
     private static void AddCommon(

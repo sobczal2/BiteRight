@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BiteRight.Infrastructure.Configuration.Users;
 
-public class UserConfiguration : IEntityTypeConfiguration<BiteRight.Domain.Users.User>
+public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(
-        EntityTypeBuilder<BiteRight.Domain.Users.User> builder
+        EntityTypeBuilder<User> builder
     )
     {
         builder.ToTable("users", "user");
@@ -19,31 +19,44 @@ public class UserConfiguration : IEntityTypeConfiguration<BiteRight.Domain.Users
                 value => value
             )
             .ValueGeneratedNever();
+
         builder.Property(user => user.IdentityId)
             .HasConversion(
                 identityId => identityId.Value,
                 value => value
             );
+
         builder.HasIndex(user => user.IdentityId)
             .IsUnique();
+
         builder.Property(user => user.Username)
             .HasConversion(
                 username => username.Value,
                 value => Username.CreateSkipValidation(value)
             );
+
         builder.Property(user => user.Email)
             .HasConversion(
                 email => email.Value,
                 value => Email.CreateSkipValidation(value)
             );
+
         builder.Property(user => user.JoinedAt)
             .HasConversion(
-                joinedAt => joinedAt,
+                joinedAt => joinedAt.Value,
+                value => value.ToUniversalTime()
+            )
+            .HasColumnType("timestamp");
+
+        builder.Property(user => user.ProfileId)
+            .HasConversion(
+                profileId => profileId.Value,
                 value => value
             );
+
         builder.HasOne(user => user.Profile)
             .WithOne()
-            .HasForeignKey<User>(user => user.ProfileId) 
+            .HasForeignKey<User>(user => user.ProfileId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

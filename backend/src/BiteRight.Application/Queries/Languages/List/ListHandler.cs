@@ -1,3 +1,4 @@
+using BiteRight.Application.Common;
 using BiteRight.Application.Dtos.Languages;
 using BiteRight.Infrastructure.Database;
 using MediatR;
@@ -5,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BiteRight.Application.Queries.Languages.List;
 
-public class ListHandler : IRequestHandler<ListRequest, ListResponse>
+public class ListHandler : QueryHandlerBase<ListRequest, ListResponse>
 {
     private readonly AppDbContext _appDbContext;
 
@@ -16,7 +17,7 @@ public class ListHandler : IRequestHandler<ListRequest, ListResponse>
         _appDbContext = appDbContext;
     }
 
-    public async Task<ListResponse> Handle(
+    protected override async Task<ListResponse> HandleImpl(
         ListRequest request,
         CancellationToken cancellationToken
     )

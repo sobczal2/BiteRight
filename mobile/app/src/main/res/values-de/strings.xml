@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="get_started">Los geht\'s</string>
-    <string name="unknown_error">Unbekannter Fehler</string>
-    <string name="email_not_verified">Bitte bestätigen Sie Ihre Email Adresse</string>
-    <string name="next">Als Nächstes</string>
-    <string name="username">Nutzername</string>
-</resources>

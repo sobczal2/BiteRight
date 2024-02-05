@@ -2,7 +2,7 @@ namespace BiteRight.Domain.Common;
 
 public class Entity<TId> : IEquatable<Entity<TId>> where TId : GuidId
 {
-    public TId Id { get; }
+    public TId Id { get; protected set; }
 
     protected Entity()
     {

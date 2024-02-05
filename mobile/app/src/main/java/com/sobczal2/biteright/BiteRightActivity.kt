@@ -3,28 +3,21 @@ package com.sobczal2.biteright
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
-import com.sobczal2.biteright.core.Auth0Manager
-import com.sobczal2.biteright.core.BiteRightRouter
-import com.sobczal2.biteright.ui.theme.BiteRightTheme
+import com.sobczal2.biteright.routing.Router
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BiteRightActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var authManager: AuthManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val auth0Manager = Auth0Manager(this)
-
         setContent {
-            BiteRightTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    BiteRightRouter(auth0Manager)
-                }
+            App {
+                Router(authManager = authManager)
             }
         }
     }

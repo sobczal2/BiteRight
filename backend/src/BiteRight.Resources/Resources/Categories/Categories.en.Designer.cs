@@ -50,5 +50,17 @@ namespace BiteRight.Resources.Resources.Categories {
                 return ResourceManager.GetString("query_too_long", resourceCulture);
             }
         }
+        
+        public static string category_empty {
+            get {
+                return ResourceManager.GetString("category_empty", resourceCulture);
+            }
+        }
+        
+        public static string category_not_found {
+            get {
+                return ResourceManager.GetString("category_not_found", resourceCulture);
+            }
+        }
     }
 }

@@ -1,3 +1,4 @@
+using BiteRight.Application.Common;
 using BiteRight.Application.Dtos.Categories;
 using BiteRight.Application.Dtos.Common;
 using BiteRight.Domain.Abstracts.Common;
@@ -6,7 +7,7 @@ using MediatR;
 
 namespace BiteRight.Application.Queries.Categories.Search;
 
-public class SearchHandler : IRequestHandler<SearchRequest, SearchResponse>
+public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
 {
     private readonly ILanguageProvider _languageProvider;
     private readonly ICategoryRepository _categoryRepository;
@@ -20,7 +21,7 @@ public class SearchHandler : IRequestHandler<SearchRequest, SearchResponse>
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<SearchResponse> Handle(
+    protected override async Task<SearchResponse> HandleImpl(
         SearchRequest request,
         CancellationToken cancellationToken
     )

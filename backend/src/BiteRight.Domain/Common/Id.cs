@@ -26,7 +26,7 @@ public class Id<T>
     
     public override int GetHashCode() => Value.GetHashCode();
     
-    public override string ToString() => Value.ToString();
+    public override string ToString() => Value.ToString() ?? string.Empty;
     
     public static implicit operator T(
         Id<T> self

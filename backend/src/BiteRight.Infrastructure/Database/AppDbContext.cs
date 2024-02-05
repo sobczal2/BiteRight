@@ -3,6 +3,7 @@ using BiteRight.Domain.Common;
 using BiteRight.Domain.Countries;
 using BiteRight.Domain.Currencies;
 using BiteRight.Domain.Languages;
+using BiteRight.Domain.Products;
 using BiteRight.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ public class AppDbContext : DbContext
     public DbSet<Translation> CategoryTranslations { get; set; } = default!;
     public DbSet<Currency> Currencies { get; set; } = default!;
     public DbSet<Profile> Profiles { get; set; } = default!;
+    public DbSet<Product> Products { get; set; } = default!;
 
     public AppDbContext(
         DbContextOptions<AppDbContext> options,

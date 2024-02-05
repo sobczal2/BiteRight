@@ -6,8 +6,8 @@ using BiteRight.Domain.Currencies;
 using BiteRight.Domain.Currencies.Events;
 using BiteRight.Domain.Languages;
 using BiteRight.Domain.Languages.Events;
-using BiteRight.Domain.Product;
-using BiteRight.Domain.Product.Events;
+using BiteRight.Domain.Products;
+using BiteRight.Domain.Products.Events;
 using BiteRight.Domain.Users;
 using BiteRight.Domain.Users.Events;
 

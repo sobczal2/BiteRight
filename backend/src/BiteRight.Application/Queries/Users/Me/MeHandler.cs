@@ -1,3 +1,4 @@
+using BiteRight.Application.Common;
 using BiteRight.Application.Common.Exceptions;
 using BiteRight.Application.Dtos.Users;
 using BiteRight.Domain.Abstracts.Common;
@@ -6,30 +7,24 @@ using MediatR;
 
 namespace BiteRight.Application.Queries.Users.Me;
 
-public class MeHandler : IRequestHandler<MeRequest, MeResponse>
+public class MeHandler : QueryHandlerBase<MeRequest, MeResponse>
 {
     private readonly IIdentityProvider _identityProvider;
     private readonly IUserRepository _userRepository;
-    private readonly ICountryRepository _countryRepository;
     private readonly ICurrencyRepository _currencyRepository;
-    private readonly ILanguageRepository _languageRepository;
 
     public MeHandler(
         IIdentityProvider identityProvider,
         IUserRepository userRepository,
-        ICountryRepository countryRepository,
-        ICurrencyRepository currencyRepository,
-        ILanguageRepository languageRepository
+        ICurrencyRepository currencyRepository
     )
     {
         _identityProvider = identityProvider;
         _userRepository = userRepository;
-        _countryRepository = countryRepository;
         _currencyRepository = currencyRepository;
-        _languageRepository = languageRepository;
     }
 
-    public async Task<MeResponse> Handle(
+    protected override async Task<MeResponse> HandleImpl(
         MeRequest request,
         CancellationToken cancellationToken
     )
@@ -42,11 +37,9 @@ public class MeHandler : IRequestHandler<MeRequest, MeResponse>
             throw new NotFoundException();
         }
         
-        var country = await _countryRepository.FindById(user.Profile.CountryId, cancellationToken);
         var currency = await _currencyRepository.FindById(user.Profile.CurrencyId, cancellationToken);
-        var language = await _languageRepository.FindById(user.Profile.LanguageId, cancellationToken);
         
-        if (country == null || currency == null || language == null)
+        if (currency == null)
         {
             throw new InternalErrorException();
         }
@@ -57,16 +50,11 @@ public class MeHandler : IRequestHandler<MeRequest, MeResponse>
             IdentityId = user.IdentityId,
             Username = user.Username,
             Email = user.Email,
-            JoinedAt = user.JoinedAt,
+            JoinedAt = user.JoinedAt.Value,
             Profile = new ProfileDto
             {
-                CountryId = country.Id,
-                CountryName = country.NativeName,
                 CurrencyId = currency.Id,
                 CurrencyName = currency.Name,
-                LanguageId = language.Id,
-                LanguageName = language.NativeName,
-                LanguageCode = language.Code
             }
         };
         

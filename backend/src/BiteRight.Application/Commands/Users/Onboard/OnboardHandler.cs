@@ -6,13 +6,14 @@ using BiteRight.Domain.Users.Exceptions;
 using BiteRight.Infrastructure.Configuration.Countries;
 using BiteRight.Infrastructure.Configuration.Currencies;
 using BiteRight.Infrastructure.Configuration.Languages;
+using BiteRight.Infrastructure.Database;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Localization;
 
 namespace BiteRight.Application.Commands.Users.Onboard;
 
-public class OnboardHandler : HandlerBase<OnboardRequest>
+public class OnboardHandler : CommandHandlerBase<OnboardRequest>
 {
     private readonly IIdentityManager _identityManager;
     private readonly IDomainEventFactory _domainEventFactory;
@@ -27,8 +28,9 @@ public class OnboardHandler : HandlerBase<OnboardRequest>
         IIdentityProvider identityProvider,
         IDateTimeProvider dateTimeProvider,
         IUserRepository userRepository,
-        IStringLocalizer<Resources.Resources.Users.Users> localizer
-    )
+        IStringLocalizer<Resources.Resources.Users.Users> localizer,
+        AppDbContext appAppDbContext
+    ) : base(appAppDbContext)
     {
         _identityManager = identityManager;
         _domainEventFactory = domainEventFactory;
@@ -67,7 +69,7 @@ public class OnboardHandler : HandlerBase<OnboardRequest>
         if (existsByUsername)
         {
             throw ValidationException(
-                nameof(OnboardRequest.Username),
+                _localizer[nameof(Resources.Resources.Users.Users.username)],
                 _localizer[nameof(Resources.Resources.Users.Users.username_in_use)]
             );
         }
@@ -81,8 +83,6 @@ public class OnboardHandler : HandlerBase<OnboardRequest>
         }
         
         var profile = Profile.Create(
-            CountryConfiguration.USA.Id,
-            LanguageConfiguration.English.Id,
             CurrencyConfiguration.USD.Id
         );
 
@@ -106,10 +106,10 @@ public class OnboardHandler : HandlerBase<OnboardRequest>
     {
         return exception switch
         {
-            EmailNotValidException _ => ValidationException(
+            EmailNotValidException => ValidationException(
                 _localizer[nameof(Resources.Resources.Users.Users.email_not_valid)]
             ),
-            UsernameEmptyException _ => ValidationException(
+            UsernameEmptyException => ValidationException(
                 nameof(OnboardRequest.Username),
                 _localizer[nameof(Resources.Resources.Users.Users.username_empty)]
             ),
