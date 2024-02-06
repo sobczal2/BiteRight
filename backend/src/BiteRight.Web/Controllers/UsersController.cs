@@ -32,7 +32,7 @@ public class UsersController : WebController
     }
 
     [HttpGet("me")]
-    [AuthorizeNamePresent]
+    [AuthorizeUserExists]
     [ProducesResponseType(typeof(MeResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Me()
@@ -43,7 +43,7 @@ public class UsersController : WebController
     }
 
     [HttpPut("profile")]
-    [AuthorizeNamePresent]
+    [AuthorizeUserExists]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateProfile(

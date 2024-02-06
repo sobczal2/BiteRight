@@ -14,7 +14,7 @@ public interface ICategoryRepository
     );
     
     Task<Category?> FindById(
-        Guid id,
+        CategoryId id,
         LanguageId languageId,
         CancellationToken cancellationToken = default
     );

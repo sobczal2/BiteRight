@@ -1,7 +1,9 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Application.Dtos.Categories;
 using BiteRight.Application.Dtos.Common;
+using BiteRight.Application.Queries.Categories.GetPhoto;
 using BiteRight.Application.Queries.Categories.Search;
 using BiteRight.Web.Authorization;
 using MediatR;
@@ -18,7 +20,7 @@ public class CategoriesController : WebController
         : base(mediator)
     {
     }
-    
+
     [HttpGet("search")]
     [AuthorizeUserExists]
     [ProducesResponseType(typeof(SearchResponse), StatusCodes.Status200OK)]
@@ -39,5 +41,25 @@ public class CategoriesController : WebController
         );
 
         return Ok(response);
+    }
+
+    [HttpGet("{categoryId:guid}/photo")]
+    [AuthorizeUserExists]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetPhoto(
+        [FromRoute] Guid categoryId,
+        CancellationToken cancellationToken
+    )
+    {
+        var photo = await Mediator.Send(
+            new GetPhotoRequest(categoryId),
+            cancellationToken
+        );
+
+        return new FileStreamResult(photo.PhotoStream, photo.ContentType)
+        {
+            FileDownloadName = photo.FileName
+        };
     }
 }

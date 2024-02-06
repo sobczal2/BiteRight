@@ -44,23 +44,28 @@ namespace BiteRight.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e8c78317-70ac-4051-805e-ece2bb37656f")
+                            Id = new Guid("e8c78317-70ac-4051-805e-ece2bb37656f"),
+                            PhotoId = new Guid("98eb4dc2-11b5-440b-bfc1-742fda8279b7")
                         },
                         new
                         {
-                            Id = new Guid("1fd7ed59-9e34-40ab-a03d-6282b5d9fd86")
+                            Id = new Guid("1fd7ed59-9e34-40ab-a03d-6282b5d9fd86"),
+                            PhotoId = new Guid("5e4d81da-841b-493a-a47b-9f69791e1063")
                         },
                         new
                         {
-                            Id = new Guid("349774c7-3249-4245-a1e2-5b70c5725bbf")
+                            Id = new Guid("349774c7-3249-4245-a1e2-5b70c5725bbf"),
+                            PhotoId = new Guid("2eaee2ac-3ebf-49f2-807b-1b0509f528ba")
                         },
                         new
                         {
-                            Id = new Guid("5e40ba93-d28c-4cf3-9e75-379040a18e52")
+                            Id = new Guid("5e40ba93-d28c-4cf3-9e75-379040a18e52"),
+                            PhotoId = new Guid("4d4c96bc-6990-4b94-982e-d5e7860019a1")
                         },
                         new
                         {
-                            Id = new Guid("17c56168-c9ec-4ffb-a074-495a02ab0359")
+                            Id = new Guid("17c56168-c9ec-4ffb-a074-495a02ab0359"),
+                            PhotoId = new Guid("2bfd1c0c-8882-44fa-b73d-8588ad8ec50b")
                         });
                 });
 
@@ -70,6 +75,11 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
                     b.HasKey("Id")
                         .HasName("pk_photos");
 
@@ -78,7 +88,28 @@ namespace BiteRight.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000000")
+                            Id = new Guid("98eb4dc2-11b5-440b-bfc1-742fda8279b7"),
+                            Name = "dairy.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("5e4d81da-841b-493a-a47b-9f69791e1063"),
+                            Name = "fruit.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("2eaee2ac-3ebf-49f2-807b-1b0509f528ba"),
+                            Name = "vegetable.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("4d4c96bc-6990-4b94-982e-d5e7860019a1"),
+                            Name = "meat.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("2bfd1c0c-8882-44fa-b73d-8588ad8ec50b"),
+                            Name = "fish.webp"
                         });
                 });
 
@@ -413,7 +444,7 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("AddedDateTime")
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("added_date_time");
 
                     b.Property<Guid>("CategoryId")
@@ -486,7 +517,7 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnName("identity_id");
 
                     b.Property<DateTime>("JoinedAt")
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("joined_at");
 
                     b.Property<Guid>("ProfileId")

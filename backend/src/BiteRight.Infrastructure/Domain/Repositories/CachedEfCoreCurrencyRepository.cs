@@ -26,7 +26,7 @@ public class CachedEfCoreCurrencyRepository : ICurrencyRepository
         _codeCache = codeCache;
         _idCache = idCache;
         _cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(
-            cacheOptions.Value.LanguageCacheDuration
+            cacheOptions.Value.CurrencyCacheDuration
         );
     }
 
@@ -35,17 +35,21 @@ public class CachedEfCoreCurrencyRepository : ICurrencyRepository
         CancellationToken cancellationToken = default
     )
     {
-        if (_idCache.TryGetValue(id, out Currency? currencyToFind)) return currencyToFind;
-        currencyToFind = await _appDbContext.Currencies
-            .Where(currency => currency.Id == id)
-            .FirstOrDefaultAsync(cancellationToken);
+        var cacheKey = $"Currency_Id_{id}";
 
-        if (currencyToFind == null) return currencyToFind;
+        if (_idCache.TryGetValue(cacheKey, out Currency? cachedCurrency)) return cachedCurrency;
 
-        _idCache.Set(id, currencyToFind, _cacheEntryOptions);
+        cachedCurrency = await _appDbContext.Currencies
+            .FirstOrDefaultAsync(currency => currency.Id == id, cancellationToken);
 
-        return currencyToFind;
+        if (cachedCurrency != null)
+        {
+            _idCache.Set(cacheKey, cachedCurrency, _cacheEntryOptions);
+        }
+
+        return cachedCurrency;
     }
+
 
     public Task<bool> ExistsById(
         CurrencyId id,

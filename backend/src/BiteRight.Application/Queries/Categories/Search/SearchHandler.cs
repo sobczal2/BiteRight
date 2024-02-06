@@ -43,7 +43,6 @@ public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
             {
                 Id = category.Id,
                 Name = category.GetName(languageId),
-                PhotoUri = category.GetPhotoUri(),
             })
         );
 

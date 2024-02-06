@@ -26,24 +26,10 @@ namespace BiteRight.Infrastructure.Migrations
                 name: "language");
 
             migrationBuilder.EnsureSchema(
-                name: "user");
+                name: "product");
 
-            migrationBuilder.CreateTable(
-                name: "countries",
-                schema: "country",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    native_name = table.Column<string>(type: "text", nullable: false),
-                    english_name = table.Column<string>(type: "text", nullable: false),
-                    alpha2code = table.Column<string>(type: "text", nullable: false),
-                    official_language_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    currency_id = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_countries", x => x.id);
-                });
+            migrationBuilder.EnsureSchema(
+                name: "user");
 
             migrationBuilder.CreateTable(
                 name: "currencies",
@@ -66,7 +52,8 @@ namespace BiteRight.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
+                    native_name = table.Column<string>(type: "text", nullable: false),
+                    english_name = table.Column<string>(type: "text", nullable: false),
                     code = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -79,7 +66,8 @@ namespace BiteRight.Infrastructure.Migrations
                 schema: "category",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -92,30 +80,45 @@ namespace BiteRight.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    country_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    language_id = table.Column<Guid>(type: "uuid", nullable: false),
                     currency_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_profiles", x => x.id);
                     table.ForeignKey(
-                        name: "fk_profiles_countries_country_id",
-                        column: x => x.country_id,
-                        principalSchema: "country",
-                        principalTable: "countries",
+                        name: "fk_profiles_currencies_currency_temp_id2",
+                        column: x => x.currency_id,
+                        principalSchema: "currency",
+                        principalTable: "currencies",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "countries",
+                schema: "country",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    native_name = table.Column<string>(type: "text", nullable: false),
+                    english_name = table.Column<string>(type: "text", nullable: false),
+                    alpha2code = table.Column<string>(type: "text", nullable: false),
+                    official_language_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    currency_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_countries", x => x.id);
                     table.ForeignKey(
-                        name: "fk_profiles_currencies_currency_id",
+                        name: "fk_countries_currencies_currency_temp_id",
                         column: x => x.currency_id,
                         principalSchema: "currency",
                         principalTable: "currencies",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "fk_profiles_languages_language_id",
-                        column: x => x.language_id,
+                        name: "fk_countries_languages_official_language_temp_id1",
+                        column: x => x.official_language_id,
                         principalSchema: "language",
                         principalTable: "languages",
                         principalColumn: "id",
@@ -151,14 +154,14 @@ namespace BiteRight.Infrastructure.Migrations
                     identity_id = table.Column<string>(type: "text", nullable: false),
                     username = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
-                    joined_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    joined_at = table.Column<DateTime>(type: "timestamp", nullable: false),
                     profile_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_users", x => x.id);
                     table.ForeignKey(
-                        name: "fk_users_profile_profile_temp_id",
+                        name: "fk_users_profiles_profile_temp_id",
                         column: x => x.profile_id,
                         principalSchema: "user",
                         principalTable: "profiles",
@@ -195,29 +198,40 @@ namespace BiteRight.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                schema: "category",
-                table: "categories",
-                columns: new[] { "id", "photo_id" },
-                values: new object[,]
+            migrationBuilder.CreateTable(
+                name: "products",
+                schema: "product",
+                columns: table => new
                 {
-                    { new Guid("17c56168-c9ec-4ffb-a074-495a02ab0359"), null },
-                    { new Guid("1fd7ed59-9e34-40ab-a03d-6282b5d9fd86"), null },
-                    { new Guid("349774c7-3249-4245-a1e2-5b70c5725bbf"), null },
-                    { new Guid("5e40ba93-d28c-4cf3-9e75-379040a18e52"), null },
-                    { new Guid("e8c78317-70ac-4051-805e-ece2bb37656f"), null }
-                });
-
-            migrationBuilder.InsertData(
-                schema: "country",
-                table: "countries",
-                columns: new[] { "id", "alpha2code", "currency_id", "english_name", "native_name", "official_language_id" },
-                values: new object[,]
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: false),
+                    price_value = table.Column<decimal>(type: "numeric", nullable: true),
+                    price_currency_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    expiration_date_value = table.Column<DateOnly>(type: "date", nullable: false),
+                    expiration_date_kind = table.Column<int>(type: "integer", nullable: false),
+                    category_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    added_date_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    usage = table.Column<double>(type: "double precision", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
                 {
-                    { new Guid("12e2937f-f04d-4150-a7ae-5ab1176a95d8"), "US", new Guid("e862f33f-a04a-4b4e-a4bb-9542b1db3eeb"), "United States of America", "United States of America", new Guid("454faf9a-644c-445c-89e3-b57203957c1a") },
-                    { new Guid("1352de6e-c0bf-48c6-b703-fae0b254d642"), "DE", new Guid("8b0a0882-3eb5-495a-a646-06d7e0e9fe99"), "Germany", "Deutschland", new Guid("c1dd0a3b-70d3-4aa1-b53e-4c08a03b57c3") },
-                    { new Guid("35d08361-f753-4db9-b88e-11c400d53eb7"), "PL", new Guid("3b56a6de-3b41-4b10-934f-469ca12f4fe3"), "Poland", "Polska", new Guid("24d48691-7325-4703-b69f-8db933a6736d") },
-                    { new Guid("f3e4c5cb-229c-4b2d-90dc-f83cb4a45f75"), "EN", new Guid("53dffab5-429d-4626-b1d9-f568119e069a"), "England", "England", new Guid("454faf9a-644c-445c-89e3-b57203957c1a") }
+                    table.PrimaryKey("pk_products", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_products_categories_category_id",
+                        column: x => x.category_id,
+                        principalSchema: "category",
+                        principalTable: "categories",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_products_users_user_temp_id1",
+                        column: x => x.user_id,
+                        principalSchema: "user",
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -235,19 +249,51 @@ namespace BiteRight.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 schema: "language",
                 table: "languages",
-                columns: new[] { "id", "code", "name" },
+                columns: new[] { "id", "code", "english_name", "native_name" },
                 values: new object[,]
                 {
-                    { new Guid("24d48691-7325-4703-b69f-8db933a6736d"), "pl", "Polski" },
-                    { new Guid("454faf9a-644c-445c-89e3-b57203957c1a"), "en", "English" },
-                    { new Guid("c1dd0a3b-70d3-4aa1-b53e-4c08a03b57c3"), "de", "Deutsch" }
+                    { new Guid("24d48691-7325-4703-b69f-8db933a6736d"), "pl", "Polish", "Polski" },
+                    { new Guid("454faf9a-644c-445c-89e3-b57203957c1a"), "en", "English", "English" },
+                    { new Guid("c1dd0a3b-70d3-4aa1-b53e-4c08a03b57c3"), "de", "German", "Deutsch" }
                 });
 
             migrationBuilder.InsertData(
                 schema: "category",
                 table: "photos",
-                column: "id",
-                value: new Guid("00000000-0000-0000-0000-000000000000"));
+                columns: new[] { "id", "name" },
+                values: new object[,]
+                {
+                    { new Guid("2bfd1c0c-8882-44fa-b73d-8588ad8ec50b"), "fish.webp" },
+                    { new Guid("2eaee2ac-3ebf-49f2-807b-1b0509f528ba"), "vegetable.webp" },
+                    { new Guid("4d4c96bc-6990-4b94-982e-d5e7860019a1"), "meat.webp" },
+                    { new Guid("5e4d81da-841b-493a-a47b-9f69791e1063"), "fruit.webp" },
+                    { new Guid("98eb4dc2-11b5-440b-bfc1-742fda8279b7"), "dairy.webp" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "category",
+                table: "categories",
+                columns: new[] { "id", "photo_id" },
+                values: new object[,]
+                {
+                    { new Guid("17c56168-c9ec-4ffb-a074-495a02ab0359"), new Guid("2bfd1c0c-8882-44fa-b73d-8588ad8ec50b") },
+                    { new Guid("1fd7ed59-9e34-40ab-a03d-6282b5d9fd86"), new Guid("5e4d81da-841b-493a-a47b-9f69791e1063") },
+                    { new Guid("349774c7-3249-4245-a1e2-5b70c5725bbf"), new Guid("2eaee2ac-3ebf-49f2-807b-1b0509f528ba") },
+                    { new Guid("5e40ba93-d28c-4cf3-9e75-379040a18e52"), new Guid("4d4c96bc-6990-4b94-982e-d5e7860019a1") },
+                    { new Guid("e8c78317-70ac-4051-805e-ece2bb37656f"), new Guid("98eb4dc2-11b5-440b-bfc1-742fda8279b7") }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "country",
+                table: "countries",
+                columns: new[] { "id", "alpha2code", "currency_id", "english_name", "native_name", "official_language_id" },
+                values: new object[,]
+                {
+                    { new Guid("12e2937f-f04d-4150-a7ae-5ab1176a95d8"), "US", new Guid("e862f33f-a04a-4b4e-a4bb-9542b1db3eeb"), "United States of America", "United States of America", new Guid("454faf9a-644c-445c-89e3-b57203957c1a") },
+                    { new Guid("1352de6e-c0bf-48c6-b703-fae0b254d642"), "DE", new Guid("8b0a0882-3eb5-495a-a646-06d7e0e9fe99"), "Germany", "Deutschland", new Guid("c1dd0a3b-70d3-4aa1-b53e-4c08a03b57c3") },
+                    { new Guid("35d08361-f753-4db9-b88e-11c400d53eb7"), "PL", new Guid("3b56a6de-3b41-4b10-934f-469ca12f4fe3"), "Poland", "Polska", new Guid("24d48691-7325-4703-b69f-8db933a6736d") },
+                    { new Guid("f3e4c5cb-229c-4b2d-90dc-f83cb4a45f75"), "EN", new Guid("53dffab5-429d-4626-b1d9-f568119e069a"), "England", "England", new Guid("454faf9a-644c-445c-89e3-b57203957c1a") }
+                });
 
             migrationBuilder.InsertData(
                 schema: "category",
@@ -292,22 +338,34 @@ namespace BiteRight.Infrastructure.Migrations
                 column: "language_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_profiles_country_id",
-                schema: "user",
-                table: "profiles",
-                column: "country_id");
+                name: "ix_countries_currency_id",
+                schema: "country",
+                table: "countries",
+                column: "currency_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_countries_official_language_id",
+                schema: "country",
+                table: "countries",
+                column: "official_language_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_products_category_id",
+                schema: "product",
+                table: "products",
+                column: "category_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_products_user_id",
+                schema: "product",
+                table: "products",
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_profiles_currency_id",
                 schema: "user",
                 table: "profiles",
                 column: "currency_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_profiles_language_id",
-                schema: "user",
-                table: "profiles",
-                column: "language_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_users_identity_id",
@@ -332,15 +390,23 @@ namespace BiteRight.Infrastructure.Migrations
                 schema: "category");
 
             migrationBuilder.DropTable(
-                name: "users",
-                schema: "user");
+                name: "countries",
+                schema: "country");
+
+            migrationBuilder.DropTable(
+                name: "products",
+                schema: "product");
+
+            migrationBuilder.DropTable(
+                name: "languages",
+                schema: "language");
 
             migrationBuilder.DropTable(
                 name: "categories",
                 schema: "category");
 
             migrationBuilder.DropTable(
-                name: "profiles",
+                name: "users",
                 schema: "user");
 
             migrationBuilder.DropTable(
@@ -348,16 +414,12 @@ namespace BiteRight.Infrastructure.Migrations
                 schema: "category");
 
             migrationBuilder.DropTable(
-                name: "countries",
-                schema: "country");
+                name: "profiles",
+                schema: "user");
 
             migrationBuilder.DropTable(
                 name: "currencies",
                 schema: "currency");
-
-            migrationBuilder.DropTable(
-                name: "languages",
-                schema: "language");
         }
     }
 }

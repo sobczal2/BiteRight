@@ -5,14 +5,16 @@ using BiteRight.Infrastructure.Auth0Management;
 using BiteRight.Infrastructure.Common;
 using BiteRight.Infrastructure.Database;
 using BiteRight.Infrastructure.Domain.Repositories;
+using BiteRight.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using IFileProvider = BiteRight.Domain.Abstracts.Common.IFileProvider;
 
 namespace BiteRight.Web.Registration;
 
-public static class InfrastructureRegistrations 
+public static class InfrastructureRegistrations
 {
     public static void AddBiteRightInfrastructure(
         IServiceCollection services,
@@ -24,8 +26,9 @@ public static class InfrastructureRegistrations
         AddCommon(services);
         AddAuth0Management(services);
         AddRepositories(services);
+        AddFileProvider(services, configuration);
     }
-    
+
     private static void AddDatabase(
         IServiceCollection services,
         ConfigurationManager configuration,
@@ -38,12 +41,12 @@ public static class InfrastructureRegistrations
             {
                 opt.EnableSensitiveDataLogging();
             }
-            
+
             opt.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             opt.UseSnakeCaseNamingConvention();
         });
     }
-    
+
     private static void AddCommon(
         IServiceCollection services
     )
@@ -52,23 +55,33 @@ public static class InfrastructureRegistrations
         services.AddSingleton<IDomainEventFactory, MediatorDomainEventFactory>();
         services.AddSingleton<IDateTimeProvider, SystemDateTimeProvider>();
     }
-    
+
     private static void AddAuth0Management(
         IServiceCollection services
     )
     {
         services.AddSingleton<IIdentityManager, Auth0IdentityManager>();
     }
-    
+
     private static void AddRepositories(
         IServiceCollection services
     )
     {
-        services.AddScoped<IUserRepository, EfCoreUserRepository>();
+        services.AddScoped<IUserRepository, CachedEfCoreUserRepository>();
         services.AddScoped<ILanguageRepository, CachedEfCoreLanguageRepository>();
-        services.AddScoped<ICategoryRepository, EfCoreCategoryRepository>();
+        services.AddScoped<ICategoryRepository, CachedEfCoreCategoryRepository>();
         services.AddScoped<ICurrencyRepository, CachedEfCoreCurrencyRepository>();
         services.AddScoped<ICountryRepository, CachedEfCoreCountryRepository>();
         services.AddScoped<IProductRepository, EfCoreProductRepository>();
+    }
+
+    private static void AddFileProvider(
+        IServiceCollection services,
+        ConfigurationManager configuration
+    )
+    {
+        services.AddSingleton<IFileProvider, FileSystemFileProvider>();
+        services.Configure<FileSystemFileProviderOptions>(
+            configuration.GetSection(FileSystemFileProviderOptions.SectionName));
     }
 }
