@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BiteRight.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240205200659_Fixes_In_Product")]
-    partial class Fixes_In_Product
+    [Migration("20240206005321_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,23 +47,28 @@ namespace BiteRight.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e8c78317-70ac-4051-805e-ece2bb37656f")
+                            Id = new Guid("e8c78317-70ac-4051-805e-ece2bb37656f"),
+                            PhotoId = new Guid("98eb4dc2-11b5-440b-bfc1-742fda8279b7")
                         },
                         new
                         {
-                            Id = new Guid("1fd7ed59-9e34-40ab-a03d-6282b5d9fd86")
+                            Id = new Guid("1fd7ed59-9e34-40ab-a03d-6282b5d9fd86"),
+                            PhotoId = new Guid("5e4d81da-841b-493a-a47b-9f69791e1063")
                         },
                         new
                         {
-                            Id = new Guid("349774c7-3249-4245-a1e2-5b70c5725bbf")
+                            Id = new Guid("349774c7-3249-4245-a1e2-5b70c5725bbf"),
+                            PhotoId = new Guid("2eaee2ac-3ebf-49f2-807b-1b0509f528ba")
                         },
                         new
                         {
-                            Id = new Guid("5e40ba93-d28c-4cf3-9e75-379040a18e52")
+                            Id = new Guid("5e40ba93-d28c-4cf3-9e75-379040a18e52"),
+                            PhotoId = new Guid("4d4c96bc-6990-4b94-982e-d5e7860019a1")
                         },
                         new
                         {
-                            Id = new Guid("17c56168-c9ec-4ffb-a074-495a02ab0359")
+                            Id = new Guid("17c56168-c9ec-4ffb-a074-495a02ab0359"),
+                            PhotoId = new Guid("2bfd1c0c-8882-44fa-b73d-8588ad8ec50b")
                         });
                 });
 
@@ -73,6 +78,11 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
                     b.HasKey("Id")
                         .HasName("pk_photos");
 
@@ -81,7 +91,28 @@ namespace BiteRight.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000000")
+                            Id = new Guid("98eb4dc2-11b5-440b-bfc1-742fda8279b7"),
+                            Name = "dairy.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("5e4d81da-841b-493a-a47b-9f69791e1063"),
+                            Name = "fruit.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("2eaee2ac-3ebf-49f2-807b-1b0509f528ba"),
+                            Name = "vegetable.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("4d4c96bc-6990-4b94-982e-d5e7860019a1"),
+                            Name = "meat.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("2bfd1c0c-8882-44fa-b73d-8588ad8ec50b"),
+                            Name = "fish.webp"
                         });
                 });
 
@@ -489,7 +520,7 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnName("identity_id");
 
                     b.Property<DateTime>("JoinedAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp")
                         .HasColumnName("joined_at");
 
                     b.Property<Guid>("ProfileId")
@@ -592,22 +623,15 @@ namespace BiteRight.Infrastructure.Migrations
 
                             b1.Property<int>("Kind")
                                 .HasColumnType("integer")
-                                .HasColumnName("ExpirationDate_Kind");
+                                .HasColumnName("expiration_date_kind");
 
                             b1.Property<DateOnly>("Value")
                                 .HasColumnType("date")
-                                .HasColumnName("ExpirationDate_Value");
+                                .HasColumnName("expiration_date_value");
 
                             b1.HasKey("ProductId");
 
-                            b1.ToTable("products", "product", t =>
-                                {
-                                    t.Property("Kind")
-                                        .HasColumnName("expiration_date_Kind");
-
-                                    t.Property("Value")
-                                        .HasColumnName("expiration_date_Value");
-                                });
+                            b1.ToTable("products", "product");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductId")
@@ -622,22 +646,15 @@ namespace BiteRight.Infrastructure.Migrations
 
                             b1.Property<Guid>("CurrencyId")
                                 .HasColumnType("uuid")
-                                .HasColumnName("Price_CurrencyId");
+                                .HasColumnName("price_currency_id");
 
                             b1.Property<decimal>("Value")
                                 .HasColumnType("numeric")
-                                .HasColumnName("Price_Value");
+                                .HasColumnName("price_value");
 
                             b1.HasKey("ProductId");
 
-                            b1.ToTable("products", "product", t =>
-                                {
-                                    t.Property("CurrencyId")
-                                        .HasColumnName("price_CurrencyId");
-
-                                    t.Property("Value")
-                                        .HasColumnName("price_Value");
-                                });
+                            b1.ToTable("products", "product");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductId")

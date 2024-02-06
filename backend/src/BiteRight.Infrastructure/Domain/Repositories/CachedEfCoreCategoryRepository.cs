@@ -2,19 +2,30 @@ using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Categories;
 using BiteRight.Domain.Languages;
 using BiteRight.Infrastructure.Database;
+using BiteRight.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 
 namespace BiteRight.Infrastructure.Domain.Repositories;
 
-public class EfCoreCategoryRepository : ICategoryRepository
+public class CachedEfCoreCategoryRepository : ICategoryRepository
 {
     private readonly AppDbContext _appDbContext;
+    private readonly IMemoryCache _cache;
+    private readonly MemoryCacheEntryOptions _cacheEntryOptions;
 
-    public EfCoreCategoryRepository(
-        AppDbContext appDbContext
+    public CachedEfCoreCategoryRepository(
+        AppDbContext appDbContext,
+        IMemoryCache cache,
+        IOptions<CacheOptions> cacheOptions
     )
     {
         _appDbContext = appDbContext;
+        _cache = cache;
+        _cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(
+            cacheOptions.Value.CategoryCacheDuration
+        );
     }
 
     public async Task<(IEnumerable<Category> Categories, int TotalCount)> Search(
@@ -54,14 +65,26 @@ public class EfCoreCategoryRepository : ICategoryRepository
     }
 
     public async Task<Category?> FindById(
-        Guid id,
+        CategoryId id,
         LanguageId languageId,
         CancellationToken cancellationToken = default
     )
     {
-        return await _appDbContext.Categories
-            .Include(category =>
-                category.Translations.Where(translation => Equals(translation.LanguageId, languageId)))
+        var cacheKey = $"Category_Id_{id}_Language_{languageId}";
+
+        if (_cache.TryGetValue(cacheKey, out Category? cachedCategory)) return cachedCategory;
+
+        cachedCategory = await _appDbContext.Categories
+            .Include(category => category.Translations.Where(translation => translation.LanguageId == languageId))
+            .Include(category => category.Photo)
             .FirstOrDefaultAsync(category => category.Id == id, cancellationToken);
+
+        if (cachedCategory != null)
+        {
+            _cache.Set(cacheKey, cachedCategory, _cacheEntryOptions);
+        }
+
+        return cachedCategory;
     }
+
 }

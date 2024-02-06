@@ -20,24 +20,24 @@ public class Category : AggregateRoot<CategoryId>
 
     private Category(
         CategoryId id,
-        Photo? photo
+        PhotoId? photoId
     )
         : base(id)
     {
-        Photo = photo;
-        PhotoId = photo?.Id;
+        PhotoId = photoId;
+        Photo = default!;
         Translations = new List<Translation>();
     }
 
     public static Category Create(
-        Photo? photo,
+        PhotoId? photoId,
         IDomainEventFactory? domainEventFactory = null,
         CategoryId? id = null
     )
     {
         var category = new Category(
             id ?? new CategoryId(),
-            photo
+            photoId
         );
 
         if (domainEventFactory is not null)
@@ -51,9 +51,10 @@ public class Category : AggregateRoot<CategoryId>
 
         return category;
     }
-    public Uri GetPhotoUri()
+
+    public string GetPhotoName()
     {
-        return Photo?.GetUri() ?? Photo.Default.GetUri();
+        return Photo?.Name ?? Photo.DefaultName;
     }
 
     public string GetName(

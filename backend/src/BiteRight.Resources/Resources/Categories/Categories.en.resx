@@ -27,4 +27,7 @@
     <data name="category_not_found" xml:space="preserve">
         <value>Category not found</value>
     </data>
+    <data name="category_id_empty" xml:space="preserve">
+        <value>Category id can't be empty</value>
+    </data>
 </root>

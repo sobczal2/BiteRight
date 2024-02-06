@@ -35,34 +35,42 @@ public class CachedEfCoreLanguageRepository : ILanguageRepository
         CancellationToken cancellationToken = default
     )
     {
-        if (_codeCache.TryGetValue(code, out Language? languageToFind)) return languageToFind;
-        languageToFind = await _appDbContext.Languages
-            .Where(language => language.Code == code)
-            .FirstOrDefaultAsync(cancellationToken);
+        var cacheKey = $"Language_Code_{code}";
 
-        if (languageToFind == null) return languageToFind;
+        if (_codeCache.TryGetValue(cacheKey, out Language? cachedLanguage)) return cachedLanguage;
 
-        _codeCache.Set(code, languageToFind, _cacheEntryOptions);
+        cachedLanguage = await _appDbContext.Languages
+            .FirstOrDefaultAsync(language => language.Code == code, cancellationToken);
 
-        return languageToFind;
+        if (cachedLanguage != null)
+        {
+            _codeCache.Set(cacheKey, cachedLanguage, _cacheEntryOptions);
+        }
+
+        return cachedLanguage;
     }
+
 
     public async Task<Language?> FindById(
         LanguageId id,
         CancellationToken cancellationToken = default
     )
     {
-        if (_idCache.TryGetValue(id, out Language? languageToFind)) return languageToFind;
-        languageToFind = await _appDbContext.Languages
-            .Where(language => language.Id == id)
-            .FirstOrDefaultAsync(cancellationToken);
+        var cacheKey = $"Language_Id_{id}";
 
-        if (languageToFind == null) return languageToFind;
+        if (_idCache.TryGetValue(cacheKey, out Language? cachedLanguage)) return cachedLanguage;
 
-        _idCache.Set(id, languageToFind, _cacheEntryOptions);
+        cachedLanguage = await _appDbContext.Languages
+            .FirstOrDefaultAsync(language => language.Id == id, cancellationToken);
 
-        return languageToFind;
+        if (cachedLanguage != null)
+        {
+            _idCache.Set(cacheKey, cachedLanguage, _cacheEntryOptions);
+        }
+
+        return cachedLanguage;
     }
+
 
     public Task<bool> ExistsById(
         LanguageId id,

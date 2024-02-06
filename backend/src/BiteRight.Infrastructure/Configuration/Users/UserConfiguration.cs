@@ -45,8 +45,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasConversion(
                 joinedAt => joinedAt.Value,
                 value => value.ToUniversalTime()
-            )
-            .HasColumnType("timestamp");
+            );
 
         builder.Property(user => user.ProfileId)
             .HasConversion(

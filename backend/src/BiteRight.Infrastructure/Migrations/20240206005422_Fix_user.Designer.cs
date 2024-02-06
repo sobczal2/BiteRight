@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BiteRight.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240204072012_Remove_Language_And_Country_From_Profile")]
-    partial class Remove_Language_And_Country_From_Profile
+    [Migration("20240206005422_Fix_user")]
+    partial class Fix_user
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,23 +47,28 @@ namespace BiteRight.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e8c78317-70ac-4051-805e-ece2bb37656f")
+                            Id = new Guid("e8c78317-70ac-4051-805e-ece2bb37656f"),
+                            PhotoId = new Guid("98eb4dc2-11b5-440b-bfc1-742fda8279b7")
                         },
                         new
                         {
-                            Id = new Guid("1fd7ed59-9e34-40ab-a03d-6282b5d9fd86")
+                            Id = new Guid("1fd7ed59-9e34-40ab-a03d-6282b5d9fd86"),
+                            PhotoId = new Guid("5e4d81da-841b-493a-a47b-9f69791e1063")
                         },
                         new
                         {
-                            Id = new Guid("349774c7-3249-4245-a1e2-5b70c5725bbf")
+                            Id = new Guid("349774c7-3249-4245-a1e2-5b70c5725bbf"),
+                            PhotoId = new Guid("2eaee2ac-3ebf-49f2-807b-1b0509f528ba")
                         },
                         new
                         {
-                            Id = new Guid("5e40ba93-d28c-4cf3-9e75-379040a18e52")
+                            Id = new Guid("5e40ba93-d28c-4cf3-9e75-379040a18e52"),
+                            PhotoId = new Guid("4d4c96bc-6990-4b94-982e-d5e7860019a1")
                         },
                         new
                         {
-                            Id = new Guid("17c56168-c9ec-4ffb-a074-495a02ab0359")
+                            Id = new Guid("17c56168-c9ec-4ffb-a074-495a02ab0359"),
+                            PhotoId = new Guid("2bfd1c0c-8882-44fa-b73d-8588ad8ec50b")
                         });
                 });
 
@@ -73,6 +78,11 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
                     b.HasKey("Id")
                         .HasName("pk_photos");
 
@@ -81,7 +91,28 @@ namespace BiteRight.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000000")
+                            Id = new Guid("98eb4dc2-11b5-440b-bfc1-742fda8279b7"),
+                            Name = "dairy.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("5e4d81da-841b-493a-a47b-9f69791e1063"),
+                            Name = "fruit.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("2eaee2ac-3ebf-49f2-807b-1b0509f528ba"),
+                            Name = "vegetable.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("4d4c96bc-6990-4b94-982e-d5e7860019a1"),
+                            Name = "meat.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("2bfd1c0c-8882-44fa-b73d-8588ad8ec50b"),
+                            Name = "fish.webp"
                         });
                 });
 
@@ -255,6 +286,12 @@ namespace BiteRight.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_countries");
 
+                    b.HasIndex("CurrencyId")
+                        .HasDatabaseName("ix_countries_currency_id");
+
+                    b.HasIndex("OfficialLanguageId")
+                        .HasDatabaseName("ix_countries_official_language_id");
+
                     b.ToTable("countries", "country");
 
                     b.HasData(
@@ -403,6 +440,50 @@ namespace BiteRight.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("BiteRight.Domain.Products.Product", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("AddedDateTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("added_date_time");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("category_id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<double>("Usage")
+                        .HasColumnType("double precision")
+                        .HasColumnName("usage");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_products");
+
+                    b.HasIndex("CategoryId")
+                        .HasDatabaseName("ix_products_category_id");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_products_user_id");
+
+                    b.ToTable("products", "product");
+                });
+
             modelBuilder.Entity("BiteRight.Domain.Users.Profile", b =>
                 {
                     b.Property<Guid>("Id")
@@ -497,14 +578,109 @@ namespace BiteRight.Infrastructure.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("BiteRight.Domain.Users.Profile", b =>
+            modelBuilder.Entity("BiteRight.Domain.Countries.Country", b =>
                 {
-                    b.HasOne("BiteRight.Domain.Currencies.Currency", null)
+                    b.HasOne("BiteRight.Domain.Currencies.Currency", "Currency")
                         .WithMany()
                         .HasForeignKey("CurrencyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_profiles_currencies_currency_id");
+                        .HasConstraintName("fk_countries_currencies_currency_temp_id");
+
+                    b.HasOne("BiteRight.Domain.Languages.Language", "OfficialLanguage")
+                        .WithMany()
+                        .HasForeignKey("OfficialLanguageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_countries_languages_official_language_temp_id1");
+
+                    b.Navigation("Currency");
+
+                    b.Navigation("OfficialLanguage");
+                });
+
+            modelBuilder.Entity("BiteRight.Domain.Products.Product", b =>
+                {
+                    b.HasOne("BiteRight.Domain.Categories.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_products_categories_category_id");
+
+                    b.HasOne("BiteRight.Domain.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_products_users_user_temp_id1");
+
+                    b.OwnsOne("BiteRight.Domain.Products.ExpirationDate", "ExpirationDate", b1 =>
+                        {
+                            b1.Property<Guid>("ProductId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("id");
+
+                            b1.Property<int>("Kind")
+                                .HasColumnType("integer")
+                                .HasColumnName("expiration_date_kind");
+
+                            b1.Property<DateOnly>("Value")
+                                .HasColumnType("date")
+                                .HasColumnName("expiration_date_value");
+
+                            b1.HasKey("ProductId");
+
+                            b1.ToTable("products", "product");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId")
+                                .HasConstraintName("fk_products_products_id");
+                        });
+
+                    b.OwnsOne("BiteRight.Domain.Products.Price", "Price", b1 =>
+                        {
+                            b1.Property<Guid>("ProductId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("id");
+
+                            b1.Property<Guid>("CurrencyId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("price_currency_id");
+
+                            b1.Property<decimal>("Value")
+                                .HasColumnType("numeric")
+                                .HasColumnName("price_value");
+
+                            b1.HasKey("ProductId");
+
+                            b1.ToTable("products", "product");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId")
+                                .HasConstraintName("fk_products_products_id");
+                        });
+
+                    b.Navigation("Category");
+
+                    b.Navigation("ExpirationDate")
+                        .IsRequired();
+
+                    b.Navigation("Price");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BiteRight.Domain.Users.Profile", b =>
+                {
+                    b.HasOne("BiteRight.Domain.Currencies.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_profiles_currencies_currency_temp_id2");
+
+                    b.Navigation("Currency");
                 });
 
             modelBuilder.Entity("BiteRight.Domain.Users.User", b =>
