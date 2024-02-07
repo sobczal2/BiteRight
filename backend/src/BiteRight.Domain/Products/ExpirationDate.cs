@@ -1,3 +1,4 @@
+using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Products.Exceptions;
 
@@ -7,7 +8,7 @@ public class ExpirationDate : ValueObject
 {
     public DateOnly Value { get; }
     public ExpirationDateKind Kind { get; }
-    
+
     // EF Core
     private ExpirationDate()
     {
@@ -53,18 +54,14 @@ public class ExpirationDate : ValueObject
         return Create(value, ExpirationDateKind.UseBy);
     }
 
-    public static ExpirationDate CreateUnknown(
-        DateOnly? value = null
-    )
+    public static ExpirationDate CreateUnknown()
     {
-        if (value == null)
-            value = DateOnly.MinValue;
-        return Create(value.Value, ExpirationDateKind.Unknown);
+        return Create(DateOnly.MaxValue, ExpirationDateKind.Unknown);
     }
 
     public static ExpirationDate CreateInfinite()
     {
-        return Create(DateOnly.MinValue, ExpirationDateKind.Infinite);
+        return Create(DateOnly.MaxValue, ExpirationDateKind.Infinite);
     }
 
     public static ExpirationDate CreateSkipValidation(
@@ -80,13 +77,11 @@ public class ExpirationDate : ValueObject
         ExpirationDateKind kind
     )
     {
-        if (kind == ExpirationDateKind.Infinite && value != DateOnly.MinValue)
+        if (kind == ExpirationDateKind.Infinite && value != DateOnly.MaxValue)
         {
             throw new ExpirationDateInfiniteValueException();
         }
     }
-
-    public bool IsInfinite() => Value == DateOnly.MaxValue;
 
     public enum ExpirationDateKind
     {
@@ -94,5 +89,15 @@ public class ExpirationDate : ValueObject
         Infinite = 1,
         BestBefore = 2,
         UseBy = 3
+    }
+
+    public DateOnly? GetDateIfKnown()
+    {
+        return Kind switch
+        {
+            ExpirationDateKind.Unknown => null,
+            ExpirationDateKind.Infinite => null,
+            _ => Value
+        };
     }
 }

@@ -30,5 +30,11 @@ public class ProfileConfiguration : IEntityTypeConfiguration<Profile>
             .WithMany()
             .HasForeignKey(profile => profile.CurrencyId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Property(profile => profile.TimeZone)
+            .HasConversion(
+                timeZone => timeZone.Id,
+                value => TimeZoneInfo.FindSystemTimeZoneById(value)
+            );
     }
 }

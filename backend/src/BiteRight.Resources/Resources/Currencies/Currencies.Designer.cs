@@ -56,11 +56,5 @@ namespace BiteRight.Resources.Resources.Currencies {
                 return ResourceManager.GetString("currency_empty", resourceCulture);
             }
         }
-        
-        public static string expiration_date_empty {
-            get {
-                return ResourceManager.GetString("expiration_date_empty", resourceCulture);
-            }
-        }
     }
 }

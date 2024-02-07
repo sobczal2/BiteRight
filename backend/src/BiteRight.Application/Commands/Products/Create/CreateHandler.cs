@@ -79,7 +79,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
             ExpirationDateKindDto.Infinite => ExpirationDate.CreateInfinite(),
             ExpirationDateKindDto.BestBefore => ExpirationDate.CreateBestBefore(request.ExpirationDate!.Value),
             ExpirationDateKindDto.UseBy => ExpirationDate.CreateUseBy(request.ExpirationDate!.Value),
-            ExpirationDateKindDto.Unknown => ExpirationDate.CreateUnknown(request.ExpirationDate),
+            ExpirationDateKindDto.Unknown => ExpirationDate.CreateUnknown(),
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -91,20 +91,15 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                                nameof(Resources.Resources.Categories.Categories.category_not_found)]
                        );
 
-        var addedDateTime = AddedDateTime.Create(_dateTimeProvider.UtcNow);
-
-        var usage = Usage.CreateFull();
-
         var product = Product.Create(
             name,
             description,
             price,
             expirationDate,
             category.Id,
-            addedDateTime,
-            usage,
             user.Id,
-            _domainEventFactory
+            _domainEventFactory,
+            _dateTimeProvider
         );
 
         _productRepository.Add(product);

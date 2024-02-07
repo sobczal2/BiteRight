@@ -104,5 +104,11 @@ namespace BiteRight.Resources.Resources.Products {
                 return ResourceManager.GetString("expiration_date_kind_invalid", resourceCulture);
             }
         }
+        
+        public static string sorting_strategy_invalid {
+            get {
+                return ResourceManager.GetString("sorting_strategy_invalid", resourceCulture);
+            }
+        }
     }
 }

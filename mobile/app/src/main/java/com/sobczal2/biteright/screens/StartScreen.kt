@@ -77,7 +77,7 @@ fun StartScreenContent(
                 singleLine = true,
                 imeAction = ImeAction.Done
             )
-            OutlinedButton(
+            Button(
                 onClick = onNextClick,
             ) {
                 if (state.loading) {

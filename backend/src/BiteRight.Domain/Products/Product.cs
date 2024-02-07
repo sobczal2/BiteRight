@@ -17,6 +17,7 @@ public class Product : AggregateRoot<ProductId>
     public Usage Usage { get; }
     public UserId UserId { get; }
     public virtual User User { get; }
+    public Disposed Disposed { get; private set; }
 
     // EF Core
     private Product()
@@ -31,6 +32,7 @@ public class Product : AggregateRoot<ProductId>
         Usage = default!;
         UserId = default!;
         User = default!;
+        Disposed = default!;
     }
 
     private Product(
@@ -42,6 +44,7 @@ public class Product : AggregateRoot<ProductId>
         CategoryId categoryId,
         AddedDateTime addedDateTime,
         Usage usage,
+        Disposed disposed,
         UserId userId
     )
         : base(id)
@@ -54,6 +57,7 @@ public class Product : AggregateRoot<ProductId>
         Category = default!;
         AddedDateTime = addedDateTime;
         Usage = usage;
+        Disposed = disposed;
         UserId = userId;
         User = default!;
     }
@@ -64,10 +68,9 @@ public class Product : AggregateRoot<ProductId>
         Price? price,
         ExpirationDate expirationDate,
         CategoryId categoryId,
-        AddedDateTime addedDateTime,
-        Usage usage,
         UserId userId,
         IDomainEventFactory domainEventFactory,
+        IDateTimeProvider dateTimeProvider,
         ProductId? id = null
     )
     {
@@ -78,8 +81,9 @@ public class Product : AggregateRoot<ProductId>
             price,
             expirationDate,
             categoryId,
-            addedDateTime,
-            usage,
+            AddedDateTime.Create(dateTimeProvider.UtcNow),
+            Usage.CreateFull(),
+            Disposed.CreateNotDisposed(),
             userId
         );
 

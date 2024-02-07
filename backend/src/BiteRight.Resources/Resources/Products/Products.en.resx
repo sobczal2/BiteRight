@@ -41,4 +41,7 @@
     <data name="expiration_date_kind_invalid" xml:space="preserve">
         <value>Expiration date kind has invalid value</value>
     </data>
+    <data name="sorting_strategy_invalid" xml:space="preserve">
+        <value>Sorting strategy has invalid value</value>
+    </data>
 </root>

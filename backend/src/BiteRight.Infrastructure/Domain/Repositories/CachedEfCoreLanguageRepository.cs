@@ -11,23 +11,34 @@ namespace BiteRight.Infrastructure.Domain.Repositories;
 public class CachedEfCoreLanguageRepository : ILanguageRepository
 {
     private readonly AppDbContext _appDbContext;
-    private readonly IMemoryCache _codeCache;
-    private readonly IMemoryCache _idCache;
+    private readonly IMemoryCache _cache;
     private readonly MemoryCacheEntryOptions _cacheEntryOptions;
 
     public CachedEfCoreLanguageRepository(
         AppDbContext appDbContext,
-        IMemoryCache codeCache,
-        IMemoryCache idCache,
+        IMemoryCache cache,
         IOptions<CacheOptions> cacheOptions
     )
     {
         _appDbContext = appDbContext;
-        _codeCache = codeCache;
-        _idCache = idCache;
+        _cache = cache;
         _cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(
             cacheOptions.Value.LanguageCacheDuration
         );
+    }
+    
+    private static string GetCacheKey(
+        LanguageId id
+    )
+    {
+        return $"Language_Id_{id}";
+    }
+    
+    private static string GetCacheKey(
+        Code code
+    )
+    {
+        return $"Language_Code_{code}";
     }
 
     public async Task<Language?> FindByCode(
@@ -35,19 +46,16 @@ public class CachedEfCoreLanguageRepository : ILanguageRepository
         CancellationToken cancellationToken = default
     )
     {
-        var cacheKey = $"Language_Code_{code}";
+        return await _cache.GetOrCreateAsync(
+            GetCacheKey(code),
+            async entry =>
+            {
+                entry.SetOptions(_cacheEntryOptions);
 
-        if (_codeCache.TryGetValue(cacheKey, out Language? cachedLanguage)) return cachedLanguage;
-
-        cachedLanguage = await _appDbContext.Languages
-            .FirstOrDefaultAsync(language => language.Code == code, cancellationToken);
-
-        if (cachedLanguage != null)
-        {
-            _codeCache.Set(cacheKey, cachedLanguage, _cacheEntryOptions);
-        }
-
-        return cachedLanguage;
+                return await _appDbContext.Languages
+                    .FirstOrDefaultAsync(language => language.Code == code, cancellationToken);
+            }
+        );
     }
 
 
@@ -56,20 +64,18 @@ public class CachedEfCoreLanguageRepository : ILanguageRepository
         CancellationToken cancellationToken = default
     )
     {
-        var cacheKey = $"Language_Id_{id}";
+        return await _cache.GetOrCreateAsync(
+            GetCacheKey(id),
+            async entry =>
+            {
+                entry.SetOptions(_cacheEntryOptions);
 
-        if (_idCache.TryGetValue(cacheKey, out Language? cachedLanguage)) return cachedLanguage;
-
-        cachedLanguage = await _appDbContext.Languages
-            .FirstOrDefaultAsync(language => language.Id == id, cancellationToken);
-
-        if (cachedLanguage != null)
-        {
-            _idCache.Set(cacheKey, cachedLanguage, _cacheEntryOptions);
-        }
-
-        return cachedLanguage;
+                return await _appDbContext.Languages
+                    .FirstOrDefaultAsync(language => language.Id == id, cancellationToken);
+            }
+        );
     }
+
 
 
     public Task<bool> ExistsById(

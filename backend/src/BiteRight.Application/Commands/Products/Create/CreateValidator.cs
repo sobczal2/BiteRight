@@ -34,7 +34,13 @@ public class CreateValidator : AbstractValidator<CreateRequest>
             .NotNull()
             .When(x => x.ExpirationDateKind != ExpirationDateKindDto.Infinite &&
                        x.ExpirationDateKind != ExpirationDateKindDto.Unknown)
-            .WithMessage(_ => currenciesLocalizer[nameof(Resources.Resources.Currencies.Currencies.expiration_date_empty)]);
+            .WithMessage(_ => productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_empty)]);
+        
+        RuleFor(x => x.ExpirationDate)
+            .Null()
+            .When(x => x.ExpirationDateKind == ExpirationDateKindDto.Infinite ||
+                       x.ExpirationDateKind == ExpirationDateKindDto.Unknown)
+            .WithMessage(_ => productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_not_null)]);
         
         RuleFor(x => x.ExpirationDateKind)
             .IsInEnum()

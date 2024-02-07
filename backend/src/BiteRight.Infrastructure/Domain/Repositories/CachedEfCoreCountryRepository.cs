@@ -11,20 +11,27 @@ namespace BiteRight.Infrastructure.Domain.Repositories;
 public class CachedEfCoreCountryRepository : ICountryRepository
 {
     private readonly AppDbContext _appDbContext;
-    private readonly IMemoryCache _idCache;
+    private readonly IMemoryCache _cache;
     private readonly MemoryCacheEntryOptions _cacheEntryOptions;
 
     public CachedEfCoreCountryRepository(
         AppDbContext appDbContext,
-        IMemoryCache idCache,
+        IMemoryCache cache,
         IOptions<CacheOptions> cacheOptions
     )
     {
         _appDbContext = appDbContext;
-        _idCache = idCache;
+        _cache = cache;
         _cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(
             cacheOptions.Value.CountryCacheDuration
         );
+    }
+    
+    private static string GetCacheKey(
+        CountryId id
+    )
+    {
+        return $"Country_Id_{id}";
     }
 
     public async Task<Country?> FindById(
@@ -32,37 +39,32 @@ public class CachedEfCoreCountryRepository : ICountryRepository
         CancellationToken cancellationToken = default
     )
     {
-        var cacheKey = $"Country_Id_{id}";
+        return await _cache.GetOrCreateAsync(
+            GetCacheKey(id),
+            async entry =>
+            {
+                entry.SetOptions(_cacheEntryOptions);
 
-        if (_idCache.TryGetValue(cacheKey, out Country? cachedCountry)) return cachedCountry;
-
-        cachedCountry = await _appDbContext.Countries
-            .FirstOrDefaultAsync(country => country.Id == id, cancellationToken);
-
-        if (cachedCountry != null)
-        {
-            _idCache.Set(cacheKey, cachedCountry, _cacheEntryOptions);
-        }
-
-        return cachedCountry;
+                return await _appDbContext.Countries
+                    .FirstOrDefaultAsync(country => country.Id == id, cancellationToken);
+            }
+        );
     }
-
-
+    
     public async Task<bool> ExistsById(
         CountryId id,
         CancellationToken cancellationToken = default
     )
     {
-        var cacheKey = $"Country_Exists_Id_{id}";
+        return await _cache.GetOrCreateAsync(
+            GetCacheKey(id),
+            async entry =>
+            {
+                entry.SetOptions(_cacheEntryOptions);
 
-        if (_idCache.TryGetValue(cacheKey, out bool exists)) return exists;
-
-        exists = await _appDbContext.Countries
-            .AnyAsync(country => country.Id == id, cancellationToken);
-
-        _idCache.Set(cacheKey, exists, _cacheEntryOptions);
-
-        return exists;
+                return await _appDbContext.Countries
+                    .AnyAsync(country => country.Id == id, cancellationToken);
+            }
+        );
     }
-
 }

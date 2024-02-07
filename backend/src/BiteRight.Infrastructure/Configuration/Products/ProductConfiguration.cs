@@ -39,7 +39,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             priceBuilder
                 .Property(p => p.Value)
                 .HasColumnName("price_value");
-            
+
             priceBuilder
                 .Property(p => p.CurrencyId)
                 .HasConversion(
@@ -54,7 +54,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             expirationDateBuilder
                 .Property(p => p.Value)
                 .HasColumnName("expiration_date_value");
-            
+
             expirationDateBuilder
                 .Property(p => p.Kind)
                 .HasColumnName("expiration_date_kind");
@@ -93,5 +93,11 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .WithMany()
             .HasForeignKey(p => p.UserId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Property(p => p.Disposed)
+            .HasConversion(
+                disposed => disposed.Value,
+                value => Disposed.Create(value)
+            );
     }
 }

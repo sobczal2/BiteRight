@@ -48,4 +48,16 @@
     <data name="expiration_date_kind_invalid" xml:space="preserve">
         <value>Expiration date kind has invalid value</value>
     </data>
+    <data name="sorting_strategy_invalid" xml:space="preserve">
+        <value>Sorting strategy has invalid value</value>
+    </data>
+    <data name="expiration_date_not_null" xml:space="preserve">
+        <value>Expiration date has to be specified if using best before or use by kind</value>
+    </data>
+    <data name="expiration_date_empty" xml:space="preserve">
+        <value>Expiration date has to be empty if using unknown or infinity type</value>
+    </data>
+    <data name="time_zone_not_found" xml:space="preserve">
+        <value />
+    </data>
 </root>

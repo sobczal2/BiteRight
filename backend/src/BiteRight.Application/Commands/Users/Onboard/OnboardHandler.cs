@@ -30,7 +30,8 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
         IUserRepository userRepository,
         IStringLocalizer<Resources.Resources.Users.Users> localizer,
         AppDbContext appAppDbContext
-    ) : base(appAppDbContext)
+    )
+        : base(appAppDbContext)
     {
         _identityManager = identityManager;
         _domainEventFactory = domainEventFactory;
@@ -47,22 +48,23 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
     {
         var currentIdentityId = _identityProvider.RequireCurrent();
         var existingUser = await _userRepository.FindByIdentityId(currentIdentityId, cancellationToken);
-        
+
         if (existingUser != null)
         {
             throw ValidationException(
                 _localizer[nameof(Resources.Resources.Users.Users.user_already_exists)]
             );
         }
-        
+
         var (email, isVerified) = await _identityManager.GetEmail(currentIdentityId, cancellationToken);
-        
+
         if (!isVerified)
         {
             throw ValidationException(
                 _localizer[nameof(Resources.Resources.Users.Users.email_not_verified)]
             );
         }
+
         var username = Username.Create(request.Username);
 
         var existsByUsername = await _userRepository.ExistsByUsername(username, cancellationToken);
@@ -81,9 +83,18 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
                 _localizer[nameof(Resources.Resources.Users.Users.email_in_use)]
             );
         }
-        
+
+        if (!TimeZoneInfo.TryFindSystemTimeZoneById(request.TimeZoneId, out var timeZone))
+        {
+            throw ValidationException(
+                nameof(OnboardRequest.TimeZoneId),
+                _localizer[nameof(Resources.Resources.Users.Users.time_zone_not_found)]
+            );
+        }
+
         var profile = Profile.Create(
-            CurrencyConfiguration.USD.Id
+            CurrencyConfiguration.USD.Id,
+            timeZone
         );
 
         var user = User.Create(
@@ -115,11 +126,13 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
             ),
             UsernameInvalidLengthException usernameLengthNotValidException => ValidationException(
                 nameof(OnboardRequest.Username),
-                string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_length_not_valid)], usernameLengthNotValidException.MinLength, usernameLengthNotValidException.MaxLength)
+                string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_length_not_valid)],
+                    usernameLengthNotValidException.MinLength, usernameLengthNotValidException.MaxLength)
             ),
             UsernameInvalidCharactersException usernameCharactersNotValidException => ValidationException(
                 nameof(OnboardRequest.Username),
-                string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_characters_not_valid)], usernameCharactersNotValidException.ValidCharacters)
+                string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_characters_not_valid)],
+                    usernameCharactersNotValidException.ValidCharacters)
             ),
             _ => base.MapExceptionToValidationException(exception)
         };
