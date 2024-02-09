@@ -60,4 +60,13 @@
     <data name="time_zone_not_found" xml:space="preserve">
         <value />
     </data>
+    <data name="product_id_empty" xml:space="preserve">
+        <value>Product id can't be empty</value>
+    </data>
+    <data name="product_not_found" xml:space="preserve">
+        <value>Product was not found</value>
+    </data>
+    <data name="product_already_disposed" xml:space="preserve">
+        <value>Product was already disposed</value>
+    </data>
 </root>

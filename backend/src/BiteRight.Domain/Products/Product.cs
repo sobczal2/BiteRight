@@ -17,7 +17,7 @@ public class Product : AggregateRoot<ProductId>
     public Usage Usage { get; }
     public UserId UserId { get; }
     public virtual User User { get; }
-    public Disposed Disposed { get; private set; }
+    public DisposedState DisposedState { get; private set; }
 
     // EF Core
     private Product()
@@ -32,7 +32,7 @@ public class Product : AggregateRoot<ProductId>
         Usage = default!;
         UserId = default!;
         User = default!;
-        Disposed = default!;
+        DisposedState = default!;
     }
 
     private Product(
@@ -44,7 +44,7 @@ public class Product : AggregateRoot<ProductId>
         CategoryId categoryId,
         AddedDateTime addedDateTime,
         Usage usage,
-        Disposed disposed,
+        DisposedState disposedState,
         UserId userId
     )
         : base(id)
@@ -57,7 +57,7 @@ public class Product : AggregateRoot<ProductId>
         Category = default!;
         AddedDateTime = addedDateTime;
         Usage = usage;
-        Disposed = disposed;
+        DisposedState = disposedState;
         UserId = userId;
         User = default!;
     }
@@ -69,8 +69,7 @@ public class Product : AggregateRoot<ProductId>
         ExpirationDate expirationDate,
         CategoryId categoryId,
         UserId userId,
-        IDomainEventFactory domainEventFactory,
-        IDateTimeProvider dateTimeProvider,
+        DateTime currentDateTime,
         ProductId? id = null
     )
     {
@@ -81,14 +80,24 @@ public class Product : AggregateRoot<ProductId>
             price,
             expirationDate,
             categoryId,
-            AddedDateTime.Create(dateTimeProvider.UtcNow),
+            AddedDateTime.Create(currentDateTime),
             Usage.CreateFull(),
-            Disposed.CreateNotDisposed(),
+            DisposedState.CreateNotDisposed(),
             userId
         );
 
-        product.AddDomainEvent(domainEventFactory.CreateProductCreatedEvent(product.Id));
-
         return product;
+    }
+
+    public bool IsDisposed()
+    {
+        return DisposedState.Disposed;
+    }
+
+    public void SetDisposed(DateTime currentDateTime)
+    {
+        DisposedState = DisposedState.CreateDisposed(
+            currentDateTime
+        );
     }
 }

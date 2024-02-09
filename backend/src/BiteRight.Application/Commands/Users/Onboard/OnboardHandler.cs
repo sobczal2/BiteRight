@@ -3,9 +3,7 @@ using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Users;
 using BiteRight.Domain.Users.Exceptions;
-using BiteRight.Infrastructure.Configuration.Countries;
 using BiteRight.Infrastructure.Configuration.Currencies;
-using BiteRight.Infrastructure.Configuration.Languages;
 using BiteRight.Infrastructure.Database;
 using FluentValidation;
 using MediatR;
@@ -16,7 +14,6 @@ namespace BiteRight.Application.Commands.Users.Onboard;
 public class OnboardHandler : CommandHandlerBase<OnboardRequest>
 {
     private readonly IIdentityManager _identityManager;
-    private readonly IDomainEventFactory _domainEventFactory;
     private readonly IIdentityProvider _identityProvider;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IUserRepository _userRepository;
@@ -24,7 +21,6 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
 
     public OnboardHandler(
         IIdentityManager identityManager,
-        IDomainEventFactory domainEventFactory,
         IIdentityProvider identityProvider,
         IDateTimeProvider dateTimeProvider,
         IUserRepository userRepository,
@@ -34,7 +30,6 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
         : base(appAppDbContext)
     {
         _identityManager = identityManager;
-        _domainEventFactory = domainEventFactory;
         _identityProvider = identityProvider;
         _dateTimeProvider = dateTimeProvider;
         _userRepository = userRepository;
@@ -88,7 +83,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
         {
             throw ValidationException(
                 nameof(OnboardRequest.TimeZoneId),
-                _localizer[nameof(Resources.Resources.Users.Users.time_zone_not_found)]
+                _localizer[nameof(Resources.Resources.Users.Users.time_zone_id_not_found)]
             );
         }
 
@@ -102,8 +97,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
             Username.Create(request.Username),
             email,
             profile,
-            _dateTimeProvider,
-            _domainEventFactory
+            _dateTimeProvider.UtcNow
         );
 
         _userRepository.Add(user);

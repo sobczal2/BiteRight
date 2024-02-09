@@ -6,4 +6,5 @@ public interface IIdentityProvider
 {
     IdentityId RequireCurrent();
     Task<UserId> RequireCurrentUserId();
+    Task<User> RequireCurrentUser();
 }

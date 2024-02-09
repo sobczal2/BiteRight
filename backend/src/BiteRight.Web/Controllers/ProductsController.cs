@@ -1,5 +1,7 @@
+using System;
 using System.Threading.Tasks;
 using BiteRight.Application.Commands.Products.Create;
+using BiteRight.Application.Commands.Products.Dispose;
 using BiteRight.Application.Queries.Products.ListCurrent;
 using BiteRight.Web.Authorization;
 using MediatR;
@@ -36,6 +38,17 @@ public class ProductsController : WebController
         [FromQuery] ListCurrentRequest request
     )
     {
+        var response = await Mediator.Send(request);
+        return Ok(response);
+    }
+
+    [HttpPost("{productId:guid}/dispose")]
+    [AuthorizeUserExists]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Dispose(Guid productId)
+    {
+        var request = new DisposeRequest(productId);
         var response = await Mediator.Send(request);
         return Ok(response);
     }

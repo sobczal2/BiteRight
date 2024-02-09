@@ -52,7 +52,6 @@ public static class InfrastructureRegistrations
     )
     {
         services.AddSingleton<IDomainEventPublisher, MediatorDomainEventPublisher>();
-        services.AddSingleton<IDomainEventFactory, MediatorDomainEventFactory>();
         services.AddSingleton<IDateTimeProvider, SystemDateTimeProvider>();
     }
 

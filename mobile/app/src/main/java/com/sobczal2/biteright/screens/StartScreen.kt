@@ -58,7 +58,6 @@ fun StartScreenContent(
     Surface(
         modifier = Modifier
             .fillMaxSize()
-            .padding(MaterialTheme.dimension.lg)
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),

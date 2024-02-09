@@ -481,10 +481,6 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("description");
 
-                    b.Property<bool>("Disposed")
-                        .HasColumnType("boolean")
-                        .HasColumnName("disposed");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
@@ -646,7 +642,30 @@ namespace BiteRight.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_products_users_user_temp_id1");
 
-                    b.OwnsOne("BiteRight.Domain.Products.ExpirationDate", "ExpirationDate", b1 =>
+                    b.OwnsOne("BiteRight.Domain.Products.Product.DisposedState#BiteRight.Domain.Products.DisposedState", "DisposedState", b1 =>
+                        {
+                            b1.Property<Guid>("ProductId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("id");
+
+                            b1.Property<bool>("Disposed")
+                                .HasColumnType("boolean")
+                                .HasColumnName("disposed_state_disposed");
+
+                            b1.Property<DateTime?>("DisposedDate")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("disposed_state_disposed_date");
+
+                            b1.HasKey("ProductId");
+
+                            b1.ToTable("products", "product");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId")
+                                .HasConstraintName("fk_products_products_id");
+                        });
+
+                    b.OwnsOne("BiteRight.Domain.Products.Product.ExpirationDate#BiteRight.Domain.Products.ExpirationDate", "ExpirationDate", b1 =>
                         {
                             b1.Property<Guid>("ProductId")
                                 .HasColumnType("uuid")
@@ -669,7 +688,7 @@ namespace BiteRight.Infrastructure.Migrations
                                 .HasConstraintName("fk_products_products_id");
                         });
 
-                    b.OwnsOne("BiteRight.Domain.Products.Price", "Price", b1 =>
+                    b.OwnsOne("BiteRight.Domain.Products.Product.Price#BiteRight.Domain.Products.Price", "Price", b1 =>
                         {
                             b1.Property<Guid>("ProductId")
                                 .HasColumnType("uuid")
@@ -693,6 +712,9 @@ namespace BiteRight.Infrastructure.Migrations
                         });
 
                     b.Navigation("Category");
+
+                    b.Navigation("DisposedState")
+                        .IsRequired();
 
                     b.Navigation("ExpirationDate")
                         .IsRequired();

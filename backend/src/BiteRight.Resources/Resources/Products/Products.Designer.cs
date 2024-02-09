@@ -128,5 +128,23 @@ namespace BiteRight.Resources.Resources.Products {
                 return ResourceManager.GetString("time_zone_not_found", resourceCulture);
             }
         }
+        
+        public static string product_id_empty {
+            get {
+                return ResourceManager.GetString("product_id_empty", resourceCulture);
+            }
+        }
+        
+        public static string product_not_found {
+            get {
+                return ResourceManager.GetString("product_not_found", resourceCulture);
+            }
+        }
+        
+        public static string product_already_disposed {
+            get {
+                return ResourceManager.GetString("product_already_disposed", resourceCulture);
+            }
+        }
     }
 }

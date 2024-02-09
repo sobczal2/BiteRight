@@ -52,7 +52,6 @@ public class Country : AggregateRoot<CountryId>
         Alpha2Code alpha2Code,
         LanguageId officialLanguageId,
         CurrencyId currencyId,
-        IDomainEventFactory domainEventFactory,
         CountryId? id = null
     )
     {
@@ -63,12 +62,6 @@ public class Country : AggregateRoot<CountryId>
             alpha2Code,
             officialLanguageId,
             currencyId
-        );
-
-        country.AddDomainEvent(
-            domainEventFactory.CreateCountryCreatedEvent(
-                country.Id
-            )
         );
 
         return country;

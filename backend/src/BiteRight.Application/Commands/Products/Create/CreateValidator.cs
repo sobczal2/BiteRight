@@ -28,7 +28,7 @@ public class CreateValidator : AbstractValidator<CreateRequest>
         RuleFor(x => x.CurrencyId)
             .NotEmpty()
             .When(x => x.Price.HasValue)
-            .WithMessage(_ => currenciesLocalizer[nameof(Resources.Resources.Currencies.Currencies.currency_empty)]);
+            .WithMessage(_ => currenciesLocalizer[nameof(Resources.Resources.Currencies.Currencies.currency_id_empty)]);
 
         RuleFor(x => x.ExpirationDate)
             .NotNull()
@@ -48,6 +48,6 @@ public class CreateValidator : AbstractValidator<CreateRequest>
         
         RuleFor(x => x.CategoryId)
             .NotEmpty()
-            .WithMessage(_ => categoriesLocalizer[nameof(Resources.Resources.Categories.Categories.category_empty)]);
+            .WithMessage(_ => categoriesLocalizer[nameof(Resources.Resources.Categories.Categories.category_id_empty)]);
     }
 }

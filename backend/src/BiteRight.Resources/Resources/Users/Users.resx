@@ -51,7 +51,7 @@
     <data name="username" xml:space="preserve">
         <value>Username</value>
     </data>
-    <data name="time_zone_not_found" xml:space="preserve">
+    <data name="time_zone_id_not_found" xml:space="preserve">
         <value>Time zone specified was not found</value>
     </data>
     <data name="time_zone_empty" xml:space="preserve">

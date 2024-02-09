@@ -111,9 +111,9 @@ namespace BiteRight.Resources.Resources.Users {
             }
         }
         
-        public static string time_zone_not_found {
+        public static string time_zone_id_not_found {
             get {
-                return ResourceManager.GetString("time_zone_not_found", resourceCulture);
+                return ResourceManager.GetString("time_zone_id_not_found", resourceCulture);
             }
         }
     }

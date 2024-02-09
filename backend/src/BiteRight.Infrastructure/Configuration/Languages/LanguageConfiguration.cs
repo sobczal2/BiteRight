@@ -53,7 +53,6 @@ public class LanguageConfiguration : IEntityTypeConfiguration<Language>
         Name.Create("Polski"),
         Name.Create("Polish"),
         Code.Create("pl"),
-        new SeedDomainEventFactory(),
         new LanguageId(new Guid("24D48691-7325-4703-B69F-8DB933A6736D"))
     );
 
@@ -61,7 +60,6 @@ public class LanguageConfiguration : IEntityTypeConfiguration<Language>
         Name.Create("English"),
         Name.Create("English"),
         Code.Create("en"),
-        new SeedDomainEventFactory(),
         new LanguageId(new Guid("454FAF9A-644C-445C-89E3-B57203957C1A"))
     );
 
@@ -69,7 +67,6 @@ public class LanguageConfiguration : IEntityTypeConfiguration<Language>
         Name.Create("Deutsch"),
         Name.Create("German"),
         Code.Create("de"),
-        new SeedDomainEventFactory(),
         new LanguageId(new Guid("C1DD0A3B-70D3-4AA1-B53E-4C08A03B57C3"))
     );
 }

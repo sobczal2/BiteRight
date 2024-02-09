@@ -35,6 +35,11 @@ public class HttpContextIdentityProvider : IIdentityProvider
 
     public async Task<UserId> RequireCurrentUserId()
     {
+        return (await RequireCurrentUser()).Id;
+    }
+
+    public async Task<User> RequireCurrentUser()
+    {
         var identityId = RequireCurrent();
         var user = await _userRepository.FindByIdentityId(identityId);
         if (user is null)
@@ -42,7 +47,7 @@ public class HttpContextIdentityProvider : IIdentityProvider
             throw new InvalidOperationException("User not found");
         }
 
-        return user.Id;
+        return user;
     }
 
     private IdentityId? GetIdentityId()

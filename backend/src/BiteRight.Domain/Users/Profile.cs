@@ -46,9 +46,11 @@ public class Profile : Entity<ProfileId>
     }
 
     public void Update(
-        CurrencyId currencyId
+        CurrencyId currencyId,
+        TimeZoneInfo timeZone
     )
     {
         CurrencyId = currencyId;
+        TimeZone = timeZone;
     }
 }

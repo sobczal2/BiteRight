@@ -49,14 +49,14 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                 .HasColumnName("price_currency_id");
         });
 
-        builder.OwnsOne<ExpirationDate>(p => p.ExpirationDate, expirationDateBuilder =>
+        builder.OwnsOne(product => product.ExpirationDate, expirationDateBuilder =>
         {
             expirationDateBuilder
-                .Property(p => p.Value)
+                .Property(expirationDate => expirationDate.Value)
                 .HasColumnName("expiration_date_value");
 
             expirationDateBuilder
-                .Property(p => p.Kind)
+                .Property(expirationDate => expirationDate.Kind)
                 .HasColumnName("expiration_date_kind");
         });
 
@@ -94,10 +94,15 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasForeignKey(p => p.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Property(p => p.Disposed)
-            .HasConversion(
-                disposed => disposed.Value,
-                value => Disposed.Create(value)
-            );
+        builder.OwnsOne(p => p.DisposedState, disposedStateBuilder =>
+        {
+            disposedStateBuilder
+                .Property(disposedState => disposedState.Disposed)
+                .HasColumnName("disposed_state_disposed");
+
+            disposedStateBuilder
+                .Property(disposedState => disposedState.DisposedDate)
+                .HasColumnName("disposed_state_disposed_date");
+        });
     }
 }

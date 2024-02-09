@@ -51,9 +51,9 @@ namespace BiteRight.Resources.Resources.Currencies {
             }
         }
         
-        public static string currency_empty {
+        public static string currency_id_empty {
             get {
-                return ResourceManager.GetString("currency_empty", resourceCulture);
+                return ResourceManager.GetString("currency_id_empty", resourceCulture);
             }
         }
     }

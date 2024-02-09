@@ -53,7 +53,7 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
                     product.UserId == user.Id
                 )
                 .Where(product =>
-                    !product.Disposed
+                    !product.DisposedState.Disposed
                 )
                 .Where(product =>
                     product.Usage != Usage.Empty

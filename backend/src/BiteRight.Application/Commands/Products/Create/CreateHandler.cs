@@ -14,7 +14,6 @@ namespace BiteRight.Application.Commands.Products.Create;
 
 public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
 {
-    private readonly IDomainEventFactory _domainEventFactory;
     private readonly IIdentityProvider _identityProvider;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IUserRepository _userRepository;
@@ -26,7 +25,6 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
     private readonly IStringLocalizer<Resources.Resources.Currencies.Currencies> _currenciesLocalizer;
 
     public CreateHandler(
-        IDomainEventFactory domainEventFactory,
         IIdentityProvider identityProvider,
         IDateTimeProvider dateTimeProvider,
         IUserRepository userRepository,
@@ -40,7 +38,6 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
     )
         : base(appDbContext)
     {
-        _domainEventFactory = domainEventFactory;
         _identityProvider = identityProvider;
         _dateTimeProvider = dateTimeProvider;
         _userRepository = userRepository;
@@ -98,8 +95,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
             expirationDate,
             category.Id,
             user.Id,
-            _domainEventFactory,
-            _dateTimeProvider
+            _dateTimeProvider.UtcNow
         );
 
         _productRepository.Add(product);
