@@ -34,7 +34,6 @@ public class Language : AggregateRoot<LanguageId>
         Name nativeName,
         Name englishName,
         Code code,
-        IDomainEventFactory domainEventFactory,
         LanguageId? id = null
     )
     {
@@ -43,12 +42,6 @@ public class Language : AggregateRoot<LanguageId>
             nativeName,
             englishName,
             code
-        );
-
-        language.AddDomainEvent(
-            domainEventFactory.CreateLanguageCreatedEvent(
-                language.Id
-            )
         );
 
         return language;

@@ -21,10 +21,7 @@
     <data name="currency_not_found" xml:space="preserve">
         <value>Currency not found</value>
     </data>
-    <data name="currency_empty" xml:space="preserve">
+    <data name="currency_id_empty" xml:space="preserve">
         <value>Currency can't be empty</value>
-    </data>
-    <data name="expiration_date_empty" xml:space="preserve">
-        <value>Expiration date can't be empty with kind other than infinite or unknown</value>
     </data>
 </root>

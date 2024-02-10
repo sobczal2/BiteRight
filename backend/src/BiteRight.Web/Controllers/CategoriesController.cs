@@ -43,8 +43,8 @@ public class CategoriesController : WebController
         return Ok(response);
     }
 
+    // TODO: add authorization
     [HttpGet("{categoryId:guid}/photo")]
-    [AuthorizeUserExists]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetPhoto(

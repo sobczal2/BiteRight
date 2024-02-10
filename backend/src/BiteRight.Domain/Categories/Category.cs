@@ -31,7 +31,6 @@ public class Category : AggregateRoot<CategoryId>
 
     public static Category Create(
         PhotoId? photoId,
-        IDomainEventFactory? domainEventFactory = null,
         CategoryId? id = null
     )
     {
@@ -40,14 +39,6 @@ public class Category : AggregateRoot<CategoryId>
             photoId
         );
 
-        if (domainEventFactory is not null)
-        {
-            category.AddDomainEvent(
-                domainEventFactory.CreateCategoryCreatedEvent(
-                    category.Id
-                )
-            );
-        }
 
         return category;
     }

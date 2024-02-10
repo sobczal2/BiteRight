@@ -28,6 +28,14 @@ public class CachedEfCoreCategoryRepository : ICategoryRepository
         );
     }
 
+    private static string GetCacheKey(
+        CategoryId id,
+        LanguageId languageId
+    )
+    {
+        return $"Category_Id_{id}_Language_{languageId}";
+    }
+
     public async Task<(IEnumerable<Category> Categories, int TotalCount)> Search(
         string name,
         int pageNumber,
@@ -70,21 +78,18 @@ public class CachedEfCoreCategoryRepository : ICategoryRepository
         CancellationToken cancellationToken = default
     )
     {
-        var cacheKey = $"Category_Id_{id}_Language_{languageId}";
+        return await _cache.GetOrCreateAsync(
+            GetCacheKey(id, languageId),
+            async entry =>
+            {
+                entry.SetOptions(_cacheEntryOptions);
 
-        if (_cache.TryGetValue(cacheKey, out Category? cachedCategory)) return cachedCategory;
-
-        cachedCategory = await _appDbContext.Categories
-            .Include(category => category.Translations.Where(translation => translation.LanguageId == languageId))
-            .Include(category => category.Photo)
-            .FirstOrDefaultAsync(category => category.Id == id, cancellationToken);
-
-        if (cachedCategory != null)
-        {
-            _cache.Set(cacheKey, cachedCategory, _cacheEntryOptions);
-        }
-
-        return cachedCategory;
+                return await _appDbContext.Categories
+                    .Include(category =>
+                        category.Translations.Where(translation => translation.LanguageId == languageId))
+                    .Include(category => category.Photo)
+                    .FirstOrDefaultAsync(category => category.Id == id, cancellationToken);
+            }
+        );
     }
-
 }

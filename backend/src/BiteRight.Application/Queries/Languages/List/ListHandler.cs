@@ -24,6 +24,7 @@ public class ListHandler : QueryHandlerBase<ListRequest, ListResponse>
     {
         var languages = await _appDbContext
             .Languages
+            .AsNoTracking()
             .Select(language => new LanguageDto
             {
                 Id = language.Id,

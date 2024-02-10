@@ -1,6 +1,9 @@
 using System;
+using System.Threading.Tasks;
 using BiteRight.Domain.Abstracts.Common;
+using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Users;
+using BiteRight.Infrastructure.Database;
 using Microsoft.AspNetCore.Http;
 
 namespace BiteRight.Web.Providers;
@@ -8,12 +11,15 @@ namespace BiteRight.Web.Providers;
 public class HttpContextIdentityProvider : IIdentityProvider
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IUserRepository _userRepository;
 
     public HttpContextIdentityProvider(
-        IHttpContextAccessor httpContextAccessor
+        IHttpContextAccessor httpContextAccessor,
+        IUserRepository userRepository
     )
     {
         _httpContextAccessor = httpContextAccessor;
+        _userRepository = userRepository;
     }
 
     public IdentityId RequireCurrent()
@@ -25,6 +31,23 @@ public class HttpContextIdentityProvider : IIdentityProvider
         }
 
         return identityId;
+    }
+
+    public async Task<UserId> RequireCurrentUserId()
+    {
+        return (await RequireCurrentUser()).Id;
+    }
+
+    public async Task<User> RequireCurrentUser()
+    {
+        var identityId = RequireCurrent();
+        var user = await _userRepository.FindByIdentityId(identityId);
+        if (user is null)
+        {
+            throw new InvalidOperationException("User not found");
+        }
+
+        return user;
     }
 
     private IdentityId? GetIdentityId()

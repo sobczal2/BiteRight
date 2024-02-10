@@ -104,5 +104,47 @@ namespace BiteRight.Resources.Resources.Products {
                 return ResourceManager.GetString("expiration_date_kind_invalid", resourceCulture);
             }
         }
+        
+        public static string sorting_strategy_invalid {
+            get {
+                return ResourceManager.GetString("sorting_strategy_invalid", resourceCulture);
+            }
+        }
+        
+        public static string expiration_date_not_null {
+            get {
+                return ResourceManager.GetString("expiration_date_not_null", resourceCulture);
+            }
+        }
+        
+        public static string expiration_date_empty {
+            get {
+                return ResourceManager.GetString("expiration_date_empty", resourceCulture);
+            }
+        }
+        
+        public static string time_zone_not_found {
+            get {
+                return ResourceManager.GetString("time_zone_not_found", resourceCulture);
+            }
+        }
+        
+        public static string product_id_empty {
+            get {
+                return ResourceManager.GetString("product_id_empty", resourceCulture);
+            }
+        }
+        
+        public static string product_not_found {
+            get {
+                return ResourceManager.GetString("product_not_found", resourceCulture);
+            }
+        }
+        
+        public static string product_already_disposed {
+            get {
+                return ResourceManager.GetString("product_already_disposed", resourceCulture);
+            }
+        }
     }
 }

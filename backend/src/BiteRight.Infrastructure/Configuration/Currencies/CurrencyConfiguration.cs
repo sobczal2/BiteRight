@@ -55,7 +55,6 @@ public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
         Name.Create("Polski złoty"),
         Symbol.Create("zł"),
         ISO4217Code.Create("PLN"),
-        new SeedDomainEventFactory(),
         new CurrencyId(Guid.Parse("3B56A6DE-3B41-4B10-934F-469CA12F4FE3"))
     );
 
@@ -64,7 +63,6 @@ public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
         Name.Create("Pound sterling"),
         Symbol.Create("£"),
         ISO4217Code.Create("GBP"),
-        new SeedDomainEventFactory(),
         new CurrencyId(Guid.Parse("53DFFAB5-429D-4626-B1D9-F568119E069A"))
     );
 
@@ -73,7 +71,6 @@ public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
         Name.Create("Euro"),
         Symbol.Create("€"),
         ISO4217Code.Create("EUR"),
-        new SeedDomainEventFactory(),
         new CurrencyId(Guid.Parse("8B0A0882-3EB5-495A-A646-06D7E0E9FE99"))
     );
 
@@ -82,7 +79,6 @@ public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
         Name.Create("United States dollar"),
         Symbol.Create("$"),
         ISO4217Code.Create("USD"),
-        new SeedDomainEventFactory(),
         new CurrencyId(Guid.Parse("E862F33F-A04A-4B4E-A4BB-9542B1DB3EEB"))
     );
 }

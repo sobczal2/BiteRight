@@ -1,6 +1,6 @@
 namespace BiteRight.Domain.Common;
 
-public class GuidId : Id<Guid>
+public abstract class GuidId : Id<Guid>
 {
     protected GuidId()
         : base(Guid.NewGuid())

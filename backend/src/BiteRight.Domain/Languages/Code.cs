@@ -70,4 +70,9 @@ public class Code : ValueObject
     {
         return code.Value;
     }
+
+    public override string ToString()
+    {
+        return Value;
+    }
 }

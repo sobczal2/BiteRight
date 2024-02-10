@@ -28,13 +28,19 @@ public class CreateValidator : AbstractValidator<CreateRequest>
         RuleFor(x => x.CurrencyId)
             .NotEmpty()
             .When(x => x.Price.HasValue)
-            .WithMessage(_ => currenciesLocalizer[nameof(Resources.Resources.Currencies.Currencies.currency_empty)]);
+            .WithMessage(_ => currenciesLocalizer[nameof(Resources.Resources.Currencies.Currencies.currency_id_empty)]);
 
         RuleFor(x => x.ExpirationDate)
             .NotNull()
             .When(x => x.ExpirationDateKind != ExpirationDateKindDto.Infinite &&
                        x.ExpirationDateKind != ExpirationDateKindDto.Unknown)
-            .WithMessage(_ => currenciesLocalizer[nameof(Resources.Resources.Currencies.Currencies.expiration_date_empty)]);
+            .WithMessage(_ => productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_empty)]);
+        
+        RuleFor(x => x.ExpirationDate)
+            .Null()
+            .When(x => x.ExpirationDateKind == ExpirationDateKindDto.Infinite ||
+                       x.ExpirationDateKind == ExpirationDateKindDto.Unknown)
+            .WithMessage(_ => productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_not_null)]);
         
         RuleFor(x => x.ExpirationDateKind)
             .IsInEnum()
@@ -42,6 +48,6 @@ public class CreateValidator : AbstractValidator<CreateRequest>
         
         RuleFor(x => x.CategoryId)
             .NotEmpty()
-            .WithMessage(_ => categoriesLocalizer[nameof(Resources.Resources.Categories.Categories.category_empty)]);
+            .WithMessage(_ => categoriesLocalizer[nameof(Resources.Resources.Categories.Categories.category_id_empty)]);
     }
 }

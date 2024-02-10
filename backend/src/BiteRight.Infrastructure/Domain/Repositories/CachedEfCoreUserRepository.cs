@@ -26,6 +26,13 @@ public class CachedEfCoreUserRepository : IUserRepository
             cacheOptions.Value.UserCacheDuration
         );
     }
+    
+    private static string GetCacheKey(
+        IdentityId identityId
+    )
+    {
+        return $"User_IdentityId_{identityId}";
+    }
 
     public void Add(
         User user
@@ -39,24 +46,19 @@ public class CachedEfCoreUserRepository : IUserRepository
         CancellationToken cancellationToken = default
     )
     {
-        var cacheKey = $"User_{identityId}";
+        return await _cache.GetOrCreateAsync(
+            GetCacheKey(identityId),
+            async entry =>
+            {
+                entry.SetOptions(_cacheEntryOptions);
 
-        if (_cache.TryGetValue(cacheKey, out User? cachedUser)) return cachedUser;
-        cachedUser = await _appDbContext
-            .Users
-            .Include(user => user.Profile)
-            .FirstOrDefaultAsync(
-                user => user.IdentityId == identityId,
-                cancellationToken
-            );
-
-        if (cachedUser != null)
-        {
-            _cache.Set(cacheKey, cachedUser, _cacheEntryOptions);
-        }
-
-        return cachedUser;
+                return await _appDbContext.Users
+                    .Include(user => user.Profile)
+                    .FirstOrDefaultAsync(user => user.IdentityId == identityId, cancellationToken);
+            }
+        );
     }
+
 
 
     public async Task<bool> ExistsByEmail(

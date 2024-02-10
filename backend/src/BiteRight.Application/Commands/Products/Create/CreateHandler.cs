@@ -14,7 +14,6 @@ namespace BiteRight.Application.Commands.Products.Create;
 
 public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
 {
-    private readonly IDomainEventFactory _domainEventFactory;
     private readonly IIdentityProvider _identityProvider;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IUserRepository _userRepository;
@@ -26,7 +25,6 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
     private readonly IStringLocalizer<Resources.Resources.Currencies.Currencies> _currenciesLocalizer;
 
     public CreateHandler(
-        IDomainEventFactory domainEventFactory,
         IIdentityProvider identityProvider,
         IDateTimeProvider dateTimeProvider,
         IUserRepository userRepository,
@@ -40,7 +38,6 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
     )
         : base(appDbContext)
     {
-        _domainEventFactory = domainEventFactory;
         _identityProvider = identityProvider;
         _dateTimeProvider = dateTimeProvider;
         _userRepository = userRepository;
@@ -79,7 +76,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
             ExpirationDateKindDto.Infinite => ExpirationDate.CreateInfinite(),
             ExpirationDateKindDto.BestBefore => ExpirationDate.CreateBestBefore(request.ExpirationDate!.Value),
             ExpirationDateKindDto.UseBy => ExpirationDate.CreateUseBy(request.ExpirationDate!.Value),
-            ExpirationDateKindDto.Unknown => ExpirationDate.CreateUnknown(request.ExpirationDate),
+            ExpirationDateKindDto.Unknown => ExpirationDate.CreateUnknown(),
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -91,20 +88,14 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                                nameof(Resources.Resources.Categories.Categories.category_not_found)]
                        );
 
-        var addedDateTime = AddedDateTime.Create(_dateTimeProvider.UtcNow);
-
-        var usage = Usage.CreateFull();
-
         var product = Product.Create(
             name,
             description,
             price,
             expirationDate,
             category.Id,
-            addedDateTime,
-            usage,
             user.Id,
-            _domainEventFactory
+            _dateTimeProvider.UtcNow
         );
 
         _productRepository.Add(product);

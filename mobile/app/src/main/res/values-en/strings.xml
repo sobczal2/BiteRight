@@ -10,4 +10,8 @@
     <string name="login_canceled">Login has been cancelled</string>
     <string name="username_length_error">Username must be between 3 and 30 characters long</string>
     <string name="username_invalid_characters_error">Username must only contain lowercase letters, uppercase letters, numbers and underscores.</string>
+    <string name="today">today</string>
+    <string name="expired_for">Expired for</string>
+    <string name="expires_in">Expires in</string>
+    <string name="add_product">Add a product</string>
 </resources>

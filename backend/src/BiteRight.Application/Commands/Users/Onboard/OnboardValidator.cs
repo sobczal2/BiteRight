@@ -12,5 +12,9 @@ public class OnboardValidator : AbstractValidator<OnboardRequest>
         RuleFor(x => x.Username)
             .NotEmpty()
             .WithMessage(_ => localizer[nameof(Resources.Resources.Users.Users.username_empty)]);
+        
+        RuleFor(x => x.TimeZoneId)
+            .NotEmpty()
+            .WithMessage(_ => localizer[nameof(Resources.Resources.Users.Users.time_zone_empty)]);
     }
 }

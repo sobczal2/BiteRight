@@ -3,7 +3,7 @@ package com.sobczal2.biteright.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sobczal2.biteright.R
-import com.sobczal2.biteright.data.api.requests.OnboardRequest
+import com.sobczal2.biteright.data.api.requests.users.OnboardRequest
 import com.sobczal2.biteright.repositories.abstractions.UserRepository
 import com.sobczal2.biteright.repositories.common.ApiRepositoryError
 import com.sobczal2.biteright.state.StartScreenState
@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.TimeZone
 import javax.inject.Inject
 
 @HiltViewModel
@@ -75,7 +76,8 @@ class StartViewModel @Inject constructor(
         }
 
         val onboardRequest = OnboardRequest(
-            username = state.value.username
+            username = state.value.username,
+            timeZoneId = TimeZone.getDefault().id
         )
 
         viewModelScope.launch {

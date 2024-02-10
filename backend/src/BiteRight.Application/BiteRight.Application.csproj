@@ -19,8 +19,4 @@
       <ProjectReference Include="..\BiteRight.Resources\BiteRight.Resources.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Queries\Products\" />
-    </ItemGroup>
-
 </Project>

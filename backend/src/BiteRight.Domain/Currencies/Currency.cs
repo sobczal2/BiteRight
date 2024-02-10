@@ -36,7 +36,6 @@ public class Currency : AggregateRoot<CurrencyId>
         Name name,
         Symbol symbol,
         ISO4217Code iso4217Code,
-        IDomainEventFactory domainEventFactory,
         CurrencyId? id = null
     )
     {
@@ -45,12 +44,6 @@ public class Currency : AggregateRoot<CurrencyId>
             name,
             symbol,
             iso4217Code
-        );
-
-        currency.AddDomainEvent(
-            domainEventFactory.CreateCurrencyCreatedEvent(
-                currency.Id
-            )
         );
 
         return currency;

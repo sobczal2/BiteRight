@@ -49,8 +49,7 @@ public class User : AggregateRoot<UserId>
         Username username,
         Email email,
         Profile profile,
-        IDateTimeProvider dateTimeProvider,
-        IDomainEventFactory domainEventFactory
+        DateTime currentDateTime
     )
     {
         var user = new User(
@@ -58,14 +57,8 @@ public class User : AggregateRoot<UserId>
             identityId,
             username,
             email,
-            JoinedAt.Create(dateTimeProvider.UtcNow),
+            JoinedAt.Create(currentDateTime),
             profile
-        );
-
-        user.AddDomainEvent(
-            domainEventFactory.CreateUserCreatedEvent(
-                user.IdentityId
-            )
         );
 
         return user;
@@ -73,17 +66,12 @@ public class User : AggregateRoot<UserId>
 
     public void UpdateProfile(
         CurrencyId currencyId,
-        IDomainEventFactory domainEventFactory
+        TimeZoneInfo timeZone
     )
     {
         Profile.Update(
-            currencyId
-        );
-
-        AddDomainEvent(
-            domainEventFactory.CreateUserProfileUpdatedEvent(
-                IdentityId
-            )
+            currencyId,
+            timeZone
         );
     }
 }

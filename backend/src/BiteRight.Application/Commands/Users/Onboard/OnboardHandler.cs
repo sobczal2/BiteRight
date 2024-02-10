@@ -3,9 +3,7 @@ using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Users;
 using BiteRight.Domain.Users.Exceptions;
-using BiteRight.Infrastructure.Configuration.Countries;
 using BiteRight.Infrastructure.Configuration.Currencies;
-using BiteRight.Infrastructure.Configuration.Languages;
 using BiteRight.Infrastructure.Database;
 using FluentValidation;
 using MediatR;
@@ -16,7 +14,6 @@ namespace BiteRight.Application.Commands.Users.Onboard;
 public class OnboardHandler : CommandHandlerBase<OnboardRequest>
 {
     private readonly IIdentityManager _identityManager;
-    private readonly IDomainEventFactory _domainEventFactory;
     private readonly IIdentityProvider _identityProvider;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IUserRepository _userRepository;
@@ -24,16 +21,15 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
 
     public OnboardHandler(
         IIdentityManager identityManager,
-        IDomainEventFactory domainEventFactory,
         IIdentityProvider identityProvider,
         IDateTimeProvider dateTimeProvider,
         IUserRepository userRepository,
         IStringLocalizer<Resources.Resources.Users.Users> localizer,
         AppDbContext appAppDbContext
-    ) : base(appAppDbContext)
+    )
+        : base(appAppDbContext)
     {
         _identityManager = identityManager;
-        _domainEventFactory = domainEventFactory;
         _identityProvider = identityProvider;
         _dateTimeProvider = dateTimeProvider;
         _userRepository = userRepository;
@@ -47,22 +43,23 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
     {
         var currentIdentityId = _identityProvider.RequireCurrent();
         var existingUser = await _userRepository.FindByIdentityId(currentIdentityId, cancellationToken);
-        
+
         if (existingUser != null)
         {
             throw ValidationException(
                 _localizer[nameof(Resources.Resources.Users.Users.user_already_exists)]
             );
         }
-        
+
         var (email, isVerified) = await _identityManager.GetEmail(currentIdentityId, cancellationToken);
-        
+
         if (!isVerified)
         {
             throw ValidationException(
                 _localizer[nameof(Resources.Resources.Users.Users.email_not_verified)]
             );
         }
+
         var username = Username.Create(request.Username);
 
         var existsByUsername = await _userRepository.ExistsByUsername(username, cancellationToken);
@@ -81,9 +78,18 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
                 _localizer[nameof(Resources.Resources.Users.Users.email_in_use)]
             );
         }
-        
+
+        if (!TimeZoneInfo.TryFindSystemTimeZoneById(request.TimeZoneId, out var timeZone))
+        {
+            throw ValidationException(
+                nameof(OnboardRequest.TimeZoneId),
+                _localizer[nameof(Resources.Resources.Users.Users.time_zone_id_not_found)]
+            );
+        }
+
         var profile = Profile.Create(
-            CurrencyConfiguration.USD.Id
+            CurrencyConfiguration.USD.Id,
+            timeZone
         );
 
         var user = User.Create(
@@ -91,8 +97,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
             Username.Create(request.Username),
             email,
             profile,
-            _dateTimeProvider,
-            _domainEventFactory
+            _dateTimeProvider.UtcNow
         );
 
         _userRepository.Add(user);
@@ -115,11 +120,13 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
             ),
             UsernameInvalidLengthException usernameLengthNotValidException => ValidationException(
                 nameof(OnboardRequest.Username),
-                string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_length_not_valid)], usernameLengthNotValidException.MinLength, usernameLengthNotValidException.MaxLength)
+                string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_length_not_valid)],
+                    usernameLengthNotValidException.MinLength, usernameLengthNotValidException.MaxLength)
             ),
             UsernameInvalidCharactersException usernameCharactersNotValidException => ValidationException(
                 nameof(OnboardRequest.Username),
-                string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_characters_not_valid)], usernameCharactersNotValidException.ValidCharacters)
+                string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_characters_not_valid)],
+                    usernameCharactersNotValidException.ValidCharacters)
             ),
             _ => base.MapExceptionToValidationException(exception)
         };

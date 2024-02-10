@@ -1,6 +1,7 @@
 package com.sobczal2.biteright.di
 
-import com.sobczal2.biteright.data.api.UserApi
+import com.sobczal2.biteright.data.api.abstractions.ProductsApi
+import com.sobczal2.biteright.data.api.abstractions.UsersApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +14,13 @@ import javax.inject.Singleton
 object BackendDataModule {
     @Singleton
     @Provides
-    fun provideUserApi(retrofit: Retrofit): UserApi {
-        return retrofit.create(UserApi::class.java)
+    fun provideUsersApi(retrofit: Retrofit): UsersApi {
+        return retrofit.create(UsersApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideProductsApi(retrofit: Retrofit): ProductsApi {
+        return retrofit.create(ProductsApi::class.java)
     }
 }

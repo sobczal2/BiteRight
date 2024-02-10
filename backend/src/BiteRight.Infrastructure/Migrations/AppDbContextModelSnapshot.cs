@@ -66,6 +66,10 @@ namespace BiteRight.Infrastructure.Migrations
                         {
                             Id = new Guid("17c56168-c9ec-4ffb-a074-495a02ab0359"),
                             PhotoId = new Guid("2bfd1c0c-8882-44fa-b73d-8588ad8ec50b")
+                        },
+                        new
+                        {
+                            Id = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757")
                         });
                 });
 
@@ -248,6 +252,27 @@ namespace BiteRight.Infrastructure.Migrations
                             CategoryId = new Guid("17c56168-c9ec-4ffb-a074-495a02ab0359"),
                             LanguageId = new Guid("c1dd0a3b-70d3-4aa1-b53e-4c08a03b57c3"),
                             Name = "Fisch"
+                        },
+                        new
+                        {
+                            Id = new Guid("f7b5e10f-0719-4731-831a-ffe0a1a1ed07"),
+                            CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
+                            LanguageId = new Guid("454faf9a-644c-445c-89e3-b57203957c1a"),
+                            Name = "None"
+                        },
+                        new
+                        {
+                            Id = new Guid("abed62c9-41b4-462f-866b-06d714dec958"),
+                            CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
+                            LanguageId = new Guid("24d48691-7325-4703-b69f-8db933a6736d"),
+                            Name = "Brak"
+                        },
+                        new
+                        {
+                            Id = new Guid("206a3c95-fb6d-4127-a37b-9f328c021021"),
+                            CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
+                            LanguageId = new Guid("c1dd0a3b-70d3-4aa1-b53e-4c08a03b57c3"),
+                            Name = "Keine"
                         });
                 });
 
@@ -451,6 +476,10 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("category_id");
 
+                    b.Property<double>("Consumption")
+                        .HasColumnType("double precision")
+                        .HasColumnName("consumption");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text")
@@ -460,10 +489,6 @@ namespace BiteRight.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
-
-                    b.Property<double>("Usage")
-                        .HasColumnType("double precision")
-                        .HasColumnName("usage");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
@@ -490,6 +515,11 @@ namespace BiteRight.Infrastructure.Migrations
                     b.Property<Guid>("CurrencyId")
                         .HasColumnType("uuid")
                         .HasColumnName("currency_id");
+
+                    b.Property<string>("TimeZone")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("time_zone_id");
 
                     b.HasKey("Id")
                         .HasName("pk_profiles");
@@ -612,6 +642,29 @@ namespace BiteRight.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_products_users_user_temp_id1");
 
+                    b.OwnsOne("BiteRight.Domain.Products.DisposedState", "DisposedState", b1 =>
+                        {
+                            b1.Property<Guid>("ProductId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("id");
+
+                            b1.Property<bool>("Disposed")
+                                .HasColumnType("boolean")
+                                .HasColumnName("disposed_state_disposed");
+
+                            b1.Property<DateTime?>("DisposedDate")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("disposed_state_disposed_date");
+
+                            b1.HasKey("ProductId");
+
+                            b1.ToTable("products", "product");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId")
+                                .HasConstraintName("fk_products_products_id");
+                        });
+
                     b.OwnsOne("BiteRight.Domain.Products.ExpirationDate", "ExpirationDate", b1 =>
                         {
                             b1.Property<Guid>("ProductId")
@@ -659,6 +712,9 @@ namespace BiteRight.Infrastructure.Migrations
                         });
 
                     b.Navigation("Category");
+
+                    b.Navigation("DisposedState")
+                        .IsRequired();
 
                     b.Navigation("ExpirationDate")
                         .IsRequired();

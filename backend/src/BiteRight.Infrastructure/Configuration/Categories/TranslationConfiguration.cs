@@ -41,7 +41,7 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
         builder.HasOne(ct => ct.Language)
             .WithMany()
             .HasForeignKey(ct => ct.LanguageId);
-        
+
         builder.HasData(GetSeedData());
     }
 
@@ -62,6 +62,9 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
         yield return FishEn;
         yield return FishPl;
         yield return FishDe;
+        yield return NoneEn;
+        yield return NonePl;
+        yield return NoneDe;
     }
 
     public static Translation DairyEn { get; } = Translation.Create(
@@ -167,5 +170,26 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
         Name.Create("Fisch"),
         LanguageConfiguration.German.Id,
         new TranslationId(new Guid("C605CDF4-8B17-4CF0-950A-5A9BEE434145"))
+    );
+
+    public static Translation NoneEn { get; } = Translation.Create(
+        CategoryConfiguration.None.Id,
+        Name.Create("None"),
+        LanguageConfiguration.English.Id,
+        new TranslationId(new Guid("F7B5E10F-0719-4731-831A-FFE0A1A1ED07"))
+    );
+
+    public static Translation NonePl { get; } = Translation.Create(
+        CategoryConfiguration.None.Id,
+        Name.Create("Brak"),
+        LanguageConfiguration.Polish.Id,
+        new TranslationId(new Guid("ABED62C9-41B4-462F-866B-06D714DEC958"))
+    );
+
+    public static Translation NoneDe { get; } = Translation.Create(
+        CategoryConfiguration.None.Id,
+        Name.Create("Keine"),
+        LanguageConfiguration.German.Id,
+        new TranslationId(new Guid("206A3C95-FB6D-4127-A37B-9F328C021021"))
     );
 }

@@ -14,9 +14,10 @@ public class Product : AggregateRoot<ProductId>
     public CategoryId CategoryId { get; }
     public virtual Category Category { get; }
     public AddedDateTime AddedDateTime { get; }
-    public Usage Usage { get; }
+    public Consumption Consumption { get; }
     public UserId UserId { get; }
     public virtual User User { get; }
+    public DisposedState DisposedState { get; private set; }
 
     // EF Core
     private Product()
@@ -28,9 +29,10 @@ public class Product : AggregateRoot<ProductId>
         CategoryId = default!;
         Category = default!;
         AddedDateTime = default!;
-        Usage = default!;
+        Consumption = default!;
         UserId = default!;
         User = default!;
+        DisposedState = default!;
     }
 
     private Product(
@@ -41,7 +43,8 @@ public class Product : AggregateRoot<ProductId>
         ExpirationDate expirationDate,
         CategoryId categoryId,
         AddedDateTime addedDateTime,
-        Usage usage,
+        Consumption consumption,
+        DisposedState disposedState,
         UserId userId
     )
         : base(id)
@@ -53,7 +56,8 @@ public class Product : AggregateRoot<ProductId>
         CategoryId = categoryId;
         Category = default!;
         AddedDateTime = addedDateTime;
-        Usage = usage;
+        Consumption = consumption;
+        DisposedState = disposedState;
         UserId = userId;
         User = default!;
     }
@@ -64,10 +68,8 @@ public class Product : AggregateRoot<ProductId>
         Price? price,
         ExpirationDate expirationDate,
         CategoryId categoryId,
-        AddedDateTime addedDateTime,
-        Usage usage,
         UserId userId,
-        IDomainEventFactory domainEventFactory,
+        DateTime currentDateTime,
         ProductId? id = null
     )
     {
@@ -78,13 +80,24 @@ public class Product : AggregateRoot<ProductId>
             price,
             expirationDate,
             categoryId,
-            addedDateTime,
-            usage,
+            AddedDateTime.Create(currentDateTime),
+            Consumption.CreateFull(),
+            DisposedState.CreateNotDisposed(),
             userId
         );
 
-        product.AddDomainEvent(domainEventFactory.CreateProductCreatedEvent(product.Id));
-
         return product;
+    }
+
+    public bool IsDisposed()
+    {
+        return DisposedState.Disposed;
+    }
+
+    public void SetDisposed(DateTime currentDateTime)
+    {
+        DisposedState = DisposedState.CreateDisposed(
+            currentDateTime
+        );
     }
 }

@@ -11,23 +11,27 @@ namespace BiteRight.Infrastructure.Domain.Repositories;
 public class CachedEfCoreCurrencyRepository : ICurrencyRepository
 {
     private readonly AppDbContext _appDbContext;
-    private readonly IMemoryCache _codeCache;
     private readonly IMemoryCache _idCache;
     private readonly MemoryCacheEntryOptions _cacheEntryOptions;
 
     public CachedEfCoreCurrencyRepository(
         AppDbContext appDbContext,
-        IMemoryCache codeCache,
         IMemoryCache idCache,
         IOptions<CacheOptions> cacheOptions
     )
     {
         _appDbContext = appDbContext;
-        _codeCache = codeCache;
         _idCache = idCache;
         _cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(
             cacheOptions.Value.CurrencyCacheDuration
         );
+    }
+    
+    private static string GetCacheKey(
+        CurrencyId id
+    )
+    {
+        return $"Currency_Id_{id}";
     }
 
     public async Task<Currency?> FindById(
@@ -35,19 +39,16 @@ public class CachedEfCoreCurrencyRepository : ICurrencyRepository
         CancellationToken cancellationToken = default
     )
     {
-        var cacheKey = $"Currency_Id_{id}";
+        return await _idCache.GetOrCreateAsync(
+            GetCacheKey(id),
+            async entry =>
+            {
+                entry.SetOptions(_cacheEntryOptions);
 
-        if (_idCache.TryGetValue(cacheKey, out Currency? cachedCurrency)) return cachedCurrency;
-
-        cachedCurrency = await _appDbContext.Currencies
-            .FirstOrDefaultAsync(currency => currency.Id == id, cancellationToken);
-
-        if (cachedCurrency != null)
-        {
-            _idCache.Set(cacheKey, cachedCurrency, _cacheEntryOptions);
-        }
-
-        return cachedCurrency;
+                return await _appDbContext.Currencies
+                    .FirstOrDefaultAsync(currency => currency.Id == id, cancellationToken);
+            }
+        );
     }
 
 

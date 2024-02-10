@@ -4,12 +4,10 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,12 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.state.StartScreenState
-import com.sobczal2.biteright.ui.components.BigLoader
-import com.sobczal2.biteright.ui.components.BiteRightLogo
-import com.sobczal2.biteright.ui.components.ErrorBoxWrapped
-import com.sobczal2.biteright.ui.components.ValidatedTextField
+import com.sobczal2.biteright.ui.components.common.BigLoader
+import com.sobczal2.biteright.ui.components.common.BiteRightLogo
+import com.sobczal2.biteright.ui.components.common.ErrorBoxWrapped
+import com.sobczal2.biteright.ui.components.common.ValidatedTextField
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
-import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.ResourceIdOrString
 import com.sobczal2.biteright.viewmodels.StartViewModel
 
@@ -58,7 +55,6 @@ fun StartScreenContent(
     Surface(
         modifier = Modifier
             .fillMaxSize()
-            .padding(MaterialTheme.dimension.lg)
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -77,7 +73,7 @@ fun StartScreenContent(
                 singleLine = true,
                 imeAction = ImeAction.Done
             )
-            OutlinedButton(
+            Button(
                 onClick = onNextClick,
             ) {
                 if (state.loading) {
