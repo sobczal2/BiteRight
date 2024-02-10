@@ -54,20 +54,10 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
                 )
                 .Where(product =>
                     !product.DisposedState.Disposed
-                )
-                .Where(product =>
-                    product.Usage != Usage.Empty
-                )
-                .Where(product =>
-                    product.ExpirationDate.Kind == ExpirationDate.ExpirationDateKind.Unknown
-                    || product.ExpirationDate.Kind == ExpirationDate.ExpirationDateKind.Infinite
-                    || (product.ExpirationDate.Kind == ExpirationDate.ExpirationDateKind.BestBefore
-                        && product.ExpirationDate.Value >= currentLocalDate)
-                    || (product.ExpirationDate.Kind == ExpirationDate.ExpirationDateKind.UseBy
-                        && product.ExpirationDate.Value >= currentLocalDate)
                 );
 
-        var sortedQuery = ApplySortingStrategy(baseQuery, request.SortingStrategy);
+        var sortedQuery = ApplySortingStrategy(baseQuery, request.SortingStrategy)
+            .ThenBy(product => product.Id);
 
         var products = await sortedQuery
             .Select(product => new SimpleProductDto
@@ -77,14 +67,14 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
                 ExpirationDate = product.ExpirationDate.GetDateIfKnown(),
                 CategoryId = product.CategoryId,
                 AddedDateTime = product.AddedDateTime,
-                UsagePercentage = product.Usage.GetPercentage(),
+                Consumption = product.Consumption,
             })
             .ToListAsync(cancellationToken);
 
         return new ListCurrentResponse(products);
     }
 
-    private static IQueryable<Product> ApplySortingStrategy(
+    private static IOrderedQueryable<Product> ApplySortingStrategy(
         IQueryable<Product> baseQuery,
         ProductSortingStrategy sortingStrategy
     )
@@ -96,10 +86,10 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
             ProductSortingStrategy.ExpirationDateAsc => baseQuery.OrderBy(product => product.ExpirationDate.Value),
             ProductSortingStrategy.ExpirationDateDesc => baseQuery.OrderByDescending(product =>
                 product.ExpirationDate.Value),
-            ProductSortingStrategy.AddedDateTimeAsc => baseQuery.OrderBy(product => product.Usage),
-            ProductSortingStrategy.AddedDateTimeDesc => baseQuery.OrderByDescending(product => product.Usage),
-            ProductSortingStrategy.UsageAsc => baseQuery.OrderBy(product => product.Name),
-            ProductSortingStrategy.UsageDesc => baseQuery.OrderByDescending(product => product.Name),
+            ProductSortingStrategy.AddedDateTimeAsc => baseQuery.OrderBy(product => product.Consumption),
+            ProductSortingStrategy.AddedDateTimeDesc => baseQuery.OrderByDescending(product => product.Consumption),
+            ProductSortingStrategy.ConsumptionAsc => baseQuery.OrderBy(product => product.Name),
+            ProductSortingStrategy.ConsumptionDesc => baseQuery.OrderByDescending(product => product.Name),
             _ => throw new ArgumentOutOfRangeException(nameof(sortingStrategy), sortingStrategy, null)
         };
     }

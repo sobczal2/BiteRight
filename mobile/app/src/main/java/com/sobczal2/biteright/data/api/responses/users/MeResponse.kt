@@ -1,4 +1,4 @@
-package com.sobczal2.biteright.data.api.responses
+package com.sobczal2.biteright.data.api.responses.users
 
 import com.google.gson.annotations.SerializedName
 import com.sobczal2.biteright.dto.users.UserDto

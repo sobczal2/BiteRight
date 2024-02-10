@@ -1,4 +1,4 @@
-package com.sobczal2.biteright.data.api
+package com.sobczal2.biteright.data.api.common
 
 import com.auth0.android.authentication.storage.CredentialsManagerException
 import com.auth0.android.callback.Callback

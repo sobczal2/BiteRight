@@ -476,6 +476,10 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("category_id");
 
+                    b.Property<double>("Consumption")
+                        .HasColumnType("double precision")
+                        .HasColumnName("consumption");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text")
@@ -485,10 +489,6 @@ namespace BiteRight.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
-
-                    b.Property<double>("Usage")
-                        .HasColumnType("double precision")
-                        .HasColumnName("usage");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
@@ -519,7 +519,7 @@ namespace BiteRight.Infrastructure.Migrations
                     b.Property<string>("TimeZone")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("time_zone");
+                        .HasColumnName("time_zone_id");
 
                     b.HasKey("Id")
                         .HasName("pk_profiles");
@@ -642,7 +642,7 @@ namespace BiteRight.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_products_users_user_temp_id1");
 
-                    b.OwnsOne("BiteRight.Domain.Products.Product.DisposedState#BiteRight.Domain.Products.DisposedState", "DisposedState", b1 =>
+                    b.OwnsOne("BiteRight.Domain.Products.DisposedState", "DisposedState", b1 =>
                         {
                             b1.Property<Guid>("ProductId")
                                 .HasColumnType("uuid")
@@ -665,7 +665,7 @@ namespace BiteRight.Infrastructure.Migrations
                                 .HasConstraintName("fk_products_products_id");
                         });
 
-                    b.OwnsOne("BiteRight.Domain.Products.Product.ExpirationDate#BiteRight.Domain.Products.ExpirationDate", "ExpirationDate", b1 =>
+                    b.OwnsOne("BiteRight.Domain.Products.ExpirationDate", "ExpirationDate", b1 =>
                         {
                             b1.Property<Guid>("ProductId")
                                 .HasColumnType("uuid")
@@ -688,7 +688,7 @@ namespace BiteRight.Infrastructure.Migrations
                                 .HasConstraintName("fk_products_products_id");
                         });
 
-                    b.OwnsOne("BiteRight.Domain.Products.Product.Price#BiteRight.Domain.Products.Price", "Price", b1 =>
+                    b.OwnsOne("BiteRight.Domain.Products.Price", "Price", b1 =>
                         {
                             b1.Property<Guid>("ProductId")
                                 .HasColumnType("uuid")

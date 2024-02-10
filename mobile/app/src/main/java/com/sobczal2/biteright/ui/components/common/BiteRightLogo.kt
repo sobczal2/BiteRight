@@ -1,4 +1,4 @@
-package com.sobczal2.biteright.ui.components
+package com.sobczal2.biteright.ui.components.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable

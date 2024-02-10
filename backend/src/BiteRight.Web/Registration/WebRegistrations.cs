@@ -1,5 +1,7 @@
 using System;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json;
 using BiteRight.Domain.Abstracts.Common;
@@ -79,6 +81,9 @@ public static class WebRegistrations
 
             opt.OperationFilter<CultureQueryParameterFilter>();
             opt.OperationFilter<ProducesInternalServerErrorResponseFilter>();
+            
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            opt.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
     }
 

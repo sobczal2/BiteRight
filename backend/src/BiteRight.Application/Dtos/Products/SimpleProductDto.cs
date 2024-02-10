@@ -7,5 +7,5 @@ public class SimpleProductDto
     public DateOnly? ExpirationDate { get; set; }
     public Guid CategoryId { get; set; }
     public DateTime AddedDateTime { get; set; }
-    public double UsagePercentage { get; set; }
+    public double Consumption { get; set; }
 }

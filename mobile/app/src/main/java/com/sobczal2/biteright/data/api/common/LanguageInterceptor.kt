@@ -1,4 +1,4 @@
-package com.sobczal2.biteright.data.api
+package com.sobczal2.biteright.data.api.common
 
 import androidx.compose.ui.text.intl.Locale
 import okhttp3.Interceptor

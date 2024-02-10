@@ -14,7 +14,7 @@ public class Product : AggregateRoot<ProductId>
     public CategoryId CategoryId { get; }
     public virtual Category Category { get; }
     public AddedDateTime AddedDateTime { get; }
-    public Usage Usage { get; }
+    public Consumption Consumption { get; }
     public UserId UserId { get; }
     public virtual User User { get; }
     public DisposedState DisposedState { get; private set; }
@@ -29,7 +29,7 @@ public class Product : AggregateRoot<ProductId>
         CategoryId = default!;
         Category = default!;
         AddedDateTime = default!;
-        Usage = default!;
+        Consumption = default!;
         UserId = default!;
         User = default!;
         DisposedState = default!;
@@ -43,7 +43,7 @@ public class Product : AggregateRoot<ProductId>
         ExpirationDate expirationDate,
         CategoryId categoryId,
         AddedDateTime addedDateTime,
-        Usage usage,
+        Consumption consumption,
         DisposedState disposedState,
         UserId userId
     )
@@ -56,7 +56,7 @@ public class Product : AggregateRoot<ProductId>
         CategoryId = categoryId;
         Category = default!;
         AddedDateTime = addedDateTime;
-        Usage = usage;
+        Consumption = consumption;
         DisposedState = disposedState;
         UserId = userId;
         User = default!;
@@ -81,7 +81,7 @@ public class Product : AggregateRoot<ProductId>
             expirationDate,
             categoryId,
             AddedDateTime.Create(currentDateTime),
-            Usage.CreateFull(),
+            Consumption.CreateFull(),
             DisposedState.CreateNotDisposed(),
             userId
         );

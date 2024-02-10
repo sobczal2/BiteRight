@@ -1,6 +1,6 @@
 package com.sobczal2.biteright.repositories.common
 
-import com.sobczal2.biteright.data.api.ApiError
+import com.sobczal2.biteright.data.api.common.ApiError
 import com.sobczal2.biteright.util.ResourceIdOrString
 
 class ApiRepositoryError(

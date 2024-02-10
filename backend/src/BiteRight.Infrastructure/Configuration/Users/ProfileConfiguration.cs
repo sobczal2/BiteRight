@@ -35,6 +35,7 @@ public class ProfileConfiguration : IEntityTypeConfiguration<Profile>
             .HasConversion(
                 timeZone => timeZone.Id,
                 value => TimeZoneInfo.FindSystemTimeZoneById(value)
-            );
+            )
+            .HasColumnName("time_zone_id");
     }
 }

@@ -3,48 +3,48 @@ using BiteRight.Domain.Products.Exceptions;
 
 namespace BiteRight.Domain.Products;
 
-public class Usage : ValueObject
+public class Consumption : ValueObject
 {
     public double Amount { get; }
-    public static Usage Empty => MinAmount;
-    public static Usage Full => MaxAmount;
+    public static Consumption All => MaxAmount;
+    public static Consumption None => MinAmount;
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Amount;
     }
 
-    private Usage(
+    private Consumption(
         double amount
     )
     {
         Amount = amount;
     }
 
-    public static Usage Create(
+    public static Consumption Create(
         double amount
     )
     {
         Validate(amount);
 
-        return new Usage(amount);
+        return new Consumption(amount);
     }
 
-    public static Usage CreateSkipValidation(
+    public static Consumption CreateSkipValidation(
         double amount
     )
     {
-        return new Usage(amount);
+        return new Consumption(amount);
     }
 
-    public static Usage CreateEmpty()
-    {
-        return Create(MinAmount);
-    }
-
-    public static Usage CreateFull()
+    public static Consumption CreateEmpty()
     {
         return Create(MaxAmount);
+    }
+
+    public static Consumption CreateFull()
+    {
+        return Create(MinAmount);
     }
 
     private const double MinAmount = 0.0;
@@ -56,7 +56,7 @@ public class Usage : ValueObject
     {
         if (amount is < MinAmount or > MaxAmount)
         {
-            throw new UsageInvalidAmountException(MinAmount, MaxAmount);
+            throw new ConsumptionInvalidAmountException(MinAmount, MaxAmount);
         }
     }
 
@@ -64,25 +64,15 @@ public class Usage : ValueObject
     {
         return Amount * 100;
     }
-
-    public bool IsEmpty()
-    {
-        return Math.Abs(Amount - MinAmount) < double.Epsilon;
-    }
-
-    public bool IsFull()
-    {
-        return Math.Abs(Amount - MaxAmount) < double.Epsilon;
-    }
     
     public static implicit operator double(
-        Usage usage
+        Consumption consumption
     )
     {
-        return usage.Amount;
+        return consumption.Amount;
     }
     
-    public static implicit operator Usage(
+    public static implicit operator Consumption(
         double amount
     )
     {

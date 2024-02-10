@@ -77,10 +77,10 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                 value => value.ToUniversalTime()
             );
 
-        builder.Property(p => p.Usage)
+        builder.Property(p => p.Consumption)
             .HasConversion(
-                usage => usage.Amount,
-                amount => Usage.CreateSkipValidation(amount)
+                consumption => consumption.Amount,
+                amount => Consumption.CreateSkipValidation(amount)
             );
 
         builder.Property(p => p.UserId)
