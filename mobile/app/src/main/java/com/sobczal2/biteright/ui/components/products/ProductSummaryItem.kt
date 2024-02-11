@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -59,7 +58,7 @@ data class ProductSummaryItemState(
     val name: String,
     val expirationDate: LocalDate,
     val categoryImageUri: String?,
-    val consumption: Double,
+    val amountPercentage: Double,
     val disposed: Boolean = false
 )
 
@@ -80,8 +79,14 @@ fun ProductSummaryItem(
         initialValue = SwipeToDismissBoxValue.Settled,
         confirmValueChange = {
             when (it) {
-                SwipeToDismissBoxValue.EndToStart -> { isDeleted = true; true }
-                SwipeToDismissBoxValue.StartToEnd -> { isRestored = true; true }
+                SwipeToDismissBoxValue.EndToStart -> {
+                    isDeleted = true; true
+                }
+
+                SwipeToDismissBoxValue.StartToEnd -> {
+                    isRestored = true; true
+                }
+
                 else -> false
             }
         }
@@ -132,7 +137,7 @@ fun ProductSummaryItem(
                         modifier = Modifier
                             .weight(1f)
                     )
-                    ProductConsumptionIndicator(consumption = productSummaryItemState.consumption)
+                    ProductConsumptionIndicator(amountPercentage = productSummaryItemState.amountPercentage)
                 }
             }
         }
@@ -141,7 +146,7 @@ fun ProductSummaryItem(
 
 @Composable
 fun ProductConsumptionIndicator(
-    consumption: Double
+    amountPercentage: Double
 ) {
     Box(
         modifier = Modifier
@@ -149,13 +154,12 @@ fun ProductConsumptionIndicator(
             .width(48.dp)
     ) {
         CircularProgressIndicator(
-            progress = { consumption.toFloat() },
+            progress = { amountPercentage.toFloat() / 100 },
             modifier = Modifier.size(48.dp),
-            trackColor = MaterialTheme.colorScheme.onBackground,
-            color = getConsumptionColor(consumption)
+            color = getColorForAmountPercentage(amountPercentage)
         )
         Text(
-            text = "${((1 - consumption) * 100).roundToInt()}%",
+            text = "${amountPercentage.roundToInt()}%",
             modifier = Modifier.align(Alignment.Center),
             style = MaterialTheme.typography.labelMedium
                 .copy(textAlign = TextAlign.Center)
@@ -163,12 +167,12 @@ fun ProductConsumptionIndicator(
     }
 }
 
-private fun getConsumptionColor(consumption: Double): Color {
-    return when (consumption) {
-        in 0.0..0.25 -> Color.Green
-        in 0.25..0.5 -> Color.Yellow
-        in 0.5..0.75 -> Color(0xFFFFA500)
-        in 0.75..1.0 -> Color.Red
+private fun getColorForAmountPercentage(amountPercentage: Double): Color {
+    return when (amountPercentage) {
+        in 0.0..25.0 -> Color.Green
+        in 25.0..50.0 -> Color.Yellow
+        in 50.0..75.0 -> Color(0xFFFFA500)
+        in 75.0..100.0 -> Color.Red
         else -> Color.Black
     }
 }
@@ -197,8 +201,9 @@ fun ProductDetails(
     productSummaryItemState: ProductSummaryItemState,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier
-        .padding(MaterialTheme.dimension.sm)
+    Box(
+        modifier = modifier
+            .padding(MaterialTheme.dimension.sm)
     ) {
         Column {
             Text(
@@ -218,13 +223,27 @@ fun ProductExpirationIndicator(
 
     if (expirationDate.isBefore(LocalDate.now())) {
         Text(
-            text = "${stringResource(id = R.string.expired_for)} ${humanizePeriod(period = Period.between(expirationDate, LocalDate.now()))}",
+            text = "${stringResource(id = R.string.expired_for)} ${
+                humanizePeriod(
+                    period = Period.between(
+                        expirationDate,
+                        LocalDate.now()
+                    )
+                )
+            }",
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.error
         )
     } else {
         Text(
-            text = "${stringResource(id = R.string.expires_in)} ${humanizePeriod(period = Period.between(LocalDate.now(), expirationDate))}",
+            text = "${stringResource(id = R.string.expires_in)} ${
+                humanizePeriod(
+                    period = Period.between(
+                        LocalDate.now(),
+                        expirationDate
+                    )
+                )
+            }",
             style = MaterialTheme.typography.labelMedium,
         )
 
@@ -275,7 +294,7 @@ fun ProductSummaryItemPreview() {
                 name = "Product name Product name Product name",
                 expirationDate = LocalDate.now().plusDays(5),
                 categoryImageUri = null,
-                consumption = 0.2,
+                amountPercentage = 50.0
             ),
             inPreview = true
         )

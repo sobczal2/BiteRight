@@ -11,6 +11,6 @@ data class SimpleProductDto(
     @SerializedName("expirationDate") val expirationDate: LocalDate,
     @SerializedName("categoryId") val categoryId: UUID,
     @SerializedName("addedDateTime") val addedDateTime: LocalDateTime,
-    @SerializedName("consumption") val consumption: Double,
+    @SerializedName("amountPercentage") val amountPercentage: Double,
     @SerializedName("disposed") val disposed: Boolean
 )
