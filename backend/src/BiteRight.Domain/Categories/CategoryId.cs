@@ -1,3 +1,4 @@
+using System;
 using BiteRight.Domain.Common;
 
 namespace BiteRight.Domain.Categories;

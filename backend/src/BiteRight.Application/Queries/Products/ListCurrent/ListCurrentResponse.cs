@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BiteRight.Application.Dtos.Products;
 
 namespace BiteRight.Application.Queries.Products.ListCurrent;

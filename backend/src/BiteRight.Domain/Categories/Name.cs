@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BiteRight.Domain.Categories.Exceptions;
 using BiteRight.Domain.Common;
 

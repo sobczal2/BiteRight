@@ -1,3 +1,5 @@
+using System;
+
 namespace BiteRight.Domain.Abstracts.Common;
 
 public interface ICorrelationIdAccessor

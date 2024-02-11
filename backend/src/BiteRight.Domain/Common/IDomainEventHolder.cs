@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace BiteRight.Domain.Common;
 
 public interface IDomainEventHolder

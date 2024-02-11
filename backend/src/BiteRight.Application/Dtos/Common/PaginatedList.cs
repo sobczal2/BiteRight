@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace BiteRight.Application.Dtos.Common;
 
 public class PaginatedList<T>

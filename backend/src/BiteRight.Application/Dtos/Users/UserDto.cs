@@ -1,3 +1,5 @@
+using System;
+
 namespace BiteRight.Application.Dtos.Users;
 
 public class UserDto

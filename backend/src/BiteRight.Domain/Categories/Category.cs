@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Languages;
 

@@ -1,3 +1,5 @@
+using System;
+
 namespace BiteRight.Application.Dtos.Categories;
 
 public class CategoryDto

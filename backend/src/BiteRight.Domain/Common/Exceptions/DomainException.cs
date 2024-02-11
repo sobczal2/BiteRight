@@ -1,3 +1,5 @@
+using System;
+
 namespace BiteRight.Domain.Common.Exceptions;
 
 public class DomainException : Exception

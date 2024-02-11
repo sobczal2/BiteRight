@@ -1,3 +1,5 @@
+using System;
+
 namespace BiteRight.Domain.Common;
 
 public abstract class DomainEvent

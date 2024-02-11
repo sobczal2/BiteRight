@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Products.Exceptions;

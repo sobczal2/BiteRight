@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace BiteRight.Domain.Common;
 
 public abstract class Id<T>

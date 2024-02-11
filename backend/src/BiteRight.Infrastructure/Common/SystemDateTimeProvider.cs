@@ -1,3 +1,4 @@
+using System;
 using BiteRight.Domain.Abstracts.Common;
 
 namespace BiteRight.Infrastructure.Common;

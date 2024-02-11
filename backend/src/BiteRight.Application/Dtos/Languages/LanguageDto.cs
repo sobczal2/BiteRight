@@ -1,3 +1,5 @@
+using System;
+
 namespace BiteRight.Application.Dtos.Languages;
 
 public class LanguageDto

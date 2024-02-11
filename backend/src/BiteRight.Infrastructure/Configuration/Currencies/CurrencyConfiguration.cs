@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using BiteRight.Domain.Currencies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

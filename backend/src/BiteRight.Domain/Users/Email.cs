@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Mail;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Users.Exceptions;

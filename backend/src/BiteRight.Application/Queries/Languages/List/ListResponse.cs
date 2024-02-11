@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BiteRight.Application.Dtos.Languages;
 
 namespace BiteRight.Application.Queries.Languages.List;

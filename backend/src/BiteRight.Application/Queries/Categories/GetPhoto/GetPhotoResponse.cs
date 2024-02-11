@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace BiteRight.Application.Queries.Categories.GetPhoto;
 
 public class GetPhotoResponse

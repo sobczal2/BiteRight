@@ -3,6 +3,7 @@ using System;
 using BiteRight.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BiteRight.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240211231219_Hello")]
+    partial class Hello
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,11 +93,6 @@ namespace BiteRight.Infrastructure.Migrations
                     b.ToTable("photos", "category");
 
                     b.HasData(
-                        new
-                        {
-                            Id = new Guid("4aa9576b-8f3d-4a09-a66e-caa3fddfb4fb"),
-                            Name = "default.webp"
-                        },
                         new
                         {
                             Id = new Guid("98eb4dc2-11b5-440b-bfc1-742fda8279b7"),
@@ -580,7 +578,7 @@ namespace BiteRight.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d91f5a31-458e-4d08-bfee-1812183ea35d"),
+                            Id = new Guid("e0b0ad1f-0f7b-4586-8afd-cabc85bb72c9"),
                             Abbreviation = "L",
                             LanguageId = new Guid("454faf9a-644c-445c-89e3-b57203957c1a"),
                             Name = "Liter",
@@ -588,7 +586,7 @@ namespace BiteRight.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ca5c1bac-a53d-44bf-9cdf-2cd165047f7b"),
+                            Id = new Guid("223c9c16-509f-454c-9d57-b4dbe46a9687"),
                             Abbreviation = "L",
                             LanguageId = new Guid("24d48691-7325-4703-b69f-8db933a6736d"),
                             Name = "Litr",
@@ -596,7 +594,7 @@ namespace BiteRight.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ce4f6636-140c-48f7-a2f4-3148045ca0e5"),
+                            Id = new Guid("6a436b72-bde9-4ef4-8df9-8cc0abe13115"),
                             Abbreviation = "L",
                             LanguageId = new Guid("c1dd0a3b-70d3-4aa1-b53e-4c08a03b57c3"),
                             Name = "Liter",
@@ -604,7 +602,7 @@ namespace BiteRight.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("712cd66c-87ac-4af4-bc07-2d42db04e8b3"),
+                            Id = new Guid("9125b867-044e-40c0-a1de-f8fed20f0476"),
                             Abbreviation = "kg",
                             LanguageId = new Guid("454faf9a-644c-445c-89e3-b57203957c1a"),
                             Name = "Kilogram",
@@ -612,7 +610,7 @@ namespace BiteRight.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e45767ee-c69c-4c34-9729-ffa396306017"),
+                            Id = new Guid("b24bd84f-3294-4f2c-a711-a616c4effa17"),
                             Abbreviation = "kg",
                             LanguageId = new Guid("24d48691-7325-4703-b69f-8db933a6736d"),
                             Name = "Kilogram",
@@ -620,7 +618,7 @@ namespace BiteRight.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("368fb52e-06d7-4b33-aceb-c7edfdf865ad"),
+                            Id = new Guid("f755089b-a0ee-4999-972d-77512fc9330c"),
                             Abbreviation = "kg",
                             LanguageId = new Guid("c1dd0a3b-70d3-4aa1-b53e-4c08a03b57c3"),
                             Name = "Kilogramm",

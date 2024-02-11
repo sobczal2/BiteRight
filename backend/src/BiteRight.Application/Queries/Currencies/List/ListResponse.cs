@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BiteRight.Application.Dtos.Currencies;
 
 namespace BiteRight.Application.Queries.Currencies.List;

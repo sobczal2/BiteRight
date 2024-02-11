@@ -1,3 +1,4 @@
+using System;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Currencies;
 

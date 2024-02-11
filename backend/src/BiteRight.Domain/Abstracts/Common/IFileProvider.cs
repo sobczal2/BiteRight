@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace BiteRight.Domain.Abstracts.Common;
 
 public interface IFileProvider

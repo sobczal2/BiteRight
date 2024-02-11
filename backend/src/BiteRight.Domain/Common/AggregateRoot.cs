@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace BiteRight.Domain.Common;
 
 public class AggregateRoot<TId> : Entity<TId>, IDomainEventHolder

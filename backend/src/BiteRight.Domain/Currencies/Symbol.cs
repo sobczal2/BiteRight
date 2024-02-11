@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Currencies.Exceptions;
 

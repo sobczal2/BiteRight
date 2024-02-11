@@ -1,3 +1,4 @@
+using System.IO;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Options;
 using Microsoft.Extensions.Options;

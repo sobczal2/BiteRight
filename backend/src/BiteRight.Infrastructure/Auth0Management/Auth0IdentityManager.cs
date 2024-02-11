@@ -1,4 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using Auth0.ManagementApi;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Users;

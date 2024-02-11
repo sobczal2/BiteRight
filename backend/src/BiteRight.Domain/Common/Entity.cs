@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace BiteRight.Domain.Common;
 
 public class Entity<TId> : IEquatable<Entity<TId>> where TId : GuidId

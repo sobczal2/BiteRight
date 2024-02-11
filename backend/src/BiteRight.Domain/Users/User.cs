@@ -1,3 +1,4 @@
+using System;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Currencies;
 
@@ -51,7 +52,7 @@ public class User : AggregateRoot<UserId>
     )
     {
         var user = new User(
-            new UserId(Guid.NewGuid()),
+            new UserId(),
             identityId,
             username,
             email,

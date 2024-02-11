@@ -1,3 +1,4 @@
+using System;
 using BiteRight.Domain.Categories;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Users;
