@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BiteRight.Resources\BiteRight.Resources.csproj" />
+      <ProjectReference Include="..\BiteRight.Utils\BiteRight.Utils.csproj" />
     </ItemGroup>
 
 </Project>

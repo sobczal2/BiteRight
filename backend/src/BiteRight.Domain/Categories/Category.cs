@@ -26,7 +26,7 @@ public class Category : AggregateRoot<CategoryId>
     {
         PhotoId = photoId;
         Photo = default!;
-        Translations = new List<Translation>();
+        Translations = default!;
     }
 
     public static Category Create(

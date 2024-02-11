@@ -27,7 +27,7 @@ public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
     )
     {
         var languageId = await _languageProvider.RequireCurrentId(cancellationToken);
-        var categories = await _categoryRepository.Search(
+        var searchResult = await _categoryRepository.Search(
             request.Query,
             request.PaginationParams.PageNumber,
             request.PaginationParams.PageSize,
@@ -38,8 +38,8 @@ public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
         var pagedList = new PaginatedList<CategoryDto>(
             request.PaginationParams.PageNumber,
             request.PaginationParams.PageSize,
-            categories.TotalCount,
-            categories.Categories.Select(category => new CategoryDto
+            searchResult.TotalCount,
+            searchResult.Categories.Select(category => new CategoryDto
             {
                 Id = category.Id,
                 Name = category.GetName(languageId),

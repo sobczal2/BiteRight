@@ -67,7 +67,7 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
                 ExpirationDate = product.ExpirationDate.GetDateIfKnown(),
                 CategoryId = product.CategoryId,
                 AddedDateTime = product.AddedDateTime,
-                Consumption = product.Consumption,
+                AmountPercentage = product.Amount.GetPercentage(),
                 Disposed = product.DisposedState.Disposed
             })
             .ToListAsync(cancellationToken);
@@ -87,8 +87,8 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
             ProductSortingStrategy.ExpirationDateAsc => baseQuery.OrderBy(product => product.ExpirationDate.Value),
             ProductSortingStrategy.ExpirationDateDesc => baseQuery.OrderByDescending(product =>
                 product.ExpirationDate.Value),
-            ProductSortingStrategy.AddedDateTimeAsc => baseQuery.OrderBy(product => product.Consumption),
-            ProductSortingStrategy.AddedDateTimeDesc => baseQuery.OrderByDescending(product => product.Consumption),
+            ProductSortingStrategy.AddedDateTimeAsc => baseQuery.OrderBy(product => product.Amount),
+            ProductSortingStrategy.AddedDateTimeDesc => baseQuery.OrderByDescending(product => product.Amount),
             ProductSortingStrategy.ConsumptionAsc => baseQuery.OrderBy(product => product.Name),
             ProductSortingStrategy.ConsumptionDesc => baseQuery.OrderByDescending(product => product.Name),
             _ => throw new ArgumentOutOfRangeException(nameof(sortingStrategy), sortingStrategy, null)

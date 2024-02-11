@@ -20,9 +20,11 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
     private readonly ICurrencyRepository _currencyRepository;
     private readonly IProductRepository _productRepository;
     private readonly ICategoryRepository _categoryRepository;
+    private readonly IUnitRepository _unitRepository;
     private readonly ILanguageProvider _languageProvider;
     private readonly IStringLocalizer<Resources.Resources.Products.Products> _productsLocalizer;
     private readonly IStringLocalizer<Resources.Resources.Currencies.Currencies> _currenciesLocalizer;
+    private readonly IStringLocalizer<Resources.Resources.Units.Units> _unitsLocalizer;
 
     public CreateHandler(
         IIdentityProvider identityProvider,
@@ -31,10 +33,12 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
         ICurrencyRepository currencyRepository,
         IProductRepository productRepository,
         ICategoryRepository categoryRepository,
+        IUnitRepository unitRepository,
         AppDbContext appDbContext,
         ILanguageProvider languageProvider,
         IStringLocalizer<Resources.Resources.Products.Products> productsLocalizer,
-        IStringLocalizer<Resources.Resources.Currencies.Currencies> currenciesLocalizer
+        IStringLocalizer<Resources.Resources.Currencies.Currencies> currenciesLocalizer,
+        IStringLocalizer<Resources.Resources.Units.Units> unitsLocalizer
     )
         : base(appDbContext)
     {
@@ -44,9 +48,11 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
         _currencyRepository = currencyRepository;
         _productRepository = productRepository;
         _categoryRepository = categoryRepository;
+        _unitRepository = unitRepository;
         _languageProvider = languageProvider;
         _productsLocalizer = productsLocalizer;
         _currenciesLocalizer = currenciesLocalizer;
+        _unitsLocalizer = unitsLocalizer;
     }
 
     protected override async Task<CreateResponse> HandleImpl(
@@ -88,6 +94,14 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                                nameof(Resources.Resources.Categories.Categories.category_not_found)]
                        );
 
+        var amountUnit = await _unitRepository.FindById(request.AmountUnitId, languageId, cancellationToken)
+                         ?? throw ValidationException(
+                             _unitsLocalizer[
+                                 nameof(Resources.Resources.Units.Units.unit_not_found)]
+                         );
+
+        var amount = Amount.CreateFull(amountUnit.Id, request.MaximumAmountValue);
+
         var product = Product.Create(
             name,
             description,
@@ -95,12 +109,11 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
             expirationDate,
             category.Id,
             user.Id,
+            amount,
             _dateTimeProvider.UtcNow
         );
 
         _productRepository.Add(product);
-
-        await AppDbContext.SaveChangesAsync(cancellationToken);
 
         return new CreateResponse(product.Id);
     }
@@ -156,6 +169,20 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                 nameof(CreateRequest.ExpirationDateKind),
                 _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_infinite)]
             ),
+            AmountCurrentValueLessThanZeroException => ValidationException(
+                nameof(CreateRequest.MaximumAmountValue),
+                _productsLocalizer[nameof(Resources.Resources.Products.Products.amount_current_value_less_than_zero)]
+            ),
+            AmountMaxValueLessThanZeroException => ValidationException(
+                nameof(CreateRequest.MaximumAmountValue),
+                _productsLocalizer[nameof(Resources.Resources.Products.Products.amount_max_value_less_than_zero)]
+            ),
+            AmountCurrentValueGreaterThanMaxValueException => ValidationException(
+                nameof(CreateRequest.MaximumAmountValue),
+                _productsLocalizer[
+                    nameof(Resources.Resources.Products.Products.amount_current_value_greater_than_max_value)]
+            ),
+
             _ => base.MapExceptionToValidationException(exception)
         };
     }

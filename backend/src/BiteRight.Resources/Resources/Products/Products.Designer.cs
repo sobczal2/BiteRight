@@ -140,5 +140,23 @@ namespace BiteRight.Resources.Resources.Products {
                 return ResourceManager.GetString("product_already_disposed", resourceCulture);
             }
         }
+        
+        public static string amount_current_value_less_than_zero {
+            get {
+                return ResourceManager.GetString("amount_current_value_less_than_zero", resourceCulture);
+            }
+        }
+        
+        public static string amount_max_value_less_than_zero {
+            get {
+                return ResourceManager.GetString("amount_max_value_less_than_zero", resourceCulture);
+            }
+        }
+        
+        public static string amount_current_value_greater_than_max_value {
+            get {
+                return ResourceManager.GetString("amount_current_value_greater_than_max_value", resourceCulture);
+            }
+        }
     }
 }

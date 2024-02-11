@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Languages.Exceptions;
+using BiteRight.Utils;
 
 namespace BiteRight.Domain.Languages;
 
@@ -38,11 +39,8 @@ public class Code : ValueObject
     }
 
     private const int ExactLength = 2;
-
-    private static readonly Regex ValidCharacters = new(
-        @"^[a-z]+$",
-        RegexOptions.Compiled
-    );
+    
+    private static readonly Regex ValidCharacters = CommonRegexes.LowercaseLetters;
 
     private static void Validate(
         string value

@@ -20,11 +20,13 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
                 value => value
             )
             .ValueGeneratedNever();
+        
         builder.Property(category => category.PhotoId)
             .HasConversion(
                 photoId => photoId!.Value,
                 value => value
             );
+        
         builder.HasOne(category => category.Photo)
             .WithOne()
             .HasForeignKey<Category>(category => category.PhotoId)

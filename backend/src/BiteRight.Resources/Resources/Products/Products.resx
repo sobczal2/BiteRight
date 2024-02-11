@@ -66,4 +66,13 @@
     <data name="product_already_disposed" xml:space="preserve">
         <value>Product was already disposed</value>
     </data>
+    <data name="amount_current_value_less_than_zero" xml:space="preserve">
+        <value />
+    </data>
+    <data name="amount_max_value_less_than_zero" xml:space="preserve">
+        <value />
+    </data>
+    <data name="amount_current_value_greater_than_max_value" xml:space="preserve">
+        <value />
+    </data>
 </root>

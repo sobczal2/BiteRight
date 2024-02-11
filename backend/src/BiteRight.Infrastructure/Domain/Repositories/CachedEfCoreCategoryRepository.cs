@@ -37,32 +37,32 @@ public class CachedEfCoreCategoryRepository : ICategoryRepository
     }
 
     public async Task<(IEnumerable<Category> Categories, int TotalCount)> Search(
-        string name,
+        string query,
         int pageNumber,
         int pageSize,
         LanguageId languageId,
         CancellationToken cancellationToken = default
     )
     {
-        IQueryable<Category> query = _appDbContext.Categories
+        IQueryable<Category> baseQuery = _appDbContext.Categories
             .Include(category =>
                 category.Translations.Where(translation => Equals(translation.LanguageId, languageId)));
 
-        if (!string.IsNullOrWhiteSpace(name))
+        if (!string.IsNullOrWhiteSpace(query))
         {
-            query = query.Where(category =>
+            baseQuery = baseQuery.Where(category =>
                 category.Translations.Any(translation =>
 #pragma warning disable CA1862
-                    ((string)translation.Name).ToLower().Contains(name.ToLower())
+                    ((string)translation.Name).ToLower().Contains(query.ToLower())
 #pragma warning restore CA1862
                     && Equals(translation.LanguageId, languageId)
                 )
             );
         }
 
-        var totalCount = await query.CountAsync(cancellationToken);
+        var totalCount = await baseQuery.CountAsync(cancellationToken);
 
-        var categories = await query
+        var categories = await baseQuery
             .OrderBy(category =>
                 (string)category.Translations.First(translation => translation.LanguageId == languageId).Name)
             .Skip(pageNumber * pageSize)

@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Currencies.Exceptions;
+using BiteRight.Utils;
 
 namespace BiteRight.Domain.Currencies;
 
@@ -37,11 +38,8 @@ public class Name : ValueObject
     
     private const int MinLength = 3;
     private const int MaxLength = 30;
-    
-    private static readonly Regex ValidCharacters = new(
-        @"^[\p{L}\s]+$",
-        RegexOptions.Compiled
-    );
+
+    private static readonly Regex ValidCharacters = CommonRegexes.LettersWithSpaces;
     
     private static void Validate(
         string value

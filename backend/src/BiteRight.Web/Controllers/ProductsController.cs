@@ -32,10 +32,12 @@ public class ProductsController : WebController
     ///       "Name": "Example Product",
     ///       "Description": "This is an example product description.",
     ///       "Price": 19.99,
-    ///       "CurrencyId": "3b56a6de-3b41-4b10-934f-469ca12f4fe3",
+    ///       "CurrencyId": "3B56A6DE-3B41-4B10-934F-469CA12F4FE3",
     ///       "ExpirationDate": "2024-12-31",
-    ///       "ExpirationDateKind": 0,
-    ///       "CategoryId": "1fd7ed59-9e34-40ab-a03d-6282b5d9fd86"
+    ///       "ExpirationDateKind": 2,
+    ///       "CategoryId": "E8C78317-70AC-4051-805E-ECE2BB37656F",
+    ///       "maximumAmountValue": 100,
+    ///       "amountUnitId": "B6D4D4DD-C035-4047-B8EE-48937CB1F368"
     ///     }
     ///
     /// </remarks>

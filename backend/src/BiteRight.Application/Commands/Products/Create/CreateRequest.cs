@@ -10,5 +10,7 @@ public record CreateRequest(
     Guid? CurrencyId,
     DateOnly? ExpirationDate,
     ExpirationDateKindDto ExpirationDateKind,
-    Guid CategoryId
+    Guid CategoryId,
+    double MaximumAmountValue,
+    Guid AmountUnitId
 ) : IRequest<CreateResponse>;

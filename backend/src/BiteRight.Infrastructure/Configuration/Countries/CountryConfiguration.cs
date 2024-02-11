@@ -23,40 +23,47 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
                 value => value
             )
             .ValueGeneratedNever();
+
         builder.Property(country => country.NativeName)
             .HasConversion(
                 nativeName => nativeName.Value,
                 value => Name.CreateSkipValidation(value)
             );
+
         builder.Property(country => country.EnglishName)
             .HasConversion(
                 englishName => englishName.Value,
                 value => Name.CreateSkipValidation(value)
             );
+
         builder.Property(country => country.Alpha2Code)
             .HasConversion(
                 alpha2Code => alpha2Code.Value,
                 value => Alpha2Code.CreateSkipValidation(value)
             );
+
         builder.Property(country => country.OfficialLanguageId)
             .HasConversion(
                 officialLanguageId => officialLanguageId.Value,
                 value => value
             );
+
         builder.HasOne(country => country.OfficialLanguage)
             .WithMany()
             .HasForeignKey(country => country.OfficialLanguageId)
             .OnDelete(DeleteBehavior.Restrict);
+
         builder.Property(country => country.CurrencyId)
             .HasConversion(
                 currencyId => currencyId.Value,
                 value => value
             );
+
         builder.HasOne(country => country.Currency)
             .WithMany()
             .HasForeignKey(country => country.CurrencyId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder.HasData(GetSeedData());
     }
 

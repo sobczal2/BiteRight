@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Products.Exceptions;
+using BiteRight.Utils;
 
 namespace BiteRight.Domain.Products;
 
@@ -39,10 +40,7 @@ public class Name : ValueObject
     private const int MinLength = 3;
     private const int MaxLength = 64;
     
-    private static readonly Regex ValidCharacters = new(
-        @"^[a-zA-Z0-9\s-]+$",
-        RegexOptions.Compiled
-    );
+    private static readonly Regex ValidCharacters = CommonRegexes.AlphanumericWithSpacesAndSpecialCharacters;
     
     private static void Validate(
         string value

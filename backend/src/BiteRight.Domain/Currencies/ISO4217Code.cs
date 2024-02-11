@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Currencies.Exceptions;
+using BiteRight.Utils;
 
 namespace BiteRight.Domain.Currencies;
 
@@ -37,11 +38,8 @@ public class ISO4217Code : ValueObject
     }
 
     private const int ExactLength = 3;
-    
-    private static readonly Regex ValidCharacters = new(
-        @"^[A-Z]+$",
-        RegexOptions.Compiled
-    );
+
+    private static readonly Regex ValidCharacters = CommonRegexes.UppercaseLetters;
     
     private static void Validate(
         string value

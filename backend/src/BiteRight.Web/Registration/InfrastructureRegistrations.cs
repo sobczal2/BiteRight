@@ -72,6 +72,7 @@ public static class InfrastructureRegistrations
         services.AddScoped<ICurrencyRepository, CachedEfCoreCurrencyRepository>();
         services.AddScoped<ICountryRepository, CachedEfCoreCountryRepository>();
         services.AddScoped<IProductRepository, EfCoreProductRepository>();
+        services.AddScoped<IUnitRepository, CachedEfCoreUnitRepository>();
     }
 
     private static void AddFileProvider(

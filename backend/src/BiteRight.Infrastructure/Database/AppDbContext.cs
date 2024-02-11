@@ -4,6 +4,7 @@ using BiteRight.Domain.Countries;
 using BiteRight.Domain.Currencies;
 using BiteRight.Domain.Languages;
 using BiteRight.Domain.Products;
+using BiteRight.Domain.Units;
 using BiteRight.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,13 +14,17 @@ public class AppDbContext : DbContext
 {
     private readonly IDomainEventPublisher _domainEventPublisher;
     public DbSet<User> Users { get; set; } = default!;
+    public DbSet<Profile> Profiles { get; set; } = default!;
     public DbSet<Country> Countries { get; set; } = default!;
     public DbSet<Language> Languages { get; set; } = default!;
     public DbSet<Category> Categories { get; set; } = default!;
-    public DbSet<Translation> CategoryTranslations { get; set; } = default!;
+    public DbSet<BiteRight.Domain.Categories.Translation> CategoryTranslations { get; set; } = default!;
     public DbSet<Currency> Currencies { get; set; } = default!;
-    public DbSet<Profile> Profiles { get; set; } = default!;
     public DbSet<Product> Products { get; set; } = default!;
+    public DbSet<Unit> Units { get; set; } = default!;
+    public DbSet<BiteRight.Domain.Units.Translation> UnitTranslations { get; set; } = default!;
+    public DbSet<Amount> Amounts { get; set; } = default!;
+    public DbSet<Photo> Photos { get; set; } = default!;
 
     public AppDbContext(
         DbContextOptions<AppDbContext> options,

@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Countries.Exceptions;
+using BiteRight.Utils;
 
 namespace BiteRight.Domain.Countries;
 
@@ -37,11 +38,8 @@ public class Alpha2Code : ValueObject
     }
     
     private const int ExactLength = 2;
-    
-    private static readonly Regex ValidCharacters = new(
-        @"^[A-Z]+$",
-        RegexOptions.Compiled
-    );
+
+    private static readonly Regex ValidCharacters = CommonRegexes.UppercaseLetters;
     
     private static void Validate(
         string value

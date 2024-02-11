@@ -87,6 +87,22 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Currencies.pl.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Units\Units.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Units.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Units\Units.de.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Units.de.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Units\Units.en.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Units.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Units\Units.pl.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Units.pl.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -189,6 +205,26 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Currencies.pl.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Units\Units.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Units.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Units\Units.de.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Units.de.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Units\Units.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Units.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Units\Units.pl.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Units.pl.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 

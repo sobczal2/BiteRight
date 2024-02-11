@@ -1,19 +1,21 @@
 using System.Text.RegularExpressions;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Countries.Exceptions;
+using BiteRight.Utils;
 
 namespace BiteRight.Domain.Countries;
 
 public class Name : ValueObject
 {
     public string Value { get; private set; }
-    
+
     private Name(
         string value
     )
     {
         Value = value;
     }
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
@@ -24,25 +26,22 @@ public class Name : ValueObject
     )
     {
         Validate(value);
-        
+
         return new Name(value);
     }
-    
+
     public static Name CreateSkipValidation(
         string value
     )
     {
         return new Name(value);
     }
-    
+
     private const int MinLength = 3;
     private const int MaxLength = 100;
-    
-    private static readonly Regex ValidCharacters = new(
-        @"^[a-zA-Z\s]+$",
-        RegexOptions.Compiled
-    );
-    
+
+    private static readonly Regex ValidCharacters = CommonRegexes.LettersWithSpaces;
+
     private static void Validate(
         string value
     )
@@ -51,18 +50,18 @@ public class Name : ValueObject
         {
             throw new NameEmptyException();
         }
-        
+
         if (value.Length is < MinLength or > MaxLength)
         {
             throw new NameInvalidLengthException(MinLength, MaxLength);
         }
-        
+
         if (!ValidCharacters.IsMatch(value))
         {
             throw new NameInvalidCharactersException(ValidCharacters.ToString());
         }
     }
-    
+
     public static implicit operator string(
         Name name
     )

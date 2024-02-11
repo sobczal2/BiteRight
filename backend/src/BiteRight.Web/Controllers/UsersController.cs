@@ -32,7 +32,7 @@ public class UsersController : WebController
     }
 
     [HttpGet("me")]
-    [AuthorizeUserExists]
+    [AuthorizeNamePresent]
     [ProducesResponseType(typeof(MeResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Me()

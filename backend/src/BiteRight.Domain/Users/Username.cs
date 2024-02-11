@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Users.Exceptions;
+using BiteRight.Utils;
 
 namespace BiteRight.Domain.Users;
 
@@ -39,10 +40,7 @@ public class Username : ValueObject
     private const int MinLength = 3;
     private const int MaxLength = 30;
 
-    private static readonly Regex ValidCharacters = new(
-        @"^[a-zA-Z0-9_]+$",
-        RegexOptions.Compiled
-    );
+    private static readonly Regex ValidCharacters = CommonRegexes.AlphanumericWithHuphensAndUnderscores;
 
     private static void Validate(
         string value
