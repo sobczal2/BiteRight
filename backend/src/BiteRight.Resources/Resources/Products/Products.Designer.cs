@@ -123,12 +123,6 @@ namespace BiteRight.Resources.Resources.Products {
             }
         }
         
-        public static string time_zone_not_found {
-            get {
-                return ResourceManager.GetString("time_zone_not_found", resourceCulture);
-            }
-        }
-        
         public static string product_id_empty {
             get {
                 return ResourceManager.GetString("product_id_empty", resourceCulture);

@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -18,12 +17,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.state.CurrentProductsScreenState
@@ -37,7 +36,7 @@ import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.getCategoryPhotoUrl
 import com.sobczal2.biteright.viewmodels.CurrentProductsViewModel
-import java.time.LocalDate
+import java.util.UUID
 
 @Composable
 fun CurrentProductsScreen(
@@ -60,7 +59,8 @@ fun CurrentProductsScreen(
     } else {
         CurrentProductsScreenContent(
             state = state.value,
-            mainAppLayoutActions = mainAppLayoutActions
+            mainAppLayoutActions = mainAppLayoutActions,
+            disposeProduct = { viewModel.disposeProduct(it) }
         )
     }
 }
@@ -69,7 +69,8 @@ fun CurrentProductsScreen(
 fun CurrentProductsScreenContent(
     state: CurrentProductsScreenState = CurrentProductsScreenState(),
     mainAppLayoutActions: MainAppLayoutActions = MainAppLayoutActions(),
-    navigateToCreateProduct: () -> Unit = {}
+    navigateToCreateProduct: () -> Unit = {},
+    disposeProduct: (UUID) -> Unit = {}
 ) {
     MainAppLayout(
         currentTab = MainAppLayoutTab.CURRENT_PRODUCTS,
@@ -109,20 +110,21 @@ fun CurrentProductsScreenContent(
                                 .padding(MaterialTheme.dimension.sm)
                         )
                     }
-                    items(state.currentProducts) {
-                        key(it.id) {
-                            Box(modifier = Modifier.padding(MaterialTheme.dimension.sm)) {
-                                ProductSummaryItem(
-                                    productSummaryItemState = ProductSummaryItemState(
-                                        name = it.name,
-                                        expirationDate = it.expirationDate,
-                                        categoryImageUri = getCategoryPhotoUrl(categoryId = it.categoryId),
-                                        consumption = it.consumption
-                                    ),
-                                    onClick = { /*TODO*/ }
-                                )
-                            }
-                        }
+                    items(
+                        items = state.currentProducts,
+                        key = { it.id }
+                    ) { simpleProductDto ->
+                        ProductSummaryItem(
+                            productSummaryItemState = ProductSummaryItemState(
+                                name = simpleProductDto.name,
+                                expirationDate = simpleProductDto.expirationDate,
+                                categoryImageUri = getCategoryPhotoUrl(categoryId = simpleProductDto.categoryId),
+                                consumption = simpleProductDto.consumption,
+                                disposed = simpleProductDto.disposed,
+                            ),
+                            onClick = { /*TODO*/ },
+                            onDeleted = { disposeProduct(simpleProductDto.id) }
+                        )
                     }
                 },
             )

@@ -8,4 +8,5 @@ public class SimpleProductDto
     public Guid CategoryId { get; set; }
     public DateTime AddedDateTime { get; set; }
     public double Consumption { get; set; }
+    public bool Disposed { get; set; }
 }
