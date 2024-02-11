@@ -13,11 +13,11 @@ namespace BiteRight.Application.Commands.Users.Onboard;
 
 public class OnboardHandler : CommandHandlerBase<OnboardRequest>
 {
+    private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IIdentityManager _identityManager;
     private readonly IIdentityProvider _identityProvider;
-    private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly IUserRepository _userRepository;
     private readonly IStringLocalizer<Resources.Resources.Users.Users> _localizer;
+    private readonly IUserRepository _userRepository;
 
     public OnboardHandler(
         IIdentityManager identityManager,
@@ -45,47 +45,37 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
         var existingUser = await _userRepository.FindByIdentityId(currentIdentityId, cancellationToken);
 
         if (existingUser != null)
-        {
             throw ValidationException(
                 _localizer[nameof(Resources.Resources.Users.Users.user_already_exists)]
             );
-        }
 
         var (email, isVerified) = await _identityManager.GetEmail(currentIdentityId, cancellationToken);
 
         if (!isVerified)
-        {
             throw ValidationException(
                 _localizer[nameof(Resources.Resources.Users.Users.email_not_verified)]
             );
-        }
 
         var username = Username.Create(request.Username);
 
         var existsByUsername = await _userRepository.ExistsByUsername(username, cancellationToken);
         if (existsByUsername)
-        {
             throw ValidationException(
                 _localizer[nameof(Resources.Resources.Users.Users.username)],
                 _localizer[nameof(Resources.Resources.Users.Users.username_in_use)]
             );
-        }
 
         var existsByEmail = await _userRepository.ExistsByEmail(email, cancellationToken);
         if (existsByEmail)
-        {
             throw ValidationException(
                 _localizer[nameof(Resources.Resources.Users.Users.email_in_use)]
             );
-        }
 
         if (!TimeZoneInfo.TryFindSystemTimeZoneById(request.TimeZoneId, out var timeZone))
-        {
             throw ValidationException(
                 nameof(OnboardRequest.TimeZoneId),
                 _localizer[nameof(Resources.Resources.Users.Users.time_zone_id_not_found)]
             );
-        }
 
         var profile = Profile.Create(
             CurrencyConfiguration.USD.Id,

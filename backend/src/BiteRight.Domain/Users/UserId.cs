@@ -17,9 +17,15 @@ public class UserId : GuidId
 
     public static implicit operator Guid(
         UserId id
-    ) => id.Value;
+    )
+    {
+        return id.Value;
+    }
 
     public static implicit operator UserId(
         Guid id
-    ) => new(id);
+    )
+    {
+        return new UserId(id);
+    }
 }

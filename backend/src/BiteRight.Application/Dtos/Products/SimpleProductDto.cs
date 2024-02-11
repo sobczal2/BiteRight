@@ -7,6 +7,6 @@ public class SimpleProductDto
     public DateOnly? ExpirationDate { get; set; }
     public Guid CategoryId { get; set; }
     public DateTime AddedDateTime { get; set; }
-    public double Consumption { get; set; }
+    public double AmountPercentage { get; set; }
     public bool Disposed { get; set; }
 }

@@ -1,4 +1,3 @@
-using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Categories;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Users;
@@ -7,18 +6,6 @@ namespace BiteRight.Domain.Products;
 
 public class Product : AggregateRoot<ProductId>
 {
-    public Name Name { get; }
-    public Description Description { get; }
-    public Price? Price { get; }
-    public ExpirationDate ExpirationDate { get; }
-    public CategoryId CategoryId { get; }
-    public virtual Category Category { get; }
-    public AddedDateTime AddedDateTime { get; }
-    public Consumption Consumption { get; }
-    public UserId UserId { get; }
-    public virtual User User { get; }
-    public DisposedState DisposedState { get; private set; }
-
     // EF Core
     private Product()
     {
@@ -29,7 +16,8 @@ public class Product : AggregateRoot<ProductId>
         CategoryId = default!;
         Category = default!;
         AddedDateTime = default!;
-        Consumption = default!;
+        AmountId = default!;
+        Amount = default!;
         UserId = default!;
         User = default!;
         DisposedState = default!;
@@ -43,7 +31,7 @@ public class Product : AggregateRoot<ProductId>
         ExpirationDate expirationDate,
         CategoryId categoryId,
         AddedDateTime addedDateTime,
-        Consumption consumption,
+        Amount amount,
         DisposedState disposedState,
         UserId userId
     )
@@ -56,11 +44,26 @@ public class Product : AggregateRoot<ProductId>
         CategoryId = categoryId;
         Category = default!;
         AddedDateTime = addedDateTime;
-        Consumption = consumption;
+        AmountId = amount.Id;
+        Amount = amount;
         DisposedState = disposedState;
         UserId = userId;
         User = default!;
     }
+
+    public Name Name { get; private set; }
+    public Description Description { get; private set; }
+    public Price? Price { get; private set; }
+    public ExpirationDate ExpirationDate { get; private set; }
+    public CategoryId CategoryId { get; private set; }
+    public virtual Category Category { get; private set; }
+    public AddedDateTime AddedDateTime { get; private set; }
+    public AmountId AmountId { get; private set; }
+    public virtual Amount Amount { get; private set; }
+    public UserId UserId { get; private set; }
+    public virtual User User { get; private set; }
+
+    public DisposedState DisposedState { get; private set; }
 
     public static Product Create(
         Name name,
@@ -69,6 +72,7 @@ public class Product : AggregateRoot<ProductId>
         ExpirationDate expirationDate,
         CategoryId categoryId,
         UserId userId,
+        Amount amount,
         DateTime currentDateTime,
         ProductId? id = null
     )
@@ -81,7 +85,7 @@ public class Product : AggregateRoot<ProductId>
             expirationDate,
             categoryId,
             AddedDateTime.Create(currentDateTime),
-            Consumption.CreateFull(),
+            amount,
             DisposedState.CreateNotDisposed(),
             userId
         );

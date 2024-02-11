@@ -6,14 +6,14 @@ namespace BiteRight.Application.Common;
 public abstract class CommandHandlerBase<TRequest, TResponse> : HandlerBase<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    protected AppDbContext AppDbContext { get; }
-
     protected CommandHandlerBase(
         AppDbContext appDbContext
     )
     {
         AppDbContext = appDbContext;
     }
+
+    protected AppDbContext AppDbContext { get; }
 
     public override async Task<TResponse> Handle(
         TRequest request,

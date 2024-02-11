@@ -1,4 +1,3 @@
-using BiteRight.Domain.Abstracts;
 using BiteRight.Domain.Abstracts.Common;
 
 namespace BiteRight.Infrastructure.Common;

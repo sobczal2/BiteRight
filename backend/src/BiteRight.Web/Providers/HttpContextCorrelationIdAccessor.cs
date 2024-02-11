@@ -1,5 +1,4 @@
 using System;
-using BiteRight.Domain.Abstracts;
 using BiteRight.Domain.Abstracts.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -14,7 +13,7 @@ public class HttpContextCorrelationIdAccessor : ICorrelationIdAccessor
     )
     {
         var correlationId = httpContextAccessor.HttpContext?.Items["CorrelationId"] as string;
-        
+
         switch (correlationId)
         {
             case null:

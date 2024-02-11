@@ -26,13 +26,6 @@ public class CachedEfCoreCountryRepository : ICountryRepository
             cacheOptions.Value.CountryCacheDuration
         );
     }
-    
-    private static string GetCacheKey(
-        CountryId id
-    )
-    {
-        return $"Country_Id_{id}";
-    }
 
     public async Task<Country?> FindById(
         CountryId id,
@@ -50,7 +43,7 @@ public class CachedEfCoreCountryRepository : ICountryRepository
             }
         );
     }
-    
+
     public async Task<bool> ExistsById(
         CountryId id,
         CancellationToken cancellationToken = default
@@ -66,5 +59,12 @@ public class CachedEfCoreCountryRepository : ICountryRepository
                     .AnyAsync(country => country.Id == id, cancellationToken);
             }
         );
+    }
+
+    private static string GetCacheKey(
+        CountryId id
+    )
+    {
+        return $"Country_Id_{id}";
     }
 }

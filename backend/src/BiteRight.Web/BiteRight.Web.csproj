@@ -11,7 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="EFCore.NamingConventions" Version="8.0.0-rc.2" />
+        <PackageReference Include="EFCore.NamingConventions" Version="8.0.0-rc.2"/>
         <PackageReference Include="MediatR" Version="12.2.0"/>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
@@ -33,37 +33,37 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Resources\BiteRight\Application\Commannds\Users\Onboard.en.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Onboard.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\BiteRight\Application\Commannds\Users\Onboard.pl.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Onboard.pl.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
+        <EmbeddedResource Update="Resources\BiteRight\Application\Commannds\Users\Onboard.en.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Onboard.en.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\BiteRight\Application\Commannds\Users\Onboard.pl.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Onboard.pl.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Resources\BiteRight\Application\Commannds\Users\Onboard.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Onboard.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\BiteRight\Application\Commannds\Users\Onboard.pl.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Onboard.pl.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\BiteRight\Application\Commannds\Users\Onboard.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Onboard.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\BiteRight\Application\Commannds\Users\Onboard.pl.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Onboard.pl.resx</DependentUpon>
-      </Compile>
+        <Compile Update="Resources\BiteRight\Application\Commannds\Users\Onboard.en.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Onboard.en.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\BiteRight\Application\Commannds\Users\Onboard.pl.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Onboard.pl.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\BiteRight\Application\Commannds\Users\Onboard.en.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Onboard.en.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\BiteRight\Application\Commannds\Users\Onboard.pl.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Onboard.pl.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
 
 </Project>

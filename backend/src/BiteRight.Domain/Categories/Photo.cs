@@ -4,7 +4,6 @@ namespace BiteRight.Domain.Categories;
 
 public class Photo : Entity<PhotoId>
 {
-    public string Name { get; private set; }
     public const string DefaultName = "default.webp";
     public const string ContentType = "image/webp";
     public const string Directory = "photos";
@@ -24,11 +23,15 @@ public class Photo : Entity<PhotoId>
         Name = name;
     }
 
+    public string Name { get; private set; }
+
+    public static Photo Default { get; } = new(PhotoId.Empty, DefaultName);
+
     public static Photo Create(
         PhotoId id,
         string name
     )
-        => new(id, name);
-
-    public static Photo Default { get; } = new(PhotoId.Empty, DefaultName);
+    {
+        return new Photo(id, name);
+    }
 }

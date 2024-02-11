@@ -1,4 +1,3 @@
-using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Currencies;
 using BiteRight.Domain.Languages;
@@ -7,14 +6,6 @@ namespace BiteRight.Domain.Countries;
 
 public class Country : AggregateRoot<CountryId>
 {
-    public Name NativeName { get; private set; }
-    public Name EnglishName { get; private set; }
-    public Alpha2Code Alpha2Code { get; private set; }
-    public LanguageId OfficialLanguageId { get; private set; }
-    public virtual Language OfficialLanguage { get; private set; }
-    public CurrencyId CurrencyId { get; private set; }
-    public virtual Currency Currency { get; private set; }
-
     // EF Core
     private Country()
     {
@@ -45,6 +36,15 @@ public class Country : AggregateRoot<CountryId>
         CurrencyId = currencyId;
         Currency = default!;
     }
+
+    public Name NativeName { get; private set; }
+    public Name EnglishName { get; private set; }
+    public Alpha2Code Alpha2Code { get; private set; }
+    public LanguageId OfficialLanguageId { get; private set; }
+    public virtual Language OfficialLanguage { get; private set; }
+    public CurrencyId CurrencyId { get; private set; }
+
+    public virtual Currency Currency { get; private set; }
 
     public static Country Create(
         Name nativeName,

@@ -8,7 +8,7 @@ public interface ICurrencyRepository
         CurrencyId id,
         CancellationToken cancellationToken = default
     );
-    
+
     Task<bool> ExistsById(
         CurrencyId id,
         CancellationToken cancellationToken = default

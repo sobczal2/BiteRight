@@ -23,6 +23,20 @@ public class Auth0IdentityManager : IIdentityManager
         _dateTimeProvider = dateTimeProvider;
     }
 
+    public async Task<(Email email, bool isVerified)> GetEmail(
+        IdentityId identityId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        await EnsureManagementApiToken(cancellationToken);
+
+        var user = await _managementApiClient!.Users.GetAsync(identityId.Value, cancellationToken: cancellationToken);
+
+        if (user is null) throw new InvalidOperationException("User not found.");
+
+        return (Email.Create(user.Email), user.EmailVerified ?? false);
+    }
+
     private async Task EnsureManagementApiToken(
         CancellationToken cancellationToken = default
     )
@@ -46,10 +60,7 @@ public class Auth0IdentityManager : IIdentityManager
                 await response.Content.ReadAsStringAsync(cancellationToken)
             );
 
-            if (getTokenResponse is null)
-            {
-                throw new InvalidOperationException("Failed to deserialize token response.");
-            }
+            if (getTokenResponse is null) throw new InvalidOperationException("Failed to deserialize token response.");
 
             _managementApiClient = new ManagementApiClient(
                 getTokenResponse.AccessToken,
@@ -58,22 +69,5 @@ public class Auth0IdentityManager : IIdentityManager
 
             _managementApiTokenExpiresAt = _dateTimeProvider.UtcNow.AddSeconds(getTokenResponse.ExpiresIn);
         }
-    }
-
-    public async Task<(Email email, bool isVerified)> GetEmail(
-        IdentityId identityId,
-        CancellationToken cancellationToken = default
-    )
-    {
-        await EnsureManagementApiToken(cancellationToken);
-
-        var user = await _managementApiClient!.Users.GetAsync(identityId.Value, cancellationToken: cancellationToken);
-
-        if (user is null)
-        {
-            throw new InvalidOperationException("User not found.");
-        }
-
-        return (Email.Create(user.Email), user.EmailVerified ?? false);
     }
 }

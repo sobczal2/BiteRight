@@ -6,14 +6,14 @@ namespace BiteRight.Domain.Users;
 
 public class JoinedAt : ValueObject
 {
-    public DateTime Value { get; }
-
     private JoinedAt(
         DateTime value
     )
     {
         Value = value;
     }
+
+    public DateTime Value { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
@@ -47,17 +47,14 @@ public class JoinedAt : ValueObject
         DateTime value
     )
     {
-        if (value.Kind != DateTimeKind.Utc)
-        {
-            throw new AddedDateTimeInvalidKindException();
-        }
+        if (value.Kind != DateTimeKind.Utc) throw new AddedDateTimeInvalidKindException();
     }
-    
+
     public static implicit operator DateTime(JoinedAt joinedAt)
     {
         return joinedAt.Value;
     }
-    
+
     public static implicit operator JoinedAt(DateTime value)
     {
         return Create(value);

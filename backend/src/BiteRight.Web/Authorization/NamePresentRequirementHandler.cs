@@ -10,10 +10,7 @@ public class NamePresentRequirementHandler : AuthorizationHandler<NamePresentReq
         NamePresentRequirement requirement
     )
     {
-        if (!string.IsNullOrWhiteSpace(context.User.Identity?.Name))
-        {
-            context.Succeed(requirement);
-        }
+        if (!string.IsNullOrWhiteSpace(context.User.Identity?.Name)) context.Succeed(requirement);
 
         return Task.CompletedTask;
     }

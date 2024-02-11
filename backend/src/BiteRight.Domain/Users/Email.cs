@@ -6,7 +6,6 @@ namespace BiteRight.Domain.Users;
 
 public class Email : ValueObject
 {
-    public string Value => _mailAddress.Address;
     private readonly MailAddress _mailAddress;
 
     private Email(
@@ -15,30 +14,32 @@ public class Email : ValueObject
     {
         _mailAddress = mailAddress;
     }
-    
+
+    public string Value => _mailAddress.Address;
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
     }
-    
+
     public static Email Create(
         string value
     )
     {
-        if(!MailAddress.TryCreate(value, out var mailAddress))
-        {
-            throw new EmailNotValidException();
-        }
+        if (!MailAddress.TryCreate(value, out var mailAddress)) throw new EmailNotValidException();
 
         return new Email(mailAddress);
     }
-    
+
     public static Email CreateSkipValidation(
         string value
     )
     {
         return new Email(new MailAddress(value));
     }
-    
-    public static implicit operator string(Email email) => email.Value;
+
+    public static implicit operator string(Email email)
+    {
+        return email.Value;
+    }
 }

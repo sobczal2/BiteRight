@@ -5,15 +5,6 @@ namespace BiteRight.Domain.Products;
 
 public class DisposedState : ValueObject
 {
-    public bool Disposed { get; private set; }
-    public DateTime? DisposedDate { get; private set; }
-
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Disposed;
-        yield return DisposedDate!;
-    }
-
     // EF Core
     private DisposedState()
     {
@@ -28,6 +19,16 @@ public class DisposedState : ValueObject
     {
         Disposed = disposed;
         DisposedDate = disposedDate;
+    }
+
+    public bool Disposed { get; }
+
+    public DateTime? DisposedDate { get; }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Disposed;
+        yield return DisposedDate!;
     }
 
     private static DisposedState Create(
@@ -46,17 +47,12 @@ public class DisposedState : ValueObject
     {
         if (!disposed)
         {
-            if (disposedDate.HasValue)
-            {
-                throw new DisposedStateInvalidDisposedDateValueException();
-            }
+            if (disposedDate.HasValue) throw new DisposedStateInvalidDisposedDateValueException();
         }
         else
         {
             if (disposedDate is not { Kind: DateTimeKind.Utc })
-            {
                 throw new DisposedStateInvalidDisposedDateValueException();
-            }
         }
     }
 

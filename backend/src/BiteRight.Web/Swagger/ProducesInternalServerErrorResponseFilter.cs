@@ -36,7 +36,7 @@ public class ProducesInternalServerErrorResponseFilter : IOperationFilter
                 }
             }
         };
-        
+
         operation.Responses.Add("500", producesInternalServerErrorResponse);
     }
 }

@@ -1,5 +1,4 @@
 using BiteRight.Domain.Languages;
-using BiteRight.Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +6,27 @@ namespace BiteRight.Infrastructure.Configuration.Languages;
 
 public class LanguageConfiguration : IEntityTypeConfiguration<Language>
 {
+    public static Language Polish { get; } = Language.Create(
+        Name.Create("Polski"),
+        Name.Create("Polish"),
+        Code.Create("pl"),
+        new LanguageId(new Guid("24D48691-7325-4703-B69F-8DB933A6736D"))
+    );
+
+    public static Language English { get; } = Language.Create(
+        Name.Create("English"),
+        Name.Create("English"),
+        Code.Create("en"),
+        new LanguageId(new Guid("454FAF9A-644C-445C-89E3-B57203957C1A"))
+    );
+
+    public static Language German { get; } = Language.Create(
+        Name.Create("Deutsch"),
+        Name.Create("German"),
+        Code.Create("de"),
+        new LanguageId(new Guid("C1DD0A3B-70D3-4AA1-B53E-4C08A03B57C3"))
+    );
+
     public void Configure(
         EntityTypeBuilder<Language> builder
     )
@@ -48,25 +68,4 @@ public class LanguageConfiguration : IEntityTypeConfiguration<Language>
         yield return English;
         yield return German;
     }
-
-    public static Language Polish { get; } = Language.Create(
-        Name.Create("Polski"),
-        Name.Create("Polish"),
-        Code.Create("pl"),
-        new LanguageId(new Guid("24D48691-7325-4703-B69F-8DB933A6736D"))
-    );
-
-    public static Language English { get; } = Language.Create(
-        Name.Create("English"),
-        Name.Create("English"),
-        Code.Create("en"),
-        new LanguageId(new Guid("454FAF9A-644C-445C-89E3-B57203957C1A"))
-    );
-
-    public static Language German { get; } = Language.Create(
-        Name.Create("Deutsch"),
-        Name.Create("German"),
-        Code.Create("de"),
-        new LanguageId(new Guid("C1DD0A3B-70D3-4AA1-B53E-4C08A03B57C3"))
-    );
 }

@@ -17,9 +17,15 @@ public class LanguageId : GuidId
 
     public static implicit operator Guid(
         LanguageId id
-    ) => id.Value;
+    )
+    {
+        return id.Value;
+    }
 
     public static implicit operator LanguageId(
         Guid id
-    ) => new(id);
+    )
+    {
+        return new LanguageId(id);
+    }
 }

@@ -11,9 +11,9 @@ namespace BiteRight.Application.Queries.Products.ListCurrent;
 
 public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurrentResponse>
 {
-    private readonly IIdentityProvider _identityProvider;
     private readonly AppDbContext _appDbContext;
     private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly IIdentityProvider _identityProvider;
     private readonly IUserRepository _userRepository;
 
     public ListCurrentHandler(
@@ -37,10 +37,7 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
         var identityId = _identityProvider.RequireCurrent();
         var user = await _userRepository.FindByIdentityId(identityId, cancellationToken);
 
-        if (user is null)
-        {
-            throw new InternalErrorException();
-        }
+        if (user is null) throw new InternalErrorException();
 
         var currentLocalDate = _dateTimeProvider.GetLocalDate(user.Profile.TimeZone);
 
@@ -67,7 +64,7 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
                 ExpirationDate = product.ExpirationDate.GetDateIfKnown(),
                 CategoryId = product.CategoryId,
                 AddedDateTime = product.AddedDateTime,
-                Consumption = product.Consumption,
+                AmountPercentage = product.Amount.GetPercentage(),
                 Disposed = product.DisposedState.Disposed
             })
             .ToListAsync(cancellationToken);
@@ -87,8 +84,8 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
             ProductSortingStrategy.ExpirationDateAsc => baseQuery.OrderBy(product => product.ExpirationDate.Value),
             ProductSortingStrategy.ExpirationDateDesc => baseQuery.OrderByDescending(product =>
                 product.ExpirationDate.Value),
-            ProductSortingStrategy.AddedDateTimeAsc => baseQuery.OrderBy(product => product.Consumption),
-            ProductSortingStrategy.AddedDateTimeDesc => baseQuery.OrderByDescending(product => product.Consumption),
+            ProductSortingStrategy.AddedDateTimeAsc => baseQuery.OrderBy(product => product.Amount),
+            ProductSortingStrategy.AddedDateTimeDesc => baseQuery.OrderByDescending(product => product.Amount),
             ProductSortingStrategy.ConsumptionAsc => baseQuery.OrderBy(product => product.Name),
             ProductSortingStrategy.ConsumptionDesc => baseQuery.OrderByDescending(product => product.Name),
             _ => throw new ArgumentOutOfRangeException(nameof(sortingStrategy), sortingStrategy, null)

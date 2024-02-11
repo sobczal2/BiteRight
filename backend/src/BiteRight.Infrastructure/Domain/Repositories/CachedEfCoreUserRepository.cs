@@ -26,13 +26,6 @@ public class CachedEfCoreUserRepository : IUserRepository
             cacheOptions.Value.UserCacheDuration
         );
     }
-    
-    private static string GetCacheKey(
-        IdentityId identityId
-    )
-    {
-        return $"User_IdentityId_{identityId}";
-    }
 
     public void Add(
         User user
@@ -60,7 +53,6 @@ public class CachedEfCoreUserRepository : IUserRepository
     }
 
 
-
     public async Task<bool> ExistsByEmail(
         Email email,
         CancellationToken cancellationToken = default
@@ -85,5 +77,12 @@ public class CachedEfCoreUserRepository : IUserRepository
                 user => user.Username == username,
                 cancellationToken
             );
+    }
+
+    private static string GetCacheKey(
+        IdentityId identityId
+    )
+    {
+        return $"User_IdentityId_{identityId}";
     }
 }

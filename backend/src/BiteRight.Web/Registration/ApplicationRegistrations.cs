@@ -14,7 +14,7 @@ public static class ApplicationRegistrations
         AddMediator(services);
         AddValidators(services);
     }
-    
+
     private static void AddMediator(
         IServiceCollection services
     )
@@ -25,7 +25,7 @@ public static class ApplicationRegistrations
             opt.AddOpenBehavior(typeof(MediatorValidationBehaviour<,>));
         });
     }
-    
+
     private static void AddValidators(
         IServiceCollection services
     )

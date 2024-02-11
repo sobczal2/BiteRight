@@ -10,25 +10,25 @@ public class IdentityId : Id<string>
         : base(value)
     {
     }
-    
+
     public static IdentityId Create(
         string value
     )
     {
         return new IdentityId(value);
     }
-    
+
     public static implicit operator string(
         IdentityId id
     )
     {
         return id.Value;
     }
-    
+
     public static implicit operator IdentityId(
         string id
     )
     {
-        return new(id);
+        return new IdentityId(id);
     }
 }

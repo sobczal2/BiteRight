@@ -4,7 +4,6 @@ using BiteRight.Application.Commands.Users.UpdateProfile;
 using BiteRight.Application.Queries.Users.Me;
 using BiteRight.Web.Authorization;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,7 +31,7 @@ public class UsersController : WebController
     }
 
     [HttpGet("me")]
-    [AuthorizeUserExists]
+    [AuthorizeNamePresent]
     [ProducesResponseType(typeof(MeResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Me()

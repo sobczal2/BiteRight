@@ -3,14 +3,13 @@ using BiteRight.Application.Dtos.Categories;
 using BiteRight.Application.Dtos.Common;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
-using MediatR;
 
 namespace BiteRight.Application.Queries.Categories.Search;
 
 public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
 {
-    private readonly ILanguageProvider _languageProvider;
     private readonly ICategoryRepository _categoryRepository;
+    private readonly ILanguageProvider _languageProvider;
 
     public SearchHandler(
         ILanguageProvider languageProvider,
@@ -27,7 +26,7 @@ public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
     )
     {
         var languageId = await _languageProvider.RequireCurrentId(cancellationToken);
-        var categories = await _categoryRepository.Search(
+        var searchResult = await _categoryRepository.Search(
             request.Query,
             request.PaginationParams.PageNumber,
             request.PaginationParams.PageSize,
@@ -38,11 +37,11 @@ public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
         var pagedList = new PaginatedList<CategoryDto>(
             request.PaginationParams.PageNumber,
             request.PaginationParams.PageSize,
-            categories.TotalCount,
-            categories.Categories.Select(category => new CategoryDto
+            searchResult.TotalCount,
+            searchResult.Categories.Select(category => new CategoryDto
             {
                 Id = category.Id,
-                Name = category.GetName(languageId),
+                Name = category.GetName(languageId)
             })
         );
 

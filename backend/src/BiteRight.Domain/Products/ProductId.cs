@@ -17,9 +17,15 @@ public class ProductId : GuidId
 
     public static implicit operator Guid(
         ProductId id
-    ) => id.Value;
+    )
+    {
+        return id.Value;
+    }
 
     public static implicit operator ProductId(
         Guid id
-    ) => new(id);
+    )
+    {
+        return new ProductId(id);
+    }
 }

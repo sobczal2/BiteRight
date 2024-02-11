@@ -5,43 +5,50 @@ namespace BiteRight.Domain.Categories;
 
 public class Translation : Entity<TranslationId>
 {
-    public CategoryId CategoryId { get; private set; }
-    public Category Category { get; private set; } = default!;
-    public LanguageId LanguageId { get; private set; }
-    public Language Language { get; private set; } = default!;
-    public Name Name { get; private set; }
-    
     // EF Core
     private Translation()
     {
         CategoryId = default!;
-        Name = default!;
+        Category = default!;
         LanguageId = default!;
+        Language = default!;
+        Name = default!;
     }
-    
+
     private Translation(
         TranslationId id,
         CategoryId categoryId,
-        Name name,
-        LanguageId languageId
+        LanguageId languageId,
+        Name name
     )
         : base(id)
     {
         CategoryId = categoryId;
-        Name = name;
+        Category = default!;
         LanguageId = languageId;
+        Language = default!;
+        Name = name;
     }
-    
+
+    public CategoryId CategoryId { get; private set; }
+    public virtual Category Category { get; private set; }
+    public LanguageId LanguageId { get; private set; }
+    public virtual Language Language { get; private set; }
+
+    public Name Name { get; private set; }
+
     public static Translation Create(
         CategoryId categoryId,
-        Name name,
         LanguageId languageId,
+        Name name,
         TranslationId? id = null
     )
-        => new(
+    {
+        return new Translation(
             id ?? new TranslationId(),
             categoryId,
-            name,
-            languageId
+            languageId,
+            name
         );
+    }
 }

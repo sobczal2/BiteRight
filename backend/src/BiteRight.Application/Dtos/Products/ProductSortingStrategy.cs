@@ -9,5 +9,5 @@ public enum ProductSortingStrategy
     AddedDateTimeAsc = 4,
     AddedDateTimeDesc = 5,
     ConsumptionAsc = 6,
-    ConsumptionDesc = 7,
+    ConsumptionDesc = 7
 }

@@ -11,8 +11,8 @@ namespace BiteRight.Infrastructure.Domain.Repositories;
 public class CachedEfCoreCurrencyRepository : ICurrencyRepository
 {
     private readonly AppDbContext _appDbContext;
-    private readonly IMemoryCache _idCache;
     private readonly MemoryCacheEntryOptions _cacheEntryOptions;
+    private readonly IMemoryCache _idCache;
 
     public CachedEfCoreCurrencyRepository(
         AppDbContext appDbContext,
@@ -25,13 +25,6 @@ public class CachedEfCoreCurrencyRepository : ICurrencyRepository
         _cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(
             cacheOptions.Value.CurrencyCacheDuration
         );
-    }
-    
-    private static string GetCacheKey(
-        CurrencyId id
-    )
-    {
-        return $"Currency_Id_{id}";
     }
 
     public async Task<Currency?> FindById(
@@ -60,5 +53,12 @@ public class CachedEfCoreCurrencyRepository : ICurrencyRepository
         return _appDbContext.Currencies
             .Where(currency => currency.Id == id)
             .AnyAsync(cancellationToken);
+    }
+
+    private static string GetCacheKey(
+        CurrencyId id
+    )
+    {
+        return $"Currency_Id_{id}";
     }
 }

@@ -1,5 +1,4 @@
 using BiteRight.Domain.Countries;
-using BiteRight.Infrastructure.Common;
 using BiteRight.Infrastructure.Configuration.Currencies;
 using BiteRight.Infrastructure.Configuration.Languages;
 using Microsoft.EntityFrameworkCore;
@@ -10,64 +9,6 @@ namespace BiteRight.Infrastructure.Configuration.Countries;
 
 public class CountryConfiguration : IEntityTypeConfiguration<Country>
 {
-    public void Configure(
-        EntityTypeBuilder<Country> builder
-    )
-    {
-        builder.ToTable("countries", "country");
-        builder.Ignore(country => country.DomainEvents);
-        builder.HasKey(country => country.Id);
-        builder.Property(country => country.Id)
-            .HasConversion(
-                id => id.Value,
-                value => value
-            )
-            .ValueGeneratedNever();
-        builder.Property(country => country.NativeName)
-            .HasConversion(
-                nativeName => nativeName.Value,
-                value => Name.CreateSkipValidation(value)
-            );
-        builder.Property(country => country.EnglishName)
-            .HasConversion(
-                englishName => englishName.Value,
-                value => Name.CreateSkipValidation(value)
-            );
-        builder.Property(country => country.Alpha2Code)
-            .HasConversion(
-                alpha2Code => alpha2Code.Value,
-                value => Alpha2Code.CreateSkipValidation(value)
-            );
-        builder.Property(country => country.OfficialLanguageId)
-            .HasConversion(
-                officialLanguageId => officialLanguageId.Value,
-                value => value
-            );
-        builder.HasOne(country => country.OfficialLanguage)
-            .WithMany()
-            .HasForeignKey(country => country.OfficialLanguageId)
-            .OnDelete(DeleteBehavior.Restrict);
-        builder.Property(country => country.CurrencyId)
-            .HasConversion(
-                currencyId => currencyId.Value,
-                value => value
-            );
-        builder.HasOne(country => country.Currency)
-            .WithMany()
-            .HasForeignKey(country => country.CurrencyId)
-            .OnDelete(DeleteBehavior.Restrict);
-        
-        builder.HasData(GetSeedData());
-    }
-
-    private static IEnumerable<Country> GetSeedData()
-    {
-        yield return Poland;
-        yield return England;
-        yield return Germany;
-        yield return USA;
-    }
-
     public static Country Poland { get; } = Country.Create(
         Name.Create("Polska"),
         Name.Create("Poland"),
@@ -103,4 +44,69 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
         CurrencyConfiguration.USD.Id,
         new CountryId(new Guid("12E2937F-F04D-4150-A7AE-5AB1176A95D8"))
     );
+
+    public void Configure(
+        EntityTypeBuilder<Country> builder
+    )
+    {
+        builder.ToTable("countries", "country");
+        builder.Ignore(country => country.DomainEvents);
+        builder.HasKey(country => country.Id);
+        builder.Property(country => country.Id)
+            .HasConversion(
+                id => id.Value,
+                value => value
+            )
+            .ValueGeneratedNever();
+
+        builder.Property(country => country.NativeName)
+            .HasConversion(
+                nativeName => nativeName.Value,
+                value => Name.CreateSkipValidation(value)
+            );
+
+        builder.Property(country => country.EnglishName)
+            .HasConversion(
+                englishName => englishName.Value,
+                value => Name.CreateSkipValidation(value)
+            );
+
+        builder.Property(country => country.Alpha2Code)
+            .HasConversion(
+                alpha2Code => alpha2Code.Value,
+                value => Alpha2Code.CreateSkipValidation(value)
+            );
+
+        builder.Property(country => country.OfficialLanguageId)
+            .HasConversion(
+                officialLanguageId => officialLanguageId.Value,
+                value => value
+            );
+
+        builder.HasOne(country => country.OfficialLanguage)
+            .WithMany()
+            .HasForeignKey(country => country.OfficialLanguageId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Property(country => country.CurrencyId)
+            .HasConversion(
+                currencyId => currencyId.Value,
+                value => value
+            );
+
+        builder.HasOne(country => country.Currency)
+            .WithMany()
+            .HasForeignKey(country => country.CurrencyId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasData(GetSeedData());
+    }
+
+    private static IEnumerable<Country> GetSeedData()
+    {
+        yield return Poland;
+        yield return England;
+        yield return Germany;
+        yield return USA;
+    }
 }

@@ -1,4 +1,3 @@
-using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Products.Exceptions;
 
@@ -6,8 +5,13 @@ namespace BiteRight.Domain.Products;
 
 public class ExpirationDate : ValueObject
 {
-    public DateOnly Value { get; }
-    public ExpirationDateKind Kind { get; }
+    public enum ExpirationDateKind
+    {
+        Unknown = 0,
+        Infinite = 1,
+        BestBefore = 2,
+        UseBy = 3
+    }
 
     // EF Core
     private ExpirationDate()
@@ -24,6 +28,9 @@ public class ExpirationDate : ValueObject
         Value = value;
         Kind = kind;
     }
+
+    public DateOnly Value { get; }
+    public ExpirationDateKind Kind { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
@@ -78,17 +85,7 @@ public class ExpirationDate : ValueObject
     )
     {
         if (kind == ExpirationDateKind.Infinite && value != DateOnly.MaxValue)
-        {
             throw new ExpirationDateInfiniteValueException();
-        }
-    }
-
-    public enum ExpirationDateKind
-    {
-        Unknown = 0,
-        Infinite = 1,
-        BestBefore = 2,
-        UseBy = 3
     }
 
     public DateOnly? GetDateIfKnown()

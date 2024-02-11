@@ -119,7 +119,7 @@ fun CurrentProductsScreenContent(
                                 name = simpleProductDto.name,
                                 expirationDate = simpleProductDto.expirationDate,
                                 categoryImageUri = getCategoryPhotoUrl(categoryId = simpleProductDto.categoryId),
-                                consumption = simpleProductDto.consumption,
+                                amountPercentage = simpleProductDto.amountPercentage,
                                 disposed = simpleProductDto.disposed,
                             ),
                             onClick = { /*TODO*/ },

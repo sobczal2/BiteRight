@@ -14,9 +14,14 @@ public class CategoryId : GuidId
         : base(value)
     {
     }
-    
+
     public static implicit operator CategoryId(Guid id)
-        => new(id);
+    {
+        return new CategoryId(id);
+    }
+
     public static implicit operator Guid(CategoryId id)
-        => id.Value;
+    {
+        return id.Value;
+    }
 }

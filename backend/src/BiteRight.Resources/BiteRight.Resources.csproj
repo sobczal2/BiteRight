@@ -7,189 +7,225 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Resources\Users\Users.pl.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Users.pl.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Users\Users.en.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Users.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Users\Users.de.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Users.de.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Users\Users.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Users.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Common\Common.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Common.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Common\Common.en.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Common.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Common\Common.de.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Common.de.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Common\Common.pl.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Common.pl.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Categories\Categories.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Categories.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Categories\Categories.en.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Categories.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Categories\Categories.pl.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Categories.pl.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Categories\Categories.de.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Categories.de.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Products\Products.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Products.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Products\Products.en.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Products.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Products\Products.pl.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Products.pl.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Products\Products.de.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Products.de.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Currencies\Currencies.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Currencies.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Currencies\Currencies.de.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Currencies.de.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Currencies\Currencies.en.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Currencies.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Currencies\Currencies.pl.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Currencies.pl.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Users\Users.pl.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Users.pl.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Users\Users.en.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Users.en.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Users\Users.de.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Users.de.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Users\Users.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Users.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Common\Common.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Common.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Common\Common.en.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Common.en.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Common\Common.de.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Common.de.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Common\Common.pl.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Common.pl.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Categories\Categories.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Categories.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Categories\Categories.en.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Categories.en.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Categories\Categories.pl.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Categories.pl.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Categories\Categories.de.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Categories.de.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Products\Products.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Products.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Products\Products.en.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Products.en.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Products\Products.pl.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Products.pl.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Products\Products.de.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Products.de.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Currencies\Currencies.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Currencies.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Currencies\Currencies.de.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Currencies.de.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Currencies\Currencies.en.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Currencies.en.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Currencies\Currencies.pl.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Currencies.pl.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Units\Units.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Units.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Units\Units.de.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Units.de.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Units\Units.en.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Units.en.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Units\Units.pl.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Units.pl.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Resources\Users\Users.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Users.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Users\Users.pl.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Users.pl.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Users\Users.de.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Users.de.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Users\Users.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Users.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Common\Common.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Common.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Common\Common.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Common.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Common\Common.de.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Common.de.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Common\Common.pl.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Common.pl.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Categories\Categories.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Categories.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Categories\Categories.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Categories.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Categories\Categories.pl.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Categories.pl.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Categories\Categories.de.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Categories.de.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Products\Products.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Products.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Products\Products.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Products.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Products\Products.pl.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Products.pl.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Products\Products.de.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Products.de.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Currencies\Currencies.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Currencies.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Currencies\Currencies.de.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Currencies.de.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Currencies\Currencies.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Currencies.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\Currencies\Currencies.pl.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Currencies.pl.resx</DependentUpon>
-      </Compile>
+        <Compile Update="Resources\Users\Users.en.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Users.en.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Users\Users.pl.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Users.pl.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Users\Users.de.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Users.de.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Users\Users.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Users.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Common\Common.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Common.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Common\Common.en.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Common.en.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Common\Common.de.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Common.de.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Common\Common.pl.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Common.pl.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Categories\Categories.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Categories.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Categories\Categories.en.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Categories.en.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Categories\Categories.pl.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Categories.pl.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Categories\Categories.de.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Categories.de.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Products\Products.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Products.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Products\Products.en.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Products.en.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Products\Products.pl.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Products.pl.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Products\Products.de.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Products.de.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Currencies\Currencies.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Currencies.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Currencies\Currencies.de.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Currencies.de.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Currencies\Currencies.en.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Currencies.en.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Currencies\Currencies.pl.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Currencies.pl.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Units\Units.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Units.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Units\Units.de.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Units.de.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Units\Units.en.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Units.en.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\Units\Units.pl.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Units.pl.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
 
 </Project>

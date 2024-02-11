@@ -1,8 +1,6 @@
 using BiteRight.Application.Common;
 using BiteRight.Application.Dtos.Countries;
-using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Infrastructure.Database;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace BiteRight.Application.Queries.Countries.List;

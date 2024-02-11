@@ -6,14 +6,14 @@ namespace BiteRight.Domain.Products;
 
 public class AddedDateTime : ValueObject
 {
-    public DateTime Value { get; }
-
     private AddedDateTime(
         DateTime value
     )
     {
         Value = value;
     }
+
+    public DateTime Value { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
@@ -47,17 +47,14 @@ public class AddedDateTime : ValueObject
         DateTime value
     )
     {
-        if (value.Kind != DateTimeKind.Utc)
-        {
-            throw new AddedDateTimeInvalidKindException();
-        }
+        if (value.Kind != DateTimeKind.Utc) throw new AddedDateTimeInvalidKindException();
     }
-    
+
     public static implicit operator DateTime(AddedDateTime addedDateTime)
     {
         return addedDateTime.Value;
     }
-    
+
     public static implicit operator AddedDateTime(DateTime value)
     {
         return Create(value);

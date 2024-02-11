@@ -18,10 +18,14 @@ public class TranslationId : GuidId
     public static implicit operator TranslationId(
         Guid id
     )
-        => new(id);
+    {
+        return new TranslationId(id);
+    }
 
     public static implicit operator Guid(
         TranslationId id
     )
-        => id.Value;
+    {
+        return id.Value;
+    }
 }

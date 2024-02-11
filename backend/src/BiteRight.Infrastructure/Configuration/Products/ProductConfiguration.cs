@@ -1,4 +1,3 @@
-using BiteRight.Domain.Categories;
 using BiteRight.Domain.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -34,14 +33,14 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                 value => Description.CreateSkipValidation(value)
             );
 
-        builder.OwnsOne(p => p.Price, priceBuilder =>
+        builder.OwnsOne(product => product.Price, priceBuilder =>
         {
             priceBuilder
-                .Property(p => p.Value)
+                .Property(price => price.Value)
                 .HasColumnName("price_value");
 
             priceBuilder
-                .Property(p => p.CurrencyId)
+                .Property(price => price.CurrencyId)
                 .HasConversion(
                     currencyId => currencyId.Value,
                     value => value
@@ -60,41 +59,46 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                 .HasColumnName("expiration_date_kind");
         });
 
-        builder.Property(p => p.CategoryId)
+        builder.Property(product => product.CategoryId)
             .HasConversion(
                 categoryId => categoryId.Value,
                 value => value
             );
 
-        builder.HasOne(p => p.Category)
+        builder.HasOne(product => product.Category)
             .WithMany()
-            .HasForeignKey(p => p.CategoryId)
+            .HasForeignKey(product => product.CategoryId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Property(p => p.AddedDateTime)
+        builder.Property(product => product.AddedDateTime)
             .HasConversion(
                 addedDateTime => addedDateTime.Value,
                 value => value.ToUniversalTime()
             );
 
-        builder.Property(p => p.Consumption)
+        builder.Property(product => product.AmountId)
             .HasConversion(
-                consumption => consumption.Amount,
-                amount => Consumption.CreateSkipValidation(amount)
+                amountId => amountId.Value,
+                value => value
             );
 
-        builder.Property(p => p.UserId)
+        builder.HasOne(product => product.Amount)
+            .WithOne()
+            .HasForeignKey<Product>(product => product.AmountId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Property(product => product.UserId)
             .HasConversion(
                 userId => userId.Value,
                 value => value
             );
 
-        builder.HasOne(p => p.User)
+        builder.HasOne(product => product.User)
             .WithMany()
             .HasForeignKey(p => p.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.OwnsOne(p => p.DisposedState, disposedStateBuilder =>
+        builder.OwnsOne(product => product.DisposedState, disposedStateBuilder =>
         {
             disposedStateBuilder
                 .Property(disposedState => disposedState.Disposed)

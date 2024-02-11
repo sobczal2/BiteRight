@@ -9,10 +9,10 @@ namespace BiteRight.Application.Commands.Products.Dispose;
 
 public class DisposeHandler : CommandHandlerBase<DisposeRequest>
 {
-    private readonly IIdentityProvider _identityProvider;
-    private readonly IProductRepository _productRepository;
-    private readonly IStringLocalizer<Resources.Resources.Products.Products> _productLocalizer;
     private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly IIdentityProvider _identityProvider;
+    private readonly IStringLocalizer<Resources.Resources.Products.Products> _productLocalizer;
+    private readonly IProductRepository _productRepository;
 
     public DisposeHandler(
         AppDbContext appDbContext,
@@ -37,18 +37,14 @@ public class DisposeHandler : CommandHandlerBase<DisposeRequest>
         var product = await _productRepository.FindById(request.ProductId, cancellationToken);
 
         if (product is null || !Equals(product.UserId, user.Id))
-        {
             throw ValidationException(nameof(DisposeRequest.ProductId),
                 _productLocalizer[nameof(Resources.Resources.Products.Products.product_not_found)]
             );
-        }
 
         if (product.IsDisposed())
-        {
             throw ValidationException(nameof(DisposeRequest.ProductId),
                 _productLocalizer[nameof(Resources.Resources.Products.Products.product_already_disposed)]
             );
-        }
 
         product.SetDisposed(_dateTimeProvider.UtcNow);
 
