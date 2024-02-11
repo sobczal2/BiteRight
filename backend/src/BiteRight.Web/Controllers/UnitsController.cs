@@ -14,7 +14,7 @@ public class UnitsController : WebController
     public UnitsController(IMediator mediator) : base(mediator)
     {
     }
-    
+
     [HttpGet("search")]
     [AuthorizeUserExists]
     [ProducesResponseType(typeof(SearchResponse), StatusCodes.Status200OK)]

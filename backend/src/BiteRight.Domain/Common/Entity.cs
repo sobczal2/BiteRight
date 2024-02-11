@@ -2,18 +2,19 @@ namespace BiteRight.Domain.Common;
 
 public class Entity<TId> : IEquatable<Entity<TId>> where TId : GuidId
 {
-    public TId Id { get; protected set; }
-
     protected Entity()
     {
         Id = default!;
     }
+
     public Entity(
         TId id
     )
     {
         Id = id;
     }
+
+    public TId Id { get; protected set; }
 
     public bool Equals(
         Entity<TId>? other
@@ -55,5 +56,8 @@ public class Entity<TId> : IEquatable<Entity<TId>> where TId : GuidId
         return EqualityComparer<TId>.Default.GetHashCode(Id);
     }
 
-    public override string ToString() => Id.ToString();
+    public override string ToString()
+    {
+        return Id.ToString();
+    }
 }

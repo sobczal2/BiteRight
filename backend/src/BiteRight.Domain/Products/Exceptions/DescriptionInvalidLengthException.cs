@@ -5,12 +5,12 @@ namespace BiteRight.Domain.Products.Exceptions;
 public class DescriptionInvalidLengthException
     : BusinessRuleDomainException
 {
-    public int MaxLength { get; }
-
     public DescriptionInvalidLengthException(
         int maxLength
     )
     {
         MaxLength = maxLength;
     }
+
+    public int MaxLength { get; }
 }

@@ -17,9 +17,15 @@ public class CountryId : GuidId
 
     public static implicit operator Guid(
         CountryId id
-    ) => id.Value;
+    )
+    {
+        return id.Value;
+    }
 
     public static implicit operator CountryId(
         Guid id
-    ) => new(id);
+    )
+    {
+        return new CountryId(id);
+    }
 }

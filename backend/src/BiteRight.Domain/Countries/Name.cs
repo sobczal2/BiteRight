@@ -7,7 +7,10 @@ namespace BiteRight.Domain.Countries;
 
 public class Name : ValueObject
 {
-    public string Value { get; private set; }
+    private const int MinLength = 3;
+    private const int MaxLength = 100;
+
+    private static readonly Regex ValidCharacters = CommonRegexes.LettersWithSpaces;
 
     private Name(
         string value
@@ -15,6 +18,8 @@ public class Name : ValueObject
     {
         Value = value;
     }
+
+    public string Value { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
@@ -37,29 +42,15 @@ public class Name : ValueObject
         return new Name(value);
     }
 
-    private const int MinLength = 3;
-    private const int MaxLength = 100;
-
-    private static readonly Regex ValidCharacters = CommonRegexes.LettersWithSpaces;
-
     private static void Validate(
         string value
     )
     {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new NameEmptyException();
-        }
+        if (string.IsNullOrWhiteSpace(value)) throw new NameEmptyException();
 
-        if (value.Length is < MinLength or > MaxLength)
-        {
-            throw new NameInvalidLengthException(MinLength, MaxLength);
-        }
+        if (value.Length is < MinLength or > MaxLength) throw new NameInvalidLengthException(MinLength, MaxLength);
 
-        if (!ValidCharacters.IsMatch(value))
-        {
-            throw new NameInvalidCharactersException(ValidCharacters.ToString());
-        }
+        if (!ValidCharacters.IsMatch(value)) throw new NameInvalidCharactersException(ValidCharacters.ToString());
     }
 
     public static implicit operator string(

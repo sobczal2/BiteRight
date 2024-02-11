@@ -7,8 +7,9 @@ namespace BiteRight.Domain.Languages;
 
 public class Code : ValueObject
 {
-    public string Value { get; }
-    public static Code Default => new("en");
+    private const int ExactLength = 2;
+
+    private static readonly Regex ValidCharacters = CommonRegexes.LowercaseLetters;
 
     private Code(
         string value
@@ -16,6 +17,9 @@ public class Code : ValueObject
     {
         Value = value;
     }
+
+    public string Value { get; }
+    public static Code Default => new("en");
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
@@ -38,28 +42,15 @@ public class Code : ValueObject
         return new Code(value);
     }
 
-    private const int ExactLength = 2;
-    
-    private static readonly Regex ValidCharacters = CommonRegexes.LowercaseLetters;
-
     private static void Validate(
         string value
     )
     {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new CodeEmptyException();
-        }
+        if (string.IsNullOrWhiteSpace(value)) throw new CodeEmptyException();
 
-        if (value.Length != ExactLength)
-        {
-            throw new CodeInvalidLengthException(ExactLength);
-        }
+        if (value.Length != ExactLength) throw new CodeInvalidLengthException(ExactLength);
 
-        if (!ValidCharacters.IsMatch(value))
-        {
-            throw new CodeInvalidCharactersException(ValidCharacters.ToString());
-        }
+        if (!ValidCharacters.IsMatch(value)) throw new CodeInvalidCharactersException(ValidCharacters.ToString());
     }
 
     public static implicit operator string(

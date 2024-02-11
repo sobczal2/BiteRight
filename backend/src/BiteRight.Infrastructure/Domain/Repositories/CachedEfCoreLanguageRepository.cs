@@ -26,20 +26,6 @@ public class CachedEfCoreLanguageRepository : ILanguageRepository
             cacheOptions.Value.LanguageCacheDuration
         );
     }
-    
-    private static string GetCacheKey(
-        LanguageId id
-    )
-    {
-        return $"Language_Id_{id}";
-    }
-    
-    private static string GetCacheKey(
-        Code code
-    )
-    {
-        return $"Language_Code_{code}";
-    }
 
     public async Task<Language?> FindByCode(
         Code code,
@@ -77,7 +63,6 @@ public class CachedEfCoreLanguageRepository : ILanguageRepository
     }
 
 
-
     public Task<bool> ExistsById(
         LanguageId id,
         CancellationToken cancellationToken = default
@@ -86,5 +71,19 @@ public class CachedEfCoreLanguageRepository : ILanguageRepository
         return _appDbContext.Languages
             .Where(language => language.Id == id)
             .AnyAsync(cancellationToken);
+    }
+
+    private static string GetCacheKey(
+        LanguageId id
+    )
+    {
+        return $"Language_Id_{id}";
+    }
+
+    private static string GetCacheKey(
+        Code code
+    )
+    {
+        return $"Language_Code_{code}";
     }
 }

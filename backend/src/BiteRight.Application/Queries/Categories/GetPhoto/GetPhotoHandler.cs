@@ -8,8 +8,8 @@ namespace BiteRight.Application.Queries.Categories.GetPhoto;
 public class GetPhotoHandler : QueryHandlerBase<GetPhotoRequest, GetPhotoResponse>
 {
     private readonly ICategoryRepository _categoryRepository;
-    private readonly ILanguageProvider _languageProvider;
     private readonly IFileProvider _fileProvider;
+    private readonly ILanguageProvider _languageProvider;
 
     public GetPhotoHandler(
         ICategoryRepository categoryRepository,

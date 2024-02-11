@@ -1,4 +1,3 @@
-using BiteRight.Domain.Categories;
 using BiteRight.Domain.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -76,7 +75,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                 addedDateTime => addedDateTime.Value,
                 value => value.ToUniversalTime()
             );
-        
+
         builder.Property(product => product.AmountId)
             .HasConversion(
                 amountId => amountId.Value,

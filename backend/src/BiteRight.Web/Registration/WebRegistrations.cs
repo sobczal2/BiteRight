@@ -81,7 +81,7 @@ public static class WebRegistrations
 
             opt.OperationFilter<CultureQueryParameterFilter>();
             opt.OperationFilter<ProducesInternalServerErrorResponseFilter>();
-            
+
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             opt.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
@@ -93,10 +93,7 @@ public static class WebRegistrations
     )
     {
         var auth0Options = configuration.GetSection("Auth0").Get<Auth0Options>();
-        if (auth0Options is null)
-        {
-            throw new InvalidOperationException("Auth0 options are not configured.");
-        }
+        if (auth0Options is null) throw new InvalidOperationException("Auth0 options are not configured.");
 
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

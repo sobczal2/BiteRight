@@ -17,9 +17,15 @@ public class CurrencyId : GuidId
 
     public static implicit operator Guid(
         CurrencyId id
-    ) => id.Value;
+    )
+    {
+        return id.Value;
+    }
 
     public static implicit operator CurrencyId(
         Guid id
-    ) => new(id);
+    )
+    {
+        return new CurrencyId(id);
+    }
 }

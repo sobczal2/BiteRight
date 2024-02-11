@@ -6,6 +6,9 @@ using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Products;
 using BiteRight.Domain.Products.Exceptions;
 using BiteRight.Infrastructure.Database;
+using BiteRight.Resources.Resources.Categories;
+using BiteRight.Resources.Resources.Currencies;
+using BiteRight.Resources.Resources.Units;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using Name = BiteRight.Domain.Products.Name;
@@ -14,17 +17,17 @@ namespace BiteRight.Application.Commands.Products.Create;
 
 public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
 {
-    private readonly IIdentityProvider _identityProvider;
-    private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly IUserRepository _userRepository;
-    private readonly ICurrencyRepository _currencyRepository;
-    private readonly IProductRepository _productRepository;
     private readonly ICategoryRepository _categoryRepository;
-    private readonly IUnitRepository _unitRepository;
+    private readonly IStringLocalizer<Currencies> _currenciesLocalizer;
+    private readonly ICurrencyRepository _currencyRepository;
+    private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly IIdentityProvider _identityProvider;
     private readonly ILanguageProvider _languageProvider;
+    private readonly IProductRepository _productRepository;
     private readonly IStringLocalizer<Resources.Resources.Products.Products> _productsLocalizer;
-    private readonly IStringLocalizer<Resources.Resources.Currencies.Currencies> _currenciesLocalizer;
-    private readonly IStringLocalizer<Resources.Resources.Units.Units> _unitsLocalizer;
+    private readonly IUnitRepository _unitRepository;
+    private readonly IStringLocalizer<Units> _unitsLocalizer;
+    private readonly IUserRepository _userRepository;
 
     public CreateHandler(
         IIdentityProvider identityProvider,
@@ -37,8 +40,8 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
         AppDbContext appDbContext,
         ILanguageProvider languageProvider,
         IStringLocalizer<Resources.Resources.Products.Products> productsLocalizer,
-        IStringLocalizer<Resources.Resources.Currencies.Currencies> currenciesLocalizer,
-        IStringLocalizer<Resources.Resources.Units.Units> unitsLocalizer
+        IStringLocalizer<Currencies> currenciesLocalizer,
+        IStringLocalizer<Units> unitsLocalizer
     )
         : base(appDbContext)
     {
@@ -73,7 +76,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
             var currency = await _currencyRepository.FindById(request.CurrencyId, cancellationToken)
                            ?? throw ValidationException(
                                _currenciesLocalizer[
-                                   nameof(Resources.Resources.Currencies.Currencies.currency_not_found)]);
+                                   nameof(Currencies.currency_not_found)]);
             price = Price.Create(request.Price.Value, currency);
         }
 
@@ -91,13 +94,13 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
         var category = await _categoryRepository.FindById(request.CategoryId, languageId, cancellationToken)
                        ?? throw ValidationException(
                            _productsLocalizer[
-                               nameof(Resources.Resources.Categories.Categories.category_not_found)]
+                               nameof(Categories.category_not_found)]
                        );
 
         var amountUnit = await _unitRepository.FindById(request.AmountUnitId, languageId, cancellationToken)
                          ?? throw ValidationException(
                              _unitsLocalizer[
-                                 nameof(Resources.Resources.Units.Units.unit_not_found)]
+                                 nameof(Units.unit_not_found)]
                          );
 
         var amount = Amount.CreateFull(amountUnit.Id, request.MaximumAmountValue);

@@ -7,7 +7,9 @@ namespace BiteRight.Domain.Currencies;
 
 public class ISO4217Code : ValueObject
 {
-    public string Value { get; }
+    private const int ExactLength = 3;
+
+    private static readonly Regex ValidCharacters = CommonRegexes.UppercaseLetters;
 
     private ISO4217Code(
         string value
@@ -15,6 +17,8 @@ public class ISO4217Code : ValueObject
     {
         Value = value;
     }
+
+    public string Value { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
@@ -37,30 +41,18 @@ public class ISO4217Code : ValueObject
         return new ISO4217Code(value);
     }
 
-    private const int ExactLength = 3;
-
-    private static readonly Regex ValidCharacters = CommonRegexes.UppercaseLetters;
-    
     private static void Validate(
         string value
     )
     {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ISO4217CodeEmptyException();
-        }
-        
-        if (value.Length != ExactLength)
-        {
-            throw new ISO4217CodeInvalidLengthException(ExactLength);
-        }
-        
+        if (string.IsNullOrWhiteSpace(value)) throw new ISO4217CodeEmptyException();
+
+        if (value.Length != ExactLength) throw new ISO4217CodeInvalidLengthException(ExactLength);
+
         if (!ValidCharacters.IsMatch(value))
-        {
             throw new ISO4217CodeInvalidCharactersException(ValidCharacters.ToString());
-        }
     }
-    
+
     public static implicit operator string(
         ISO4217Code iso4217Code
     )

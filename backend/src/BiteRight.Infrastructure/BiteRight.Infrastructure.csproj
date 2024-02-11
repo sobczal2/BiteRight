@@ -7,18 +7,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Auth0.ManagementApi" Version="7.25.1" />
-      <PackageReference Include="MediatR" Version="12.2.0" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+        <PackageReference Include="Auth0.ManagementApi" Version="7.25.1"/>
+        <PackageReference Include="MediatR" Version="12.2.0"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BiteRight.Domain\BiteRight.Domain.csproj" />
-      <ProjectReference Include="..\BiteRight.Options\BiteRight.Options.csproj" />
+        <ProjectReference Include="..\BiteRight.Domain\BiteRight.Domain.csproj"/>
+        <ProjectReference Include="..\BiteRight.Options\BiteRight.Options.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Migrations\" />
+        <Folder Include="Migrations\"/>
     </ItemGroup>
 
 </Project>

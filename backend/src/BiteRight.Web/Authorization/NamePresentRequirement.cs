@@ -4,5 +4,4 @@ namespace BiteRight.Web.Authorization;
 
 public class NamePresentRequirement : IAuthorizationRequirement
 {
-    
 }

@@ -3,8 +3,6 @@ namespace BiteRight.Domain.Common;
 public abstract class Id<T>
     where T : notnull
 {
-    public T Value { get; }
-
     public Id(
         T value
     )
@@ -12,18 +10,23 @@ public abstract class Id<T>
         Value = value;
     }
 
+    public T Value { get; }
+
     public override bool Equals(object? obj)
     {
-        if (obj is null || GetType() != obj.GetType())
-        {
-            return false;
-        }
+        if (obj is null || GetType() != obj.GetType()) return false;
 
         var id = (Id<T>)obj;
         return EqualityComparer<T>.Default.Equals(Value, id.Value);
     }
 
-    public override int GetHashCode() => Value.GetHashCode();
+    public override int GetHashCode()
+    {
+        return Value.GetHashCode();
+    }
 
-    public override string ToString() => Value.ToString() ?? string.Empty;
+    public override string ToString()
+    {
+        return Value.ToString() ?? string.Empty;
+    }
 }

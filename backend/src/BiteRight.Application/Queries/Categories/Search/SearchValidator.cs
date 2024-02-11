@@ -1,5 +1,4 @@
 using BiteRight.Application.Dtos.Common;
-using BiteRight.Domain.Categories;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
@@ -15,7 +14,8 @@ public class SearchValidator : AbstractValidator<SearchRequest>
         const int maxQueryLength = 64;
         RuleFor(x => x.Query)
             .MaximumLength(maxQueryLength)
-            .WithMessage(string.Format(categoriesLocalizer[nameof(Resources.Resources.Categories.Categories.query_too_long)], maxQueryLength));
+            .WithMessage(string.Format(
+                categoriesLocalizer[nameof(Resources.Resources.Categories.Categories.query_too_long)], maxQueryLength));
         RuleFor(x => x.PaginationParams)
             .NotNull()
             .WithMessage(commonLocalizer[nameof(Resources.Resources.Common.Common.pagination_params_null)]);

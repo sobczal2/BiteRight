@@ -12,7 +12,7 @@ public interface IUnitRepository
         LanguageId languageId,
         CancellationToken cancellationToken = default
     );
-    
+
     Task<Unit?> FindById(
         UnitId id,
         LanguageId languageId,

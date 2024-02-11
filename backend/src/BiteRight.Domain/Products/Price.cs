@@ -6,9 +6,8 @@ namespace BiteRight.Domain.Products;
 
 public class Price : ValueObject
 {
-    public decimal Value { get; }
-    public CurrencyId CurrencyId { get; }
-    public virtual Currency Currency { get; }
+    private const decimal MinValue = 0.00m;
+    private const decimal MaxValue = 1e6m;
 
     // EF Core
     private Price()
@@ -16,12 +15,6 @@ public class Price : ValueObject
         Value = default!;
         CurrencyId = default!;
         Currency = default!;
-    }
-    
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
-        yield return CurrencyId;
     }
 
     private Price(
@@ -32,6 +25,16 @@ public class Price : ValueObject
         Value = value;
         CurrencyId = currency.Id;
         Currency = currency;
+    }
+
+    public decimal Value { get; }
+    public CurrencyId CurrencyId { get; }
+    public virtual Currency Currency { get; }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
+        yield return CurrencyId;
     }
 
     public static Price Create(
@@ -52,21 +55,18 @@ public class Price : ValueObject
         return new Price(value, currency);
     }
 
-    private const decimal MinValue = 0.00m;
-    private const decimal MaxValue = 1e6m;
-
     private static void Validate(
         decimal value,
         Currency currency
     )
     {
-        if (value is < MinValue or > MaxValue)
-        {
-            throw new PriceInvalidValueException(MinValue, MaxValue);
-        }
+        if (value is < MinValue or > MaxValue) throw new PriceInvalidValueException(MinValue, MaxValue);
     }
 
     public static implicit operator decimal(
         Price price
-    ) => price.Value;
+    )
+    {
+        return price.Value;
+    }
 }

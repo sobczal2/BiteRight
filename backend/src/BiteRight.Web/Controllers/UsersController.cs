@@ -4,7 +4,6 @@ using BiteRight.Application.Commands.Users.UpdateProfile;
 using BiteRight.Application.Queries.Users.Me;
 using BiteRight.Web.Authorization;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

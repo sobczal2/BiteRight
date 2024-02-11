@@ -11,9 +11,9 @@ namespace BiteRight.Application.Queries.Products.ListCurrent;
 
 public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurrentResponse>
 {
-    private readonly IIdentityProvider _identityProvider;
     private readonly AppDbContext _appDbContext;
     private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly IIdentityProvider _identityProvider;
     private readonly IUserRepository _userRepository;
 
     public ListCurrentHandler(
@@ -37,10 +37,7 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
         var identityId = _identityProvider.RequireCurrent();
         var user = await _userRepository.FindByIdentityId(identityId, cancellationToken);
 
-        if (user is null)
-        {
-            throw new InternalErrorException();
-        }
+        if (user is null) throw new InternalErrorException();
 
         var currentLocalDate = _dateTimeProvider.GetLocalDate(user.Profile.TimeZone);
 

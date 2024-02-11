@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Languages;
-using Microsoft.AspNetCore.Http;
 
 namespace BiteRight.Web.Providers;
 
@@ -28,18 +27,12 @@ public class CultureLanguageProvider : ILanguageProvider
     {
         var code = GetLanguageCode();
 
-        if (code is null)
-        {
-            throw new InvalidOperationException("Language code is null");
-        }
+        if (code is null) throw new InvalidOperationException("Language code is null");
 
         var language = await _languageRepository.FindByCode(code, cancellationToken) ??
                        await _languageRepository.FindByCode(Code.Default, cancellationToken);
 
-        if (language is null)
-        {
-            throw new InvalidOperationException("Language is null");
-        }
+        if (language is null) throw new InvalidOperationException("Language is null");
 
         return language;
     }

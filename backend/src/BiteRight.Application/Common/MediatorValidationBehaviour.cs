@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using FluentValidation;
 using MediatR;
 
@@ -24,7 +23,7 @@ public class MediatorValidationBehaviour<TRequest, TResponse> : IPipelineBehavio
     )
     {
         _validator?.ValidateAndThrow(request);
-        
+
         return next();
     }
 }

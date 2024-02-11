@@ -3,14 +3,13 @@ using BiteRight.Application.Dtos.Categories;
 using BiteRight.Application.Dtos.Common;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
-using MediatR;
 
 namespace BiteRight.Application.Queries.Categories.Search;
 
 public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
 {
-    private readonly ILanguageProvider _languageProvider;
     private readonly ICategoryRepository _categoryRepository;
+    private readonly ILanguageProvider _languageProvider;
 
     public SearchHandler(
         ILanguageProvider languageProvider,
@@ -42,7 +41,7 @@ public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
             searchResult.Categories.Select(category => new CategoryDto
             {
                 Id = category.Id,
-                Name = category.GetName(languageId),
+                Name = category.GetName(languageId)
             })
         );
 

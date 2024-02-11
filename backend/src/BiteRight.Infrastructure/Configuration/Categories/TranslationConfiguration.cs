@@ -8,70 +8,6 @@ namespace BiteRight.Infrastructure.Configuration.Categories;
 
 public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
 {
-    public void Configure(
-        EntityTypeBuilder<Translation> builder
-    )
-    {
-        builder.ToTable("category_translations", "category");
-        builder.HasKey(translation => translation.Id);
-        builder.Property(translation => translation.Id)
-            .HasConversion(
-                id => id.Value,
-                value => value
-            )
-            .ValueGeneratedNever();
-
-        builder.Property(translation => translation.CategoryId)
-            .HasConversion(
-                categoryId => categoryId.Value,
-                value => value
-            );
-
-        builder.Property(translation => translation.LanguageId)
-            .HasConversion(
-                languageId => languageId.Value,
-                value => value
-            );
-
-        builder.Property(translation => translation.Name)
-            .HasConversion(
-                name => name.Value,
-                value => Name.CreateSkipValidation(value)
-            );
-
-        builder.HasOne(translation => translation.Category)
-            .WithMany(category => category.Translations)
-            .HasForeignKey(translation => translation.CategoryId);
-
-        builder.HasOne(translation => translation.Language)
-            .WithMany()
-            .HasForeignKey(translation => translation.LanguageId);
-
-        builder.HasData(GetSeedData());
-    }
-
-    private static IEnumerable<Translation> GetSeedData()
-    {
-        yield return DairyEn;
-        yield return DairyPl;
-        yield return DairyDe;
-        yield return FruitEn;
-        yield return FruitPl;
-        yield return FruitDe;
-        yield return VegetableEn;
-        yield return VegetablePl;
-        yield return VegetableDe;
-        yield return MeatEn;
-        yield return MeatPl;
-        yield return MeatDe;
-        yield return FishEn;
-        yield return FishPl;
-        yield return FishDe;
-        yield return NoneEn;
-        yield return NonePl;
-        yield return NoneDe;
-    }
-
     public static Translation DairyEn { get; } = Translation.Create(
         CategoryConfiguration.Dairy.Id,
         LanguageConfiguration.English.Id,
@@ -197,4 +133,68 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
         Name.Create("Keine"),
         new TranslationId(new Guid("206A3C95-FB6D-4127-A37B-9F328C021021"))
     );
+
+    public void Configure(
+        EntityTypeBuilder<Translation> builder
+    )
+    {
+        builder.ToTable("category_translations", "category");
+        builder.HasKey(translation => translation.Id);
+        builder.Property(translation => translation.Id)
+            .HasConversion(
+                id => id.Value,
+                value => value
+            )
+            .ValueGeneratedNever();
+
+        builder.Property(translation => translation.CategoryId)
+            .HasConversion(
+                categoryId => categoryId.Value,
+                value => value
+            );
+
+        builder.Property(translation => translation.LanguageId)
+            .HasConversion(
+                languageId => languageId.Value,
+                value => value
+            );
+
+        builder.Property(translation => translation.Name)
+            .HasConversion(
+                name => name.Value,
+                value => Name.CreateSkipValidation(value)
+            );
+
+        builder.HasOne(translation => translation.Category)
+            .WithMany(category => category.Translations)
+            .HasForeignKey(translation => translation.CategoryId);
+
+        builder.HasOne(translation => translation.Language)
+            .WithMany()
+            .HasForeignKey(translation => translation.LanguageId);
+
+        builder.HasData(GetSeedData());
+    }
+
+    private static IEnumerable<Translation> GetSeedData()
+    {
+        yield return DairyEn;
+        yield return DairyPl;
+        yield return DairyDe;
+        yield return FruitEn;
+        yield return FruitPl;
+        yield return FruitDe;
+        yield return VegetableEn;
+        yield return VegetablePl;
+        yield return VegetableDe;
+        yield return MeatEn;
+        yield return MeatPl;
+        yield return MeatDe;
+        yield return FishEn;
+        yield return FishPl;
+        yield return FishDe;
+        yield return NoneEn;
+        yield return NonePl;
+        yield return NoneDe;
+    }
 }

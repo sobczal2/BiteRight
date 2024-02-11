@@ -1,16 +1,9 @@
-using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Common;
 
 namespace BiteRight.Domain.Currencies;
 
 public class Currency : AggregateRoot<CurrencyId>
 {
-    public Name Name { get; private set; }
-    public Symbol Symbol { get; private set; }
-
-    // ReSharper disable once InconsistentNaming
-    public ISO4217Code ISO4217Code { get; private set; }
-
     // EF Core
     private Currency()
     {
@@ -31,6 +24,12 @@ public class Currency : AggregateRoot<CurrencyId>
         Symbol = symbol;
         ISO4217Code = iso4217Code;
     }
+
+    public Name Name { get; private set; }
+    public Symbol Symbol { get; private set; }
+
+    // ReSharper disable once InconsistentNaming
+    public ISO4217Code ISO4217Code { get; private set; }
 
     public static Currency Create(
         Name name,

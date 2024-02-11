@@ -11,6 +11,7 @@ public class ListCurrentValidator : AbstractValidator<ListCurrentRequest>
     {
         RuleFor(x => x.SortingStrategy)
             .IsInEnum()
-            .WithMessage(_ => productsLocalizer[nameof(Resources.Resources.Products.Products.sorting_strategy_invalid)]);
+            .WithMessage(_ =>
+                productsLocalizer[nameof(Resources.Resources.Products.Products.sorting_strategy_invalid)]);
     }
 }

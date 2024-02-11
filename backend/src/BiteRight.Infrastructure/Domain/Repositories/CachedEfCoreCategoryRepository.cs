@@ -28,14 +28,6 @@ public class CachedEfCoreCategoryRepository : ICategoryRepository
         );
     }
 
-    private static string GetCacheKey(
-        CategoryId id,
-        LanguageId languageId
-    )
-    {
-        return $"Category_Id_{id}_Language_{languageId}";
-    }
-
     public async Task<(IEnumerable<Category> Categories, int TotalCount)> Search(
         string query,
         int pageNumber,
@@ -49,7 +41,6 @@ public class CachedEfCoreCategoryRepository : ICategoryRepository
                 category.Translations.Where(translation => Equals(translation.LanguageId, languageId)));
 
         if (!string.IsNullOrWhiteSpace(query))
-        {
             baseQuery = baseQuery.Where(category =>
                 category.Translations.Any(translation =>
 #pragma warning disable CA1862
@@ -58,7 +49,6 @@ public class CachedEfCoreCategoryRepository : ICategoryRepository
                     && Equals(translation.LanguageId, languageId)
                 )
             );
-        }
 
         var totalCount = await baseQuery.CountAsync(cancellationToken);
 
@@ -91,5 +81,13 @@ public class CachedEfCoreCategoryRepository : ICategoryRepository
                     .FirstOrDefaultAsync(category => category.Id == id, cancellationToken);
             }
         );
+    }
+
+    private static string GetCacheKey(
+        CategoryId id,
+        LanguageId languageId
+    )
+    {
+        return $"Category_Id_{id}_Language_{languageId}";
     }
 }

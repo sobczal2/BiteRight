@@ -1,6 +1,5 @@
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Options;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
 namespace BiteRight.Infrastructure.Common;

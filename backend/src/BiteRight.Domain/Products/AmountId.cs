@@ -14,12 +14,18 @@ public class AmountId : GuidId
         : base(value)
     {
     }
-    
+
     public static implicit operator Guid(
         AmountId id
-    ) => id.Value;
+    )
+    {
+        return id.Value;
+    }
 
     public static implicit operator AmountId(
         Guid id
-    ) => new(id);
+    )
+    {
+        return new AmountId(id);
+    }
 }

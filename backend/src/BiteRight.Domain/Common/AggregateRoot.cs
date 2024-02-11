@@ -1,13 +1,14 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace BiteRight.Domain.Common;
 
 public class AggregateRoot<TId> : Entity<TId>, IDomainEventHolder
     where TId : GuidId
 {
+    private readonly List<DomainEvent> _domainEvents = [];
+
     protected AggregateRoot()
     {
     }
+
     public AggregateRoot(
         TId id
     )
@@ -15,19 +16,17 @@ public class AggregateRoot<TId> : Entity<TId>, IDomainEventHolder
     {
     }
 
-    private readonly List<DomainEvent> _domainEvents = [];
-    
     public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents.AsReadOnly();
-    
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
+    }
+
     protected void AddDomainEvent(
         DomainEvent domainEvent
     )
     {
         _domainEvents.Add(domainEvent);
-    }
-    
-    public void ClearDomainEvents()
-    {
-        _domainEvents.Clear();
     }
 }

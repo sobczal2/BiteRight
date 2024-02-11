@@ -15,7 +15,7 @@ public class CountriesController : WebController
         : base(mediator)
     {
     }
-    
+
     [HttpGet]
     [AuthorizeUserExists]
     [ProducesResponseType(typeof(ListResponse), StatusCodes.Status200OK)]

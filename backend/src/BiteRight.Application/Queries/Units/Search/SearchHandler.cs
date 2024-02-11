@@ -1,5 +1,4 @@
 using BiteRight.Application.Common;
-using BiteRight.Application.Dtos.Categories;
 using BiteRight.Application.Dtos.Common;
 using BiteRight.Application.Dtos.Units;
 using BiteRight.Domain.Abstracts.Common;

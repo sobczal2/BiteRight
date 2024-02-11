@@ -1,8 +1,6 @@
-using System.Globalization;
 using BiteRight.Web.Middleware;
 using BiteRight.Web.Registration;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
@@ -25,7 +23,8 @@ var app = builder.Build();
 app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseSerilogRequestLogging(opt =>
 {
-    opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} CorrelationId {CorrelationId} responded {StatusCode} in {Elapsed:0.0000} ms";
+    opt.MessageTemplate =
+        "HTTP {RequestMethod} {RequestPath} CorrelationId {CorrelationId} responded {StatusCode} in {Elapsed:0.0000} ms";
     opt.GetLevel = (ctx, _, _) => LogEventLevel.Information;
 });
 

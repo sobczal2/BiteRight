@@ -1,4 +1,5 @@
 using BiteRight.Application.Common.Exceptions;
+using BiteRight.Resources.Resources.Common;
 using BiteRight.Web.Responses;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -12,13 +13,13 @@ namespace BiteRight.Web.Filters;
 public class ApplicationExceptionFilter : IExceptionFilter
 {
     private readonly IHostEnvironment _environment;
+    private readonly IStringLocalizer<Common> _localizer;
     private readonly ILogger<ApplicationExceptionFilter> _logger;
-    private readonly IStringLocalizer<Resources.Resources.Common.Common> _localizer;
 
     public ApplicationExceptionFilter(
         IHostEnvironment environment,
         ILogger<ApplicationExceptionFilter> logger,
-        IStringLocalizer<Resources.Resources.Common.Common> localizer
+        IStringLocalizer<Common> localizer
     )
     {
         _environment = environment;
@@ -62,7 +63,7 @@ public class ApplicationExceptionFilter : IExceptionFilter
         NotFoundException _
     )
     {
-        var response = ErrorResponse.FromMessage(_localizer[nameof(Resources.Resources.Common.Common.not_found)]);
+        var response = ErrorResponse.FromMessage(_localizer[nameof(Common.not_found)]);
         context.Result = new NotFoundObjectResult(response);
         context.ExceptionHandled = true;
     }
@@ -73,25 +74,22 @@ public class ApplicationExceptionFilter : IExceptionFilter
     )
     {
         _logger.LogError(exception, "Internal error");
-        var response = ErrorResponse.FromMessage(_localizer[nameof(Resources.Resources.Common.Common.internal_error)]);
+        var response = ErrorResponse.FromMessage(_localizer[nameof(Common.internal_error)]);
         context.Result = new ObjectResult(response)
         {
             StatusCode = 500
         };
         context.ExceptionHandled = true;
     }
-    
+
     private void HandleUnknownException(
         ExceptionContext context
     )
     {
-        if (_environment.IsDevelopment())
-        {
-            return;
-        }
-        
+        if (_environment.IsDevelopment()) return;
+
         _logger.LogError(context.Exception, "Unknown exception");
-        var response = ErrorResponse.FromMessage(_localizer[nameof(Resources.Resources.Common.Common.unknown_error)]);
+        var response = ErrorResponse.FromMessage(_localizer[nameof(Common.unknown_error)]);
         context.Result = new ObjectResult(response)
         {
             StatusCode = 500

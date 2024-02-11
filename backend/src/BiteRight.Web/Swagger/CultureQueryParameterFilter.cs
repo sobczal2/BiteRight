@@ -21,7 +21,7 @@ public class CultureQueryParameterFilter : IOperationFilter
                 Type = "string"
             }
         };
-        
+
         operation.Parameters.Add(cultureQueryParameter);
     }
 }

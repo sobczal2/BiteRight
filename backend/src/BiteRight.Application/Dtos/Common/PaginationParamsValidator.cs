@@ -14,12 +14,15 @@ public class PaginationParamsValidator : AbstractValidator<PaginationParams>
         const int maxPageSize = 100;
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(minPageNumber)
-            .WithMessage(string.Format(commonLocalizer[nameof(Resources.Resources.Common.Common.page_number_not_valid)], minPageNumber));
+            .WithMessage(string.Format(commonLocalizer[nameof(Resources.Resources.Common.Common.page_number_not_valid)],
+                minPageNumber));
         RuleFor(x => x.PageSize)
             .GreaterThanOrEqualTo(minPageSize)
-            .WithMessage(string.Format(commonLocalizer[nameof(Resources.Resources.Common.Common.page_size_not_valid)], minPageSize, maxPageSize));
+            .WithMessage(string.Format(commonLocalizer[nameof(Resources.Resources.Common.Common.page_size_not_valid)],
+                minPageSize, maxPageSize));
         RuleFor(x => x.PageSize)
             .LessThanOrEqualTo(maxPageSize)
-            .WithMessage(string.Format(commonLocalizer[nameof(Resources.Resources.Common.Common.page_size_not_valid)], minPageSize, maxPageSize));
+            .WithMessage(string.Format(commonLocalizer[nameof(Resources.Resources.Common.Common.page_size_not_valid)],
+                minPageSize, maxPageSize));
     }
 }

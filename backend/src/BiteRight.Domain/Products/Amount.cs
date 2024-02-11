@@ -6,10 +6,6 @@ namespace BiteRight.Domain.Products;
 
 public class Amount : Entity<AmountId>
 {
-    public double CurrentValue { get; private set; }
-    public double MaxValue { get; private set; }
-    public UnitId UnitId { get; private set; }
-
     // EF Core
     private Amount()
     {
@@ -29,6 +25,10 @@ public class Amount : Entity<AmountId>
         MaxValue = maxValue;
         UnitId = unitId;
     }
+
+    public double CurrentValue { get; }
+    public double MaxValue { get; }
+    public UnitId UnitId { get; private set; }
 
     public static Amount Create(
         double currentValue,
@@ -54,20 +54,11 @@ public class Amount : Entity<AmountId>
         double maxValue
     )
     {
-        if (currentValue < 0)
-        {
-            throw new AmountCurrentValueLessThanZeroException();
-        }
+        if (currentValue < 0) throw new AmountCurrentValueLessThanZeroException();
 
-        if (maxValue < 0)
-        {
-            throw new AmountMaxValueLessThanZeroException();
-        }
+        if (maxValue < 0) throw new AmountMaxValueLessThanZeroException();
 
-        if (currentValue > maxValue)
-        {
-            throw new AmountCurrentValueGreaterThanMaxValueException();
-        }
+        if (currentValue > maxValue) throw new AmountCurrentValueGreaterThanMaxValueException();
     }
 
     public static Amount CreateFull(UnitId unitId, double maxValue)

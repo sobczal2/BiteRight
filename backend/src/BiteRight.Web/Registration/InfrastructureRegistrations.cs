@@ -37,10 +37,7 @@ public static class InfrastructureRegistrations
     {
         services.AddDbContext<AppDbContext>(opt =>
         {
-            if (environment.IsDevelopment())
-            {
-                opt.EnableSensitiveDataLogging();
-            }
+            if (environment.IsDevelopment()) opt.EnableSensitiveDataLogging();
 
             opt.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             opt.UseSnakeCaseNamingConvention();

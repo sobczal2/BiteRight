@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Serilog.Context;
 
 namespace BiteRight.Web.Middleware;
 
@@ -12,9 +13,7 @@ public class CorrelationIdMiddleware : IMiddleware
     )
     {
         if (!context.Request.Headers.TryGetValue("X-Correlation-ID", out var existingCorrelationId))
-        {
             existingCorrelationId = Guid.NewGuid().ToString("N");
-        }
 
         context.Items["CorrelationId"] = existingCorrelationId;
 
@@ -24,7 +23,7 @@ public class CorrelationIdMiddleware : IMiddleware
             return Task.CompletedTask;
         });
 
-        using (Serilog.Context.LogContext.PushProperty("CorrelationId", existingCorrelationId))
+        using (LogContext.PushProperty("CorrelationId", existingCorrelationId))
         {
             await next(context);
         }

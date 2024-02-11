@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Currencies.Exceptions;
 
@@ -6,54 +5,48 @@ namespace BiteRight.Domain.Currencies;
 
 public class Symbol : ValueObject
 {
-    public string Value { get; }
-    
+    private const int MinLength = 1;
+    private const int MaxLength = 5;
+
     private Symbol(
         string value
     )
     {
         Value = value;
     }
-    
+
+    public string Value { get; }
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
     }
-    
+
     public static Symbol Create(
         string value
     )
     {
         Validate(value);
-        
+
         return new Symbol(value);
     }
-    
+
     public static Symbol CreateSkipValidation(
         string value
     )
     {
         return new Symbol(value);
     }
-    
-    private const int MinLength = 1;
-    private const int MaxLength = 5;
-    
+
     private static void Validate(
         string value
     )
     {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new SymbolEmptyException();
-        }
-        
-        if (value.Length is < MinLength or > MaxLength)
-        {
-            throw new SymbolInvalidLengthException(MinLength, MaxLength);
-        }
+        if (string.IsNullOrWhiteSpace(value)) throw new SymbolEmptyException();
+
+        if (value.Length is < MinLength or > MaxLength) throw new SymbolInvalidLengthException(MinLength, MaxLength);
     }
-    
+
     public static implicit operator string(
         Symbol symbol
     )

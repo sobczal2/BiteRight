@@ -1,6 +1,3 @@
-using BiteRight.Domain.Countries;
-using BiteRight.Domain.Currencies;
-using BiteRight.Domain.Languages;
 using BiteRight.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

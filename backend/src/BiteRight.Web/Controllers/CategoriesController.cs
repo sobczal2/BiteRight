@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BiteRight.Application.Dtos.Categories;
 using BiteRight.Application.Dtos.Common;
 using BiteRight.Application.Queries.Categories.GetPhoto;
 using BiteRight.Application.Queries.Categories.Search;

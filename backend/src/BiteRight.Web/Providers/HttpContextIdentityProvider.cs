@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Users;
-using BiteRight.Infrastructure.Database;
 using Microsoft.AspNetCore.Http;
 
 namespace BiteRight.Web.Providers;
@@ -25,10 +24,7 @@ public class HttpContextIdentityProvider : IIdentityProvider
     public IdentityId RequireCurrent()
     {
         var identityId = GetIdentityId();
-        if (identityId is null)
-        {
-            throw new InvalidOperationException("Auth0Id is null");
-        }
+        if (identityId is null) throw new InvalidOperationException("Auth0Id is null");
 
         return identityId;
     }
@@ -42,10 +38,7 @@ public class HttpContextIdentityProvider : IIdentityProvider
     {
         var identityId = RequireCurrent();
         var user = await _userRepository.FindByIdentityId(identityId);
-        if (user is null)
-        {
-            throw new InvalidOperationException("User not found");
-        }
+        if (user is null) throw new InvalidOperationException("User not found");
 
         return user;
     }

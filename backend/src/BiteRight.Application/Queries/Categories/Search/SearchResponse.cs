@@ -1,4 +1,3 @@
-using Auth0.ManagementApi.Paging;
 using BiteRight.Application.Dtos.Categories;
 using BiteRight.Application.Dtos.Common;
 

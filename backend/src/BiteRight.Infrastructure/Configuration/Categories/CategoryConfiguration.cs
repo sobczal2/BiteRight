@@ -1,5 +1,4 @@
 using BiteRight.Domain.Categories;
-using BiteRight.Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,44 +6,6 @@ namespace BiteRight.Infrastructure.Configuration.Categories;
 
 public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
-    public void Configure(
-        EntityTypeBuilder<Category> builder
-    )
-    {
-        builder.ToTable("categories", "category");
-        builder.Ignore(category => category.DomainEvents);
-        builder.HasKey(category => category.Id);
-        builder.Property(category => category.Id)
-            .HasConversion(
-                id => id.Value,
-                value => value
-            )
-            .ValueGeneratedNever();
-        
-        builder.Property(category => category.PhotoId)
-            .HasConversion(
-                photoId => photoId!.Value,
-                value => value
-            );
-        
-        builder.HasOne(category => category.Photo)
-            .WithOne()
-            .HasForeignKey<Category>(category => category.PhotoId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasData(GetSeedData());
-    }
-
-    private static IEnumerable<Category> GetSeedData()
-    {
-        yield return Dairy;
-        yield return Fruit;
-        yield return Vegetable;
-        yield return Meat;
-        yield return Fish;
-        yield return None;
-    }
-
     public static Category Dairy { get; } = Category.Create(
         PhotoConfiguration.DairyPhoto.Id,
         new CategoryId(new Guid("E8C78317-70AC-4051-805E-ECE2BB37656F"))
@@ -74,4 +35,42 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         null,
         new CategoryId(new Guid("C82E0550-26CF-410D-8CEC-5CF62BADA757"))
     );
+
+    public void Configure(
+        EntityTypeBuilder<Category> builder
+    )
+    {
+        builder.ToTable("categories", "category");
+        builder.Ignore(category => category.DomainEvents);
+        builder.HasKey(category => category.Id);
+        builder.Property(category => category.Id)
+            .HasConversion(
+                id => id.Value,
+                value => value
+            )
+            .ValueGeneratedNever();
+
+        builder.Property(category => category.PhotoId)
+            .HasConversion(
+                photoId => photoId!.Value,
+                value => value
+            );
+
+        builder.HasOne(category => category.Photo)
+            .WithOne()
+            .HasForeignKey<Category>(category => category.PhotoId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasData(GetSeedData());
+    }
+
+    private static IEnumerable<Category> GetSeedData()
+    {
+        yield return Dairy;
+        yield return Fruit;
+        yield return Vegetable;
+        yield return Meat;
+        yield return Fish;
+        yield return None;
+    }
 }
