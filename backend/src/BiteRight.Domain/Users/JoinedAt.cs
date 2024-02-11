@@ -6,14 +6,14 @@ namespace BiteRight.Domain.Users;
 
 public class JoinedAt : ValueObject
 {
+    public DateTime Value { get; }
+
     private JoinedAt(
         DateTime value
     )
     {
         Value = value;
     }
-
-    public DateTime Value { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

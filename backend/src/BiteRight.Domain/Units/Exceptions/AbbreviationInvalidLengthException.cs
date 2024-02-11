@@ -4,6 +4,9 @@ namespace BiteRight.Domain.Units.Exceptions;
 
 public class AbbreviationInvalidLengthException : BusinessRuleDomainException
 {
+    public int MinLength { get; }
+    public int MaxLength { get; }
+
     public AbbreviationInvalidLengthException(
         int minLength,
         int maxLength
@@ -12,7 +15,4 @@ public class AbbreviationInvalidLengthException : BusinessRuleDomainException
         MinLength = minLength;
         MaxLength = maxLength;
     }
-
-    public int MinLength { get; }
-    public int MaxLength { get; }
 }

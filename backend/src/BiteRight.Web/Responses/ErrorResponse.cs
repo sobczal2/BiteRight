@@ -6,6 +6,9 @@ namespace BiteRight.Web.Responses;
 
 public class ErrorResponse
 {
+    public string Message { get; set; }
+    public Dictionary<string, List<string>> Errors { get; set; }
+
     public ErrorResponse(
         string message
     )
@@ -22,9 +25,6 @@ public class ErrorResponse
         Message = message;
         Errors = errors;
     }
-
-    public string Message { get; set; }
-    public Dictionary<string, List<string>> Errors { get; set; }
 
     public static ErrorResponse FromMessage(
         string message

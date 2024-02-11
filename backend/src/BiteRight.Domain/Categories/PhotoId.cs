@@ -4,6 +4,8 @@ namespace BiteRight.Domain.Categories;
 
 public class PhotoId : GuidId
 {
+    public static PhotoId Empty => new(Guid.Empty);
+
     public PhotoId()
     {
     }
@@ -14,8 +16,6 @@ public class PhotoId : GuidId
         : base(value)
     {
     }
-
-    public static PhotoId Empty => new(Guid.Empty);
 
     public static implicit operator PhotoId(Guid id)
     {

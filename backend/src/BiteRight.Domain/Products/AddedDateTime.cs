@@ -6,14 +6,14 @@ namespace BiteRight.Domain.Products;
 
 public class AddedDateTime : ValueObject
 {
+    public DateTime Value { get; }
+
     private AddedDateTime(
         DateTime value
     )
     {
         Value = value;
     }
-
-    public DateTime Value { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

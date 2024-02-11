@@ -6,6 +6,11 @@ namespace BiteRight.Domain.Products;
 
 public class Amount : Entity<AmountId>
 {
+    public double CurrentValue { get; }
+    public double MaxValue { get; }
+
+    public UnitId UnitId { get; private set; }
+
     // EF Core
     private Amount()
     {
@@ -25,10 +30,6 @@ public class Amount : Entity<AmountId>
         MaxValue = maxValue;
         UnitId = unitId;
     }
-
-    public double CurrentValue { get; }
-    public double MaxValue { get; }
-    public UnitId UnitId { get; private set; }
 
     public static Amount Create(
         double currentValue,

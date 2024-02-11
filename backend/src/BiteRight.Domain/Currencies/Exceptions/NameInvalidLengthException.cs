@@ -4,6 +4,9 @@ namespace BiteRight.Domain.Currencies.Exceptions;
 
 public class NameInvalidLengthException : BusinessRuleDomainException
 {
+    public int MinLength { get; }
+    public int MaxLength { get; }
+
     public NameInvalidLengthException(
         int minLength,
         int maxLength
@@ -12,7 +15,4 @@ public class NameInvalidLengthException : BusinessRuleDomainException
         MinLength = minLength;
         MaxLength = maxLength;
     }
-
-    public int MinLength { get; }
-    public int MaxLength { get; }
 }

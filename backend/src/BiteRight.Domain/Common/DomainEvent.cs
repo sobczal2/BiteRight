@@ -2,6 +2,9 @@ namespace BiteRight.Domain.Common;
 
 public abstract class DomainEvent
 {
+    public DateTime OccurredOn { get; }
+    public Guid CorrelationId { get; }
+
     protected DomainEvent(
         DateTime occurredOn,
         Guid correlationId
@@ -10,7 +13,4 @@ public abstract class DomainEvent
         OccurredOn = occurredOn;
         CorrelationId = correlationId;
     }
-
-    public DateTime OccurredOn { get; }
-    public Guid CorrelationId { get; }
 }

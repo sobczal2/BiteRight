@@ -5,6 +5,14 @@ namespace BiteRight.Domain.Users;
 
 public class User : AggregateRoot<UserId>
 {
+    public IdentityId IdentityId { get; private set; }
+    public Username Username { get; private set; }
+    public Email Email { get; private set; }
+    public JoinedAt JoinedAt { get; private set; }
+    public ProfileId ProfileId { get; private set; }
+
+    public virtual Profile Profile { get; }
+
     // EF Core
     private User()
     {
@@ -33,13 +41,6 @@ public class User : AggregateRoot<UserId>
         Profile = profile;
         ProfileId = profile.Id;
     }
-
-    public IdentityId IdentityId { get; private set; }
-    public Username Username { get; private set; }
-    public Email Email { get; private set; }
-    public JoinedAt JoinedAt { get; private set; }
-    public ProfileId ProfileId { get; private set; }
-    public virtual Profile Profile { get; }
 
     public static User Create(
         IdentityId identityId,

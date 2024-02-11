@@ -5,6 +5,10 @@ namespace BiteRight.Domain.Units;
 
 public class Unit : AggregateRoot<UnitId>
 {
+    public UnitSystem UnitSystem { get; private set; }
+
+    public IEnumerable<Translation> Translations { get; }
+
     // EF Core
     private Unit()
     {
@@ -20,9 +24,6 @@ public class Unit : AggregateRoot<UnitId>
         UnitSystem = unitSystem;
         Translations = default!;
     }
-
-    public UnitSystem UnitSystem { get; private set; }
-    public IEnumerable<Translation> Translations { get; }
 
     public static Unit Create(
         UnitSystem unitSystem,

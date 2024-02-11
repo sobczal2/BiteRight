@@ -5,6 +5,14 @@ namespace BiteRight.Domain.Units;
 
 public class Translation : Entity<TranslationId>
 {
+    public UnitId UnitId { get; private set; }
+    public virtual Unit Unit { get; private set; }
+    public LanguageId LanguageId { get; private set; }
+    public virtual Language Language { get; private set; }
+    public Name Name { get; private set; }
+
+    public Abbreviation Abbreviation { get; private set; }
+
     // EF Core
     private Translation()
     {
@@ -32,13 +40,6 @@ public class Translation : Entity<TranslationId>
         Name = name;
         Abbreviation = abbreviation;
     }
-
-    public UnitId UnitId { get; private set; }
-    public virtual Unit Unit { get; private set; }
-    public LanguageId LanguageId { get; private set; }
-    public virtual Language Language { get; private set; }
-    public Name Name { get; private set; }
-    public Abbreviation Abbreviation { get; private set; }
 
     public static Translation Create(
         UnitId unitId,

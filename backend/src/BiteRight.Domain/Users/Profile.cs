@@ -5,6 +5,11 @@ namespace BiteRight.Domain.Users;
 
 public class Profile : Entity<ProfileId>
 {
+    public CurrencyId CurrencyId { get; private set; }
+    public virtual Currency Currency { get; private set; }
+
+    public TimeZoneInfo TimeZone { get; private set; }
+
     // EF Core
     private Profile()
     {
@@ -24,10 +29,6 @@ public class Profile : Entity<ProfileId>
         Currency = default!;
         TimeZone = timeZone;
     }
-
-    public CurrencyId CurrencyId { get; private set; }
-    public virtual Currency Currency { get; private set; }
-    public TimeZoneInfo TimeZone { get; private set; }
 
     public static Profile Create(
         CurrencyId currencyId,

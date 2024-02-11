@@ -4,6 +4,11 @@ namespace BiteRight.Domain.Languages;
 
 public class Language : AggregateRoot<LanguageId>
 {
+    public Name NativeName { get; private set; }
+    public Name EnglishName { get; private set; }
+
+    public Code Code { get; private set; }
+
     // EF Core
     private Language()
     {
@@ -24,10 +29,6 @@ public class Language : AggregateRoot<LanguageId>
         EnglishName = englishName;
         Code = code;
     }
-
-    public Name NativeName { get; private set; }
-    public Name EnglishName { get; private set; }
-    public Code Code { get; private set; }
 
     public static Language Create(
         Name nativeName,
