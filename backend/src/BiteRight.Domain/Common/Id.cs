@@ -3,14 +3,14 @@ namespace BiteRight.Domain.Common;
 public abstract class Id<T>
     where T : notnull
 {
-    public T Value { get; }
-
     public Id(
         T value
     )
     {
         Value = value;
     }
+
+    public T Value { get; }
 
     public override bool Equals(object? obj)
     {

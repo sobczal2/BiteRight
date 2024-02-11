@@ -8,10 +8,6 @@ public class Photo : Entity<PhotoId>
     public const string ContentType = "image/webp";
     public const string Directory = "photos";
 
-    public string Name { get; private set; }
-
-    public static Photo Default { get; } = new(PhotoId.Empty, DefaultName);
-
     // EF Core
     private Photo()
     {
@@ -26,6 +22,10 @@ public class Photo : Entity<PhotoId>
     {
         Name = name;
     }
+
+    public string Name { get; private set; }
+
+    public static Photo Default { get; } = new(PhotoId.Empty, DefaultName);
 
     public static Photo Create(
         PhotoId id,

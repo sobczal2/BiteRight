@@ -8,14 +8,14 @@ public class Name : ValueObject
     private const int MinLength = 3;
     private const int MaxLength = 64;
 
-    public string Value { get; }
-
     private Name(
         string value
     )
     {
         Value = value;
     }
+
+    public string Value { get; }
 
 
     protected override IEnumerable<object> GetEqualityComponents()

@@ -9,10 +9,6 @@ public class Price : ValueObject
     private const decimal MinValue = 0.00m;
     private const decimal MaxValue = 1e6m;
 
-    public decimal Value { get; }
-    public CurrencyId CurrencyId { get; }
-    public virtual Currency Currency { get; }
-
     // EF Core
     private Price()
     {
@@ -30,6 +26,10 @@ public class Price : ValueObject
         CurrencyId = currency.Id;
         Currency = currency;
     }
+
+    public decimal Value { get; }
+    public CurrencyId CurrencyId { get; }
+    public virtual Currency Currency { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

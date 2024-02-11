@@ -4,7 +4,7 @@ using Microsoft.Extensions.Localization;
 
 namespace BiteRight.Application.Queries.Units.Search;
 
-public class SearchValidator : AbstractValidator<Categories.Search.SearchRequest>
+public class SearchValidator : AbstractValidator<SearchRequest>
 {
     public SearchValidator(
         IStringLocalizer<Resources.Resources.Categories.Categories> unitsLocalizer,

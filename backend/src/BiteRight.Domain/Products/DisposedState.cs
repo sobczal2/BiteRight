@@ -5,10 +5,6 @@ namespace BiteRight.Domain.Products;
 
 public class DisposedState : ValueObject
 {
-    public bool Disposed { get; }
-
-    public DateTime? DisposedDate { get; }
-
     // EF Core
     private DisposedState()
     {
@@ -24,6 +20,10 @@ public class DisposedState : ValueObject
         Disposed = disposed;
         DisposedDate = disposedDate;
     }
+
+    public bool Disposed { get; }
+
+    public DateTime? DisposedDate { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

@@ -18,6 +18,10 @@ public class AmountConfiguration : IEntityTypeConfiguration<Amount>
             )
             .ValueGeneratedNever();
 
+        builder.Property(amount => amount.CurrentValue);
+
+        builder.Property(amount => amount.MaxValue);
+
         builder.Property(amount => amount.UnitId)
             .HasConversion(
                 unitId => unitId.Value,

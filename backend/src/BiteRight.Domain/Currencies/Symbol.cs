@@ -8,14 +8,14 @@ public class Symbol : ValueObject
     private const int MinLength = 1;
     private const int MaxLength = 5;
 
-    public string Value { get; }
-
     private Symbol(
         string value
     )
     {
         Value = value;
     }
+
+    public string Value { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

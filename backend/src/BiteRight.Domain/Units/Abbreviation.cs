@@ -12,14 +12,14 @@ public class Abbreviation : ValueObject
 
     private static readonly Regex ValidCharacters = CommonRegexes.Letters;
 
-    public string Value { get; }
-
     private Abbreviation(
         string value
     )
     {
         Value = value;
     }
+
+    public string Value { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

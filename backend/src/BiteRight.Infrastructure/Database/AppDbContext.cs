@@ -13,6 +13,17 @@ namespace BiteRight.Infrastructure.Database;
 
 public class AppDbContext : DbContext
 {
+    private readonly IDomainEventPublisher _domainEventPublisher;
+
+    public AppDbContext(
+        DbContextOptions<AppDbContext> options,
+        IDomainEventPublisher domainEventPublisher
+    )
+        : base(options)
+    {
+        _domainEventPublisher = domainEventPublisher;
+    }
+
     public DbSet<User> Users { get; set; } = default!;
     public DbSet<Profile> Profiles { get; set; } = default!;
     public DbSet<Country> Countries { get; set; } = default!;
@@ -25,16 +36,6 @@ public class AppDbContext : DbContext
     public DbSet<BiteRight.Domain.Units.Translation> UnitTranslations { get; set; } = default!;
     public DbSet<Amount> Amounts { get; set; } = default!;
     public DbSet<Photo> Photos { get; set; } = default!;
-    private readonly IDomainEventPublisher _domainEventPublisher;
-
-    public AppDbContext(
-        DbContextOptions<AppDbContext> options,
-        IDomainEventPublisher domainEventPublisher
-    )
-        : base(options)
-    {
-        _domainEventPublisher = domainEventPublisher;
-    }
 
     protected override void OnModelCreating(
         ModelBuilder modelBuilder

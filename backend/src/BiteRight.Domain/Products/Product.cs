@@ -6,20 +6,6 @@ namespace BiteRight.Domain.Products;
 
 public class Product : AggregateRoot<ProductId>
 {
-    public Name Name { get; private set; }
-    public Description Description { get; private set; }
-    public Price? Price { get; private set; }
-    public ExpirationDate ExpirationDate { get; private set; }
-    public CategoryId CategoryId { get; private set; }
-    public virtual Category Category { get; private set; }
-    public AddedDateTime AddedDateTime { get; private set; }
-    public AmountId AmountId { get; private set; }
-    public virtual Amount Amount { get; private set; }
-    public UserId UserId { get; private set; }
-    public virtual User User { get; private set; }
-
-    public DisposedState DisposedState { get; private set; }
-
     // EF Core
     private Product()
     {
@@ -64,6 +50,20 @@ public class Product : AggregateRoot<ProductId>
         UserId = userId;
         User = default!;
     }
+
+    public Name Name { get; private set; }
+    public Description Description { get; private set; }
+    public Price? Price { get; private set; }
+    public ExpirationDate ExpirationDate { get; private set; }
+    public CategoryId CategoryId { get; private set; }
+    public virtual Category Category { get; private set; }
+    public AddedDateTime AddedDateTime { get; private set; }
+    public AmountId AmountId { get; private set; }
+    public virtual Amount Amount { get; private set; }
+    public UserId UserId { get; private set; }
+    public virtual User User { get; private set; }
+
+    public DisposedState DisposedState { get; private set; }
 
     public static Product Create(
         Name name,

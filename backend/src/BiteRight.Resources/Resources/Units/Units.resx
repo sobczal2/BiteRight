@@ -28,6 +28,6 @@
         <value/>
     </data>
     <data name="query_too_long" xml:space="preserve">
-        <value/>
+        <value>Query length cannot exceed {0} characters</value>
     </data>
 </root>

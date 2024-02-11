@@ -11,15 +11,15 @@ public class Code : ValueObject
 
     private static readonly Regex ValidCharacters = CommonRegexes.LowercaseLetters;
 
-    public string Value { get; }
-    public static Code Default => new("en");
-
     private Code(
         string value
     )
     {
         Value = value;
     }
+
+    public string Value { get; }
+    public static Code Default => new("en");
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

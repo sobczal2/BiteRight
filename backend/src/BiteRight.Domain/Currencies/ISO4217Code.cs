@@ -11,14 +11,14 @@ public class ISO4217Code : ValueObject
 
     private static readonly Regex ValidCharacters = CommonRegexes.UppercaseLetters;
 
-    public string Value { get; }
-
     private ISO4217Code(
         string value
     )
     {
         Value = value;
     }
+
+    public string Value { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

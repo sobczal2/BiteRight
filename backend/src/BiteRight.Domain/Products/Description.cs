@@ -11,14 +11,14 @@ public class Description : ValueObject
 
     private static readonly Regex ValidCharacters = CommonRegexes.AlphanumericWithSpacesAndSpecialCharacters;
 
-    public string Value { get; }
-
     private Description(
         string value
     )
     {
         Value = value;
     }
+
+    public string Value { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

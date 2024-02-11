@@ -12,14 +12,14 @@ public class Username : ValueObject
 
     private static readonly Regex ValidCharacters = CommonRegexes.AlphanumericWithHuphensAndUnderscores;
 
-    public string Value { get; }
-
     private Username(
         string value
     )
     {
         Value = value;
     }
+
+    public string Value { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

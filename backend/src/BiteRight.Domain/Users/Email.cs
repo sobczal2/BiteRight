@@ -6,7 +6,6 @@ namespace BiteRight.Domain.Users;
 
 public class Email : ValueObject
 {
-    public string Value => _mailAddress.Address;
     private readonly MailAddress _mailAddress;
 
     private Email(
@@ -15,6 +14,8 @@ public class Email : ValueObject
     {
         _mailAddress = mailAddress;
     }
+
+    public string Value => _mailAddress.Address;
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

@@ -7,12 +7,12 @@ namespace BiteRight.Web.Controllers;
 [Route("api/[controller]")]
 public class WebController : ControllerBase
 {
-    protected IMediator Mediator { get; }
-
     protected WebController(
         IMediator mediator
     )
     {
         Mediator = mediator;
     }
+
+    protected IMediator Mediator { get; }
 }

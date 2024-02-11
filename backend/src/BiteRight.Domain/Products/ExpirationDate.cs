@@ -13,9 +13,6 @@ public class ExpirationDate : ValueObject
         UseBy = 3
     }
 
-    public DateOnly Value { get; }
-    public ExpirationDateKind Kind { get; }
-
     // EF Core
     private ExpirationDate()
     {
@@ -31,6 +28,9 @@ public class ExpirationDate : ValueObject
         Value = value;
         Kind = kind;
     }
+
+    public DateOnly Value { get; }
+    public ExpirationDateKind Kind { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
