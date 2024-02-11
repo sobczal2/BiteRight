@@ -68,6 +68,7 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
                 CategoryId = product.CategoryId,
                 AddedDateTime = product.AddedDateTime,
                 Consumption = product.Consumption,
+                Disposed = product.DisposedState.Disposed
             })
             .ToListAsync(cancellationToken);
 

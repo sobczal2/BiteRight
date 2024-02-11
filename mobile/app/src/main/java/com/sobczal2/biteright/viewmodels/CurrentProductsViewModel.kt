@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -88,5 +89,15 @@ class CurrentProductsViewModel @Inject constructor(
                 }
             }
         )
+    }
+
+    fun disposeProduct(productId: UUID) {
+        _state.update {
+            it.copy(
+                currentProducts = it.currentProducts.filter { product ->
+                    product.id != productId
+                }
+            )
+        }
     }
 }
