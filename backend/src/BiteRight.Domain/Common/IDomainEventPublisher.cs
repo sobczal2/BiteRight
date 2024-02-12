@@ -1,5 +1,16 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: IDomainEventPublisher.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System.Threading;
 using System.Threading.Tasks;
+
+#endregion
 
 namespace BiteRight.Domain.Common;
 

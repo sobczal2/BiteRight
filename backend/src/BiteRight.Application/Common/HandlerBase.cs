@@ -1,3 +1,12 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: HandlerBase.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +15,8 @@ using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
+
+#endregion
 
 namespace BiteRight.Application.Common;
 

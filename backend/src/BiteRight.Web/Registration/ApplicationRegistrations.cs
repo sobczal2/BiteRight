@@ -1,7 +1,18 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: ApplicationRegistrations.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using BiteRight.Application.Commands.Users.Onboard;
 using BiteRight.Application.Common;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+
+#endregion
 
 namespace BiteRight.Web.Registration;
 

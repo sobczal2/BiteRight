@@ -1,6 +1,17 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: User.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Currencies;
+
+#endregion
 
 namespace BiteRight.Domain.Users;
 

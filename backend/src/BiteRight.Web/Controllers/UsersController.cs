@@ -1,3 +1,12 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: UsersController.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System.Threading.Tasks;
 using BiteRight.Application.Commands.Users.Onboard;
 using BiteRight.Application.Commands.Users.UpdateProfile;
@@ -6,6 +15,8 @@ using BiteRight.Web.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+#endregion
 
 namespace BiteRight.Web.Controllers;
 

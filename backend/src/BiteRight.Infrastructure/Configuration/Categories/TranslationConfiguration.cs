@@ -1,3 +1,12 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: TranslationConfiguration.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using System.Collections.Generic;
 using BiteRight.Domain.Categories;
@@ -5,6 +14,8 @@ using BiteRight.Infrastructure.Configuration.Languages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Name = BiteRight.Domain.Categories.Name;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Configuration.Categories;
 

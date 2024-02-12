@@ -1,3 +1,12 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: ListHandler.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -5,6 +14,8 @@ using BiteRight.Application.Common;
 using BiteRight.Application.Dtos.Countries;
 using BiteRight.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
+
+#endregion
 
 namespace BiteRight.Application.Queries.Countries.List;
 

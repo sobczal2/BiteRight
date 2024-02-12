@@ -1,7 +1,18 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: Product.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using BiteRight.Domain.Categories;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Users;
+
+#endregion
 
 namespace BiteRight.Domain.Products;
 

@@ -1,3 +1,12 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: ProductsController.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using System.Threading.Tasks;
 using BiteRight.Application.Commands.Products.Create;
@@ -7,6 +16,8 @@ using BiteRight.Web.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+#endregion
 
 namespace BiteRight.Web.Controllers;
 

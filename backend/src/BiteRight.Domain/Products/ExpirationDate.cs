@@ -1,7 +1,18 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: ExpirationDate.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using System.Collections.Generic;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Products.Exceptions;
+
+#endregion
 
 namespace BiteRight.Domain.Products;
 

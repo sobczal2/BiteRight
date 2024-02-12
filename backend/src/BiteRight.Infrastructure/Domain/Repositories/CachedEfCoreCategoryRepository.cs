@@ -1,3 +1,12 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: CachedEfCoreCategoryRepository.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -10,6 +19,8 @@ using BiteRight.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Domain.Repositories;
 

@@ -1,6 +1,17 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: UserConfiguration.cs
+// # Author: Łukasz Sobczak
+// # Created: 11-02-2024
+// # ==============================================================================
+
+#region
+
 using BiteRight.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Configuration.Users;
 

@@ -1,6 +1,17 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: Symbol.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System.Collections.Generic;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Currencies.Exceptions;
+
+#endregion
 
 namespace BiteRight.Domain.Currencies;
 

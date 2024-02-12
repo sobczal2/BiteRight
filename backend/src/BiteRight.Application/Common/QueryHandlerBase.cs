@@ -1,7 +1,18 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: QueryHandlerBase.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+
+#endregion
 
 namespace BiteRight.Application.Common;
 

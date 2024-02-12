@@ -1,5 +1,16 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: Translation.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Languages;
+
+#endregion
 
 namespace BiteRight.Domain.Units;
 

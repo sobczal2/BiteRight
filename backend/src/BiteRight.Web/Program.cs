@@ -1,9 +1,20 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: Program.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using BiteRight.Web.Middleware;
 using BiteRight.Web.Registration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+
+#endregion
 
 var builder = WebApplication.CreateSlimBuilder(args);
 

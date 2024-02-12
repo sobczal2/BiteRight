@@ -1,3 +1,12 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: OnboardHandler.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +20,8 @@ using BiteRight.Infrastructure.Database;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Localization;
+
+#endregion
 
 namespace BiteRight.Application.Commands.Users.Onboard;
 

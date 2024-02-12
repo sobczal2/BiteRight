@@ -1,7 +1,18 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: CorrelationIdMiddleware.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Serilog.Context;
+
+#endregion
 
 namespace BiteRight.Web.Middleware;
 

@@ -1,3 +1,12 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: Auth0IdentityManager.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -9,6 +18,8 @@ using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Users;
 using BiteRight.Options;
 using Microsoft.Extensions.Options;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Auth0Management;
 

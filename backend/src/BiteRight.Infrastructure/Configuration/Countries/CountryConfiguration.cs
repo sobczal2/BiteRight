@@ -1,3 +1,12 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: CountryConfiguration.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using System.Collections.Generic;
 using BiteRight.Domain.Countries;
@@ -6,6 +15,8 @@ using BiteRight.Infrastructure.Configuration.Languages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Name = BiteRight.Domain.Countries.Name;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Configuration.Countries;
 

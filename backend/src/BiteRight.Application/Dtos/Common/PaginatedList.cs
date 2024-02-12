@@ -1,5 +1,16 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: PaginatedList.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using System.Collections.Generic;
+
+#endregion
 
 namespace BiteRight.Application.Dtos.Common;
 

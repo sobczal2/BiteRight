@@ -1,9 +1,20 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: MediatorValidationBehaviour.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
+
+#endregion
 
 namespace BiteRight.Application.Common;
 

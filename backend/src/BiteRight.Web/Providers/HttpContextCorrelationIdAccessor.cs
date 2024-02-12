@@ -1,7 +1,18 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: HttpContextCorrelationIdAccessor.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using BiteRight.Domain.Abstracts.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+
+#endregion
 
 namespace BiteRight.Web.Providers;
 

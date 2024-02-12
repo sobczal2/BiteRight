@@ -1,6 +1,17 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: UserExistsRequirementHandler.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System.Threading.Tasks;
 using BiteRight.Domain.Abstracts.Repositories;
 using Microsoft.AspNetCore.Authorization;
+
+#endregion
 
 namespace BiteRight.Web.Authorization;
 

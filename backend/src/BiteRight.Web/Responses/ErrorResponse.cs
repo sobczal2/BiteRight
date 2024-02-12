@@ -1,6 +1,17 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: ErrorResponse.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
+
+#endregion
 
 namespace BiteRight.Web.Responses;
 
