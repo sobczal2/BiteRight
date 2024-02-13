@@ -66,7 +66,6 @@ fun StartScreenContent(
                     .size(300.dp)
             )
             ValidatedTextField(
-                value = state.username,
                 onValueChange = onUsernameChange,
                 error = state.usernameError,
                 label = { Text(text = stringResource(id = R.string.username)) },

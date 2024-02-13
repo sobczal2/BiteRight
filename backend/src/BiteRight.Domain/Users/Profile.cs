@@ -20,6 +20,8 @@ public class Profile : Entity<ProfileId>
     // EF Core
     private Profile()
     {
+        UserId = default!;
+        User = default!;
         CurrencyId = default!;
         Currency = default!;
         TimeZone = default!;
@@ -33,6 +35,8 @@ public class Profile : Entity<ProfileId>
     )
         : base(id)
     {
+        UserId = userId;
+        User = default!;
         CurrencyId = currencyId;
         Currency = default!;
         TimeZone = timeZone;

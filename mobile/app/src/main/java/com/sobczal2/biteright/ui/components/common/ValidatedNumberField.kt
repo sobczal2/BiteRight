@@ -24,8 +24,13 @@ fun ValidatedNumberField(
     modifier: Modifier = Modifier,
     imeAction: ImeAction = ImeAction.Next,
     label: @Composable (() -> Unit)? = null,
+    initialValue: Double? = null
 ) {
-    var text by remember { mutableStateOf("") }
+    var text by remember {
+        mutableStateOf(
+            initialValue?.toString() ?: ""
+        )
+    }
     val number = text.toDoubleOrNull()
 
     LaunchedEffect(
@@ -34,6 +39,7 @@ fun ValidatedNumberField(
             onValueChange(number)
         }
     )
+
     TextField(
         value = text,
         onValueChange = {

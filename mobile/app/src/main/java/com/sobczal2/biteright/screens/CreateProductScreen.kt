@@ -52,13 +52,11 @@ fun CreateProductScreenContent(
     ) {
         Column {
             ValidatedTextField(
-                value = state.name,
                 onValueChange = onNameChange,
                 error = state.nameError,
                 label = { Text(text = stringResource(id = R.string.name)) },
             )
             ValidatedTextField(
-                value = state.description,
                 onValueChange = onDescriptionChange,
                 error = state.descriptionError,
                 label = { Text(text = stringResource(id = R.string.description)) },

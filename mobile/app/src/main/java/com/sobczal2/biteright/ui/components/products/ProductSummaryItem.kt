@@ -169,10 +169,10 @@ fun ProductConsumptionIndicator(
 
 private fun getColorForAmountPercentage(amountPercentage: Double): Color {
     return when (amountPercentage) {
-        in 0.0..25.0 -> Color.Green
-        in 25.0..50.0 -> Color.Yellow
-        in 50.0..75.0 -> Color(0xFFFFA500)
-        in 75.0..100.0 -> Color.Red
+        in 0.0..25.0 -> Color.Red
+        in 25.0..50.0 -> Color(0xFFFFA500)
+        in 50.0..75.0 -> Color.Yellow
+        in 75.0..100.0 -> Color.Green
         else -> Color.Black
     }
 }
