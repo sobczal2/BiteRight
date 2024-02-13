@@ -52,7 +52,7 @@ class StartViewModel @Inject constructor(
             }
             return
         }
-        if (!Regex("^[a-zA-Z0-9_]+\$").matches(_state.value.username)) {
+        if (!Regex("^[\\p{L}\\p{Nd}-_]*\$").matches(_state.value.username)) {
             _state.update {
                 it.copy(
                     usernameError = ResourceIdOrString(R.string.username_invalid_characters_error)

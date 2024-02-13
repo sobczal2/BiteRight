@@ -1,6 +1,19 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: LanguageConfiguration.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System;
+using System.Collections.Generic;
 using BiteRight.Domain.Languages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Configuration.Languages;
 
@@ -10,21 +23,21 @@ public class LanguageConfiguration : IEntityTypeConfiguration<Language>
         Name.Create("Polski"),
         Name.Create("Polish"),
         Code.Create("pl"),
-        new LanguageId(new Guid("24D48691-7325-4703-B69F-8DB933A6736D"))
+        new LanguageId(Guid.Parse("24D48691-7325-4703-B69F-8DB933A6736D"))
     );
 
     public static Language English { get; } = Language.Create(
         Name.Create("English"),
         Name.Create("English"),
         Code.Create("en"),
-        new LanguageId(new Guid("454FAF9A-644C-445C-89E3-B57203957C1A"))
+        new LanguageId(Guid.Parse("454FAF9A-644C-445C-89E3-B57203957C1A"))
     );
 
     public static Language German { get; } = Language.Create(
         Name.Create("Deutsch"),
         Name.Create("German"),
         Code.Create("de"),
-        new LanguageId(new Guid("C1DD0A3B-70D3-4AA1-B53E-4C08A03B57C3"))
+        new LanguageId(Guid.Parse("C1DD0A3B-70D3-4AA1-B53E-4C08A03B57C3"))
     );
 
     public void Configure(

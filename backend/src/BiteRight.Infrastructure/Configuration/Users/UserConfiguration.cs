@@ -1,6 +1,17 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: UserConfiguration.cs
+// # Author: Łukasz Sobczak
+// # Created: 11-02-2024
+// # ==============================================================================
+
+#region
+
 using BiteRight.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Configuration.Users;
 
@@ -46,16 +57,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 joinedAt => joinedAt.Value,
                 value => value.ToUniversalTime()
             );
-
-        builder.Property(user => user.ProfileId)
-            .HasConversion(
-                profileId => profileId.Value,
-                value => value
-            );
-
-        builder.HasOne(user => user.Profile)
-            .WithOne()
-            .HasForeignKey<User>(user => user.ProfileId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -1,5 +1,17 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: Name.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System.Collections.Generic;
 using BiteRight.Domain.Categories.Exceptions;
 using BiteRight.Domain.Common;
+
+#endregion
 
 namespace BiteRight.Domain.Categories;
 

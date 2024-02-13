@@ -1,6 +1,18 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: FileSystemFileProvider.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System.IO;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Options;
 using Microsoft.Extensions.Options;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Common;
 

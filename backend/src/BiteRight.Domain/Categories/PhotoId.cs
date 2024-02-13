@@ -1,4 +1,16 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: PhotoId.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System;
 using BiteRight.Domain.Common;
+
+#endregion
 
 namespace BiteRight.Domain.Categories;
 

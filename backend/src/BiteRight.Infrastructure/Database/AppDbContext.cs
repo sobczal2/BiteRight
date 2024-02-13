@@ -1,3 +1,15 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: AppDbContext.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using BiteRight.Domain.Categories;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Countries;
@@ -8,6 +20,8 @@ using BiteRight.Domain.Units;
 using BiteRight.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Translation = BiteRight.Domain.Categories.Translation;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Database;
 

@@ -1,3 +1,15 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: UpdateProfileHandler.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using BiteRight.Application.Common;
 using BiteRight.Application.Common.Exceptions;
 using BiteRight.Domain.Abstracts.Common;
@@ -6,6 +18,8 @@ using BiteRight.Infrastructure.Database;
 using BiteRight.Resources.Resources.Currencies;
 using MediatR;
 using Microsoft.Extensions.Localization;
+
+#endregion
 
 namespace BiteRight.Application.Commands.Users.UpdateProfile;
 

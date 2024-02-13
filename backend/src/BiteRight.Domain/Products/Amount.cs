@@ -1,6 +1,17 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: Amount.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Products.Exceptions;
 using BiteRight.Domain.Units;
+
+#endregion
 
 namespace BiteRight.Domain.Products;
 

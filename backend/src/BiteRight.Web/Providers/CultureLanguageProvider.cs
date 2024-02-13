@@ -1,9 +1,20 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: CultureLanguageProvider.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Languages;
+
+#endregion
 
 namespace BiteRight.Web.Providers;
 

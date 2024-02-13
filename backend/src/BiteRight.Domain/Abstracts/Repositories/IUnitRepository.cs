@@ -1,5 +1,19 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: IUnitRepository.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using BiteRight.Domain.Languages;
 using BiteRight.Domain.Units;
+
+#endregion
 
 namespace BiteRight.Domain.Abstracts.Repositories;
 

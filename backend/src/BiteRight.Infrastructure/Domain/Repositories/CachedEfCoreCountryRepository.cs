@@ -1,3 +1,14 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: CachedEfCoreCountryRepository.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System.Threading;
+using System.Threading.Tasks;
 using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Countries;
 using BiteRight.Infrastructure.Database;
@@ -5,6 +16,8 @@ using BiteRight.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Domain.Repositories;
 
@@ -32,33 +45,29 @@ public class CachedEfCoreCountryRepository : ICountryRepository
         CancellationToken cancellationToken = default
     )
     {
-        return await _cache.GetOrCreateAsync(
-            GetCacheKey(id),
-            async entry =>
-            {
-                entry.SetOptions(_cacheEntryOptions);
+        var cacheKey = GetCacheKey(id);
 
-                return await _appDbContext.Countries
-                    .FirstOrDefaultAsync(country => country.Id == id, cancellationToken);
-            }
-        );
+        if (_cache.TryGetValue(cacheKey, out Country? cachedCountry)) return cachedCountry;
+
+        var country = await _appDbContext.Countries
+            .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+
+        if (country is not null)
+        {
+            _cache.Set(cacheKey, country, _cacheEntryOptions);
+        }
+
+        return country;
     }
+
 
     public async Task<bool> ExistsById(
         CountryId id,
         CancellationToken cancellationToken = default
     )
     {
-        return await _cache.GetOrCreateAsync(
-            GetCacheKey(id),
-            async entry =>
-            {
-                entry.SetOptions(_cacheEntryOptions);
-
-                return await _appDbContext.Countries
-                    .AnyAsync(country => country.Id == id, cancellationToken);
-            }
-        );
+        return await _appDbContext.Countries
+            .AnyAsync(country => country.Id == id, cancellationToken);
     }
 
     private static string GetCacheKey(

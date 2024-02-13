@@ -1,8 +1,22 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: SearchHandler.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using BiteRight.Application.Common;
 using BiteRight.Application.Dtos.Common;
 using BiteRight.Application.Dtos.Units;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
+
+#endregion
 
 namespace BiteRight.Application.Queries.Units.Search;
 

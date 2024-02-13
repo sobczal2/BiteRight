@@ -1,6 +1,17 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: ProducesInternalServerErrorResponseFilter.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System.Collections.Generic;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+
+#endregion
 
 namespace BiteRight.Web.Swagger;
 

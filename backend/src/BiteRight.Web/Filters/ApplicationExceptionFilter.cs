@@ -1,3 +1,12 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: ApplicationExceptionFilter.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using BiteRight.Application.Common.Exceptions;
 using BiteRight.Resources.Resources.Common;
 using BiteRight.Web.Responses;
@@ -7,6 +16,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+
+#endregion
 
 namespace BiteRight.Web.Filters;
 

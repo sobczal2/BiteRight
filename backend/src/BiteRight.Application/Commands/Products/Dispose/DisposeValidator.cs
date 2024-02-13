@@ -1,5 +1,16 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: DisposeValidator.cs
+// # Author: Łukasz Sobczak
+// # Created: 11-02-2024
+// # ==============================================================================
+
+#region
+
 using FluentValidation;
 using Microsoft.Extensions.Localization;
+
+#endregion
 
 namespace BiteRight.Application.Commands.Products.Dispose;
 

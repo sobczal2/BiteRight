@@ -1,5 +1,19 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: Category.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Languages;
+
+#endregion
 
 namespace BiteRight.Domain.Categories;
 

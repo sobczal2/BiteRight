@@ -1,9 +1,22 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: CountryConfiguration.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System;
+using System.Collections.Generic;
 using BiteRight.Domain.Countries;
 using BiteRight.Infrastructure.Configuration.Currencies;
 using BiteRight.Infrastructure.Configuration.Languages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Name = BiteRight.Domain.Countries.Name;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Configuration.Countries;
 
@@ -15,7 +28,7 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
         Alpha2Code.Create("PL"),
         LanguageConfiguration.Polish.Id,
         CurrencyConfiguration.PLN.Id,
-        new CountryId(new Guid("35D08361-F753-4DB9-B88E-11C400D53EB7"))
+        new CountryId(Guid.Parse("35D08361-F753-4DB9-B88E-11C400D53EB7"))
     );
 
     public static Country England { get; } = Country.Create(
@@ -24,7 +37,7 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
         Alpha2Code.Create("EN"),
         LanguageConfiguration.English.Id,
         CurrencyConfiguration.GBP.Id,
-        new CountryId(new Guid("F3E4C5CB-229C-4B2D-90DC-F83CB4A45F75"))
+        new CountryId(Guid.Parse("F3E4C5CB-229C-4B2D-90DC-F83CB4A45F75"))
     );
 
     public static Country Germany { get; } = Country.Create(
@@ -33,7 +46,7 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
         Alpha2Code.Create("DE"),
         LanguageConfiguration.German.Id,
         CurrencyConfiguration.EUR.Id,
-        new CountryId(new Guid("1352DE6E-C0BF-48C6-B703-FAE0B254D642"))
+        new CountryId(Guid.Parse("1352DE6E-C0BF-48C6-B703-FAE0B254D642"))
     );
 
     public static Country USA { get; } = Country.Create(
@@ -42,7 +55,7 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
         Alpha2Code.Create("US"),
         LanguageConfiguration.English.Id,
         CurrencyConfiguration.USD.Id,
-        new CountryId(new Guid("12E2937F-F04D-4150-A7AE-5AB1176A95D8"))
+        new CountryId(Guid.Parse("12E2937F-F04D-4150-A7AE-5AB1176A95D8"))
     );
 
     public void Configure(

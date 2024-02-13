@@ -1,7 +1,18 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: ProductConfiguration.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using BiteRight.Domain.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Name = BiteRight.Domain.Products.Name;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Configuration.Products;
 

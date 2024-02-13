@@ -1,6 +1,17 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: Country.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Currencies;
 using BiteRight.Domain.Languages;
+
+#endregion
 
 namespace BiteRight.Domain.Countries;
 

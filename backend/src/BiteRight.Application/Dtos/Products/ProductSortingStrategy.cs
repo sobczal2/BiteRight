@@ -1,3 +1,10 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: ProductSortingStrategy.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
 namespace BiteRight.Application.Dtos.Products;
 
 public enum ProductSortingStrategy

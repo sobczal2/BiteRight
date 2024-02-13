@@ -1,3 +1,12 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: InfrastructureRegistrations.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Common;
@@ -11,6 +20,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using IFileProvider = BiteRight.Domain.Abstracts.Common.IFileProvider;
+
+#endregion
 
 namespace BiteRight.Web.Registration;
 

@@ -1,3 +1,16 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: Id.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System.Collections.Generic;
+
+#endregion
+
 namespace BiteRight.Domain.Common;
 
 public abstract class Id<T>

@@ -1,3 +1,10 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: Auth0Options.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
 namespace BiteRight.Options;
 
 public class Auth0Options

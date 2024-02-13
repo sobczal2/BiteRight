@@ -1,7 +1,19 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: Username.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Users.Exceptions;
 using BiteRight.Utils;
+
+#endregion
 
 namespace BiteRight.Domain.Users;
 

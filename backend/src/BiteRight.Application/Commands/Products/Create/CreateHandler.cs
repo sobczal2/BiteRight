@@ -1,3 +1,15 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: CreateHandler.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using BiteRight.Application.Common;
 using BiteRight.Application.Common.Exceptions;
 using BiteRight.Application.Dtos.Products;
@@ -12,6 +24,8 @@ using BiteRight.Resources.Resources.Units;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using Name = BiteRight.Domain.Products.Name;
+
+#endregion
 
 namespace BiteRight.Application.Commands.Products.Create;
 

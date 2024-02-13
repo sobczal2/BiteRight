@@ -1,4 +1,16 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: SystemDateTimeProvider.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System;
 using BiteRight.Domain.Abstracts.Common;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Common;
 

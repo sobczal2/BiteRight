@@ -1,7 +1,20 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: GetPhotoHandler.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System.Threading;
+using System.Threading.Tasks;
 using BiteRight.Application.Common;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Categories;
+
+#endregion
 
 namespace BiteRight.Application.Queries.Categories.GetPhoto;
 

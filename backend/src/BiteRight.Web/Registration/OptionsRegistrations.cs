@@ -1,6 +1,17 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: OptionsRegistrations.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-01-2024
+// # ==============================================================================
+
+#region
+
 using BiteRight.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+#endregion
 
 namespace BiteRight.Web.Registration;
 

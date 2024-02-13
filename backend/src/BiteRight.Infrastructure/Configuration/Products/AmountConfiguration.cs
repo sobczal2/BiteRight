@@ -1,7 +1,18 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: AmountConfiguration.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using BiteRight.Domain.Products;
 using BiteRight.Domain.Units;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Configuration.Products;
 

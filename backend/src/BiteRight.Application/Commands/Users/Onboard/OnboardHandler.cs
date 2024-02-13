@@ -1,3 +1,15 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: OnboardHandler.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using BiteRight.Application.Common;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
@@ -8,6 +20,8 @@ using BiteRight.Infrastructure.Database;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Localization;
+
+#endregion
 
 namespace BiteRight.Application.Commands.Users.Onboard;
 
@@ -77,7 +91,10 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
                 _localizer[nameof(Resources.Resources.Users.Users.time_zone_id_not_found)]
             );
 
+        var userId = new UserId();
+
         var profile = Profile.Create(
+            userId,
             CurrencyConfiguration.USD.Id,
             timeZone
         );
@@ -87,7 +104,8 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
             Username.Create(request.Username),
             email,
             profile,
-            _dateTimeProvider.UtcNow
+            _dateTimeProvider.UtcNow,
+            userId
         );
 
         _userRepository.Add(user);

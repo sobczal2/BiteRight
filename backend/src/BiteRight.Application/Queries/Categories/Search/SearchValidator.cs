@@ -1,6 +1,17 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: SearchValidator.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using BiteRight.Application.Dtos.Common;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
+
+#endregion
 
 namespace BiteRight.Application.Queries.Categories.Search;
 

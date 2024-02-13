@@ -1,3 +1,12 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: WebRegistrations.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System;
 using System.Globalization;
 using System.IO;
@@ -19,6 +28,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+
+#endregion
 
 namespace BiteRight.Web.Registration;
 

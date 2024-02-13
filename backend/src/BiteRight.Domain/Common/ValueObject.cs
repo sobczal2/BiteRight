@@ -1,3 +1,17 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: ValueObject.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System.Collections.Generic;
+using System.Linq;
+
+#endregion
+
 namespace BiteRight.Domain.Common;
 
 public abstract class ValueObject

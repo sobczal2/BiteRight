@@ -1,6 +1,18 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: ProfileConfiguration.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System;
 using BiteRight.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Configuration.Users;
 
@@ -34,5 +46,16 @@ public class ProfileConfiguration : IEntityTypeConfiguration<Profile>
                 value => TimeZoneInfo.FindSystemTimeZoneById(value)
             )
             .HasColumnName("time_zone_id");
+
+        builder.Property(profile => profile.UserId)
+            .HasConversion(
+                userId => userId.Value,
+                value => value
+            );
+
+        builder.HasOne(profile => profile.User)
+            .WithOne(user => user.Profile)
+            .HasForeignKey<Profile>(profile => profile.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -1,6 +1,18 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: Email.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System.Collections.Generic;
 using System.Net.Mail;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Users.Exceptions;
+
+#endregion
 
 namespace BiteRight.Domain.Users;
 

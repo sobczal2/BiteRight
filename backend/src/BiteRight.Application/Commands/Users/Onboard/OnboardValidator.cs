@@ -1,5 +1,16 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: OnboardValidator.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using FluentValidation;
 using Microsoft.Extensions.Localization;
+
+#endregion
 
 namespace BiteRight.Application.Commands.Users.Onboard;
 

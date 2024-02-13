@@ -1,5 +1,17 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: CreateRequest.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
+using System;
 using BiteRight.Application.Dtos.Products;
 using MediatR;
+
+#endregion
 
 namespace BiteRight.Application.Commands.Products.Create;
 

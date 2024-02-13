@@ -1,4 +1,15 @@
+// # ==============================================================================
+// # Solution: BiteRight
+// # File: Auth0GetTokenResponse.cs
+// # Author: Łukasz Sobczak
+// # Created: 12-02-2024
+// # ==============================================================================
+
+#region
+
 using System.Text.Json.Serialization;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Auth0Management;
 
