@@ -17,7 +17,7 @@ namespace BiteRight.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -671,11 +671,19 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("time_zone_id");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id")
                         .HasName("pk_profiles");
 
                     b.HasIndex("CurrencyId")
                         .HasDatabaseName("ix_profiles_currency_id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_profiles_user_id");
 
                     b.ToTable("profiles", "user");
                 });
@@ -700,10 +708,6 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("joined_at");
 
-                    b.Property<Guid>("ProfileId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("profile_id");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text")
@@ -716,10 +720,6 @@ namespace BiteRight.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("ix_users_identity_id");
 
-                    b.HasIndex("ProfileId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_users_profile_id");
-
                     b.ToTable("users", "user");
                 });
 
@@ -729,7 +729,7 @@ namespace BiteRight.Infrastructure.Migrations
                         .WithOne()
                         .HasForeignKey("BiteRight.Domain.Categories.Category", "PhotoId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_categories_photos_photo_temp_id");
+                        .HasConstraintName("fk_categories_photos_photo_id");
 
                     b.Navigation("Photo");
                 });
@@ -741,14 +741,14 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_category_translations_categories_category_temp_id1");
+                        .HasConstraintName("fk_category_translations_categories_category_id");
 
                     b.HasOne("BiteRight.Domain.Languages.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_category_translations_languages_language_temp_id");
+                        .HasConstraintName("fk_category_translations_languages_language_id");
 
                     b.Navigation("Category");
 
@@ -762,14 +762,14 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasForeignKey("CurrencyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_countries_currencies_currency_temp_id");
+                        .HasConstraintName("fk_countries_currencies_currency_id");
 
                     b.HasOne("BiteRight.Domain.Languages.Language", "OfficialLanguage")
                         .WithMany()
                         .HasForeignKey("OfficialLanguageId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_countries_languages_official_language_temp_id1");
+                        .HasConstraintName("fk_countries_languages_official_language_id");
 
                     b.Navigation("Currency");
 
@@ -783,7 +783,7 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasForeignKey("UnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_amounts_units_unit_temp_id2");
+                        .HasConstraintName("fk_amounts_units_unit_id");
                 });
 
             modelBuilder.Entity("BiteRight.Domain.Products.Product", b =>
@@ -793,21 +793,21 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasForeignKey("BiteRight.Domain.Products.Product", "AmountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_products_amounts_amount_temp_id");
+                        .HasConstraintName("fk_products_amounts_amount_id");
 
                     b.HasOne("BiteRight.Domain.Categories.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_products_categories_category_temp_id2");
+                        .HasConstraintName("fk_products_categories_category_id");
 
                     b.HasOne("BiteRight.Domain.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_products_users_user_temp_id");
+                        .HasConstraintName("fk_products_users_user_id");
 
                     b.OwnsOne("BiteRight.Domain.Products.DisposedState", "DisposedState", b1 =>
                         {
@@ -900,14 +900,14 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_unit_translations_languages_language_temp_id3");
+                        .HasConstraintName("fk_unit_translations_languages_language_id");
 
                     b.HasOne("BiteRight.Domain.Units.Unit", "Unit")
                         .WithMany("Translations")
                         .HasForeignKey("UnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_unit_translations_units_unit_temp_id1");
+                        .HasConstraintName("fk_unit_translations_units_unit_id");
 
                     b.Navigation("Language");
 
@@ -921,21 +921,18 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasForeignKey("CurrencyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_profiles_currencies_currency_temp_id2");
+                        .HasConstraintName("fk_profiles_currencies_currency_id");
 
-                    b.Navigation("Currency");
-                });
-
-            modelBuilder.Entity("BiteRight.Domain.Users.User", b =>
-                {
-                    b.HasOne("BiteRight.Domain.Users.Profile", "Profile")
-                        .WithOne()
-                        .HasForeignKey("BiteRight.Domain.Users.User", "ProfileId")
+                    b.HasOne("BiteRight.Domain.Users.User", "User")
+                        .WithOne("Profile")
+                        .HasForeignKey("BiteRight.Domain.Users.Profile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_users_profiles_profile_id");
+                        .HasConstraintName("fk_profiles_users_user_id");
 
-                    b.Navigation("Profile");
+                    b.Navigation("Currency");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BiteRight.Domain.Categories.Category", b =>
@@ -946,6 +943,12 @@ namespace BiteRight.Infrastructure.Migrations
             modelBuilder.Entity("BiteRight.Domain.Units.Unit", b =>
                 {
                     b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("BiteRight.Domain.Users.User", b =>
+                {
+                    b.Navigation("Profile")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Infrastructure.Database;
 using BiteRight.Web.Tests.Integration.Dependencies;
+using BiteRight.Web.Tests.Integration.TestHelpers;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -30,7 +32,7 @@ public class BiteRightBackendFactory : WebApplicationFactory<IWebAssemblyMarker>
     public BiteRightBackendFactory()
     {
         _postgreSqlContainer = new PostgreSqlBuilder()
-            .WithImage("postgres:12.16-bullseye")
+            .WithImage("postgres:16")
             .Build();
     }
 
@@ -44,12 +46,17 @@ public class BiteRightBackendFactory : WebApplicationFactory<IWebAssemblyMarker>
         await _postgreSqlContainer.DisposeAsync();
     }
 
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    protected override void ConfigureWebHost(
+        IWebHostBuilder builder
+    )
     {
         builder.ConfigureLogging(logging => { logging.ClearProviders(); });
 
         builder.ConfigureTestServices(services =>
         {
+            services.AddAuthentication("Test")
+                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", _ => { });
+
             services.RemoveAll(typeof(IHostedService));
 
             services.RemoveAll(typeof(IIdentityManager));
@@ -73,8 +80,15 @@ public class BiteRightBackendFactory : WebApplicationFactory<IWebAssemblyMarker>
 
             using var scope = serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
             dbContext.Database.EnsureCreated();
+
+            TestUsers.SeedOnboardedUser(dbContext);
         });
+    }
+    
+    public IServiceScope CreateScope()
+    {
+        var scope = Services.CreateScope();
+        return scope;
     }
 }

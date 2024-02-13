@@ -83,20 +83,23 @@ public class CachedEfCoreCategoryRepository : ICategoryRepository
         CancellationToken cancellationToken = default
     )
     {
-        return await _cache.GetOrCreateAsync(
-            GetCacheKey(id, languageId),
-            async entry =>
-            {
-                entry.SetOptions(_cacheEntryOptions);
+        var cacheKey = GetCacheKey(id, languageId);
 
-                return await _appDbContext.Categories
-                    .Include(category =>
-                        category.Translations.Where(translation => translation.LanguageId == languageId))
-                    .Include(category => category.Photo)
-                    .FirstOrDefaultAsync(category => category.Id == id, cancellationToken);
-            }
-        );
+        if (_cache.TryGetValue(cacheKey, out Category? cachedCategory)) return cachedCategory;
+
+        var category = await _appDbContext.Categories
+            .Include(c => c.Translations.Where(t => t.LanguageId == languageId))
+            .Include(c => c.Photo)
+            .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+
+        if (category is not null)
+        {
+            _cache.Set(cacheKey, category, _cacheEntryOptions);
+        }
+
+        return category;
     }
+
 
     private static string GetCacheKey(
         CategoryId id,

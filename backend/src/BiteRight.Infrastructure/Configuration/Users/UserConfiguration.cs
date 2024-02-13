@@ -57,16 +57,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 joinedAt => joinedAt.Value,
                 value => value.ToUniversalTime()
             );
-
-        builder.Property(user => user.ProfileId)
-            .HasConversion(
-                profileId => profileId.Value,
-                value => value
-            );
-
-        builder.HasOne(user => user.Profile)
-            .WithOne()
-            .HasForeignKey<User>(user => user.ProfileId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

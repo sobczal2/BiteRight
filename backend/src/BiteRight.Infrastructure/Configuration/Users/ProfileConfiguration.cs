@@ -46,5 +46,16 @@ public class ProfileConfiguration : IEntityTypeConfiguration<Profile>
                 value => TimeZoneInfo.FindSystemTimeZoneById(value)
             )
             .HasColumnName("time_zone_id");
+
+        builder.Property(profile => profile.UserId)
+            .HasConversion(
+                userId => userId.Value,
+                value => value
+            );
+
+        builder.HasOne(profile => profile.User)
+            .WithOne(user => user.Profile)
+            .HasForeignKey<Profile>(profile => profile.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

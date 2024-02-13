@@ -43,9 +43,13 @@ public class CachedEfCoreUnitRepository : IUnitRepository
         );
     }
 
-    public async Task<(IEnumerable<Unit> Units, int TotalCount)> Search(string query, int pageNumber, int pageSize,
+    public async Task<(IEnumerable<Unit> Units, int TotalCount)> Search(
+        string query,
+        int pageNumber,
+        int pageSize,
         LanguageId languageId,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         IQueryable<Unit> baseQuery = _appDbContext.Units
             .Include(unit =>
@@ -85,21 +89,26 @@ public class CachedEfCoreUnitRepository : IUnitRepository
         return (units, totalCount);
     }
 
-    public async Task<Unit?> FindById(UnitId id, LanguageId languageId, CancellationToken cancellationToken)
+    public async Task<Unit?> FindById(
+        UnitId id,
+        LanguageId languageId,
+        CancellationToken cancellationToken
+    )
     {
-        return await _cache.GetOrCreateAsync(
-            GetCacheKey(id, languageId),
-            async entry =>
-            {
-                entry.SetOptions(_cacheEntryOptions);
+        var cacheKey = GetCacheKey(id, languageId);
 
-                return await _appDbContext
-                    .Units
-                    .Include(category =>
-                        category.Translations.Where(translation => translation.LanguageId == languageId))
-                    .FirstOrDefaultAsync(category => category.Id == id, cancellationToken);
-            }
-        );
+        if (_cache.TryGetValue(cacheKey, out Unit? cachedUnit)) return cachedUnit;
+
+        var unit = await _appDbContext.Units
+            .Include(u => u.Translations.Where(t => t.LanguageId == languageId))
+            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+
+        if (unit is not null)
+        {
+            _cache.Set(cacheKey, unit, _cacheEntryOptions);
+        }
+
+        return unit;
     }
 
     private static string GetCacheKey(

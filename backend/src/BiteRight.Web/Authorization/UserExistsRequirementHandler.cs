@@ -31,10 +31,10 @@ public class UserExistsRequirementHandler : AuthorizationHandler<UserExistsRequi
         UserExistsRequirement requirement
     )
     {
-        var userId = context.User.Identity?.Name;
-        if (userId is null) return;
+        var identityId = context.User.Identity?.Name;
+        if (identityId is null) return;
 
-        var user = await _userRepository.FindByIdentityId(userId);
+        var user = await _userRepository.FindByIdentityId(identityId);  
 
         if (user is null) return;
 

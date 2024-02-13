@@ -46,17 +46,21 @@ public class CachedEfCoreCurrencyRepository : ICurrencyRepository
         CancellationToken cancellationToken = default
     )
     {
-        return await _idCache.GetOrCreateAsync(
-            GetCacheKey(id),
-            async entry =>
-            {
-                entry.SetOptions(_cacheEntryOptions);
+        var cacheKey = GetCacheKey(id);
 
-                return await _appDbContext.Currencies
-                    .FirstOrDefaultAsync(currency => currency.Id == id, cancellationToken);
-            }
-        );
+        if (_idCache.TryGetValue(cacheKey, out Currency? cachedCurrency)) return cachedCurrency;
+
+        var currency = await _appDbContext.Currencies
+            .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+
+        if (currency is not null)
+        {
+            _idCache.Set(cacheKey, currency, _cacheEntryOptions);
+        }
+
+        return currency;
     }
+
 
 
     public Task<bool> ExistsById(

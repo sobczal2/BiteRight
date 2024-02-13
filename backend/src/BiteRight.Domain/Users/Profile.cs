@@ -26,6 +26,7 @@ public class Profile : Entity<ProfileId>
     }
 
     private Profile(
+        UserId userId,
         CurrencyId currencyId,
         TimeZoneInfo timeZone,
         ProfileId id
@@ -37,18 +38,22 @@ public class Profile : Entity<ProfileId>
         TimeZone = timeZone;
     }
 
+    public UserId UserId { get; private set; }
+    public virtual User User { get; private set; }
     public CurrencyId CurrencyId { get; private set; }
     public virtual Currency Currency { get; private set; }
 
     public TimeZoneInfo TimeZone { get; private set; }
 
     public static Profile Create(
+        UserId userId,
         CurrencyId currencyId,
         TimeZoneInfo timeZone,
         ProfileId? id = null
     )
     {
         return new Profile(
+            userId,
             currencyId,
             timeZone,
             id ?? new ProfileId()

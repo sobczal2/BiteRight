@@ -7,6 +7,7 @@
 
 #region
 
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Domain.Abstracts.Repositories;
@@ -52,17 +53,20 @@ public class CachedEfCoreUserRepository : IUserRepository
         CancellationToken cancellationToken = default
     )
     {
-        return await _cache.GetOrCreateAsync(
-            GetCacheKey(identityId),
-            async entry =>
-            {
-                entry.SetOptions(_cacheEntryOptions);
+        var cacheKey = GetCacheKey(identityId);
 
-                return await _appDbContext.Users
-                    .Include(user => user.Profile)
-                    .FirstOrDefaultAsync(user => user.IdentityId == identityId, cancellationToken);
-            }
-        );
+        if (_cache.TryGetValue(cacheKey, out User? cachedUser)) return cachedUser;
+
+        var user = await _appDbContext.Users
+            .Include(u => u.Profile)
+            .FirstOrDefaultAsync(u => u.IdentityId == identityId, cancellationToken);
+
+        if (user is not null)
+        {
+            _cache.Set(cacheKey, user, _cacheEntryOptions);
+        }
+
+        return user;
     }
 
 

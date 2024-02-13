@@ -91,7 +91,10 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
                 _localizer[nameof(Resources.Resources.Users.Users.time_zone_id_not_found)]
             );
 
+        var userId = new UserId();
+
         var profile = Profile.Create(
+            userId,
             CurrencyConfiguration.USD.Id,
             timeZone
         );
@@ -101,7 +104,8 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
             Username.Create(request.Username),
             email,
             profile,
-            _dateTimeProvider.UtcNow
+            _dateTimeProvider.UtcNow,
+            userId
         );
 
         _userRepository.Add(user);

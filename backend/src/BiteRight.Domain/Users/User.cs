@@ -25,7 +25,6 @@ public class User : AggregateRoot<UserId>
         Email = default!;
         JoinedAt = default!;
         Profile = default!;
-        ProfileId = default!;
     }
 
     private User(
@@ -43,15 +42,12 @@ public class User : AggregateRoot<UserId>
         Email = email;
         JoinedAt = joinedAt;
         Profile = profile;
-        ProfileId = profile.Id;
     }
 
     public IdentityId IdentityId { get; private set; }
     public Username Username { get; private set; }
     public Email Email { get; private set; }
     public JoinedAt JoinedAt { get; private set; }
-    public ProfileId ProfileId { get; private set; }
-
     public virtual Profile Profile { get; }
 
     public static User Create(
@@ -59,11 +55,12 @@ public class User : AggregateRoot<UserId>
         Username username,
         Email email,
         Profile profile,
-        DateTime currentDateTime
+        DateTime currentDateTime,
+        UserId? id = null
     )
     {
         var user = new User(
-            new UserId(),
+            id ?? new UserId(),
             identityId,
             username,
             email,

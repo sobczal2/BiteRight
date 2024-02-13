@@ -19,17 +19,31 @@ public class TestIdentityManager : IIdentityManager
     public Task<(Email email, bool isVerified)> GetEmail(IdentityId identityId,
         CancellationToken cancellationToken = default)
     {
-        return identityId.Value switch
+        if (Equals(identityId, TestUsers.EmailNotVerifiedUser.IdentityId))
         {
-            TestUsers.EmailNotVerifiedUserId => Task.FromResult((TestUsers.TestEmail, false)),
-            TestUsers.EmailVerifiedUserId => Task.FromResult((TestUsers.TestEmail, true)),
-            TestUsers.NotFoundUserId =>
-                // Mirrored behaviour of Auth0IdentityManager, should probably be changed
-                throw new InvalidOperationException("User not found."),
-            TestUsers.IdentityProviderDownUserId =>
-                // Check later if correct
-                throw new HttpIOException(HttpRequestError.ConnectionError),
-            _ => throw new ArgumentException("Unexpected user id")
-        };
+            return Task.FromResult((TestUsers.EmailNotVerifiedUser.Email, false));
+        }
+        
+        if (Equals(identityId, TestUsers.EmailVerifiedUser.IdentityId))
+        {
+            return Task.FromResult((TestUsers.EmailVerifiedUser.Email, true));
+        }
+        
+        if (Equals(identityId, TestUsers.NotFoundUser.IdentityId))
+        {
+            throw new InvalidOperationException("User not found.");
+        }
+        
+        if (Equals(identityId, TestUsers.IdentityProviderDownUser.IdentityId))
+        {
+            throw new HttpRequestException("Identity provider down.");
+        }
+        
+        if (Equals(identityId, TestUsers.OnboardedUser.IdentityId))
+        {
+            return Task.FromResult((TestUsers.OnboardedUser.Email, true));
+        }
+        
+        throw new ArgumentException("Unexpected user id");
     }
 }
