@@ -2,6 +2,7 @@ package com.sobczal2.biteright.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sobczal2.biteright.AuthManager
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.data.api.requests.users.OnboardRequest
 import com.sobczal2.biteright.repositories.abstractions.UserRepository
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StartViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val authManager: AuthManager
 ) : ViewModel() {
     private val _state = MutableStateFlow(StartScreenState())
     val state = _state.asStateFlow()
@@ -111,5 +113,41 @@ class StartViewModel @Inject constructor(
             )
         }
 
+    }
+
+    suspend fun isOnboarded(): Boolean {
+        _state.update {
+            it.copy(
+                loading = true
+            )
+        }
+        val meResult = userRepository.me()
+
+        val isOnboarded = meResult.fold(
+            {
+                true
+            },
+            { repositoryError ->
+                if (repositoryError is ApiRepositoryError && repositoryError.apiErrorCode == 404) {
+                    false
+                } else {
+                    _state.update {
+                        it.copy(
+                            loading = false,
+                            generalError = repositoryError.message
+                        )
+                    }
+                    false
+                }
+            }
+        )
+
+        _state.update {
+            it.copy(
+                loading = false
+            )
+        }
+
+        return isOnboarded
     }
 }

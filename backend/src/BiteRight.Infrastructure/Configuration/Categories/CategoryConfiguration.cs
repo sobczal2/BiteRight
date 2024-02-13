@@ -19,6 +19,11 @@ namespace BiteRight.Infrastructure.Configuration.Categories;
 
 public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
+    public static Category None { get; } = Category.Create(
+        null,
+        new CategoryId(Guid.Parse("C82E0550-26CF-410D-8CEC-5CF62BADA757"))
+    );
+    
     public static Category Dairy { get; } = Category.Create(
         PhotoConfiguration.DairyPhoto.Id,
         new CategoryId(Guid.Parse("E8C78317-70AC-4051-805E-ECE2BB37656F"))
@@ -43,10 +48,20 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         PhotoConfiguration.FishPhoto.Id,
         new CategoryId(Guid.Parse("17C56168-C9EC-4FFB-A074-495A02AB0359"))
     );
-
-    public static Category None { get; } = Category.Create(
-        null,
-        new CategoryId(Guid.Parse("C82E0550-26CF-410D-8CEC-5CF62BADA757"))
+    
+    public static Category Beverage { get; } = Category.Create(
+        PhotoConfiguration.BeveragePhoto.Id,
+        new CategoryId(Guid.Parse("7289CBC9-8249-4FC1-B2D3-BAC90AD32595"))
+    );
+    
+    public static Category Snack { get; } = Category.Create(
+        PhotoConfiguration.SnackPhoto.Id,
+        new CategoryId(Guid.Parse("E86CAF03-EA3B-49AB-B499-68E387919FB6"))
+    );
+    
+    public static Category Wheat { get; } = Category.Create(
+        PhotoConfiguration.WheatPhoto.Id,
+        new CategoryId(Guid.Parse("BF69966B-0CBC-4F5D-9388-C05926775CBF"))
     );
 
     public void Configure(
@@ -79,11 +94,14 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 
     private static IEnumerable<Category> GetSeedData()
     {
+        yield return None;
         yield return Dairy;
         yield return Fruit;
         yield return Vegetable;
         yield return Meat;
         yield return Fish;
-        yield return None;
+        yield return Beverage;
+        yield return Snack;
+        yield return Wheat;
     }
 }

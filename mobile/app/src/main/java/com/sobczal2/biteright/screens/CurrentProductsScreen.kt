@@ -1,6 +1,5 @@
 package com.sobczal2.biteright.screens
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,14 +21,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.state.CurrentProductsScreenState
 import com.sobczal2.biteright.ui.components.common.BigLoader
-import com.sobczal2.biteright.ui.components.common.MainAppLayoutTab
 import com.sobczal2.biteright.ui.components.common.MainAppLayout
 import com.sobczal2.biteright.ui.components.common.MainAppLayoutActions
+import com.sobczal2.biteright.ui.components.common.MainAppLayoutTab
 import com.sobczal2.biteright.ui.components.products.ProductSummaryItem
 import com.sobczal2.biteright.ui.components.products.ProductSummaryItemState
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
@@ -41,18 +39,13 @@ import java.util.UUID
 @Composable
 fun CurrentProductsScreen(
     viewModel: CurrentProductsViewModel = hiltViewModel(),
-    navigateToStart: () -> Unit,
     navigateToCreateProduct: () -> Unit,
     mainAppLayoutActions: MainAppLayoutActions,
 ) {
     val state = viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
-        if (!viewModel.isOnboarded()) {
-            navigateToStart()
-        } else {
-            viewModel.fetchCurrentProducts()
-        }
+        viewModel.fetchCurrentProducts()
     }
 
     if (state.value.loading) {
@@ -99,37 +92,37 @@ fun CurrentProductsScreenContent(
                 .fillMaxSize()
                 .padding(paddingValues = paddingValues)
         ) {
-            LazyColumn(
-                content = {
-                    item {
-                        Text(
-                            text = "Current Products",
-                            style = MaterialTheme.typography.displayMedium.plus(
-                                TextStyle(textAlign = TextAlign.Center)
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(MaterialTheme.dimension.sm)
-                        )
-                    }
-                    items(
-                        items = state.currentProducts,
-                        key = { it.id }
-                    ) { simpleProductDto ->
-                        ProductSummaryItem(
-                            productSummaryItemState = ProductSummaryItemState(
-                                name = simpleProductDto.name,
-                                expirationDate = simpleProductDto.expirationDate,
-                                categoryImageUri = getCategoryPhotoUrl(categoryId = simpleProductDto.categoryId),
-                                amountPercentage = simpleProductDto.amountPercentage,
-                                disposed = simpleProductDto.disposed,
-                            ),
-                            onClick = { /*TODO*/ },
-                            onDeleted = { disposeProduct(simpleProductDto.id) }
-                        )
-                    }
-                },
-            )
+            Column {
+                Text(
+                    text = "Current Products",
+                    style = MaterialTheme.typography.displayMedium.plus(
+                        TextStyle(textAlign = TextAlign.Center)
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(MaterialTheme.dimension.sm)
+                )
+                LazyColumn(
+                    content = {
+                        items(
+                            items = state.currentProducts,
+                            key = { it.id }
+                        ) { simpleProductDto ->
+                            ProductSummaryItem(
+                                productSummaryItemState = ProductSummaryItemState(
+                                    name = simpleProductDto.name,
+                                    expirationDate = simpleProductDto.expirationDate,
+                                    categoryImageUri = getCategoryPhotoUrl(categoryId = simpleProductDto.categoryId),
+                                    amountPercentage = simpleProductDto.amountPercentage,
+                                    disposed = simpleProductDto.disposed,
+                                ),
+                                onClick = { /*TODO*/ },
+                                onDeleted = { disposeProduct(simpleProductDto.id) }
+                            )
+                        }
+                    },
+                )
+            }
         }
     }
 }

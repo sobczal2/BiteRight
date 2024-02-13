@@ -9,6 +9,7 @@ data class CreateProductScreenState(
     val descriptionError: ResourceIdOrString? = null,
     val price: Double? = null,
     val priceError: ResourceIdOrString? = null,
+    val currencyString: String? = null,
     val loading: Boolean = false,
     val error: ResourceIdOrString? = null
 )

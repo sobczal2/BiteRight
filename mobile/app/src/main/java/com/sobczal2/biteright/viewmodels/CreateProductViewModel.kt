@@ -25,4 +25,8 @@ class CreateProductViewModel @Inject constructor(
     fun onPriceChange(value: Double?) {
         _state.value = _state.value.copy(price = value)
     }
+
+    fun onSelectCurrencyButtonClick() {
+        _state.value = _state.value.copy(currencyString = "USD")
+    }
 }

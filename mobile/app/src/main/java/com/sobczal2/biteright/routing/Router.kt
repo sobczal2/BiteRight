@@ -15,7 +15,9 @@ import com.sobczal2.biteright.ui.components.common.MainAppLayoutActions
 @Composable
 fun Router(authManager: AuthManager) {
     val navController = rememberNavController()
-    authManager.subscribeToLogoutEvent { navController.navigate(Routes.WELCOME) }
+    authManager.subscribeToLogoutEvent {
+        navController.navigate(Routes.WELCOME)
+    }
     val mainAppLayoutActions = MainAppLayoutActions(
         onCurrentProductsClick = { navController.navigate(Routes.CURRENT_PRODUCTS) },
         onAllProductsClick = { navController.navigate(Routes.ALL_PRODUCTS) },
@@ -28,7 +30,7 @@ fun Router(authManager: AuthManager) {
     ) {
         composable(Routes.WELCOME) {
             WelcomeScreen(
-                navigateToCurrentProducts = { navController.navigate(Routes.CURRENT_PRODUCTS) },
+                navigateToStart = { navController.navigate(Routes.START) },
             )
         }
         composable(Routes.START) {
@@ -38,7 +40,6 @@ fun Router(authManager: AuthManager) {
         }
         composable(Routes.CURRENT_PRODUCTS) {
             CurrentProductsScreen(
-                navigateToStart = { navController.navigate(Routes.START) },
                 navigateToCreateProduct = { navController.navigate(Routes.CREATE_PRODUCT) },
                 mainAppLayoutActions = mainAppLayoutActions
             )

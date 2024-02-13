@@ -16,47 +16,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CurrentProductsViewModel @Inject constructor(
-    private val userRepository: UserRepository,
     private val productRepository: ProductRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow(CurrentProductsScreenState())
     val state = _state.asStateFlow()
-
-    suspend fun isOnboarded(): Boolean {
-        _state.update {
-            it.copy(
-                loading = true
-            )
-        }
-        val meResult = userRepository.me()
-
-        val isOnboarded = meResult.fold(
-            {
-                true
-            },
-            { repositoryError ->
-                if (repositoryError is ApiRepositoryError && repositoryError.apiErrorCode == 404) {
-                    false
-                } else {
-                    _state.update {
-                        it.copy(
-                            loading = false,
-                            error = repositoryError.message
-                        )
-                    }
-                    false
-                }
-            }
-        )
-
-        _state.update {
-            it.copy(
-                loading = false
-            )
-        }
-
-        return isOnboarded
-    }
 
     suspend fun fetchCurrentProducts() {
         _state.update {

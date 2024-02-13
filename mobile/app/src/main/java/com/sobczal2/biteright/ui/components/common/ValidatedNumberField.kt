@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -12,6 +13,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.sobczal2.biteright.util.ResourceIdOrString
@@ -24,7 +27,8 @@ fun ValidatedNumberField(
     modifier: Modifier = Modifier,
     imeAction: ImeAction = ImeAction.Next,
     label: @Composable (() -> Unit)? = null,
-    initialValue: Double? = null
+    initialValue: Double? = null,
+    shape: Shape = TextFieldDefaults.shape
 ) {
     var text by remember {
         mutableStateOf(
@@ -64,5 +68,6 @@ fun ValidatedNumberField(
             imeAction = imeAction,
             keyboardType = KeyboardType.Number
         ),
+        shape = shape,
     )
 }

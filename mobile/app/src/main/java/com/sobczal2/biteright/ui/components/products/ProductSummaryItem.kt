@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Image
@@ -49,8 +50,8 @@ import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.humanizePeriod
 import com.sobczal2.biteright.util.truncateString
 import kotlinx.coroutines.delay
-import java.time.LocalDate
 import java.time.Duration
+import java.time.LocalDate
 import java.time.Period
 import kotlin.math.roundToInt
 
@@ -188,11 +189,18 @@ fun ProductImage(imageUri: String?, inPreview: Boolean) {
             )
         }
     } else {
-        AsyncImage(
-            model = imageUri,
-            contentDescription = "Product Image",
-            modifier = Modifier.size(64.dp)
-        )
+        Box(
+            modifier = Modifier
+                .size(64.dp)
+                .padding(MaterialTheme.dimension.sm)
+                .background(MaterialTheme.colorScheme.inverseSurface, CircleShape)
+        ) {
+            AsyncImage(
+                model = imageUri,
+                contentDescription = "Product Image",
+                modifier = Modifier.size(64.dp)
+            )
+        }
     }
 }
 

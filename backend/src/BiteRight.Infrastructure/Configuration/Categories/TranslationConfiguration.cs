@@ -21,6 +21,27 @@ namespace BiteRight.Infrastructure.Configuration.Categories;
 
 public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
 {
+    public static Translation NoneEn { get; } = Translation.Create(
+        CategoryConfiguration.None.Id,
+        LanguageConfiguration.English.Id,
+        Name.Create("None"),
+        new TranslationId(Guid.Parse("F7B5E10F-0719-4731-831A-FFE0A1A1ED07"))
+    );
+
+    public static Translation NonePl { get; } = Translation.Create(
+        CategoryConfiguration.None.Id,
+        LanguageConfiguration.Polish.Id,
+        Name.Create("Brak"),
+        new TranslationId(Guid.Parse("ABED62C9-41B4-462F-866B-06D714DEC958"))
+    );
+
+    public static Translation NoneDe { get; } = Translation.Create(
+        CategoryConfiguration.None.Id,
+        LanguageConfiguration.German.Id,
+        Name.Create("Keine"),
+        new TranslationId(Guid.Parse("206A3C95-FB6D-4127-A37B-9F328C021021"))
+    );
+    
     public static Translation DairyEn { get; } = Translation.Create(
         CategoryConfiguration.Dairy.Id,
         LanguageConfiguration.English.Id,
@@ -125,26 +146,68 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
         Name.Create("Fisch"),
         new TranslationId(Guid.Parse("C605CDF4-8B17-4CF0-950A-5A9BEE434145"))
     );
-
-    public static Translation NoneEn { get; } = Translation.Create(
-        CategoryConfiguration.None.Id,
+    
+    public static Translation BeverageEn { get; } = Translation.Create(
+        CategoryConfiguration.Beverage.Id,
         LanguageConfiguration.English.Id,
-        Name.Create("None"),
-        new TranslationId(Guid.Parse("F7B5E10F-0719-4731-831A-FFE0A1A1ED07"))
+        Name.Create("Beverage"),
+        new TranslationId(Guid.Parse("2E24CA76-C17C-4A80-874B-98A33B825567"))
     );
-
-    public static Translation NonePl { get; } = Translation.Create(
-        CategoryConfiguration.None.Id,
+    
+    public static Translation BeveragePl { get; } = Translation.Create(
+        CategoryConfiguration.Beverage.Id,
         LanguageConfiguration.Polish.Id,
-        Name.Create("Brak"),
-        new TranslationId(Guid.Parse("ABED62C9-41B4-462F-866B-06D714DEC958"))
+        Name.Create("Napój"),
+        new TranslationId(Guid.Parse("329F0E4B-B364-41F9-AD75-804D796BCC74"))
     );
-
-    public static Translation NoneDe { get; } = Translation.Create(
-        CategoryConfiguration.None.Id,
+    
+    public static Translation BeverageDe { get; } = Translation.Create(
+        CategoryConfiguration.Beverage.Id,
         LanguageConfiguration.German.Id,
-        Name.Create("Keine"),
-        new TranslationId(Guid.Parse("206A3C95-FB6D-4127-A37B-9F328C021021"))
+        Name.Create("Getränk"),
+        new TranslationId(Guid.Parse("62334E0C-ACBA-47C7-A98A-9A606FED9084"))
+    );
+    
+    public static Translation SnackEn { get; } = Translation.Create(
+        CategoryConfiguration.Snack.Id,
+        LanguageConfiguration.English.Id,
+        Name.Create("Snack"),
+        new TranslationId(Guid.Parse("718BADD8-B2C2-4D4D-BD2B-2959F4949080"))
+    );
+    
+    public static Translation SnackPl { get; } = Translation.Create(
+        CategoryConfiguration.Snack.Id,
+        LanguageConfiguration.Polish.Id,
+        Name.Create("Przekąska"),
+        new TranslationId(Guid.Parse("4DAA9144-5F43-401B-8622-3AC7B1CC14FF"))
+    );
+    
+    public static Translation SnackDe { get; } = Translation.Create(
+        CategoryConfiguration.Snack.Id,
+        LanguageConfiguration.German.Id,
+        Name.Create("Snack"),
+        new TranslationId(Guid.Parse("B151FA8F-6361-40E5-99DA-1AD19108AF04"))
+    );
+    
+    public static Translation WheatEn { get; } = Translation.Create(
+        CategoryConfiguration.Wheat.Id,
+        LanguageConfiguration.English.Id,
+        Name.Create("Wheat"),
+        new TranslationId(Guid.Parse("F121FB7F-CE98-4348-9E1D-9353C1D82DF9"))
+    );
+    
+    public static Translation WheatPl { get; } = Translation.Create(
+        CategoryConfiguration.Wheat.Id,
+        LanguageConfiguration.Polish.Id,
+        Name.Create("Pszenica"),
+        new TranslationId(Guid.Parse("432866DF-EF78-4EAE-8CC3-0E2AB2EFB801"))
+    );
+    
+    public static Translation WheatDe { get; } = Translation.Create(
+        CategoryConfiguration.Wheat.Id,
+        LanguageConfiguration.German.Id,
+        Name.Create("Weizen"),
+        new TranslationId(Guid.Parse("24BA2BC6-8BC6-4A11-96DC-0DE686DE742F"))
     );
 
     public void Configure(
@@ -191,6 +254,9 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
 
     private static IEnumerable<Translation> GetSeedData()
     {
+        yield return NoneEn;
+        yield return NonePl;
+        yield return NoneDe;
         yield return DairyEn;
         yield return DairyPl;
         yield return DairyDe;
@@ -206,8 +272,14 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
         yield return FishEn;
         yield return FishPl;
         yield return FishDe;
-        yield return NoneEn;
-        yield return NonePl;
-        yield return NoneDe;
+        yield return BeverageEn;
+        yield return BeveragePl;
+        yield return BeverageDe;
+        yield return SnackEn;
+        yield return SnackPl;
+        yield return SnackDe;
+        yield return WheatEn;
+        yield return WheatPl;
+        yield return WheatDe;
     }
 }
