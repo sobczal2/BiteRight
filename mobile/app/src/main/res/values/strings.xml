@@ -15,4 +15,8 @@
     <string name="expired_for">Expired for</string>
     <string name="expires_in">Expires in</string>
     <string name="add_product">Add a product</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="price">Price</string>
+    <string name="create_product">Create product</string>
 </resources>

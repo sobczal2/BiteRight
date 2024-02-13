@@ -7,4 +7,5 @@ object Routes {
     const val ALL_PRODUCTS = "all_products"
     const val TEMPLATES = "templates"
     const val PROFILE = "profile"
+    const val CREATE_PRODUCT = "create_product"
 }

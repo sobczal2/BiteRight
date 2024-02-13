@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sobczal2.biteright.AuthManager
+import com.sobczal2.biteright.screens.CreateProductScreen
 import com.sobczal2.biteright.screens.CurrentProductsScreen
 import com.sobczal2.biteright.screens.ProfileScreen
 import com.sobczal2.biteright.screens.StartScreen
@@ -27,7 +28,7 @@ fun Router(authManager: AuthManager) {
     ) {
         composable(Routes.WELCOME) {
             WelcomeScreen(
-                navigateToHome = { navController.navigate(Routes.CURRENT_PRODUCTS) },
+                navigateToCurrentProducts = { navController.navigate(Routes.CURRENT_PRODUCTS) },
             )
         }
         composable(Routes.START) {
@@ -38,12 +39,18 @@ fun Router(authManager: AuthManager) {
         composable(Routes.CURRENT_PRODUCTS) {
             CurrentProductsScreen(
                 navigateToStart = { navController.navigate(Routes.START) },
+                navigateToCreateProduct = { navController.navigate(Routes.CREATE_PRODUCT) },
                 mainAppLayoutActions = mainAppLayoutActions
             )
         }
         composable(Routes.PROFILE) {
             ProfileScreen(
                 mainAppLayoutActions = mainAppLayoutActions
+            )
+        }
+        composable(Routes.CREATE_PRODUCT) {
+            CreateProductScreen(
+                navigateToCurrentProducts = { navController.navigate(Routes.CURRENT_PRODUCTS) }
             )
         }
     }

@@ -42,7 +42,8 @@ import java.util.UUID
 fun CurrentProductsScreen(
     viewModel: CurrentProductsViewModel = hiltViewModel(),
     navigateToStart: () -> Unit,
-    mainAppLayoutActions: MainAppLayoutActions
+    navigateToCreateProduct: () -> Unit,
+    mainAppLayoutActions: MainAppLayoutActions,
 ) {
     val state = viewModel.state.collectAsState()
 
@@ -60,6 +61,7 @@ fun CurrentProductsScreen(
         CurrentProductsScreenContent(
             state = state.value,
             mainAppLayoutActions = mainAppLayoutActions,
+            navigateToCreateProduct = navigateToCreateProduct,
             disposeProduct = { viewModel.disposeProduct(it) }
         )
     }

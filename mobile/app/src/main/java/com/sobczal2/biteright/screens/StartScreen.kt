@@ -70,7 +70,6 @@ fun StartScreenContent(
                 onValueChange = onUsernameChange,
                 error = state.usernameError,
                 label = { Text(text = stringResource(id = R.string.username)) },
-                singleLine = true,
                 imeAction = ImeAction.Done
             )
             Button(

@@ -29,7 +29,8 @@ import com.sobczal2.biteright.viewmodels.WelcomeViewModel
 
 @Composable
 fun WelcomeScreen(
-    viewModel: WelcomeViewModel = hiltViewModel(), navigateToHome: () -> Unit = {}
+    viewModel: WelcomeViewModel = hiltViewModel(),
+    navigateToCurrentProducts: () -> Unit
 ) {
     val state = viewModel.state.collectAsState()
 
@@ -38,16 +39,19 @@ fun WelcomeScreen(
     WelcomeScreenContent(
         onGetStartedClick = {
             viewModel.onGetStartedClick(
-                context = context, onSuccess = navigateToHome
+                context = context,
+                onSuccess = navigateToCurrentProducts
             )
-        }, state = state.value
+        },
+        state = state.value,
     )
 }
 
 
 @Composable
 fun WelcomeScreenContent(
-    onGetStartedClick: () -> Unit = {}, state: WelcomeScreenState = WelcomeScreenState()
+    state: WelcomeScreenState = WelcomeScreenState(),
+    onGetStartedClick: () -> Unit = {},
 ) {
 
     Surface(
