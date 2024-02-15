@@ -42,4 +42,7 @@
     <data name="internal_error" xml:space="preserve">
         <value>Internal error</value>
     </data>
+    <data name="validation_error" xml:space="preserve">
+        <value>Validation error</value>
+    </data>
 </root>

@@ -81,4 +81,7 @@
     <data name="amount_current_value_greater_than_max_value" xml:space="preserve">
         <value/>
     </data>
+    <data name="product_not_disposed" xml:space="preserve">
+        <value>Product was not disposed</value>
+    </data>
 </root>

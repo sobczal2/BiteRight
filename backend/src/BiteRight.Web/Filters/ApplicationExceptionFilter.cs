@@ -8,7 +8,6 @@
 #region
 
 using BiteRight.Application.Common.Exceptions;
-using BiteRight.Resources.Resources.Common;
 using BiteRight.Web.Responses;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -24,18 +23,18 @@ namespace BiteRight.Web.Filters;
 public class ApplicationExceptionFilter : IExceptionFilter
 {
     private readonly IHostEnvironment _environment;
-    private readonly IStringLocalizer<Common> _localizer;
+    private readonly IStringLocalizer<Resources.Resources.Common.Common> _commonLocalizer;
     private readonly ILogger<ApplicationExceptionFilter> _logger;
 
     public ApplicationExceptionFilter(
         IHostEnvironment environment,
         ILogger<ApplicationExceptionFilter> logger,
-        IStringLocalizer<Common> localizer
+        IStringLocalizer<Resources.Resources.Common.Common> commonLocalizer
     )
     {
         _environment = environment;
         _logger = logger;
-        _localizer = localizer;
+        _commonLocalizer = commonLocalizer;
     }
 
     public void OnException(
@@ -59,12 +58,12 @@ public class ApplicationExceptionFilter : IExceptionFilter
         }
     }
 
-    private static void HandleValidationException(
+    private void HandleValidationException(
         ExceptionContext context,
         ValidationException exception
     )
     {
-        var response = ErrorResponse.FromValidationException(exception);
+        var response = ErrorResponse.FromValidationException(exception, _commonLocalizer);
         context.Result = new BadRequestObjectResult(response);
         context.ExceptionHandled = true;
     }
@@ -74,7 +73,7 @@ public class ApplicationExceptionFilter : IExceptionFilter
         NotFoundException _
     )
     {
-        var response = ErrorResponse.FromMessage(_localizer[nameof(Common.not_found)]);
+        var response = ErrorResponse.FromMessage(_commonLocalizer[nameof(Resources.Resources.Common.Common.not_found)]);
         context.Result = new NotFoundObjectResult(response);
         context.ExceptionHandled = true;
     }
@@ -85,7 +84,7 @@ public class ApplicationExceptionFilter : IExceptionFilter
     )
     {
         _logger.LogError(exception, "Internal error");
-        var response = ErrorResponse.FromMessage(_localizer[nameof(Common.internal_error)]);
+        var response = ErrorResponse.FromMessage(_commonLocalizer[nameof(Resources.Resources.Common.Common.internal_error)]);
         context.Result = new ObjectResult(response)
         {
             StatusCode = 500
@@ -100,7 +99,7 @@ public class ApplicationExceptionFilter : IExceptionFilter
         if (_environment.IsDevelopment()) return;
 
         _logger.LogError(context.Exception, "Unknown exception");
-        var response = ErrorResponse.FromMessage(_localizer[nameof(Common.unknown_error)]);
+        var response = ErrorResponse.FromMessage(_commonLocalizer[nameof(Resources.Resources.Common.Common.unknown_error)]);
         context.Result = new ObjectResult(response)
         {
             StatusCode = 500

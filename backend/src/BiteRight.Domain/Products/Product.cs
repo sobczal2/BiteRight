@@ -110,10 +110,17 @@ public class Product : AggregateRoot<ProductId>
         return DisposedState.Disposed;
     }
 
-    public void SetDisposed(DateTime currentDateTime)
+    public void Dispose(
+        DateTime currentDateTime
+    )
     {
         DisposedState = DisposedState.CreateDisposed(
             currentDateTime
         );
+    }
+
+    public void Restore()
+    {
+        DisposedState = DisposedState.CreateNotDisposed();
     }
 }

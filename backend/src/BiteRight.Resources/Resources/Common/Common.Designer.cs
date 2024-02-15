@@ -80,5 +80,11 @@ namespace BiteRight.Resources.Resources.Common {
                 return ResourceManager.GetString("internal_error", resourceCulture);
             }
         }
+        
+        public static string validation_error {
+            get {
+                return ResourceManager.GetString("validation_error", resourceCulture);
+            }
+        }
     }
 }

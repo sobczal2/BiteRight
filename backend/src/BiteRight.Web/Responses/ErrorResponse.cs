@@ -10,6 +10,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 #endregion
 
@@ -45,11 +46,15 @@ public class ErrorResponse
     }
 
     public static ErrorResponse FromValidationException(
-        ValidationException exception
+        ValidationException exception,
+        IStringLocalizer<Resources.Resources.Common.Common> commonLocalizer
     )
     {
         var errors = exception.Errors.ToDictionary(error => error.PropertyName,
             error => new List<string> { error.ErrorMessage });
-        return new ErrorResponse(exception.Message, errors);
+        return new ErrorResponse(
+            commonLocalizer[nameof(Resources.Resources.Common.Common.validation_error)],
+            errors
+        );
     }
 }

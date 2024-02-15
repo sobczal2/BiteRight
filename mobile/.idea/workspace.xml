@@ -17,34 +17,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="656647fa-75dd-4f3b-89da-2c91dd013bac" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/abstractions/CurrenciesApi.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/responses/currencies/ListResponse.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/currencies/CurrencyDto.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/abstractions/CurrencyRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/implementations/CurrencyRepositoryImpl.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/currencies/CurrenciesPicker.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Dtos/Currencies/CurrencyDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Dtos/Currencies/CurrencyDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Currencies/List/ListHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Currencies/List/ListHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/di/BackendDataModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/di/BackendDataModule.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/di/RepositoryModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/di/RepositoryModule.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/users/ProfileDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/users/ProfileDto.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/users/UserDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/users/UserDto.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/CreateProductScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/CreateProductScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/CurrentProductsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/CurrentProductsScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/ProfileScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/ProfileScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/StartScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/StartScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/state/CreateProductScreenState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/state/CreateProductScreenState.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/state/ProfileScreenState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/state/ProfileScreenState.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/MainAppLayout.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/MainAppLayout.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/ValidatedNumberField.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/ValidatedNumberField.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/ValidatedTextField.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/ValidatedTextField.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/CreateProductViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/CreateProductViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/ProfileViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/ProfileViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-en/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-en/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Restore/RestoreHandler.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Restore/RestoreRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Restore/RestoreValidator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Dispose/DisposeHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Dispose/DisposeHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Dispose/DisposeRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Dispose/DisposeRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Domain/Products/Product.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Domain/Products/Product.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Resources/Resources/Products/Products.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Resources/Resources/Products/Products.Designer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Resources/Resources/Products/Products.resx" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Resources/Resources/Products/Products.resx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Web/Controllers/ProductsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Web/Controllers/ProductsController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -241,48 +222,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/implementations/UserRepositoryImpl.kt</url>
-          <line>24</line>
-          <properties>
-            <option name="lambda-ordinal" value="-1" />
-          </properties>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/AuthManager.kt</url>
           <line>45</line>
           <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/ProfileViewModel.kt</url>
-          <line>32</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/ProfileViewModel.kt</url>
-          <line>27</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/implementations/UserRepositoryImpl.kt</url>
-          <line>17</line>
-          <properties>
-            <option name="lambda-ordinal" value="-1" />
-          </properties>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/ProfileViewModel.kt</url>
-          <line>28</line>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/implementations/UserRepositoryImpl.kt</url>
-          <line>18</line>
-          <properties>
-            <option name="lambda-ordinal" value="-1" />
-          </properties>
-          <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/common/RepositoryImplBase.kt</url>
