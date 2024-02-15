@@ -128,8 +128,8 @@ fun CurrentProductsScreenContent(
 }
 
 @Composable
-@Preview
-@Preview("Dark Theme", uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(apiLevel = 33)
+@Preview("Dark Theme", apiLevel = 33, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 fun CurrentProductsScreenPreview() {
     BiteRightTheme {
         CurrentProductsScreenContent()

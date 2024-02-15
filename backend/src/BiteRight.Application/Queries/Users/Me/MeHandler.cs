@@ -60,7 +60,7 @@ public class MeHandler : QueryHandlerBase<MeRequest, MeResponse>
             Profile = new ProfileDto
             {
                 CurrencyId = currency.Id,
-                CurrencyName = currency.Name
+                TimeZoneId = user.Profile.TimeZone.Id
             }
         };
 

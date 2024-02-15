@@ -5,5 +5,5 @@ import java.util.UUID
 
 data class ProfileDto(
     @SerializedName("currencyId") val currencyId: UUID,
-    @SerializedName("currencyName") val currencyName: String
+    @SerializedName("timeZoneId") val timeZoneId: String,
 )

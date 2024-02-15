@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.ui.components.common
 
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -14,9 +15,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.ResourceIdOrString
 import com.sobczal2.biteright.util.asString
 
@@ -50,17 +51,17 @@ fun ValidatedNumberField(
             text = it
         },
         isError = error != null,
-        supportingText = {
-            error?.let {
+        supportingText = if (error != null) {
+            {
                 Text(
-                    text = it.asString(),
+                    text = error.asString(),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier
                         .wrapContentSize()
                 )
             }
-        },
+        } else null,
         label = label,
         modifier = modifier,
         singleLine = true,

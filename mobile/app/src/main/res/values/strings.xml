@@ -20,4 +20,18 @@
     <string name="price">Price</string>
     <string name="create_product">Create a product</string>
     <string name="select_currency">Select currency</string>
+    <string name="select_category">Select category</string>
+    <string name="amount">Amount</string>
+    <string name="select_unit">Select unit</string>
+    <string name="select_expiration_date">Select expiration date</string>
+    <string name="cancel">Cancel</string>
+    <string name="current">Current</string>
+    <string name="all">All</string>
+    <string name="templates">Templates</string>
+    <string name="profile">Profile</string>
+    <string name="joined_at">Joined at</string>
+    <string name="email">Email</string>
+    <string name="currency">Currency</string>
+    <string name="time_zone">Time zone</string>
+    <string name="logout">Logout</string>
 </resources>

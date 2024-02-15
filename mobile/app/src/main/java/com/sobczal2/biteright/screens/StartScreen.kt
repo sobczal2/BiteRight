@@ -96,8 +96,8 @@ fun StartScreenContent(
 }
 
 @Composable
-@Preview
-@Preview("Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(apiLevel = 33)
+@Preview("Dark Theme", apiLevel = 33, uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun StartScreenPreview() {
     val state =
         StartScreenState().copy(usernameError = ResourceIdOrString(R.string.username_length_error))

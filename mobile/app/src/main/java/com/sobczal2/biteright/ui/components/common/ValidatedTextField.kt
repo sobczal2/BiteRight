@@ -39,17 +39,17 @@ fun ValidatedTextField(
             onValueChange(it)
         },
         isError = error != null,
-        supportingText = {
-            error?.let {
+        supportingText = if (error != null) {
+            {
                 Text(
-                    text = it.asString(),
+                    text = error.asString(),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier
                         .wrapContentSize()
                 )
             }
-        },
+        } else null,
         label = label,
         modifier = modifier,
         singleLine = singleLine,
@@ -58,13 +58,15 @@ fun ValidatedTextField(
 }
 
 @Composable
-@Preview
+@Preview(apiLevel = 33)
 fun ValidatedTextFieldPreview() {
     BiteRightTheme {
         ValidatedTextField(
             onValueChange = {},
             singleLine = true,
-            error = ResourceIdOrString("This is a as dasd asd as  asdasd asd as dsadasd sa das das ine to see how it looks like."),
+            initialValue = "Initial value",
+            label = { Text("Label") },
+            error = ResourceIdOrString("Error message")
         )
     }
 }

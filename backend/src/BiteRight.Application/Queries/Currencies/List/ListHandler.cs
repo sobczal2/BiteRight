@@ -42,7 +42,7 @@ public class ListHandler : QueryHandlerBase<ListRequest, ListResponse>
                 Id = currency.Id,
                 Name = currency.Name,
                 Symbol = currency.Symbol,
-                ISO4217Code = currency.ISO4217Code
+                Code = currency.ISO4217Code
             })
             .ToListAsync(cancellationToken);
 
