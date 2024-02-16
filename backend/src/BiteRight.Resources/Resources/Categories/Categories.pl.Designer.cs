@@ -44,11 +44,5 @@ namespace BiteRight.Resources.Resources.Categories {
                 resourceCulture = value;
             }
         }
-        
-        public static string query_too_long {
-            get {
-                return ResourceManager.GetString("query_too_long", resourceCulture);
-            }
-        }
     }
 }

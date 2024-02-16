@@ -8,6 +8,7 @@
 #region
 
 using System;
+using BiteRight.Domain.Products;
 
 #endregion
 
@@ -22,4 +23,18 @@ public class SimpleProductDto
     public DateTime AddedDateTime { get; set; }
     public double AmountPercentage { get; set; }
     public bool Disposed { get; set; }
+    
+    public static SimpleProductDto FromDomain(Product product)
+    {
+        return new SimpleProductDto
+        {
+            Id = product.Id,
+            Name = product.Name,
+            ExpirationDate = product.ExpirationDate.GetDateIfKnown(),
+            CategoryId = product.CategoryId,
+            AddedDateTime = product.AddedDateTime,
+            AmountPercentage = product.Amount.GetPercentage(),
+            Disposed = product.DisposedState.Disposed
+        };
+    }
 }

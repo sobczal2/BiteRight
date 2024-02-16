@@ -293,8 +293,8 @@ fun SwipeToDismissBackground(state: SwipeToDismissBoxState) {
 
 
 @Composable
-@Preview
-@Preview("Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(apiLevel = 33)
+@Preview("Dark Theme", apiLevel = 33, uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun ProductSummaryItemPreview() {
     BiteRightTheme {
         ProductSummaryItem(

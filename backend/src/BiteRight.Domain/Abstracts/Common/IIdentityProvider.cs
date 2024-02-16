@@ -7,6 +7,7 @@
 
 #region
 
+using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Domain.Users;
 
@@ -17,6 +18,6 @@ namespace BiteRight.Domain.Abstracts.Common;
 public interface IIdentityProvider
 {
     IdentityId RequireCurrent();
-    Task<UserId> RequireCurrentUserId();
-    Task<User> RequireCurrentUser();
+    Task<UserId> RequireCurrentUserId(CancellationToken cancellationToken = default);
+    Task<User> RequireCurrentUser(CancellationToken cancellationToken = default);
 }

@@ -13,7 +13,9 @@ using BiteRight.Application.Commands.Products.Create;
 using BiteRight.Application.Commands.Products.Dispose;
 using BiteRight.Application.Commands.Products.Restore;
 using BiteRight.Application.Dtos.Products;
+using BiteRight.Application.Queries.Products.List;
 using BiteRight.Application.Queries.Products.ListCurrent;
+using BiteRight.Application.Queries.Products.Search;
 using BiteRight.Web.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -102,6 +104,18 @@ public class ProductsController : WebController
     )
     {
         var request = new RestoreRequest(productId);
+        var response = await Mediator.Send(request);
+        return Ok(response);
+    }
+    
+    [HttpPost("search")]
+    [AuthorizeUserExists]
+    [ProducesResponseType(typeof(SearchResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Search(
+        [FromBody] SearchRequest request
+    )
+    {
         var response = await Mediator.Send(request);
         return Ok(response);
     }

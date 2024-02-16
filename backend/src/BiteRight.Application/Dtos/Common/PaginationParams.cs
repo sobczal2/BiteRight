@@ -20,4 +20,6 @@ public class PaginationParams
 
     public int PageNumber { get; set; }
     public int PageSize { get; set; }
+    
+    public static PaginationParams Default => new(0, 10);
 }

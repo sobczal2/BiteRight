@@ -20,5 +20,6 @@ public enum ProductSortingStrategy
     AddedDateTimeAsc = 4,
     AddedDateTimeDesc = 5,
     PercentageAmountAsc = 6,
-    PercentageAmountDesc = 7
+    PercentageAmountDesc = 7,
+    Default = NameAsc
 }

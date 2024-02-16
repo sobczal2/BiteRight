@@ -31,22 +31,17 @@ public class CategoriesController : WebController
     {
     }
 
-    [HttpGet("search")]
+    [HttpPost("search")]
     [AuthorizeUserExists]
     [ProducesResponseType(typeof(SearchResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Search(
-        [FromQuery] string? query,
-        [FromQuery] int pageNumber,
-        [FromQuery] int pageSize,
+        [FromBody] SearchRequest request,
         CancellationToken cancellationToken
     )
     {
         var response = await Mediator.Send(
-            new SearchRequest(
-                query ?? string.Empty,
-                new PaginationParams(pageNumber, pageSize)
-            ),
+            request,
             cancellationToken
         );
 

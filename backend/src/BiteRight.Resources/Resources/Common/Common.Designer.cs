@@ -86,5 +86,17 @@ namespace BiteRight.Resources.Resources.Common {
                 return ResourceManager.GetString("validation_error", resourceCulture);
             }
         }
+        
+        public static string query_too_long {
+            get {
+                return ResourceManager.GetString("query_too_long", resourceCulture);
+            }
+        }
+        
+        public static string filtering_params_null {
+            get {
+                return ResourceManager.GetString("filtering_params_null", resourceCulture);
+            }
+        }
     }
 }

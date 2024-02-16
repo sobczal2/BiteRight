@@ -24,13 +24,13 @@
             PublicKeyToken=b77a5c561934e089
         </value>
     </resheader>
-    <data name="query_too_long" xml:space="preserve">
-        <value>Query length cannot exceed {0} characters</value>
-    </data>
     <data name="category_not_found" xml:space="preserve">
         <value>Category not found</value>
     </data>
     <data name="category_id_empty" xml:space="preserve">
         <value>Category id can't be empty</value>
+    </data>
+    <data name="category_ids_too_long" xml:space="preserve">
+        <value>Category ids can only contain {0} ids</value>
     </data>
 </root>
