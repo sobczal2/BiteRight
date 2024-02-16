@@ -17,15 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="656647fa-75dd-4f3b-89da-2c91dd013bac" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Restore/RestoreHandler.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Restore/RestoreRequest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Restore/RestoreValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Dispose/DisposeHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Dispose/DisposeHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Dispose/DisposeRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Dispose/DisposeRequest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Domain/Products/Product.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Domain/Products/Product.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Resources/Resources/Products/Products.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Resources/Resources/Products/Products.Designer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Resources/Resources/Products/Products.resx" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Resources/Resources/Products/Products.resx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Web/Controllers/ProductsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Web/Controllers/ProductsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

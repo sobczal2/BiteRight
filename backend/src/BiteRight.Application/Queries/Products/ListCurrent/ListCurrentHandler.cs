@@ -101,8 +101,8 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
                 product.ExpirationDate.Value),
             ProductSortingStrategy.AddedDateTimeAsc => baseQuery.OrderBy(product => product.Amount),
             ProductSortingStrategy.AddedDateTimeDesc => baseQuery.OrderByDescending(product => product.Amount),
-            ProductSortingStrategy.ConsumptionAsc => baseQuery.OrderBy(product => product.Name),
-            ProductSortingStrategy.ConsumptionDesc => baseQuery.OrderByDescending(product => product.Name),
+            ProductSortingStrategy.PercentageAmountAsc => baseQuery.OrderBy(product => product.Name), // TODO
+            ProductSortingStrategy.PercentageAmountDesc => baseQuery.OrderByDescending(product => product.Name),
             _ => throw new ArgumentOutOfRangeException(nameof(sortingStrategy), sortingStrategy, null)
         };
     }

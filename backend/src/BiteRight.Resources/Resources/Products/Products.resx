@@ -73,13 +73,13 @@
         <value>Product was already disposed</value>
     </data>
     <data name="amount_current_value_less_than_zero" xml:space="preserve">
-        <value/>
+        <value>Current amount can't be less than 0</value>
     </data>
     <data name="amount_max_value_less_than_zero" xml:space="preserve">
-        <value/>
+        <value>Max amount can't be less than zero</value>
     </data>
     <data name="amount_current_value_greater_than_max_value" xml:space="preserve">
-        <value/>
+        <value>Current amount can't be greater than max value</value>
     </data>
     <data name="product_not_disposed" xml:space="preserve">
         <value>Product was not disposed</value>
