@@ -2,11 +2,10 @@ package com.sobczal2.biteright.repositories.common
 
 import com.google.gson.Gson
 import com.sobczal2.biteright.data.api.common.ApiError
-import com.sobczal2.biteright.util.ResourceIdOrString
 import java.io.IOException
 
 interface RepositoryError {
-    val message: ResourceIdOrString
+    val message: String
 
     companion object {
         fun fromRetrofitException(e: Exception, gson: Gson): RepositoryError =

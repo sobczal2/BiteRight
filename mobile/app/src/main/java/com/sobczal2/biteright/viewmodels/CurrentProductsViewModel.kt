@@ -1,16 +1,19 @@
 package com.sobczal2.biteright.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sobczal2.biteright.data.api.requests.products.ListCurrentRequest
 import com.sobczal2.biteright.dto.products.ProductSortingStrategy
+import com.sobczal2.biteright.events.CurrentProductsScreenEvent
 import com.sobczal2.biteright.repositories.abstractions.ProductRepository
-import com.sobczal2.biteright.repositories.abstractions.UserRepository
-import com.sobczal2.biteright.repositories.common.ApiRepositoryError
 import com.sobczal2.biteright.state.CurrentProductsScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 
@@ -21,10 +24,34 @@ class CurrentProductsViewModel @Inject constructor(
     private val _state = MutableStateFlow(CurrentProductsScreenState())
     val state = _state.asStateFlow()
 
-    suspend fun fetchCurrentProducts() {
+    private val _events = Channel<CurrentProductsScreenEvent>()
+    val events = _events.receiveAsFlow()
+
+    init {
+        viewModelScope.launch {
+            events.collect { event ->
+                handleEvent(event)
+            }
+            fetchCurrentProducts()
+        }
+    }
+
+    fun sendEvent(event: CurrentProductsScreenEvent) {
+        viewModelScope.launch {
+            _events.send(event)
+        }
+    }
+
+    private fun handleEvent(event: CurrentProductsScreenEvent) {
+        when (event) {
+            is CurrentProductsScreenEvent.OnProductDispose -> disposeProduct(event.productId)
+        }
+    }
+
+    private suspend fun fetchCurrentProducts() {
         _state.update {
             it.copy(
-                loading = true
+                 globalLoading = true
             )
         }
 
@@ -38,7 +65,6 @@ class CurrentProductsViewModel @Inject constructor(
             { products ->
                 _state.update {
                     it.copy(
-                        loading = false,
                         currentProducts = products
                     )
                 }
@@ -46,15 +72,20 @@ class CurrentProductsViewModel @Inject constructor(
             { repositoryError ->
                 _state.update {
                     it.copy(
-                        loading = false,
-                        error = repositoryError.message
+                        globalError = repositoryError.message
                     )
                 }
             }
         )
+
+        _state.update {
+            it.copy(
+                globalLoading = false
+            )
+        }
     }
 
-    fun disposeProduct(productId: UUID) {
+    private fun disposeProduct(productId: UUID) {
         _state.update {
             it.copy(
                 currentProducts = it.currentProducts.filter { product ->

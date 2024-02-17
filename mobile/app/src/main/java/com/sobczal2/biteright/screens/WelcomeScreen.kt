@@ -20,9 +20,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.events.NavigationEvent
+import com.sobczal2.biteright.events.WelcomeScreenEvent
 import com.sobczal2.biteright.state.WelcomeScreenState
 import com.sobczal2.biteright.ui.components.common.BiteRightLogo
-import com.sobczal2.biteright.ui.components.common.ErrorBoxWrapped
+import com.sobczal2.biteright.ui.components.common.ErrorBox
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.viewmodels.WelcomeViewModel
@@ -30,20 +32,14 @@ import com.sobczal2.biteright.viewmodels.WelcomeViewModel
 @Composable
 fun WelcomeScreen(
     viewModel: WelcomeViewModel = hiltViewModel(),
-    navigateToStart: () -> Unit
+    handleNavigationEvent: (NavigationEvent) -> Unit,
 ) {
     val state = viewModel.state.collectAsState()
 
-    val context = LocalContext.current
-
     WelcomeScreenContent(
-        onGetStartedClick = {
-            viewModel.onGetStartedClick(
-                context = context,
-                onSuccess = navigateToStart
-            )
-        },
         state = state.value,
+        sendEvent = viewModel::sendEvent,
+        handleNavigationEvent = handleNavigationEvent,
     )
 }
 
@@ -51,9 +47,10 @@ fun WelcomeScreen(
 @Composable
 fun WelcomeScreenContent(
     state: WelcomeScreenState = WelcomeScreenState(),
-    onGetStartedClick: () -> Unit = {},
+    sendEvent: (WelcomeScreenEvent) -> Unit = {},
+    handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
-
+    val context = LocalContext.current
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -70,16 +67,18 @@ fun WelcomeScreenContent(
                     .size(300.dp)
             )
             Button(
-                onClick = onGetStartedClick,
+                onClick = {
+                    sendEvent(WelcomeScreenEvent.OnGetStartedClick(context = context) {
+                        handleNavigationEvent(NavigationEvent.NavigateToStart)
+                    })
+                }
             ) {
                 Text(
                     text = stringResource(id = R.string.get_started),
                     style = MaterialTheme.typography.displaySmall
                 )
             }
-            ErrorBoxWrapped(
-                message = state.generalError,
-            )
+            ErrorBox(error = state.globalError)
         }
     }
 }

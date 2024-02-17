@@ -20,11 +20,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.users.UserDto
+import com.sobczal2.biteright.events.NavigationEvent
+import com.sobczal2.biteright.events.ProfileScreenEvent
 import com.sobczal2.biteright.state.ProfileScreenState
-import com.sobczal2.biteright.ui.components.common.BigLoader
-import com.sobczal2.biteright.ui.components.common.MainAppLayout
-import com.sobczal2.biteright.ui.components.common.MainAppLayoutActions
-import com.sobczal2.biteright.ui.components.common.MainAppLayoutTab
+import com.sobczal2.biteright.ui.components.common.HomeLayout
+import com.sobczal2.biteright.ui.components.common.HomeLayoutTab
+import com.sobczal2.biteright.ui.components.common.ScreenLoader
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.viewmodels.ProfileViewModel
@@ -34,23 +35,16 @@ import java.util.UUID
 
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel = hiltViewModel(), mainAppLayoutActions: MainAppLayoutActions
+    viewModel: ProfileViewModel = hiltViewModel(),
+    handleNavigationEvent: (NavigationEvent) -> Unit,
 ) {
     val state = viewModel.state.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.init()
-    }
-
-    if (state.value.loading) {
-        BigLoader(
-            modifier = Modifier.fillMaxSize()
-        )
-    } else {
+    ScreenLoader(loading = state.value.globalLoading) {
         ProfileScreenContent(
             state = state.value,
-            mainAppLayoutActions = mainAppLayoutActions,
-            onLogoutClick = viewModel::logout
+            sendEvent = viewModel::sendEvent,
+            handleNavigationEvent = handleNavigationEvent,
         )
     }
 }
@@ -58,11 +52,12 @@ fun ProfileScreen(
 @Composable
 fun ProfileScreenContent(
     state: ProfileScreenState = ProfileScreenState(),
-    mainAppLayoutActions: MainAppLayoutActions = MainAppLayoutActions(),
-    onLogoutClick: () -> Unit = {}
+    sendEvent: (ProfileScreenEvent) -> Unit = {},
+    handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
-    MainAppLayout(
-        currentTab = MainAppLayoutTab.PROFILE, mainAppLayoutActions = mainAppLayoutActions
+    HomeLayout(
+        currentTab = HomeLayoutTab.PROFILE,
+        handleNavigationEvent = handleNavigationEvent,
     ) { paddingValues ->
         Surface(
             modifier = Modifier
@@ -129,7 +124,9 @@ fun ProfileScreenContent(
                         )
                     }", style = MaterialTheme.typography.bodyLarge
                 )
-                Button(onClick = onLogoutClick) {
+                Button(onClick = {
+                    sendEvent(ProfileScreenEvent.OnLogoutClick)
+                }) {
                     Text(stringResource(id = R.string.logout))
                 }
             }
@@ -153,8 +150,8 @@ fun ProfileScreenPreview() {
                     profile = com.sobczal2.biteright.dto.users.ProfileDto(
                         currencyId = UUID.randomUUID(), timeZoneId = "timeZoneId"
                     )
-                ), loading = false, error = null
-            ), mainAppLayoutActions = MainAppLayoutActions()
+                )
+            ),
         )
     }
 }

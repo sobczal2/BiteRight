@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,39 +22,31 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.events.CurrentProductsScreenEvent
+import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.state.CurrentProductsScreenState
-import com.sobczal2.biteright.ui.components.common.BigLoader
-import com.sobczal2.biteright.ui.components.common.MainAppLayout
-import com.sobczal2.biteright.ui.components.common.MainAppLayoutActions
-import com.sobczal2.biteright.ui.components.common.MainAppLayoutTab
+import com.sobczal2.biteright.ui.components.common.HomeLayout
+import com.sobczal2.biteright.ui.components.common.HomeLayoutTab
+import com.sobczal2.biteright.ui.components.common.ScreenLoader
 import com.sobczal2.biteright.ui.components.products.ProductSummaryItem
 import com.sobczal2.biteright.ui.components.products.ProductSummaryItemState
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.getCategoryPhotoUrl
 import com.sobczal2.biteright.viewmodels.CurrentProductsViewModel
-import java.util.UUID
 
 @Composable
 fun CurrentProductsScreen(
     viewModel: CurrentProductsViewModel = hiltViewModel(),
-    navigateToCreateProduct: () -> Unit,
-    mainAppLayoutActions: MainAppLayoutActions,
+    handleNavigationEvent: (NavigationEvent) -> Unit,
 ) {
     val state = viewModel.state.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchCurrentProducts()
-    }
-
-    if (state.value.loading) {
-        BigLoader()
-    } else {
+    ScreenLoader(loading = state.value.globalLoading) {
         CurrentProductsScreenContent(
             state = state.value,
-            mainAppLayoutActions = mainAppLayoutActions,
-            navigateToCreateProduct = navigateToCreateProduct,
-            disposeProduct = { viewModel.disposeProduct(it) }
+            sendEvent = viewModel::sendEvent,
+            handleNavigationEvent = handleNavigationEvent
         )
     }
 }
@@ -63,16 +54,17 @@ fun CurrentProductsScreen(
 @Composable
 fun CurrentProductsScreenContent(
     state: CurrentProductsScreenState = CurrentProductsScreenState(),
-    mainAppLayoutActions: MainAppLayoutActions = MainAppLayoutActions(),
-    navigateToCreateProduct: () -> Unit = {},
-    disposeProduct: (UUID) -> Unit = {}
+    sendEvent: (CurrentProductsScreenEvent) -> Unit = {},
+    handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
-    MainAppLayout(
-        currentTab = MainAppLayoutTab.CURRENT_PRODUCTS,
-        mainAppLayoutActions = mainAppLayoutActions,
+    HomeLayout(
+        currentTab = HomeLayoutTab.CURRENT_PRODUCTS,
+        handleNavigationEvent = handleNavigationEvent,
         floatingActionButton = {
             FloatingActionButton(
-                onClick = navigateToCreateProduct
+                onClick = {
+                    handleNavigationEvent(NavigationEvent.NavigateToCreateProduct)
+                },
             ) {
                 Column(
                     modifier = Modifier.padding(MaterialTheme.dimension.sm),
@@ -117,7 +109,13 @@ fun CurrentProductsScreenContent(
                                     disposed = simpleProductDto.disposed,
                                 ),
                                 onClick = { /*TODO*/ },
-                                onDeleted = { disposeProduct(simpleProductDto.id) }
+                                onDeleted = {
+                                    sendEvent(
+                                        CurrentProductsScreenEvent.OnProductDispose(
+                                            simpleProductDto.id
+                                        )
+                                    )
+                                }
                             )
                         }
                     },

@@ -66,9 +66,7 @@ class AuthManager(
 
     fun logout() {
         credentialsManager.clearCredentials()
-        CoroutineScope(Dispatchers.Main).launch {
             onLogoutCallback?.invoke()
-        }
     }
 
     fun subscribeToLogoutEvent(onLogout: () -> Unit) {

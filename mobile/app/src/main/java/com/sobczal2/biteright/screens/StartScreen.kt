@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -21,43 +22,46 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.events.NavigationEvent
+import com.sobczal2.biteright.events.StartScreenEvent
 import com.sobczal2.biteright.state.StartScreenState
-import com.sobczal2.biteright.ui.components.common.BigLoader
 import com.sobczal2.biteright.ui.components.common.BiteRightLogo
-import com.sobczal2.biteright.ui.components.common.ErrorBoxWrapped
-import com.sobczal2.biteright.ui.components.common.ValidatedTextField
+import com.sobczal2.biteright.ui.components.common.ErrorBox
+import com.sobczal2.biteright.ui.components.common.ScreenLoader
+import com.sobczal2.biteright.ui.components.common.forms.FormFieldEvents
+import com.sobczal2.biteright.ui.components.common.forms.TextFormField
+import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
-import com.sobczal2.biteright.util.ResourceIdOrString
 import com.sobczal2.biteright.viewmodels.StartViewModel
 
 
 @Composable
 fun StartScreen(
     viewModel: StartViewModel = hiltViewModel(),
-    navigateToHome: () -> Unit,
+    handleNavigationEvent: (NavigationEvent) -> Unit,
 ) {
     val state = viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
         if (viewModel.isOnboarded()) {
-            navigateToHome()
+            handleNavigationEvent(NavigationEvent.NavigateToCurrentProducts)
         }
     }
 
-    if (state.value.loading) {
-        BigLoader()
-    } else {
-        StartScreenContent(state = state.value,
-            onUsernameChange = { viewModel.onUsernameChange(it) },
-            onNextClick = { viewModel.onNextClick(navigateToHome) })
+    ScreenLoader(loading = state.value.globalLoading) {
+        StartScreenContent(
+            state = state.value,
+            sendEvent = viewModel::sendEvent,
+            handleNavigationEvent = handleNavigationEvent,
+        )
     }
 }
 
 @Composable
 fun StartScreenContent(
     state: StartScreenState = StartScreenState(),
-    onUsernameChange: (String) -> Unit = {},
-    onNextClick: () -> Unit = {}
+    sendEvent: (StartScreenEvent) -> Unit = {},
+    handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
     Surface(
         modifier = Modifier
@@ -72,16 +76,30 @@ fun StartScreenContent(
                 modifier = Modifier
                     .size(300.dp)
             )
-            ValidatedTextField(
-                onValueChange = onUsernameChange,
-                error = state.usernameError,
-                label = { Text(text = stringResource(id = R.string.username)) },
-                imeAction = ImeAction.Done
+            TextFormField(
+                state = state.usernameFieldState,
+                onEvent = { event ->
+                    when (event) {
+                        is FormFieldEvents.OnValueChange<String> -> {
+                            sendEvent(StartScreenEvent.OnUsernameChange(event.value))
+                        }
+                    }
+                },
+                options = TextFormFieldOptions(
+                    label = { Text(text = stringResource(id = R.string.username)) },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    )
+                )
             )
             Button(
-                onClick = onNextClick,
+                onClick = {
+                    sendEvent(StartScreenEvent.OnNextClick {
+                        handleNavigationEvent(NavigationEvent.NavigateToCurrentProducts)
+                    })
+                },
             ) {
-                if (state.loading) {
+                if (state.formSubmitting) {
                     CircularProgressIndicator()
                 } else {
                     Text(
@@ -90,7 +108,7 @@ fun StartScreenContent(
                     )
                 }
             }
-            ErrorBoxWrapped(message = state.generalError)
+            ErrorBox(error = state.globalError)
         }
     }
 }
@@ -99,13 +117,7 @@ fun StartScreenContent(
 @Preview(apiLevel = 33)
 @Preview("Dark Theme", apiLevel = 33, uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun StartScreenPreview() {
-    val state =
-        StartScreenState().copy(usernameError = ResourceIdOrString(R.string.username_length_error))
     BiteRightTheme {
-        StartScreenContent(
-            state = state,
-            onUsernameChange = {},
-            onNextClick = {}
-        )
+        StartScreenContent()
     }
 }

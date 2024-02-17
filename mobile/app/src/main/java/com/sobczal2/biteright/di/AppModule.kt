@@ -11,6 +11,7 @@ import com.sobczal2.biteright.data.api.common.LocalDateTimeTypeAdapter
 import com.sobczal2.biteright.data.api.common.LocalDateTypeAdapter
 import com.sobczal2.biteright.data.api.common.TokenInterceptor
 import com.sobczal2.biteright.data.api.common.UnauthorizedInterceptor
+import com.sobczal2.biteright.util.StringProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -73,5 +74,11 @@ object AppModule {
             .create()
 
         return gson
+    }
+
+    @Provides
+    @Singleton
+    fun provideStringProvider(@ApplicationContext context: Context): StringProvider {
+        return StringProvider(context)
     }
 }

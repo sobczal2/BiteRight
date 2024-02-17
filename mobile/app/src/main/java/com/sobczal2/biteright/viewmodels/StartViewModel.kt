@@ -5,14 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.sobczal2.biteright.AuthManager
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.data.api.requests.users.OnboardRequest
+import com.sobczal2.biteright.events.StartScreenEvent
 import com.sobczal2.biteright.repositories.abstractions.UserRepository
 import com.sobczal2.biteright.repositories.common.ApiRepositoryError
 import com.sobczal2.biteright.state.StartScreenState
-import com.sobczal2.biteright.util.ResourceIdOrString
-import com.sobczal2.biteright.util.asResourceIdOrString
+import com.sobczal2.biteright.util.StringProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.TimeZone
@@ -21,15 +23,41 @@ import javax.inject.Inject
 @HiltViewModel
 class StartViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val authManager: AuthManager
+    private val stringProvider: StringProvider
 ) : ViewModel() {
     private val _state = MutableStateFlow(StartScreenState())
     val state = _state.asStateFlow()
 
-    fun onUsernameChange(username: String) {
+    private val _events = Channel<StartScreenEvent>()
+    private val events = _events.receiveAsFlow()
+
+    init {
+        viewModelScope.launch {
+            events.collect { event ->
+                handleEvent(event)
+            }
+        }
+    }
+
+    fun sendEvent(event: StartScreenEvent) {
+        viewModelScope.launch {
+            _events.send(event)
+        }
+    }
+
+    private fun handleEvent(event: StartScreenEvent) {
+        when (event) {
+            is StartScreenEvent.OnUsernameChange -> onUsernameChange(event.value)
+            is StartScreenEvent.OnNextClick -> onNextClick(event.onSuccess)
+        }
+    }
+
+    private fun onUsernameChange(username: String) {
         _state.update {
             it.copy(
-                username = username,
+                usernameFieldState = it.usernameFieldState.copy(
+                    value = username
+                )
             )
         }
 
@@ -39,46 +67,52 @@ class StartViewModel @Inject constructor(
     private fun clearErrors() {
         _state.update {
             it.copy(
-                usernameError = null,
-                generalError = null
+                usernameFieldState = it.usernameFieldState.copy(
+                    error = null
+                ),
+                globalError = null
             )
         }
     }
 
-    private fun triggerValidation() {
-        if (_state.value.username.length !in 3..30) {
+    private fun validate() {
+        if (_state.value.usernameFieldState.value.length !in 3..30) {
             _state.update {
                 it.copy(
-                    usernameError = ResourceIdOrString(R.string.username_length_error)
+                    usernameFieldState = it.usernameFieldState.copy(
+                        error = stringProvider.getString(R.string.username_length_error)
+                    )
                 )
             }
             return
         }
-        if (!Regex("^[\\p{L}\\p{Nd}-_]*\$").matches(_state.value.username)) {
+        if (!Regex("^[\\p{L}\\p{Nd}-_]*\$").matches(_state.value.usernameFieldState.value)) {
             _state.update {
                 it.copy(
-                    usernameError = ResourceIdOrString(R.string.username_invalid_characters_error)
+                    usernameFieldState = it.usernameFieldState.copy(
+                        error = stringProvider.getString(R.string.username_invalid_characters_error)
+                    )
                 )
             }
             return
         }
     }
 
-    fun onNextClick(onSuccess: () -> Unit) {
-        triggerValidation()
+    private fun onNextClick(onSuccess: () -> Unit) {
+        validate()
 
-        if (_state.value.usernameError != null) {
+        if (_state.value.usernameFieldState.error != null) {
             return
         }
 
         _state.update {
             it.copy(
-                loading = true
+                formSubmitting = true
             )
         }
 
         val onboardRequest = OnboardRequest(
-            username = state.value.username,
+            username = state.value.usernameFieldState.value,
             timeZoneId = TimeZone.getDefault().id
         )
 
@@ -92,21 +126,22 @@ class StartViewModel @Inject constructor(
                     if (repositoryError is ApiRepositoryError && repositoryError.apiErrors.any { it.key == "username" }) {
                         _state.update {
                             it.copy(
-                                usernameError = repositoryError.apiErrors["username"]!!.first()
-                                    .asResourceIdOrString()
+                                usernameFieldState = it.usernameFieldState.copy(
+                                    error = repositoryError.apiErrors["username"]?.first()
+                                )
                             )
                         }
                     } else {
                         _state.update {
                             it.copy(
-                                generalError = repositoryError.message
+                                globalError = repositoryError.message
                             )
                         }
                     }
 
                     _state.update {
                         it.copy(
-                            loading = false,
+                            formSubmitting = false
                         )
                     }
                 }
@@ -118,7 +153,7 @@ class StartViewModel @Inject constructor(
     suspend fun isOnboarded(): Boolean {
         _state.update {
             it.copy(
-                loading = true
+                globalLoading = true
             )
         }
         val meResult = userRepository.me()
@@ -133,8 +168,7 @@ class StartViewModel @Inject constructor(
                 } else {
                     _state.update {
                         it.copy(
-                            loading = false,
-                            generalError = repositoryError.message
+                            globalError = repositoryError.message
                         )
                     }
                     false
@@ -144,7 +178,7 @@ class StartViewModel @Inject constructor(
 
         _state.update {
             it.copy(
-                loading = false
+                globalLoading = false
             )
         }
 

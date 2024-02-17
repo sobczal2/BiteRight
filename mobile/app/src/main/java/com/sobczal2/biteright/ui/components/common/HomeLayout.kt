@@ -19,26 +19,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 
-enum class MainAppLayoutTab {
+enum class HomeLayoutTab {
     CURRENT_PRODUCTS,
     ALL_PRODUCTS,
     TEMPLATES,
     PROFILE,
 }
 
-data class MainAppLayoutActions(
-    val onCurrentProductsClick: () -> Unit = {},
-    val onAllProductsClick: () -> Unit = {},
-    val onTemplatesClick: () -> Unit = {},
-    val onProfileClick: () -> Unit = {},
-)
-
 @Composable
-fun MainAppLayout(
-    currentTab: MainAppLayoutTab,
-    mainAppLayoutActions: MainAppLayoutActions = MainAppLayoutActions(),
+fun HomeLayout(
+    currentTab: HomeLayoutTab,
+    handleNavigationEvent: (NavigationEvent) -> Unit,
     floatingActionButton: @Composable (() -> Unit)? = null,
     content: @Composable (PaddingValues) -> Unit,
 ) {
@@ -49,13 +43,12 @@ fun MainAppLayout(
                     .fillMaxWidth(),
             ) {
                 NavigationBarItem(
-                    selected = currentTab == MainAppLayoutTab.CURRENT_PRODUCTS,
+                    selected = currentTab == HomeLayoutTab.CURRENT_PRODUCTS,
                     onClick = {
                         navigateIfNotCurrentTab(
                             currentTab,
-                            MainAppLayoutTab.CURRENT_PRODUCTS,
-                            mainAppLayoutActions.onCurrentProductsClick
-                        )
+                            HomeLayoutTab.CURRENT_PRODUCTS
+                        ) { handleNavigationEvent(NavigationEvent.NavigateToCurrentProducts) }
                     },
                     icon = {
                         Icon(
@@ -66,13 +59,12 @@ fun MainAppLayout(
                     label = { Text(stringResource(id = R.string.current)) }
                 )
                 NavigationBarItem(
-                    selected = currentTab == MainAppLayoutTab.ALL_PRODUCTS,
+                    selected = currentTab == HomeLayoutTab.ALL_PRODUCTS,
                     onClick = {
                         navigateIfNotCurrentTab(
                             currentTab,
-                            MainAppLayoutTab.ALL_PRODUCTS,
-                            mainAppLayoutActions.onAllProductsClick
-                        )
+                            HomeLayoutTab.ALL_PRODUCTS,
+                        ) { handleNavigationEvent(NavigationEvent.NavigateToAllProducts) }
                     },
                     icon = {
                         Icon(
@@ -83,13 +75,12 @@ fun MainAppLayout(
                     label = { Text(stringResource(id = R.string.all)) }
                 )
                 NavigationBarItem(
-                    selected = currentTab == MainAppLayoutTab.TEMPLATES,
+                    selected = currentTab == HomeLayoutTab.TEMPLATES,
                     onClick = {
                         navigateIfNotCurrentTab(
                             currentTab,
-                            MainAppLayoutTab.TEMPLATES,
-                            mainAppLayoutActions.onTemplatesClick
-                        )
+                            HomeLayoutTab.TEMPLATES,
+                        ) { handleNavigationEvent(NavigationEvent.NavigateToTemplates) }
                     },
                     icon = {
                         Icon(
@@ -100,13 +91,12 @@ fun MainAppLayout(
                     label = { Text(stringResource(id = R.string.templates)) }
                 )
                 NavigationBarItem(
-                    selected = currentTab == MainAppLayoutTab.PROFILE,
+                    selected = currentTab == HomeLayoutTab.PROFILE,
                     onClick = {
                         navigateIfNotCurrentTab(
                             currentTab,
-                            MainAppLayoutTab.PROFILE,
-                            mainAppLayoutActions.onProfileClick
-                        )
+                            HomeLayoutTab.PROFILE,
+                        ) { handleNavigationEvent(NavigationEvent.NavigateToProfile) }
                     },
                     icon = {
                         Icon(
@@ -125,8 +115,8 @@ fun MainAppLayout(
 }
 
 fun navigateIfNotCurrentTab(
-    currentTab: MainAppLayoutTab,
-    tab: MainAppLayoutTab,
+    currentTab: HomeLayoutTab,
+    tab: HomeLayoutTab,
     navigate: () -> Unit,
 ) {
     if (currentTab != tab) {
@@ -137,11 +127,12 @@ fun navigateIfNotCurrentTab(
 @Composable
 @Preview(apiLevel = 33)
 @Preview("Dark Theme", apiLevel = 33, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
-fun MainAppLayoutPreview() {
+fun HomeLayoutPreview() {
     BiteRightTheme {
-        MainAppLayout(
-            currentTab = MainAppLayoutTab.CURRENT_PRODUCTS,
+        HomeLayout(
+            currentTab = HomeLayoutTab.CURRENT_PRODUCTS,
             content = {},
+            handleNavigationEvent = {},
             floatingActionButton = {
                 FloatingActionButton(onClick = { }) {
                     Icon(Icons.Rounded.Add, contentDescription = "Add")
