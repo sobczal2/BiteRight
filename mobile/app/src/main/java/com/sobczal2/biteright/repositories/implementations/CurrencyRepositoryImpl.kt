@@ -7,12 +7,14 @@ import com.sobczal2.biteright.dto.currencies.CurrencyDto
 import com.sobczal2.biteright.repositories.abstractions.CurrencyRepository
 import com.sobczal2.biteright.repositories.common.RepositoryError
 import com.sobczal2.biteright.repositories.common.RepositoryImplBase
+import com.sobczal2.biteright.util.StringProvider
 import javax.inject.Inject
 
 class CurrencyRepositoryImpl @Inject constructor(
     private val currenciesApi: CurrenciesApi,
+    private val stringProvider: StringProvider,
     private val gson: Gson
-) : RepositoryImplBase(gson, "ProductRepositoryImpl"), CurrencyRepository {
+) : RepositoryImplBase(gson, stringProvider, "ProductRepositoryImpl"), CurrencyRepository {
     override suspend fun list(): Either<List<CurrencyDto>, RepositoryError> =
         safeApiCall {
             currenciesApi.list().let { response ->

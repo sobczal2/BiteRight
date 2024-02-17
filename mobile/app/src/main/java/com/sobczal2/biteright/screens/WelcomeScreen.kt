@@ -20,14 +20,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.dto.currencies.CurrencyDto
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.events.WelcomeScreenEvent
 import com.sobczal2.biteright.state.WelcomeScreenState
 import com.sobczal2.biteright.ui.components.common.BiteRightLogo
 import com.sobczal2.biteright.ui.components.common.ErrorBox
+import com.sobczal2.biteright.ui.components.products.PriceFormField
+import com.sobczal2.biteright.ui.components.products.PriceFormFieldEvents
+import com.sobczal2.biteright.ui.components.products.PriceFormFieldOptions
+import com.sobczal2.biteright.ui.components.products.PriceFormFieldState
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.viewmodels.WelcomeViewModel
+import java.util.UUID
 
 @Composable
 fun WelcomeScreen(
@@ -78,6 +84,10 @@ fun WelcomeScreenContent(
                     style = MaterialTheme.typography.displaySmall
                 )
             }
+            PriceFormField(state = PriceFormFieldState(availableCurrencies = listOf(
+                CurrencyDto(UUID.randomUUID(), "USD", "US Dollar", "USD"),
+            )), onEvent = {}, options = PriceFormFieldOptions()
+            )
             ErrorBox(error = state.globalError)
         }
     }

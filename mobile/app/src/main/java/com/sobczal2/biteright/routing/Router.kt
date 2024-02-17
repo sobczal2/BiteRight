@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sobczal2.biteright.AuthManager
 import com.sobczal2.biteright.events.NavigationEvent
+import com.sobczal2.biteright.screens.CreateProductScreen
 import com.sobczal2.biteright.screens.CurrentProductsScreen
 import com.sobczal2.biteright.screens.ProfileScreen
 import com.sobczal2.biteright.screens.StartScreen
@@ -23,7 +24,7 @@ fun Router(authManager: AuthManager) {
     }
     NavHost(
         navController = navController,
-        startDestination = if (authManager.isLoggedIn) Routes.CURRENT_PRODUCTS else Routes.WELCOME
+        startDestination = if (authManager.isLoggedIn) Routes.START else Routes.WELCOME
     ) {
         composable(Routes.WELCOME) {
             WelcomeScreen(
@@ -45,11 +46,11 @@ fun Router(authManager: AuthManager) {
                 handleNavigationEvent = { event -> handleNavigationEvent(event, navController) }
             )
         }
-//        composable(Routes.CREATE_PRODUCT) {
-//            CreateProductScreen(
-//                handleNavigationEvent = { event -> handleNavigationEvent(event, navController) }
-//            )
-//        }
+        composable(Routes.CREATE_PRODUCT) {
+            CreateProductScreen(
+                handleNavigationEvent = { event -> handleNavigationEvent(event, navController) }
+            )
+        }
     }
 }
 

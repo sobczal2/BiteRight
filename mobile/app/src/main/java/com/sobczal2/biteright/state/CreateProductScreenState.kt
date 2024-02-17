@@ -1,21 +1,12 @@
-//package com.sobczal2.biteright.state
-//
-//import com.sobczal2.biteright.dto.currencies.CurrencyDto
-//import com.sobczal2.biteright.dto.products.ExpirationDateKindDto
-//import com.sobczal2.biteright.util.ResourceIdOrString
-//import java.time.LocalDate
-//
-//data class CreateProductScreenState(
-//    val name: String = "",
-//    val nameError: ResourceIdOrString? = null,
-//    val description: String = "",
-//    val descriptionError: ResourceIdOrString? = null,
-//    val price: Double? = null,
-//    val priceError: ResourceIdOrString? = null,
-//    val currencyDto: CurrencyDto? = null,
-//    val availableCurrencyDtos: List<CurrencyDto> = emptyList(),
-//    val expirationDateDialogOpen: Boolean = false,
-//    val expirationDateKind: ExpirationDateKindDto? = null,
-//    val expirationDateValue: LocalDate? = null,
-//    val expirationDateError: ResourceIdOrString? = null,
-//) : ScreenStateBase()
+package com.sobczal2.biteright.state
+
+import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
+import com.sobczal2.biteright.ui.components.products.PriceFormFieldState
+
+data class CreateProductScreenState(
+    val nameFieldState: TextFormFieldState = TextFormFieldState(),
+    val descriptionFieldState: TextFormFieldState = TextFormFieldState(),
+    val priceFieldState: PriceFormFieldState = PriceFormFieldState(availableCurrencies = emptyList()),
+    override val globalLoading: Boolean = false,
+    override val globalError: String? = null,
+) : ScreenStateBase

@@ -10,6 +10,7 @@ import com.sobczal2.biteright.repositories.abstractions.UserRepository
 import com.sobczal2.biteright.repositories.implementations.CurrencyRepositoryImpl
 import com.sobczal2.biteright.repositories.implementations.ProductRepositoryImpl
 import com.sobczal2.biteright.repositories.implementations.UserRepositoryImpl
+import com.sobczal2.biteright.util.StringProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,26 +24,29 @@ object RepositoryModule {
     @Provides
     fun provideUserRepository(
         usersApi: UsersApi,
+        stringProvider: StringProvider,
         gson: Gson
     ): UserRepository {
-        return UserRepositoryImpl(usersApi, gson)
+        return UserRepositoryImpl(usersApi, stringProvider, gson)
     }
 
     @Singleton
     @Provides
     fun provideProductRepository(
         productsApi: ProductsApi,
+        stringProvider: StringProvider,
         gson: Gson
     ): ProductRepository {
-        return ProductRepositoryImpl(productsApi, gson)
+        return ProductRepositoryImpl(productsApi, stringProvider, gson)
     }
 
     @Singleton
     @Provides
     fun provideCurrencyRepository(
         currenciesApi: CurrenciesApi,
+        stringProvider: StringProvider,
         gson: Gson
     ): CurrencyRepository {
-        return CurrencyRepositoryImpl(currenciesApi, gson)
+        return CurrencyRepositoryImpl(currenciesApi, stringProvider, gson)
     }
 }

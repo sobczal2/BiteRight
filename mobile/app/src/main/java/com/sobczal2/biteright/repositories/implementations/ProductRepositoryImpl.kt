@@ -8,12 +8,14 @@ import com.sobczal2.biteright.dto.products.SimpleProductDto
 import com.sobczal2.biteright.repositories.abstractions.ProductRepository
 import com.sobczal2.biteright.repositories.common.RepositoryError
 import com.sobczal2.biteright.repositories.common.RepositoryImplBase
+import com.sobczal2.biteright.util.StringProvider
 import javax.inject.Inject
 
 class ProductRepositoryImpl @Inject constructor(
     private val productApi: ProductsApi,
+    private val stringProvider: StringProvider,
     private val gson: Gson
-) : RepositoryImplBase(gson, "ProductRepositoryImpl"), ProductRepository {
+) : RepositoryImplBase(gson, stringProvider, "ProductRepositoryImpl"), ProductRepository {
     override suspend fun listCurrent(
         listCurrentRequest: ListCurrentRequest
     ): Either<List<SimpleProductDto>, RepositoryError> =
