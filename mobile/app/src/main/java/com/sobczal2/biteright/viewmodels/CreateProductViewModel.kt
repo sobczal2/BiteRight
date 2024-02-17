@@ -2,11 +2,13 @@ package com.sobczal2.biteright.viewmodels
 
 import androidx.lifecycle.ViewModel
 import com.sobczal2.biteright.dto.currencies.CurrencyDto
+import com.sobczal2.biteright.dto.products.ExpirationDateKindDto
 import com.sobczal2.biteright.repositories.abstractions.CurrencyRepository
 import com.sobczal2.biteright.state.CreateProductScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,16 +30,16 @@ class CreateProductViewModel @Inject constructor(
         _state.value = _state.value.copy(price = value)
     }
 
-    fun onSelectCurrencyButtonClick() {
-        _state.value = _state.value.copy(currencyDialogOpen = true)
-    }
-
-    fun closeCurrencyDialog() {
-        _state.value = _state.value.copy(currencyDialogOpen = false)
-    }
-
     fun onCurrencySelected(currency: CurrencyDto?) {
-        _state.value = _state.value.copy(currencyDto = currency, currencyDialogOpen = false)
+        _state.value = _state.value.copy(currencyDto = currency)
+    }
+
+    fun onExpirationDateKindSelected(kind: ExpirationDateKindDto?) {
+        _state.value = _state.value.copy(expirationDateKind = kind)
+    }
+
+    fun onExpirationDateValueSelected(value: LocalDate?) {
+        _state.value = _state.value.copy(expirationDateValue = value)
     }
 
     suspend fun init() {
@@ -54,5 +56,13 @@ class CreateProductViewModel @Inject constructor(
                 _state.value = _state.value.copy(error = error.message)
             }
         )
+    }
+
+    fun onExpirationDateDialogOpen() {
+        _state.value = _state.value.copy(expirationDateDialogOpen = true)
+    }
+
+    fun onExpirationDateDialogClose() {
+        _state.value = _state.value.copy(expirationDateDialogOpen = false)
     }
 }

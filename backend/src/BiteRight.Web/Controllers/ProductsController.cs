@@ -9,6 +9,7 @@
 
 using System;
 using System.Threading.Tasks;
+using BiteRight.Application.Commands.Products.ChangeAmount;
 using BiteRight.Application.Commands.Products.Create;
 using BiteRight.Application.Commands.Products.Dispose;
 using BiteRight.Application.Commands.Products.Restore;
@@ -107,7 +108,7 @@ public class ProductsController : WebController
         var response = await Mediator.Send(request);
         return Ok(response);
     }
-    
+
     [HttpPost("search")]
     [AuthorizeUserExists]
     [ProducesResponseType(typeof(SearchResponse), StatusCodes.Status200OK)]
@@ -116,6 +117,20 @@ public class ProductsController : WebController
         [FromBody] SearchRequest request
     )
     {
+        var response = await Mediator.Send(request);
+        return Ok(response);
+    }
+
+    [HttpPut("{productId:guid}/amount")]
+    [AuthorizeUserExists]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ChangeAmount(
+        Guid productId,
+        [FromBody] ChangeAmountRequest request
+    )
+    {
+        request.ProductId = productId;
         var response = await Mediator.Send(request);
         return Ok(response);
     }

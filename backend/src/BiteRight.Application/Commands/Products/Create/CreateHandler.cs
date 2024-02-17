@@ -41,12 +41,10 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
     private readonly IStringLocalizer<Resources.Resources.Products.Products> _productsLocalizer;
     private readonly IUnitRepository _unitRepository;
     private readonly IStringLocalizer<Units> _unitsLocalizer;
-    private readonly IUserRepository _userRepository;
 
     public CreateHandler(
         IIdentityProvider identityProvider,
         IDateTimeProvider dateTimeProvider,
-        IUserRepository userRepository,
         ICurrencyRepository currencyRepository,
         IProductRepository productRepository,
         ICategoryRepository categoryRepository,
@@ -61,7 +59,6 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
     {
         _identityProvider = identityProvider;
         _dateTimeProvider = dateTimeProvider;
-        _userRepository = userRepository;
         _currencyRepository = currencyRepository;
         _productRepository = productRepository;
         _categoryRepository = categoryRepository;
@@ -77,9 +74,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
         CancellationToken cancellationToken
     )
     {
-        var currentIdentityId = _identityProvider.RequireCurrent();
-        var user = await _userRepository.FindByIdentityId(currentIdentityId, cancellationToken)
-                   ?? throw new InternalErrorException();
+        var user = await _identityProvider.RequireCurrentUser(cancellationToken);
 
         var name = Name.Create(request.Name);
         var description = Description.Create(request.Description);

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -28,13 +27,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.currencies.CurrencyDto
+import com.sobczal2.biteright.dto.products.ExpirationDateKindDto
 import com.sobczal2.biteright.state.CreateProductScreenState
 import com.sobczal2.biteright.ui.components.common.ValidatedNumberField
 import com.sobczal2.biteright.ui.components.common.ValidatedTextField
-import com.sobczal2.biteright.ui.components.currencies.CurrenciesDialog
+import com.sobczal2.biteright.ui.components.products.ExpirationDateDialog
+import com.sobczal2.biteright.ui.components.products.PriceField
+import com.sobczal2.biteright.ui.components.products.PriceFieldActions
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.viewmodels.CreateProductViewModel
+import java.time.LocalDate
 
 @Composable
 fun CreateProductScreen(
@@ -55,14 +58,15 @@ fun CreateProductScreen(
         onNameChange = viewModel::onNameChange,
         onDescriptionChange = viewModel::onDescriptionChange,
         onPriceChange = viewModel::onPriceChange,
-        onSelectCurrencyButtonClick = viewModel::onSelectCurrencyButtonClick,
         availableCurrencies = state.value.availableCurrencyDtos,
         onCurrencySelected = viewModel::onCurrencySelected,
-        onCurrencyDialogDismissRequest = viewModel::closeCurrencyDialog
+        onExpirationDateKindSelected = viewModel::onExpirationDateKindSelected,
+        onExpirationDateValueSelected = viewModel::onExpirationDateValueSelected,
+        onExpirationDateDialogOpen = viewModel::onExpirationDateDialogOpen,
+        onExpirationDateDialogClose = viewModel::onExpirationDateDialogClose
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateProductScreenContent(
     state: CreateProductScreenState = CreateProductScreenState(),
@@ -70,10 +74,12 @@ fun CreateProductScreenContent(
     onNameChange: (String) -> Unit = {},
     onDescriptionChange: (String) -> Unit = {},
     onPriceChange: (Double?) -> Unit = {},
-    onSelectCurrencyButtonClick: () -> Unit = {},
     availableCurrencies: List<CurrencyDto> = emptyList(),
     onCurrencySelected: (CurrencyDto?) -> Unit = {},
-    onCurrencyDialogDismissRequest: () -> Unit = {},
+    onExpirationDateKindSelected: (ExpirationDateKindDto?) -> Unit = {},
+    onExpirationDateValueSelected: (LocalDate?) -> Unit = {},
+    onExpirationDateDialogOpen: () -> Unit = {},
+    onExpirationDateDialogClose: () -> Unit = {},
 ) {
     Surface(
         modifier = Modifier
@@ -107,52 +113,37 @@ fun CreateProductScreenContent(
                 singleLine = false,
                 modifier = Modifier.fillMaxWidth()
             )
-            Row {
-                ValidatedNumberField(
-                    onValueChange = onPriceChange,
-                    error = state.priceError,
-                    label = { Text(text = stringResource(id = R.string.price)) },
-                    modifier = Modifier
-                        .weight(1f),
-                    shape = MaterialTheme.shapes.extraSmall.copy(
-                        topEnd = CornerSize(0.dp),
-                        bottomEnd = CornerSize(0.dp),
-                        bottomStart = CornerSize(0.dp),
-                    )
-                )
-                Button(
-                    onClick = onSelectCurrencyButtonClick,
-                    shape = MaterialTheme.shapes.extraSmall.copy(
-                        topStart = CornerSize(0.dp),
-                        bottomStart = CornerSize(0.dp)
-                    ),
-                    modifier = Modifier
-                        .height(TextFieldDefaults.MinHeight)
-                ) {
-                    Text(
-                        text = state.currencyDto?.symbol
-                            ?: stringResource(id = R.string.select_currency)
-                    )
-
-                    if (state.currencyDialogOpen) {
-                        CurrenciesDialog(
-                            availableCurrencies = availableCurrencies,
-                            selectedCurrency = state.currencyDto,
-                            onSelectionChange = onCurrencySelected,
-                            onDismissRequest = onCurrencyDialogDismissRequest
-                        )
-                    }
-                }
-            }
-
+            PriceField(
+                error = state.priceError,
+                actions = PriceFieldActions(
+                    onPriceChange = onPriceChange,
+                    onCurrencySelected = onCurrencySelected
+                ),
+                availableCurrencies = availableCurrencies,
+            )
             Button(
-                onClick = {},
+                onClick = onExpirationDateDialogOpen,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(TextFieldDefaults.MinHeight),
                 shape = MaterialTheme.shapes.extraSmall
             ) {
-                Text(text = stringResource(id = R.string.select_expiration_date))
+                Text(
+                    text = expirationDateButtonString(
+                        state.expirationDateKind,
+                        state.expirationDateValue
+                    )
+                )
+            }
+
+            if (state.expirationDateDialogOpen) {
+                ExpirationDateDialog(
+                    onSelected = { date, kind ->
+                        onExpirationDateKindSelected(kind)
+                        onExpirationDateValueSelected(date)
+                    },
+                    onDismissRequest = onExpirationDateDialogClose
+                )
             }
 
             Button(
@@ -215,6 +206,24 @@ fun CreateProductScreenContent(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun expirationDateButtonString(
+    expirationDateKind: ExpirationDateKindDto?,
+    expirationDateValue: LocalDate?,
+): String {
+    if (expirationDateKind == null) {
+        return stringResource(id = R.string.select_expiration_date)
+    } else if (expirationDateValue == null) {
+        return stringResource(
+            id = ExpirationDateKindDto.toLocalizedResourceID(
+                expirationDateKind
+            )
+        )
+    } else {
+        return "$expirationDateKind: $expirationDateValue"
     }
 }
 

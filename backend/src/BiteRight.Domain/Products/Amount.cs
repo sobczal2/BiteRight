@@ -37,7 +37,7 @@ public class Amount : Entity<AmountId>
         UnitId = unitId;
     }
 
-    public double CurrentValue { get; }
+    public double CurrentValue { get; private set; }
     public double MaxValue { get; }
     public UnitId UnitId { get; private set; }
 
@@ -80,5 +80,16 @@ public class Amount : Entity<AmountId>
     public double GetPercentage()
     {
         return CurrentValue / MaxValue * 100;
+    }
+
+    public void ChangeCurrent(
+        double amount
+    )
+    {
+        if (amount < 0) throw new AmountCurrentValueLessThanZeroException();
+
+        if (amount > MaxValue) throw new AmountCurrentValueGreaterThanMaxValueException();
+
+        CurrentValue = amount;
     }
 }

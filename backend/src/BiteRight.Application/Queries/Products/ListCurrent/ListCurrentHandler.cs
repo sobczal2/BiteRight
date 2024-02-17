@@ -63,6 +63,7 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
             .ThenBy(product => product.Id);
 
         var products = await baseQuery
+            .Include(product => product.Amount)
             .Select(product => SimpleProductDto.FromDomain(product))
             .ToListAsync(cancellationToken);
 
