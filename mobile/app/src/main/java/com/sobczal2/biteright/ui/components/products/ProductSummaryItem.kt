@@ -45,7 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sobczal2.biteright.R
-import com.sobczal2.biteright.ui.components.common.categories.CategoryImage
+import com.sobczal2.biteright.ui.components.categories.CategoryImage
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.humanizePeriod

@@ -1,4 +1,4 @@
-package com.sobczal2.biteright.ui.components.common.amounts
+package com.sobczal2.biteright.ui.components.amounts
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState

@@ -24,8 +24,8 @@ import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.state.CreateProductScreenState
 import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
 import com.sobczal2.biteright.ui.components.common.ScreenLoader
-import com.sobczal2.biteright.ui.components.common.amounts.AmountFormField
-import com.sobczal2.biteright.ui.components.common.categories.CategoryFormField
+import com.sobczal2.biteright.ui.components.amounts.AmountFormField
+import com.sobczal2.biteright.ui.components.categories.CategoryFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.products.ExpirationDateFormField

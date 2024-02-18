@@ -1,4 +1,4 @@
-package com.sobczal2.biteright.ui.components.common.categories
+package com.sobczal2.biteright.ui.components.categories
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

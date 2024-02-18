@@ -1,4 +1,4 @@
-package com.sobczal2.biteright.ui.components.common.categories
+package com.sobczal2.biteright.ui.components.categories
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState

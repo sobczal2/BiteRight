@@ -1,4 +1,4 @@
-package com.sobczal2.biteright.ui.components.common.categories
+package com.sobczal2.biteright.ui.components.categories
 
 import androidx.compose.runtime.Composable
 import com.sobczal2.biteright.dto.categories.CategoryDto

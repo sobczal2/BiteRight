@@ -1,8 +1,8 @@
 package com.sobczal2.biteright.state
 
-import com.sobczal2.biteright.ui.components.common.amounts.AmountFormFieldState
+import com.sobczal2.biteright.ui.components.amounts.AmountFormFieldState
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
-import com.sobczal2.biteright.ui.components.common.categories.CategoryFormFieldState
+import com.sobczal2.biteright.ui.components.categories.CategoryFormFieldState
 import com.sobczal2.biteright.ui.components.products.ExpirationDateFormFieldState
 import com.sobczal2.biteright.ui.components.products.PriceFormFieldState
 

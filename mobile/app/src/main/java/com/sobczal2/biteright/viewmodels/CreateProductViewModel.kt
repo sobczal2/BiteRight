@@ -11,7 +11,7 @@ import com.sobczal2.biteright.repositories.abstractions.CurrencyRepository
 import com.sobczal2.biteright.repositories.abstractions.ProductRepository
 import com.sobczal2.biteright.repositories.abstractions.UnitRepository
 import com.sobczal2.biteright.state.CreateProductScreenState
-import com.sobczal2.biteright.ui.components.common.amounts.FormAmountWithUnit
+import com.sobczal2.biteright.ui.components.amounts.FormAmountWithUnit
 import com.sobczal2.biteright.ui.components.products.ExpirationDate
 import com.sobczal2.biteright.ui.components.products.FormPriceWithCurrency
 import dagger.hilt.android.lifecycle.HiltViewModel
