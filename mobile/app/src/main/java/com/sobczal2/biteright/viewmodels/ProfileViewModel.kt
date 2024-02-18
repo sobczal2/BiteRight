@@ -17,8 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val authManager: AuthManager,
-    private val userRepository: UserRepository
+    private val authManager: AuthManager, private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProfileScreenState())
@@ -29,10 +28,8 @@ class ProfileViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            events.collect { event ->
-                handleEvent(event)
-            }
-            fetchUserData()
+            launch { events.collect { event -> handleEvent(event) } }
+            launch { fetchUserData() }
         }
     }
 
@@ -51,10 +48,8 @@ class ProfileViewModel @Inject constructor(
     private suspend fun fetchUserData() {
         _state.update { it.copy(globalLoading = true) }
         val meResponse = userRepository.me()
-        meResponse.fold(
-            { response -> _state.update { it.copy(user = response.user) } },
-            { error -> _state.update { it.copy(globalError = error.message) } }
-        )
+        meResponse.fold({ response -> _state.update { it.copy(user = response.user) } },
+            { error -> _state.update { it.copy(globalError = error.message) } })
         _state.update { it.copy(globalLoading = false) }
     }
 

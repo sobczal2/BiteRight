@@ -4,9 +4,11 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,10 +27,10 @@ import com.sobczal2.biteright.ui.components.common.BiteRightLogo
 import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
 import com.sobczal2.biteright.ui.components.common.ErrorBox
 import com.sobczal2.biteright.ui.components.common.ScreenLoader
-import com.sobczal2.biteright.ui.components.common.forms.FormFieldEvents
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
+import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.viewmodels.StartViewModel
 
 
@@ -60,12 +62,12 @@ fun StartScreenContent(
     sendEvent: (StartScreenEvent) -> Unit = {},
     handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
+    Scaffold { paddingValues ->
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(MaterialTheme.dimension.xxl),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceAround
         ) {
@@ -75,16 +77,13 @@ fun StartScreenContent(
             )
             TextFormField(
                 state = state.usernameFieldState,
-                onEvent = { event ->
-                    when (event) {
-                        is FormFieldEvents.OnValueChange<String> -> {
-                            sendEvent(StartScreenEvent.OnUsernameChange(event.value))
-                        }
-                    }
+                onChange = {
+                    sendEvent(StartScreenEvent.OnUsernameChange(it))
                 },
                 options = TextFormFieldOptions(
                     label = { Text(text = stringResource(id = R.string.username)) },
-                )
+                ),
+                modifier = Modifier.fillMaxWidth()
             )
             ButtonWithLoader(
                 onClick = {

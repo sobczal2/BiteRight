@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -59,76 +57,55 @@ fun ProfileScreenContent(
         currentTab = HomeLayoutTab.PROFILE,
         handleNavigationEvent = handleNavigationEvent,
     ) { paddingValues ->
-        Surface(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues = paddingValues)
+                .padding(paddingValues)
+                .padding(MaterialTheme.dimension.xxl),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(MaterialTheme.dimension.lg),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
-            ) {
+            Text(
+                text = stringResource(id = R.string.profile),
+                style = MaterialTheme.typography.displayMedium
+            )
+            TextField(value = state.user?.username ?: "", onValueChange = { }, label = {
+                Text(stringResource(id = R.string.username))
+            }, modifier = Modifier.fillMaxWidth(), enabled = false
+            )
+            TextField(value = state.user?.email ?: "", onValueChange = { }, label = {
                 Text(
-                    text = stringResource(id = R.string.profile),
-                    style = MaterialTheme.typography.displayMedium
+                    stringResource(id = R.string.email)
                 )
-                TextField(
-                    value = state.user?.username ?: "",
-                    onValueChange = { },
-                    label = {
-                        Text(stringResource(id = R.string.username))
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = false
-                )
-                TextField(
-                    value = state.user?.email ?: "",
-                    onValueChange = { },
-                    label = {
-                        Text(
-                            stringResource(id = R.string.email)
-                        )
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = false
+            }, modifier = Modifier.fillMaxWidth(), enabled = false
 
-                )
-                TextField(
-                    value = state.user?.profile?.currencyId.toString(),
-                    onValueChange = { },
-                    label = {
-                        Text(
-                            stringResource(id = R.string.currency)
-                        )
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = false
-                )
-                TextField(
-                    value = state.user?.profile?.timeZoneId ?: "",
-                    onValueChange = { },
-                    label = {
-                        Text(
-                            stringResource(id = R.string.time_zone)
-                        )
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = false
-                )
+            )
+            TextField(value = state.user?.profile?.currencyId.toString(),
+                onValueChange = { },
+                label = {
+                    Text(
+                        stringResource(id = R.string.currency)
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = false
+            )
+            TextField(value = state.user?.profile?.timeZoneId ?: "", onValueChange = { }, label = {
                 Text(
-                    text = "${stringResource(id = R.string.joined_at)}: ${
-                        state.user?.joinedAt?.format(
-                            DateTimeFormatter.ISO_DATE
-                        )
-                    }", style = MaterialTheme.typography.bodyLarge
+                    stringResource(id = R.string.time_zone)
                 )
-                Button(onClick = {
-                    sendEvent(ProfileScreenEvent.OnLogoutClick)
-                }) {
-                    Text(stringResource(id = R.string.logout))
-                }
+            }, modifier = Modifier.fillMaxWidth(), enabled = false
+            )
+            Text(
+                text = "${stringResource(id = R.string.joined_at)}: ${
+                    state.user?.joinedAt?.format(
+                        DateTimeFormatter.ISO_DATE
+                    )
+                }", style = MaterialTheme.typography.bodyLarge
+            )
+            Button(onClick = {
+                sendEvent(ProfileScreenEvent.OnLogoutClick)
+            }) {
+                Text(stringResource(id = R.string.logout))
             }
         }
     }

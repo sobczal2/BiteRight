@@ -12,7 +12,3 @@ interface FormFieldState<T> {
     val value: T
     val error: String?
 }
-
-sealed class FormFieldEvents<T> {
-    data class OnValueChange<T>(val value: T) : FormFieldEvents<T>()
-}

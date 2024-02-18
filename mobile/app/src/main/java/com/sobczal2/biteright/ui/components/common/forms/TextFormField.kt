@@ -1,20 +1,25 @@
 package com.sobczal2.biteright.ui.components.common.forms
 
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.dp
 
 data class TextFormFieldState(
     override val value: String = "",
     override val error: String? = null
 ) : FormFieldState<String>
-
-typealias TextFormFieldEvents = FormFieldEvents<String>
 
 data class TextFormFieldOptions(
     val label: @Composable (() -> Unit)? = null,
@@ -25,19 +30,23 @@ data class TextFormFieldOptions(
     val shape: Shape? = null,
     val leadingIcon: @Composable (() -> Unit)? = null,
     val trailingIcon: @Composable (() -> Unit)? = null,
+    val enabled: Boolean = true,
+    val readOnly: Boolean = false,
+    val colors: TextFieldColors? = null,
+    val interactionSource: MutableInteractionSource? = null,
 )
 
 @Composable
 fun TextFormField(
     state: TextFormFieldState,
-    onEvent: (TextFormFieldEvents) -> Unit,
+    onChange: (String) -> Unit,
     options: TextFormFieldOptions,
     modifier: Modifier = Modifier,
 ) {
     TextField(
         value = state.value,
         onValueChange = {
-            onEvent(FormFieldEvents.OnValueChange(it))
+            onChange(it)
         },
         isError = state.error != null,
         supportingText = if (state.error != null) {
@@ -57,8 +66,15 @@ fun TextFormField(
         minLines = options.minLines,
         maxLines = options.maxLines,
         keyboardOptions = options.keyboardOptions,
-        shape = options.shape ?: MaterialTheme.shapes.small,
+        shape = options.shape ?: MaterialTheme.shapes.small.copy(
+            bottomStart = CornerSize(0.dp),
+            bottomEnd = CornerSize(0.dp),
+        ),
         leadingIcon = options.leadingIcon,
         trailingIcon = options.trailingIcon,
+        enabled = options.enabled,
+        readOnly = options.readOnly,
+        colors = options.colors ?: TextFieldDefaults.colors(),
+        interactionSource = options.interactionSource ?: remember { MutableInteractionSource() }
     )
 }

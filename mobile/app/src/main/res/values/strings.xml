@@ -38,4 +38,5 @@
     <string name="infinite">Infinite</string>
     <string name="best_before">Best before</string>
     <string name="use_by">Use by</string>
+    <string name="none">None</string>
 </resources>

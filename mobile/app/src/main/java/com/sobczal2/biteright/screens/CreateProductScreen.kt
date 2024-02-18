@@ -7,11 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,12 +20,11 @@ import com.sobczal2.biteright.R
 import com.sobczal2.biteright.events.CreateProductScreenEvent
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.state.CreateProductScreenState
+import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
 import com.sobczal2.biteright.ui.components.common.ScreenLoader
-import com.sobczal2.biteright.ui.components.common.forms.FormFieldEvents.OnValueChange
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.products.PriceFormField
-import com.sobczal2.biteright.ui.components.products.PriceFormFieldOptions
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.viewmodels.CreateProductViewModel
@@ -51,23 +51,21 @@ fun CreateProductScreenContent(
     sendEvent: (CreateProductScreenEvent) -> Unit = {},
     handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
-    Surface(
-        modifier = Modifier
-            .fillMaxSize(),
-    ) {
+    val focusManager = LocalFocusManager.current
+
+    Scaffold { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(MaterialTheme.dimension.xl),
+                .padding(paddingValues)
+                .padding(MaterialTheme.dimension.xxl),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
         ) {
             TextFormField(
                 modifier = Modifier.fillMaxWidth(),
                 state = state.nameFieldState,
-                onEvent = { event ->
-                    when (event) {
-                        is OnValueChange -> sendEvent(CreateProductScreenEvent.OnNameChange(event.value))
-                    }
+                onChange = {
+                    sendEvent(CreateProductScreenEvent.OnNameChange(it))
                 },
                 options = TextFormFieldOptions(
                     label = { Text(text = stringResource(id = R.string.name)) },
@@ -76,14 +74,8 @@ fun CreateProductScreenContent(
             TextFormField(
                 modifier = Modifier.fillMaxWidth(),
                 state = state.descriptionFieldState,
-                onEvent = { event ->
-                    when (event) {
-                        is OnValueChange -> sendEvent(
-                            CreateProductScreenEvent.OnDescriptionChange(
-                                event.value
-                            )
-                        )
-                    }
+                onChange = {
+                    sendEvent(CreateProductScreenEvent.OnDescriptionChange(it))
                 },
                 options = TextFormFieldOptions(
                     label = { Text(text = stringResource(id = R.string.description)) },
@@ -95,11 +87,20 @@ fun CreateProductScreenContent(
             PriceFormField(
                 modifier = Modifier.fillMaxWidth(),
                 state = state.priceFieldState,
-                onEvent ={},
-                options = PriceFormFieldOptions(
-                    label = { Text(text = stringResource(id = R.string.price)) },
-                ),
+                onChange = {
+                    sendEvent(CreateProductScreenEvent.OnPriceChange(it))
+                },
             )
+
+            ButtonWithLoader(
+                onClick = {
+                    focusManager.clearFocus()
+                    sendEvent(CreateProductScreenEvent.OnSubmitClick)
+                },
+                loading = state.formSubmitting
+            ) {
+                Text(text = stringResource(id = R.string.create_product))
+            }
         }
     }
 }

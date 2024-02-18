@@ -121,6 +121,9 @@ dependencies {
 
     // icons
     implementation("androidx.compose.material:material-icons-extended:1.6.1")
+
+    // constraint layout
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 }
 
 kapt {

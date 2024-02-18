@@ -1,10 +1,14 @@
 package com.sobczal2.biteright.ui.components.products
 
 import android.content.res.Configuration
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -14,22 +18,23 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.currencies.CurrencyDto
-import com.sobczal2.biteright.ui.components.common.forms.FormFieldEvents
-import com.sobczal2.biteright.ui.components.common.forms.FormFieldState
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
@@ -37,26 +42,22 @@ import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import java.util.UUID
 
 data class PriceWithCurrency(
-    val price: Double, val currency: CurrencyDto
+    val price: Double?, val currency: CurrencyDto?
 )
 
 data class PriceFormFieldState(
-    override val value: PriceWithCurrency? = null,
-    override val error: String? = null,
+    var value: PriceWithCurrency = PriceWithCurrency(
+        price = null, currency = null
+    ),
+    val priceError: String? = null,
+    val currencyError: String? = null,
     val availableCurrencies: List<CurrencyDto>,
-) : FormFieldState<PriceWithCurrency?>
-
-typealias PriceFormFieldEvents = FormFieldEvents<PriceWithCurrency>
-
-data class PriceFormFieldOptions(
-    val label: @Composable (() -> Unit)? = null,
 )
 
 @Composable
 fun PriceFormField(
     state: PriceFormFieldState,
-    onEvent: (PriceFormFieldEvents) -> Unit,
-    options: PriceFormFieldOptions,
+    onChange: (PriceWithCurrency) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -68,44 +69,108 @@ fun PriceFormField(
         )
     }
 
+    val currencyTextFieldState by remember {
+        mutableStateOf(
+            TextFormFieldState(
+                value = ""
+            )
+        )
+    }
+
+    var selectedCurrency by remember {
+        mutableStateOf<CurrencyDto?>(null)
+    }
+
+    val moneyTypingRegex = Regex("""^\d+(\.\d{0,2})?$""")
+
+    LaunchedEffect(keys = arrayOf(priceTextFieldState, selectedCurrency)) {
+        onChange(
+            PriceWithCurrency(
+                price = priceTextFieldState.value.toDoubleOrNull(),
+                currency = selectedCurrency
+            )
+        )
+    }
+
     Row(
         modifier = modifier
     ) {
         TextFormField(
-            state = priceTextFieldState, onEvent = { event ->
-                when (event) {
-                    is FormFieldEvents.OnValueChange -> {
-                        priceTextFieldState = priceTextFieldState.copy(
-                            value = event.value
-                        )
-                    }
+            state = priceTextFieldState.copy(
+                error = state.priceError
+            ),
+            onChange = {
+                if (it.isEmpty() || moneyTypingRegex.matches(it)) {
+                    priceTextFieldState = priceTextFieldState.copy(
+                        value = it
+                    )
                 }
             },
             options = TextFormFieldOptions(
-                label = options.label, shape = MaterialTheme.shapes.extraSmall.copy(
+                label = { Text(text = stringResource(id = R.string.price)) },
+                shape = MaterialTheme.shapes.extraSmall.copy(
                     topEnd = CornerSize(0.dp),
                     bottomEnd = CornerSize(0.dp),
                     bottomStart = CornerSize(0.dp)
                 ),
                 trailingIcon = {
-                    Text(text = state.value?.currency?.symbol ?: "")
-                }
+                    Text(text = selectedCurrency?.symbol ?: "")
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Number
+                ),
             ),
-            modifier = Modifier.weight(0.6f)
+            modifier = Modifier
+                .weight(0.5f)
+                .onFocusChanged {
+                    if (!it.isFocused) {
+                        priceTextFieldState =
+                            when (val price = priceTextFieldState.value.toDoubleOrNull()) {
+                                null -> {
+                                    priceTextFieldState.copy(
+                                        value = "",
+                                    )
+                                }
+
+                                else -> {
+                                    priceTextFieldState.copy(
+                                        value = String.format("%.2f", price)
+                                    )
+                                }
+
+                            }
+                    }
+                }
         )
         Column(
             modifier = Modifier
-                .weight(0.4f)
+                .weight(0.5f)
         ) {
             DropdownMenu(
-                expanded = true,
+                expanded = expanded,
                 onDismissRequest = {
                     expanded = false
                 },
             ) {
+                DropdownMenuItem(
+                    leadingIcon = if (selectedCurrency == null) {
+                        {
+                            Icon(Icons.Default.Done, contentDescription = null)
+                        }
+                    } else {
+                        null
+                    },
+                    text = {
+                        Text(text = stringResource(id = R.string.none))
+                    },
+                    onClick = {
+                        selectedCurrency = null
+                        expanded = false
+                    },
+                )
                 state.availableCurrencies.forEach { currency ->
                     DropdownMenuItem(
-                        leadingIcon = if (currency == state.value?.currency) {
+                        leadingIcon = if (currency == selectedCurrency) {
                             {
                                 Icon(Icons.Default.Done, contentDescription = null)
                             }
@@ -113,44 +178,55 @@ fun PriceFormField(
                             null
                         },
                         text = {
-                            Text(
-                                text = "Test",
-                                color = Color.Red,
-                            )
+                            Text(text = currency.code)
                         },
-                        onClick = {},
+                        onClick = {
+                            expanded = false
+                            selectedCurrency = currency
+                        },
                     )
                 }
             }
-            TextField(
-                value = state.value?.currency?.code ?: stringResource(id = R.string.currency),
-                onValueChange = {},
-                shape = MaterialTheme.shapes.extraSmall.copy(
-                    topStart = CornerSize(0.dp),
-                    bottomStart = CornerSize(0.dp),
-                    bottomEnd = CornerSize(0.dp)
+            val interactionSource = remember { MutableInteractionSource() }
+            val isPressed: Boolean by interactionSource.collectIsPressedAsState()
+
+            LaunchedEffect(isPressed) {
+                if (isPressed) {
+                    expanded = true
+                }
+            }
+
+            TextFormField(
+                state = currencyTextFieldState.copy(
+                    value = selectedCurrency?.code ?: stringResource(id = R.string.none),
+                    error = state.currencyError
                 ),
-                trailingIcon = {
-                    Icon(
-                        imageVector = if (expanded) {
-                            Icons.Default.KeyboardArrowUp
-                        } else {
-                            Icons.Default.KeyboardArrowDown
-                        },
-                        contentDescription = null
-                    )
-                },
-                enabled = false,
-                modifier = Modifier
-                    .clickable {
-                        expanded = true
+                onChange = {},
+                options = TextFormFieldOptions(
+                    shape = MaterialTheme.shapes.extraSmall.copy(
+                        topStart = CornerSize(0.dp),
+                        bottomStart = CornerSize(0.dp),
+                        bottomEnd = CornerSize(0.dp)
+                    ),
+                    trailingIcon = {
+                        Icon(
+                            imageVector = if (expanded) {
+                                Icons.Default.KeyboardArrowUp
+                            } else {
+                                Icons.Default.KeyboardArrowDown
+                            },
+                            contentDescription = null
+                        )
                     },
-                colors = TextFieldDefaults.colors()
-                    .copy(
-                        disabledTextColor = MaterialTheme.colorScheme.onSurface,
-                        disabledTrailingIconColor = MaterialTheme.colorScheme.onSurface,
-                        disabledIndicatorColor = MaterialTheme.colorScheme.onSurface
-                    )
+                    readOnly = true,
+                    interactionSource = interactionSource,
+                    colors = TextFieldDefaults.colors()
+                        .copy(
+                            errorTextColor = MaterialTheme.colorScheme.error
+                        ),
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
             )
         }
     }
@@ -183,16 +259,13 @@ fun PriceFormFieldPreview() {
 
     BiteRightTheme {
         PriceFormField(
-
             state = PriceFormFieldState(
                 value = PriceWithCurrency(
                     price = 0.0, currency = currencies.first()
                 ),
-                error = null,
                 availableCurrencies = currencies
             ),
-            onEvent = {},
-            options = PriceFormFieldOptions(label = { Text(text = "Price") })
+            onChange = {},
         )
     }
 }
