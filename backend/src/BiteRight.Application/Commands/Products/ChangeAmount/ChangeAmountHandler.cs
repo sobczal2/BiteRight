@@ -67,7 +67,7 @@ public class ChangeAmountHandler : CommandHandlerBase<ChangeAmountRequest>
     {
         return exception switch
         {
-            AmountCurrentValueLessThanZeroException => ValidationException(
+            AmountCurrentValueInvalidValueException => ValidationException(
                 nameof(CreateRequest.MaximumAmountValue),
                 _productsLocalizer[nameof(Resources.Resources.Products.Products.amount_current_value_less_than_zero)]
             ),

@@ -13,4 +13,17 @@ using BiteRight.Domain.Common.Exceptions;
 
 namespace BiteRight.Domain.Products.Exceptions;
 
-public class AmountMaxValueLessThanZeroException : BusinessRuleDomainException;
+public class AmountMaxValueInvalidValueException : BusinessRuleDomainException
+{
+    public AmountMaxValueInvalidValueException(
+        double minValue,
+        double maxValue
+    )
+    {
+        MinValue = minValue;
+        MaxValue = maxValue;
+    }
+
+    public double MinValue { get; }
+    public double MaxValue { get; }
+}

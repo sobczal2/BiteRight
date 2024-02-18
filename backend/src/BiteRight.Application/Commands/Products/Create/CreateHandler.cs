@@ -84,6 +84,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
         {
             var currency = await _currencyRepository.FindById(request.CurrencyId, cancellationToken)
                            ?? throw ValidationException(
+                               nameof(CreateRequest.CurrencyId),
                                _currenciesLocalizer[
                                    nameof(Currencies.currency_not_found)]);
             price = Price.Create(request.Price.Value, currency);
@@ -183,13 +184,22 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                 nameof(CreateRequest.ExpirationDateKind),
                 _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_infinite)]
             ),
-            AmountCurrentValueLessThanZeroException => ValidationException(
+            AmountCurrentValueInvalidValueException e => ValidationException(
                 nameof(CreateRequest.MaximumAmountValue),
-                _productsLocalizer[nameof(Resources.Resources.Products.Products.amount_current_value_less_than_zero)]
+                string.Format(
+                    _productsLocalizer
+                        [nameof(Resources.Resources.Products.Products.amount_current_value_invalid_value)],
+                    e.MinValue,
+                    e.MaxValue
+                )
             ),
-            AmountMaxValueLessThanZeroException => ValidationException(
+            AmountMaxValueInvalidValueException e => ValidationException(
                 nameof(CreateRequest.MaximumAmountValue),
-                _productsLocalizer[nameof(Resources.Resources.Products.Products.amount_max_value_less_than_zero)]
+                string.Format(
+                    _productsLocalizer[nameof(Resources.Resources.Products.Products.amount_max_value_invalid_value)],
+                    e.MinValue,
+                    e.MaxValue
+                )
             ),
             AmountCurrentValueGreaterThanMaxValueException => ValidationException(
                 nameof(CreateRequest.MaximumAmountValue),

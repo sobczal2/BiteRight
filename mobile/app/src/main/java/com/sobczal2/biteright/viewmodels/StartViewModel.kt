@@ -2,7 +2,6 @@ package com.sobczal2.biteright.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sobczal2.biteright.AuthManager
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.data.api.requests.users.OnboardRequest
 import com.sobczal2.biteright.events.StartScreenEvent
@@ -12,7 +11,6 @@ import com.sobczal2.biteright.state.StartScreenState
 import com.sobczal2.biteright.util.StringProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -57,35 +55,31 @@ class StartViewModel @Inject constructor(
         _state.update {
             it.copy(
                 usernameFieldState = it.usernameFieldState.copy(
-                    value = username
+                    value = username,
+                    error = null,
                 )
             )
         }
-
-        clearErrors()
     }
 
-    private fun clearErrors() {
-        _state.update {
-            it.copy(
-                usernameFieldState = it.usernameFieldState.copy(
-                    error = null
-                ),
-                globalError = null
-            )
-        }
-    }
+    private fun validate(): Boolean {
+        var isValid = true
 
-    private fun validate() {
-        if (_state.value.usernameFieldState.value.length !in 3..30) {
+        val usernameMinLength = 3
+        val usernameMaxLength = 64
+        if (_state.value.usernameFieldState.value.length !in usernameMinLength..usernameMaxLength) {
             _state.update {
                 it.copy(
                     usernameFieldState = it.usernameFieldState.copy(
-                        error = stringProvider.getString(R.string.username_length_error)
+                        error = stringProvider.getString(
+                            R.string.username_length_error,
+                            usernameMinLength,
+                            usernameMaxLength
+                        )
                     )
                 )
             }
-            return
+            isValid = false
         }
         if (!Regex("^[\\p{L}\\p{Nd}-_]*\$").matches(_state.value.usernameFieldState.value)) {
             _state.update {
@@ -95,8 +89,10 @@ class StartViewModel @Inject constructor(
                     )
                 )
             }
-            return
+            isValid = false
         }
+
+        return isValid
     }
 
     private fun onNextClick(onSuccess: () -> Unit) {

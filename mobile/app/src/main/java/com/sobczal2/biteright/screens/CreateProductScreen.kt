@@ -22,10 +22,10 @@ import com.sobczal2.biteright.R
 import com.sobczal2.biteright.events.CreateProductScreenEvent
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.state.CreateProductScreenState
-import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
-import com.sobczal2.biteright.ui.components.common.ScreenLoader
 import com.sobczal2.biteright.ui.components.amounts.AmountFormField
 import com.sobczal2.biteright.ui.components.categories.CategoryFormField
+import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
+import com.sobczal2.biteright.ui.components.common.ScreenLoader
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.products.ExpirationDateFormField
@@ -67,6 +67,10 @@ fun CreateProductScreenContent(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md),
         ) {
+            Text(
+                text = stringResource(id = R.string.create_product),
+                style = MaterialTheme.typography.displayMedium
+            )
             TextFormField(
                 modifier = Modifier.fillMaxWidth(),
                 state = state.nameFieldState,

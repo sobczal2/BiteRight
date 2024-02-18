@@ -17,6 +17,8 @@ namespace BiteRight.Domain.Products;
 
 public class Amount : Entity<AmountId>
 {
+    private const double MinValidValue = 0;
+    private const double MaxValidValue = 1e6;
     // EF Core
     private Amount()
     {
@@ -65,9 +67,11 @@ public class Amount : Entity<AmountId>
         double maxValue
     )
     {
-        if (currentValue < 0) throw new AmountCurrentValueLessThanZeroException();
+        if (currentValue is < MinValidValue or > MaxValidValue)
+            throw new AmountCurrentValueInvalidValueException(MinValidValue, MaxValidValue);
 
-        if (maxValue < 0) throw new AmountMaxValueLessThanZeroException();
+        if (maxValue is < MinValidValue or > MaxValidValue)
+            throw new AmountMaxValueInvalidValueException(MinValidValue, MaxValidValue);
 
         if (currentValue > maxValue) throw new AmountCurrentValueGreaterThanMaxValueException();
     }
@@ -86,7 +90,8 @@ public class Amount : Entity<AmountId>
         double amount
     )
     {
-        if (amount < 0) throw new AmountCurrentValueLessThanZeroException();
+        if (amount is < MinValidValue or > MaxValidValue)
+            throw new AmountCurrentValueInvalidValueException(MinValidValue, MaxValidValue);
 
         if (amount > MaxValue) throw new AmountCurrentValueGreaterThanMaxValueException();
 

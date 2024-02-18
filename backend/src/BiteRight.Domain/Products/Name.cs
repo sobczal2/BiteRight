@@ -19,8 +19,8 @@ namespace BiteRight.Domain.Products;
 
 public class Name : ValueObject
 {
-    private const int MinLength = 3;
-    private const int MaxLength = 64;
+    private const int MinValidLength = 3;
+    private const int MaxValidLength = 64;
 
     private static readonly Regex ValidCharacters = CommonRegexes.AlphanumericWithSpacesAndSpecialCharacters;
 
@@ -60,7 +60,7 @@ public class Name : ValueObject
     {
         if (string.IsNullOrWhiteSpace(value)) throw new NameEmptyException();
 
-        if (value.Length is < MinLength or > MaxLength) throw new NameInvalidLengthException(MinLength, MaxLength);
+        if (value.Length is < MinValidLength or > MaxValidLength) throw new NameInvalidLengthException(MinValidLength, MaxValidLength);
 
         if (!ValidCharacters.IsMatch(value)) throw new NameInvalidCharactersException(ValidCharacters.ToString());
     }
