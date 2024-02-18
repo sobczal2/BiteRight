@@ -27,12 +27,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.compose.ui.unit.toSize
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.currencies.CurrencyDto
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
@@ -47,7 +49,8 @@ data class PriceWithCurrency(
 
 data class PriceFormFieldState(
     var value: PriceWithCurrency = PriceWithCurrency(
-        price = null, currency = null
+        price = null,
+        currency = null
     ),
     val priceError: String? = null,
     val currencyError: String? = null,
@@ -60,7 +63,7 @@ fun PriceFormField(
     onChange: (PriceWithCurrency) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var dropDownExpanded by remember { mutableStateOf(false) }
     var priceTextFieldState by remember {
         mutableStateOf(
             TextFormFieldState(
@@ -69,7 +72,7 @@ fun PriceFormField(
         )
     }
 
-    val currencyTextFieldState by remember {
+    val dropDownTextFieldState by remember {
         mutableStateOf(
             TextFormFieldState(
                 value = ""
@@ -82,6 +85,21 @@ fun PriceFormField(
     }
 
     val moneyTypingRegex = Regex("""^\d+(\.\d{0,2})?$""")
+
+    var priceFieldFocused by remember { mutableStateOf(false) }
+
+    LaunchedEffect(state.value) {
+        selectedCurrency = state.value.currency
+        if (!priceFieldFocused) {
+            priceTextFieldState = priceTextFieldState.copy(
+                value = if (state.value.price != null) {
+                    String.format("%.2f", state.value.price)
+                } else {
+                    ""
+                }
+            )
+        }
+    }
 
     LaunchedEffect(keys = arrayOf(priceTextFieldState, selectedCurrency)) {
         onChange(
@@ -114,7 +132,7 @@ fun PriceFormField(
                     bottomStart = CornerSize(0.dp)
                 ),
                 trailingIcon = {
-                    Text(text = selectedCurrency?.symbol ?: "")
+                    Text(text = state.value.currency?.symbol ?: "")
                 },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Number
@@ -123,6 +141,7 @@ fun PriceFormField(
             modifier = Modifier
                 .weight(0.5f)
                 .onFocusChanged {
+                    priceFieldFocused = it.isFocused
                     if (!it.isFocused) {
                         priceTextFieldState =
                             when (val price = priceTextFieldState.value.toDoubleOrNull()) {
@@ -146,59 +165,19 @@ fun PriceFormField(
             modifier = Modifier
                 .weight(0.5f)
         ) {
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = {
-                    expanded = false
-                },
-            ) {
-                DropdownMenuItem(
-                    leadingIcon = if (selectedCurrency == null) {
-                        {
-                            Icon(Icons.Default.Done, contentDescription = null)
-                        }
-                    } else {
-                        null
-                    },
-                    text = {
-                        Text(text = stringResource(id = R.string.none))
-                    },
-                    onClick = {
-                        selectedCurrency = null
-                        expanded = false
-                    },
-                )
-                state.availableCurrencies.forEach { currency ->
-                    DropdownMenuItem(
-                        leadingIcon = if (currency == selectedCurrency) {
-                            {
-                                Icon(Icons.Default.Done, contentDescription = null)
-                            }
-                        } else {
-                            null
-                        },
-                        text = {
-                            Text(text = currency.code)
-                        },
-                        onClick = {
-                            expanded = false
-                            selectedCurrency = currency
-                        },
-                    )
-                }
-            }
+            var textFieldSize by remember { mutableStateOf(Size.Zero) }
             val interactionSource = remember { MutableInteractionSource() }
             val isPressed: Boolean by interactionSource.collectIsPressedAsState()
 
             LaunchedEffect(isPressed) {
                 if (isPressed) {
-                    expanded = true
+                    dropDownExpanded = true
                 }
             }
 
             TextFormField(
-                state = currencyTextFieldState.copy(
-                    value = selectedCurrency?.code ?: stringResource(id = R.string.none),
+                state = dropDownTextFieldState.copy(
+                    value = state.value.currency?.code ?: stringResource(id = R.string.none),
                     error = state.currencyError
                 ),
                 onChange = {},
@@ -210,7 +189,7 @@ fun PriceFormField(
                     ),
                     trailingIcon = {
                         Icon(
-                            imageVector = if (expanded) {
+                            imageVector = if (dropDownExpanded) {
                                 Icons.Default.KeyboardArrowUp
                             } else {
                                 Icons.Default.KeyboardArrowDown
@@ -227,7 +206,62 @@ fun PriceFormField(
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .onGloballyPositioned {
+                        textFieldSize = it.size.toSize()
+                    }
             )
+
+            DropdownMenu(
+                expanded = dropDownExpanded,
+                onDismissRequest = {
+                    dropDownExpanded = false
+                },
+                modifier = Modifier
+                    .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+            ) {
+                DropdownMenuItem(
+                    leadingIcon = if (state.value.currency == null) {
+                        {
+                            Icon(Icons.Default.Done, contentDescription = null)
+                        }
+                    } else {
+                        null
+                    },
+                    text = {
+                        Text(text = stringResource(id = R.string.none))
+                    },
+                    onClick = {
+                        onChange(
+                            state.value.copy(
+                                currency = null
+                            )
+                        )
+                        dropDownExpanded = false
+                    },
+                )
+                state.availableCurrencies.forEach { currency ->
+                    DropdownMenuItem(
+                        leadingIcon = if (currency == state.value.currency) {
+                            {
+                                Icon(Icons.Default.Done, contentDescription = null)
+                            }
+                        } else {
+                            null
+                        },
+                        text = {
+                            Text(text = currency.code)
+                        },
+                        onClick = {
+                            dropDownExpanded = false
+                            onChange(
+                                state.value.copy(
+                                    currency = currency
+                                )
+                            )
+                        },
+                    )
+                }
+            }
         }
     }
 }
@@ -261,7 +295,8 @@ fun PriceFormFieldPreview() {
         PriceFormField(
             state = PriceFormFieldState(
                 value = PriceWithCurrency(
-                    price = 0.0, currency = currencies.first()
+                    price = 20.0,
+                    currency = currencies.first()
                 ),
                 availableCurrencies = currencies
             ),

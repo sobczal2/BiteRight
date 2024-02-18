@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.sobczal2.biteright.events.CreateProductScreenEvent
 import com.sobczal2.biteright.repositories.abstractions.CurrencyRepository
 import com.sobczal2.biteright.state.CreateProductScreenState
+import com.sobczal2.biteright.ui.components.products.ExpirationDate
 import com.sobczal2.biteright.ui.components.products.PriceWithCurrency
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -59,6 +60,20 @@ class CreateProductViewModel @Inject constructor(
             is CreateProductScreenEvent.OnPriceChange -> {
                 onPriceChange(event.value)
             }
+
+            is CreateProductScreenEvent.OnExpirationDateChange -> {
+                onExpirationDateChange(event.value)
+            }
+        }
+    }
+
+    private fun onExpirationDateChange(value: ExpirationDate) {
+        _state.update {
+            it.copy(
+                expirationDateFieldState = it.expirationDateFieldState.copy(
+                    value = value
+                )
+            )
         }
     }
 

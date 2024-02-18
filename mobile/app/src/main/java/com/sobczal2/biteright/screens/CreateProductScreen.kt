@@ -24,6 +24,7 @@ import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
 import com.sobczal2.biteright.ui.components.common.ScreenLoader
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
+import com.sobczal2.biteright.ui.components.products.ExpirationDateFormField
 import com.sobczal2.biteright.ui.components.products.PriceFormField
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
@@ -89,6 +90,13 @@ fun CreateProductScreenContent(
                 state = state.priceFieldState,
                 onChange = {
                     sendEvent(CreateProductScreenEvent.OnPriceChange(it))
+                },
+            )
+            ExpirationDateFormField(
+                modifier = Modifier.fillMaxWidth(),
+                state = state.expirationDateFieldState,
+                onChange = {
+                    sendEvent(CreateProductScreenEvent.OnExpirationDateChange(it))
                 },
             )
 
