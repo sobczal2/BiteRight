@@ -45,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.ui.components.common.categories.CategoryImage
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.humanizePeriod
@@ -129,7 +130,7 @@ fun ProductSummaryItem(
                     .fillMaxWidth()
             ) {
                 Row {
-                    ProductImage(
+                    CategoryImage(
                         imageUri = productSummaryItemState.categoryImageUri,
                         inPreview = inPreview
                     )
@@ -175,32 +176,6 @@ private fun getColorForAmountPercentage(amountPercentage: Double): Color {
         in 50.0..75.0 -> Color.Yellow
         in 75.0..100.0 -> Color.Green
         else -> Color.Black
-    }
-}
-
-@Composable
-fun ProductImage(imageUri: String?, inPreview: Boolean) {
-    if (inPreview) {
-        Box(modifier = Modifier.size(64.dp), contentAlignment = Alignment.Center) {
-            Icon(
-                Icons.Default.Image,
-                contentDescription = "Preview Image",
-                modifier = Modifier.size(50.dp)
-            )
-        }
-    } else {
-        Box(
-            modifier = Modifier
-                .size(64.dp)
-                .padding(MaterialTheme.dimension.sm)
-                .background(MaterialTheme.colorScheme.inverseSurface, CircleShape)
-        ) {
-            AsyncImage(
-                model = imageUri,
-                contentDescription = "Product Image",
-                modifier = Modifier.size(64.dp)
-            )
-        }
     }
 }
 

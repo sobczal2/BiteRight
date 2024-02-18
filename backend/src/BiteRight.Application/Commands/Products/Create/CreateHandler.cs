@@ -102,12 +102,14 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
 
         var category = await _categoryRepository.FindById(request.CategoryId, languageId, cancellationToken)
                        ?? throw ValidationException(
+                           nameof(CreateRequest.CategoryId),
                            _productsLocalizer[
                                nameof(Categories.category_not_found)]
                        );
 
         var amountUnit = await _unitRepository.FindById(request.AmountUnitId, languageId, cancellationToken)
                          ?? throw ValidationException(
+                             nameof(CreateRequest.AmountUnitId),
                              _unitsLocalizer[
                                  nameof(Units.unit_not_found)]
                          );

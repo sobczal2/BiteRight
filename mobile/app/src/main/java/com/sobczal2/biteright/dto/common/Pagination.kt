@@ -9,3 +9,8 @@ data class PaginatedList<T>(
     @SerializedName("totalPages") val totalPages: Int,
     @SerializedName("items") val items: List<T>,
 )
+
+data class PaginationParams(
+    @SerializedName("pageNumber") val pageNumber: Int,
+    @SerializedName("pageSize") val pageSize: Int,
+)

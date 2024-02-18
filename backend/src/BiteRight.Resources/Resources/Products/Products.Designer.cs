@@ -164,5 +164,11 @@ namespace BiteRight.Resources.Resources.Products {
                 return ResourceManager.GetString("product_not_disposed", resourceCulture);
             }
         }
+        
+        public static string amount_unit_id_empty {
+            get {
+                return ResourceManager.GetString("amount_unit_id_empty", resourceCulture);
+            }
+        }
     }
 }

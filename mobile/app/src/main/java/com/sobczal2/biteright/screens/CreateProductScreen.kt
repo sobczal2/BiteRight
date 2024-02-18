@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -22,6 +24,8 @@ import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.state.CreateProductScreenState
 import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
 import com.sobczal2.biteright.ui.components.common.ScreenLoader
+import com.sobczal2.biteright.ui.components.common.amounts.AmountFormField
+import com.sobczal2.biteright.ui.components.common.categories.CategoryFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.products.ExpirationDateFormField
@@ -59,8 +63,9 @@ fun CreateProductScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(MaterialTheme.dimension.xxl),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
+                .padding(MaterialTheme.dimension.xxl)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md),
         ) {
             TextFormField(
                 modifier = Modifier.fillMaxWidth(),
@@ -100,10 +105,30 @@ fun CreateProductScreenContent(
                 },
             )
 
+            CategoryFormField(
+                state = state.categoryFieldState,
+                onChange = {
+                    sendEvent(CreateProductScreenEvent.OnCategoryChange(it))
+                },
+            )
+
+            AmountFormField(
+                state = state.amountFormFieldState,
+                onChange = {
+                    sendEvent(CreateProductScreenEvent.OnAmountChange(it))
+                }
+            );
+
             ButtonWithLoader(
                 onClick = {
                     focusManager.clearFocus()
-                    sendEvent(CreateProductScreenEvent.OnSubmitClick)
+                    sendEvent(
+                        CreateProductScreenEvent.OnSubmitClick(
+                            onSuccess = {
+                                handleNavigationEvent(NavigationEvent.NavigateToCurrentProducts)
+                            }
+                        )
+                    )
                 },
                 loading = state.formSubmitting
             ) {

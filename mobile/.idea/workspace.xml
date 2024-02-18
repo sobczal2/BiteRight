@@ -17,15 +17,55 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="656647fa-75dd-4f3b-89da-2c91dd013bac" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/util/LocalDateExtensions.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/abstractions/UnitsApi.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/requests/categories/SearchRequest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/requests/products/CreateRequest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/requests/units/SearchRequest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/responses/products/CreateResponse.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/responses/units/SearchResponse.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/units/UnitDto.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/units/UnitSystemDto.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/abstractions/CategoryRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/abstractions/UnitRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/implementations/CategoryRepositoryImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/implementations/UnitRepositoryImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/amounts/AmountFormField.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/categories/CategoryFormField.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/categories/CategoryImage.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/categories/CategoryItem.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/util/PreviewUtils.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Create/CreateRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Commands/Products/Create/CreateRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Units/Search/SearchRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Units/Search/SearchRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Units/Search/SearchValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Units/Search/SearchValidator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Web/Controllers/UnitsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Web/Controllers/UnitsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/test/BiteRight.Web.Tests.Integration/Controllers/Products/CreateProductsTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/test/BiteRight.Web.Tests.Integration/Controllers/Products/CreateProductsTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/test/BiteRight.Web.Tests.Integration/Controllers/Products/DisposeProductsTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/test/BiteRight.Web.Tests.Integration/Controllers/Products/DisposeProductsTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/abstractions/CategoriesApi.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/abstractions/CategoriesApi.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/abstractions/ProductsApi.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/abstractions/ProductsApi.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/di/BackendDataModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/di/BackendDataModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/di/RepositoryModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/di/RepositoryModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/categories/CategoryDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/categories/CategoryDto.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/common/PaginatedList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/common/Pagination.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/products/ExpirationDateKindDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/products/ExpirationDateKindDto.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/products/SimpleProductDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/products/SimpleProductDto.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/events/CreateProductScreenEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/events/CreateProductScreenEvent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/abstractions/ProductRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/abstractions/ProductRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/implementations/CurrencyRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/implementations/CurrencyRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/implementations/ProductRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/implementations/ProductRepositoryImpl.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/CreateProductScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/CreateProductScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/CurrentProductsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/CurrentProductsScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/state/CreateProductScreenState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/state/CreateProductScreenState.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/currencies/CurrenciesDialog.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/products/ExpirationDateFormField.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/products/ExpirationDateFormField.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/products/PriceFormField.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/products/PriceFormField.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/products/ProductSummaryItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/products/ProductSummaryItem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/theme/BiteRightTheme.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/theme/BiteRightTheme.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/CreateProductViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/CreateProductViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/CurrentProductsViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/CurrentProductsViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/ic_launcher_background.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/ic_launcher_background.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,12 +126,12 @@
         <option value="resourceFile" />
         <option value="Enum" />
         <option value="valueResourceFile" />
-        <option value="Kotlin Interface" />
         <option value="Kotlin Enum" />
         <option value="Kotlin Data Class" />
         <option value="Class" />
-        <option value="Kotlin Class" />
         <option value="Kotlin File" />
+        <option value="Kotlin Interface" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -121,7 +161,7 @@
     "project.structure.last.edited": "Dependencies",
     "project.structure.proportion": "0.17",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "AndroidSdkUpdater"
+    "settings.editor.selected.configurable": "emulator"
   }
 }]]></component>
   <component name="PsdUISettings">
@@ -133,6 +173,7 @@
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/categories" />
       <recent name="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/forms" />
       <recent name="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common" />
     </key>
@@ -446,9 +487,9 @@
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/common/RepositoryImplBase.kt</url>
-          <line>37</line>
-          <option name="timeStamp" value="16" />
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/routing/Router.kt</url>
+          <line>61</line>
+          <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

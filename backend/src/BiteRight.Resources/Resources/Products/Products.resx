@@ -84,4 +84,7 @@
     <data name="product_not_disposed" xml:space="preserve">
         <value>Product was not disposed</value>
     </data>
+    <data name="amount_unit_id_empty" xml:space="preserve">
+        <value>Amount unit id can't be empty</value>
+    </data>
 </root>

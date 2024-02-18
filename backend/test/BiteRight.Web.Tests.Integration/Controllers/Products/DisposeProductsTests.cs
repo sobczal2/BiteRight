@@ -65,8 +65,8 @@ public class DisposeProductsTests : IAsyncDisposable
             "This is an example product description.",
             19.99m,
             CurrencyConfiguration.USD.Id,
-            new DateOnly(2025, 12, 31),
             ExpirationDateKindDto.BestBefore,
+            new DateOnly(2025, 12, 31),
             CategoryConfiguration.Dairy.Id,
             100,
             UnitConfiguration.Kilogram.Id

@@ -5,6 +5,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -28,8 +29,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.sobczal2.biteright.dto.products.ExpirationDateKindDto
@@ -145,6 +148,8 @@ fun ExpirationDateFormField(
                 onDismissRequest = {
                     dropDownExpanded = false
                 },
+                modifier = Modifier
+                    .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
             ) {
                 ExpirationDateKindDto.entries.forEach { expirationDateKind ->
                     DropdownMenuItem(
@@ -177,13 +182,17 @@ fun ExpirationDateFormField(
             }
         }
 
-        DatePicker(
-            state = datePickerState
-        )
+        if (ExpirationDateKindDto.shouldIncludeDate(state.value.expirationDateKind)) {
+            DatePicker(
+                state = datePickerState,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
     }
 }
 
 @Composable
+@PreviewLightDark
 @Preview(apiLevel = 33)
 @Preview(apiLevel = 33, uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun ExpirationDateFormFieldPreview() {

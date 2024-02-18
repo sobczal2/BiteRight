@@ -64,5 +64,9 @@ public class CreateValidator : AbstractValidator<CreateRequest>
         RuleFor(x => x.CategoryId)
             .NotEmpty()
             .WithMessage(_ => categoriesLocalizer[nameof(Categories.category_id_empty)]);
+        
+        RuleFor(x => x.AmountUnitId)
+            .NotEmpty()
+            .WithMessage(_ => productsLocalizer[nameof(Resources.Resources.Products.Products.amount_unit_id_empty)]);
     }
 }

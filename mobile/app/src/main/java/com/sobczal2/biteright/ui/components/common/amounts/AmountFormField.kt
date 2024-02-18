@@ -1,4 +1,4 @@
-package com.sobczal2.biteright.ui.components.products
+package com.sobczal2.biteright.ui.components.common.amounts
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -34,7 +34,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.sobczal2.biteright.R
-import com.sobczal2.biteright.dto.currencies.CurrencyDto
+import com.sobczal2.biteright.dto.units.UnitDto
+import com.sobczal2.biteright.dto.units.UnitSystemDto
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
@@ -42,29 +43,29 @@ import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.util.BiteRightPreview
 import java.util.UUID
 
-data class FormPriceWithCurrency(
-    val price: Double?,
-    val currency: CurrencyDto?
+data class FormAmountWithUnit(
+    val amount: Double?,
+    val unit: UnitDto?
 )
 
-data class PriceFormFieldState(
-    var value: FormPriceWithCurrency = FormPriceWithCurrency(
-        price = null,
-        currency = null
+data class AmountFormFieldState(
+    var value: FormAmountWithUnit = FormAmountWithUnit(
+        null,
+        null
     ),
-    val priceError: String? = null,
-    val currencyError: String? = null,
-    val availableCurrencies: List<CurrencyDto> = emptyList()
+    val amountError: String? = null,
+    val unitError: String? = null,
+    val availableUnits: List<UnitDto> = emptyList()
 )
 
 @Composable
-fun PriceFormField(
-    state: PriceFormFieldState,
-    onChange: (FormPriceWithCurrency) -> Unit,
-    modifier: Modifier = Modifier,
+fun AmountFormField(
+    state: AmountFormFieldState,
+    onChange: (FormAmountWithUnit) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var dropDownExpanded by remember { mutableStateOf(false) }
-    var priceTextFieldState by remember {
+    var amountTextFieldState by remember {
         mutableStateOf(
             TextFormFieldState(
                 value = ""
@@ -80,20 +81,20 @@ fun PriceFormField(
         )
     }
 
-    var selectedCurrency by remember {
-        mutableStateOf<CurrencyDto?>(null)
+    var selectedUnit by remember {
+        mutableStateOf<UnitDto?>(null)
     }
 
-    val moneyTypingRegex = Regex("""^\d+(\.\d{0,2})?$""")
+    val amountTypingRegex = Regex("""^\d+(\.\d{0,2})?$""")
 
-    var priceFieldFocused by remember { mutableStateOf(false) }
+    var amountFieldFocused by remember { mutableStateOf(false) }
 
     LaunchedEffect(state.value) {
-        selectedCurrency = state.value.currency
-        if (!priceFieldFocused) {
-            priceTextFieldState = priceTextFieldState.copy(
-                value = if (state.value.price != null) {
-                    String.format("%.2f", state.value.price)
+        selectedUnit = state.value.unit
+        if (!amountFieldFocused) {
+            amountTextFieldState = amountTextFieldState.copy(
+                value = if (state.value.amount != null) {
+                    String.format("%.2f", state.value.amount)
                 } else {
                     ""
                 }
@@ -101,11 +102,11 @@ fun PriceFormField(
         }
     }
 
-    LaunchedEffect(keys = arrayOf(priceTextFieldState, selectedCurrency)) {
+    LaunchedEffect(keys = arrayOf(amountTextFieldState, selectedUnit)) {
         onChange(
-            FormPriceWithCurrency(
-                price = priceTextFieldState.value.toDoubleOrNull(),
-                currency = selectedCurrency
+            FormAmountWithUnit(
+                amount = amountTextFieldState.value.toDoubleOrNull(),
+                unit = selectedUnit
             )
         )
     }
@@ -114,25 +115,25 @@ fun PriceFormField(
         modifier = modifier
     ) {
         TextFormField(
-            state = priceTextFieldState.copy(
-                error = state.priceError
+            state = amountTextFieldState.copy(
+                error = state.amountError
             ),
             onChange = {
-                if (it.isEmpty() || moneyTypingRegex.matches(it)) {
-                    priceTextFieldState = priceTextFieldState.copy(
+                if (it.isEmpty() || amountTypingRegex.matches(it)) {
+                    amountTextFieldState = amountTextFieldState.copy(
                         value = it
                     )
                 }
             },
             options = TextFormFieldOptions(
-                label = { Text(text = stringResource(id = R.string.price)) },
+                label = { Text(text = stringResource(id = R.string.amount)) },
                 shape = MaterialTheme.shapes.extraSmall.copy(
                     topEnd = CornerSize(0.dp),
                     bottomEnd = CornerSize(0.dp),
                     bottomStart = CornerSize(0.dp)
                 ),
                 trailingIcon = {
-                    Text(text = state.value.currency?.symbol ?: "")
+                    Text(text = state.value.unit?.abbreviation ?: "")
                 },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Number
@@ -141,18 +142,18 @@ fun PriceFormField(
             modifier = Modifier
                 .weight(0.5f)
                 .onFocusChanged {
-                    priceFieldFocused = it.isFocused
+                    amountFieldFocused = it.isFocused
                     if (!it.isFocused) {
-                        priceTextFieldState =
-                            when (val price = priceTextFieldState.value.toDoubleOrNull()) {
+                        amountTextFieldState =
+                            when (val price = amountTextFieldState.value.toDoubleOrNull()) {
                                 null -> {
-                                    priceTextFieldState.copy(
+                                    amountTextFieldState.copy(
                                         value = "",
                                     )
                                 }
 
                                 else -> {
-                                    priceTextFieldState.copy(
+                                    amountTextFieldState.copy(
                                         value = String.format("%.2f", price)
                                     )
                                 }
@@ -177,8 +178,8 @@ fun PriceFormField(
 
             TextFormField(
                 state = dropDownTextFieldState.copy(
-                    value = state.value.currency?.code ?: stringResource(id = R.string.none),
-                    error = state.currencyError
+                    value = state.value.unit?.name ?: stringResource(id = R.string.none),
+                    error = state.unitError
                 ),
                 onChange = {},
                 options = TextFormFieldOptions(
@@ -220,7 +221,7 @@ fun PriceFormField(
                     .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
             ) {
                 DropdownMenuItem(
-                    leadingIcon = if (state.value.currency == null) {
+                    leadingIcon = if (state.value.unit == null) {
                         {
                             Icon(Icons.Default.Done, contentDescription = null)
                         }
@@ -233,15 +234,15 @@ fun PriceFormField(
                     onClick = {
                         onChange(
                             state.value.copy(
-                                currency = null
+                                unit = null
                             )
                         )
                         dropDownExpanded = false
                     },
                 )
-                state.availableCurrencies.forEach { currency ->
+                state.availableUnits.forEach { unit ->
                     DropdownMenuItem(
-                        leadingIcon = if (currency == state.value.currency) {
+                        leadingIcon = if (unit == state.value.unit) {
                             {
                                 Icon(Icons.Default.Done, contentDescription = null)
                             }
@@ -249,13 +250,13 @@ fun PriceFormField(
                             null
                         },
                         text = {
-                            Text(text = currency.code)
+                            Text(text = "${unit.name} (${unit.abbreviation})")
                         },
                         onClick = {
                             dropDownExpanded = false
                             onChange(
                                 state.value.copy(
-                                    currency = currency
+                                    unit = unit
                                 )
                             )
                         },
@@ -268,38 +269,38 @@ fun PriceFormField(
 
 @Composable
 @BiteRightPreview
-fun PriceFormFieldPreview() {
-    val currencies = listOf(
-        CurrencyDto(
+fun AmountFormFieldPreview() {
+    val units = listOf(
+        UnitDto(
             id = UUID.randomUUID(),
-            code = "USD",
-            name = "US Dollar",
-            symbol = "$"
+            name = "Gram",
+            abbreviation = "g",
+            unitSystem = UnitSystemDto.Metric
         ),
-        CurrencyDto(
+        UnitDto(
             id = UUID.randomUUID(),
-            code = "EUR",
-            name = "Euro",
-            symbol = "€"
+            name = "Kilogram",
+            abbreviation = "kg",
+            unitSystem = UnitSystemDto.Metric
         ),
-        CurrencyDto(
+        UnitDto(
             id = UUID.randomUUID(),
-            code = "PLN",
-            name = "Polish Zloty",
-            symbol = "zł"
-        ),
+            name = "Pound",
+            abbreviation = "lb",
+            unitSystem = UnitSystemDto.Metric
+        )
     )
 
     BiteRightTheme {
-        PriceFormField(
-            state = PriceFormFieldState(
-                value = FormPriceWithCurrency(
-                    price = 20.0,
-                    currency = currencies.first()
+        AmountFormField(
+            state = AmountFormFieldState(
+                value = FormAmountWithUnit(
+                    amount = 20.0,
+                    unit = units.first()
                 ),
-                availableCurrencies = currencies
+                availableUnits = units
             ),
-            onChange = {},
+            onChange = {}
         )
     }
 }

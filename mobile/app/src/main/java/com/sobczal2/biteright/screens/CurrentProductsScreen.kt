@@ -104,7 +104,7 @@ fun CurrentProductsScreenContent(
                         ProductSummaryItem(
                             productSummaryItemState = ProductSummaryItemState(
                                 name = simpleProductDto.name,
-                                expirationDate = simpleProductDto.expirationDate,
+                                expirationDate = simpleProductDto.expirationDate ?: LocalDate.MIN, // TODO: workaround for now
                                 categoryImageUri = getCategoryPhotoUrl(categoryId = simpleProductDto.categoryId),
                                 amountPercentage = simpleProductDto.amountPercentage,
                                 disposed = simpleProductDto.disposed,

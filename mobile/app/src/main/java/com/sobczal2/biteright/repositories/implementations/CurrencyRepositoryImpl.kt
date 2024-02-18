@@ -12,8 +12,8 @@ import javax.inject.Inject
 
 class CurrencyRepositoryImpl @Inject constructor(
     private val currenciesApi: CurrenciesApi,
-    private val stringProvider: StringProvider,
-    private val gson: Gson
+    stringProvider: StringProvider,
+    gson: Gson
 ) : RepositoryImplBase(gson, stringProvider, "ProductRepositoryImpl"), CurrencyRepository {
     override suspend fun list(): Either<List<CurrencyDto>, RepositoryError> =
         safeApiCall {

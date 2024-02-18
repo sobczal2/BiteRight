@@ -29,10 +29,8 @@ class CurrentProductsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            events.collect { event ->
-                handleEvent(event)
-            }
-            fetchCurrentProducts()
+            launch { events.collect { event -> handleEvent(event) } }
+            launch { fetchCurrentProducts() }
         }
     }
 
