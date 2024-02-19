@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -88,7 +89,8 @@ fun CurrentProductsScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
+                .padding(paddingValues)
+                .padding(MaterialTheme.dimension.xl),
         ) {
             Text(
                 text = "Current Products",
@@ -122,6 +124,13 @@ fun CurrentProductsScreenContent(
                             },
                             imageRequestBuilder = state.imageRequestBuilder,
                         )
+
+                        if (simpleProductDto != state.currentProducts.last()) {
+                            HorizontalDivider(
+                                modifier = Modifier.fillMaxWidth(),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
                     }
                 },
             )

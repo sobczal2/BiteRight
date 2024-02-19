@@ -75,7 +75,7 @@ fun CreateProductScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(MaterialTheme.dimension.xxl)
+                .padding(MaterialTheme.dimension.xl)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md),
         ) {
@@ -114,7 +114,7 @@ fun CreateProductScreenContent(
                 },
             )
             ExpirationDateFormField(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier,
                 state = state.expirationDateFieldState,
                 onChange = {
                     sendEvent(CreateProductScreenEvent.OnExpirationDateChange(it))

@@ -1,6 +1,7 @@
 package com.sobczal2.biteright.ui.components.products
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
@@ -12,13 +13,13 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
@@ -188,19 +189,17 @@ fun ExpirationDateFormField(
         }
 
         if (ExpirationDateKindDto.shouldIncludeDate(state.value.expirationDateKind)) {
-            Card(
-                shape = MaterialTheme.shapes.small.copy(
-                    topStart = CornerSize(0.dp),
-                    topEnd = CornerSize(0.dp),
-                ),
-                modifier = Modifier.fillMaxWidth(),
-
-            ) {
-                DatePicker(
-                    state = datePickerState,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
+            DatePicker(
+                state = datePickerState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        CardDefaults.cardColors().containerColor, MaterialTheme.shapes.small.copy(
+                            topStart = CornerSize(0.dp),
+                            topEnd = CornerSize(0.dp),
+                        )
+                    ),
+            )
         }
     }
 }

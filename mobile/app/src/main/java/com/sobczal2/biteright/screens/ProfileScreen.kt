@@ -66,7 +66,7 @@ fun ProfileScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(MaterialTheme.dimension.xxl),
+                .padding(MaterialTheme.dimension.xl),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
         ) {
             Text(
