@@ -148,11 +148,6 @@ class StartViewModel @Inject constructor(
     }
 
     suspend fun isOnboarded(): Boolean {
-        _state.update {
-            it.copy(
-                globalLoading = true
-            )
-        }
         val meResult = userRepository.me()
 
         val isOnboarded = meResult.fold(

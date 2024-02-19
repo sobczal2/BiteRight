@@ -2,16 +2,17 @@ package com.sobczal2.biteright.ui.components.categories
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import coil.request.ImageRequest
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.categories.CategoryDto
 import com.sobczal2.biteright.dto.categories.imageUri
+import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.BiteRightPreview
 import java.util.UUID
 
@@ -37,35 +39,48 @@ fun CategoryItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.sm),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (selected) {
-            Icon(
-                Icons.Default.Done,
-                contentDescription = stringResource(id = R.string.selected)
-            )
-        }
         CategoryImage(
             imageUri = category.imageUri(),
             imageRequestBuilder = imageRequestBuilder,
             inPreview = inPreview
         )
-        Column {
-            if (label != null) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Column {
+                if (label != null) {
+                    Text(
+                        text = label,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            color = LocalContentColor.current
+                        )
+                    )
+                }
                 Text(
-                    text = label,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        color = LocalContentColor.current
+                    text = category.name,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 )
             }
-            Text(
-                text = category.name,
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            )
+            if (selected) {
+                Box(
+                    modifier = Modifier.size(64.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Default.Done,
+                        contentDescription = stringResource(id = R.string.selected),
+                        modifier = Modifier.size(MaterialTheme.dimension.xxl),
+                    )
+                }
+            }
         }
     }
 }

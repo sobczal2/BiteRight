@@ -26,7 +26,11 @@ fun CategoryImage(
     imageRequestBuilder: ImageRequest.Builder? = null
 ) {
     if (inPreview) {
-        Box(modifier = Modifier.size(64.dp), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .size(64.dp),
+            contentAlignment = Alignment.Center
+        ) {
             Icon(
                 Icons.Default.Image,
                 contentDescription = "Preview Image",

@@ -107,6 +107,12 @@ fun CategorySearchDialog(
         }
     }
 
+    if (inPreview) {
+        LaunchedEffect(Unit) {
+            fetchNewQueryCategories()
+        }
+    }
+
     LaunchedEffect(Unit) {
         queryFieldStateFlow
             .debounce(debounceDuration)
