@@ -68,8 +68,12 @@ fun CategorySearchDialog(
 
     val queryFieldState = queryFieldStateFlow.collectAsState()
 
-    var loading by remember {
+    var initialLoading by remember {
         mutableStateOf(true)
+    }
+
+    var loading by remember {
+        mutableStateOf(false)
     }
 
     var paginationParams by remember {
@@ -86,6 +90,7 @@ fun CategorySearchDialog(
     }
 
     fun fetchNewQueryCategories() {
+        if (loading) return
         loading = true
         coroutineScope.launch {
             paginationParams = paginationParams.copy(pageNumber = 0)
@@ -94,6 +99,7 @@ fun CategorySearchDialog(
             categories.clear()
             categories.addAll(searchedCategories.items)
             loading = false
+            initialLoading = false
         }
     }
 
@@ -145,7 +151,7 @@ fun CategorySearchDialog(
                         )
                     },
                     trailingIcon = {
-                        if (loading) {
+                        if (initialLoading || loading) {
                             CircularProgressIndicator()
                         }
                     },
@@ -169,7 +175,8 @@ fun CategorySearchDialog(
 
                             if (category != categories.last()) {
                                 HorizontalDivider(
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier.fillMaxWidth(),
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                             }
                         }
@@ -184,6 +191,21 @@ fun CategorySearchDialog(
                                 }
                                 LaunchedEffect(Unit) {
                                     loadMore()
+                                }
+                            }
+                        }
+
+                        item {
+                            if (!initialLoading && !loading && !hasMore && categories.isEmpty()) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Center
+
+                                ) {
+                                    Text(
+                                        text = stringResource(id = R.string.no_results),
+                                        modifier = Modifier.padding(MaterialTheme.dimension.sm)
+                                    )
                                 }
                             }
                         }

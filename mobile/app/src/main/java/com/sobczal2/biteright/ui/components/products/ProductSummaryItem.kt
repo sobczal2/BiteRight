@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,7 +43,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.ui.components.categories.CategoryImage
@@ -131,7 +130,12 @@ fun ProductSummaryItem(
                     .clickable(onClick = onClick)
                     .fillMaxWidth()
             ) {
-                Row {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.sm),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     CategoryImage(
                         imageUri = productSummaryItemState.categoryImageUri,
                         imageRequestBuilder = imageRequestBuilder,
@@ -142,7 +146,10 @@ fun ProductSummaryItem(
                         modifier = Modifier
                             .weight(1f)
                     )
-                    ProductConsumptionIndicator(amountPercentage = productSummaryItemState.amountPercentage)
+                    ProductConsumptionIndicator(
+                        amountPercentage = productSummaryItemState.amountPercentage,
+                        disposed = productSummaryItemState.disposed
+                    )
                 }
             }
         }
@@ -151,24 +158,41 @@ fun ProductSummaryItem(
 
 @Composable
 fun ProductConsumptionIndicator(
-    amountPercentage: Double
+    amountPercentage: Double,
+    disposed: Boolean
 ) {
-    Box(
-        modifier = Modifier
-            .padding(8.dp)
-            .width(48.dp)
-    ) {
-        CircularProgressIndicator(
-            progress = { amountPercentage.toFloat() / 100 },
-            modifier = Modifier.size(48.dp),
-            color = getColorForAmountPercentage(amountPercentage)
-        )
-        Text(
-            text = "${amountPercentage.roundToInt()}%",
-            modifier = Modifier.align(Alignment.Center),
-            style = MaterialTheme.typography.labelMedium
-                .copy(textAlign = TextAlign.Center)
-        )
+    if (disposed) {
+        Box(
+            modifier = Modifier
+                .padding(MaterialTheme.dimension.sm)
+                .size(MaterialTheme.dimension.xxl),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = stringResource(id = R.string.deleted),
+                modifier = Modifier.size(MaterialTheme.dimension.xl),
+                tint = MaterialTheme.colorScheme.error
+            )
+        }
+    } else {
+        Box(
+            modifier = Modifier
+                .padding(8.dp)
+                .width(MaterialTheme.dimension.xxl),
+        ) {
+            CircularProgressIndicator(
+                progress = { amountPercentage.toFloat() / 100 },
+                modifier = Modifier.size(MaterialTheme.dimension.xxl),
+                color = getColorForAmountPercentage(amountPercentage)
+            )
+            Text(
+                text = "${amountPercentage.roundToInt()}%",
+                modifier = Modifier.align(Alignment.Center),
+                style = MaterialTheme.typography.labelMedium
+                    .copy(textAlign = TextAlign.Center)
+            )
+        }
     }
 }
 
@@ -280,7 +304,8 @@ fun ProductSummaryItemPreview() {
                 name = "Product name Product name Product name",
                 expirationDate = LocalDate.now().plusDays(5),
                 categoryImageUri = null,
-                amountPercentage = 50.0
+                amountPercentage = 50.0,
+                disposed = false
             ),
             inPreview = true
         )

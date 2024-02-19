@@ -25,7 +25,8 @@ import com.sobczal2.biteright.events.ProfileScreenEvent
 import com.sobczal2.biteright.state.ProfileScreenState
 import com.sobczal2.biteright.ui.components.common.HomeLayout
 import com.sobczal2.biteright.ui.components.common.HomeLayoutTab
-import com.sobczal2.biteright.ui.components.common.ScreenLoader
+import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
+import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.viewmodels.ProfileViewModel
@@ -40,7 +41,9 @@ fun ProfileScreen(
 ) {
     val state = viewModel.state.collectAsState()
 
-    ScreenLoader(loading = state.value.globalLoading) {
+    ScaffoldLoader(
+        loading = state.value.globalLoading
+    ) {
         ProfileScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,

@@ -26,7 +26,8 @@ import com.sobczal2.biteright.state.StartScreenState
 import com.sobczal2.biteright.ui.components.common.BiteRightLogo
 import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
 import com.sobczal2.biteright.ui.components.common.ErrorBox
-import com.sobczal2.biteright.ui.components.common.ScreenLoader
+import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
+import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
@@ -47,7 +48,9 @@ fun StartScreen(
         }
     }
 
-    ScreenLoader(loading = state.value.globalLoading) {
+    ScaffoldLoader(
+        loading = state.value.globalLoading
+    ) {
         StartScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,

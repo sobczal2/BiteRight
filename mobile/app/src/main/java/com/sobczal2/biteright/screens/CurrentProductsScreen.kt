@@ -27,7 +27,8 @@ import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.state.CurrentProductsScreenState
 import com.sobczal2.biteright.ui.components.common.HomeLayout
 import com.sobczal2.biteright.ui.components.common.HomeLayoutTab
-import com.sobczal2.biteright.ui.components.common.ScreenLoader
+import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
+import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.components.products.ProductSummaryItem
 import com.sobczal2.biteright.ui.components.products.ProductSummaryItemState
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
@@ -45,7 +46,9 @@ fun CurrentProductsScreen(
 ) {
     val state = viewModel.state.collectAsState()
 
-    ScreenLoader(loading = state.value.globalLoading) {
+    ScaffoldLoader(
+        loading = state.value.globalLoading
+    ) {
         CurrentProductsScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,

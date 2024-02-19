@@ -9,7 +9,7 @@ object Dimension {
     val md = 16.dp
     val lg = 24.dp
     val xl = 32.dp
-    val xxl = 40.dp
+    val xxl = 48.dp
 }
 
 val MaterialTheme.dimension: Dimension

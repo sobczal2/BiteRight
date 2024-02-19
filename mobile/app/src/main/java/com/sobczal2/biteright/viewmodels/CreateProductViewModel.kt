@@ -203,31 +203,6 @@ class CreateProductViewModel @Inject constructor(
         )
     }
 
-    suspend fun searchCategories(
-        query: String,
-        paginationParams: PaginationParams
-    ): PaginatedList<CategoryDto> {
-
-        val categoriesResult = categoryRepository.search(
-            CategoriesSearchRequest(
-                query = query,
-                paginationParams = paginationParams
-            )
-        )
-
-        categoriesResult.fold(
-            { response ->
-                return response.categories
-            },
-            { repositoryError ->
-                _state.value = state.value.copy(
-                    globalError = repositoryError.message
-                )
-            }
-        )
-        return emptyPaginatedList()
-    }
-
     private suspend fun fetchUnits() {
         val unitsResult = unitRepository.search(
             UnitsSearchRequest(
@@ -304,6 +279,30 @@ class CreateProductViewModel @Inject constructor(
         )
     }
 
+    suspend fun searchCategories(
+        query: String,
+        paginationParams: PaginationParams
+    ): PaginatedList<CategoryDto> {
+
+        val categoriesResult = categoryRepository.search(
+            CategoriesSearchRequest(
+                query = query,
+                paginationParams = paginationParams
+            )
+        )
+
+        categoriesResult.fold(
+            { response ->
+                return response.categories
+            },
+            { repositoryError ->
+                _state.value = state.value.copy(
+                    globalError = repositoryError.message
+                )
+            }
+        )
+        return emptyPaginatedList()
+    }
 
     private suspend fun submitForm(
         onSuccess: () -> Unit = {},

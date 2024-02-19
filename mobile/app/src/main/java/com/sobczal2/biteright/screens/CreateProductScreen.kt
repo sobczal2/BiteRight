@@ -32,7 +32,8 @@ import com.sobczal2.biteright.state.CreateProductScreenState
 import com.sobczal2.biteright.ui.components.amounts.AmountFormField
 import com.sobczal2.biteright.ui.components.categories.CategoryFormField
 import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
-import com.sobczal2.biteright.ui.components.common.ScreenLoader
+import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
+import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.products.ExpirationDateFormField
@@ -48,7 +49,9 @@ fun CreateProductScreen(
 ) {
     val state = viewModel.state.collectAsState()
 
-    ScreenLoader(loading = state.value.globalLoading) {
+    ScaffoldLoader(
+        loading = state.value.globalLoading
+    ) {
         CreateProductScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,

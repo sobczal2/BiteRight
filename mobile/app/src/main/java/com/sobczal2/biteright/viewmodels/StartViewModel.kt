@@ -148,6 +148,12 @@ class StartViewModel @Inject constructor(
     }
 
     suspend fun isOnboarded(): Boolean {
+        _state.update {
+            it.copy(
+                globalLoading = true
+            )
+        }
+
         val meResult = userRepository.me()
 
         val isOnboarded = meResult.fold(
@@ -155,6 +161,12 @@ class StartViewModel @Inject constructor(
                 true
             },
             { repositoryError ->
+                _state.update {
+                    it.copy(
+                        globalLoading = false
+                    )
+                }
+
                 if (repositoryError is ApiRepositoryError && repositoryError.apiErrorCode == 404) {
                     false
                 } else {
@@ -168,11 +180,7 @@ class StartViewModel @Inject constructor(
             }
         )
 
-        _state.update {
-            it.copy(
-                globalLoading = false
-            )
-        }
+
 
         return isOnboarded
     }
