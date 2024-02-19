@@ -17,6 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.dto.currencies.CurrencyDto
+import com.sobczal2.biteright.dto.users.ProfileDto
 import com.sobczal2.biteright.dto.users.UserDto
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.events.ProfileScreenEvent
@@ -79,7 +81,7 @@ fun ProfileScreenContent(
             }, modifier = Modifier.fillMaxWidth(), enabled = false
 
             )
-            TextField(value = state.user?.profile?.currencyId.toString(),
+            TextField(value = state.user?.profile?.currency?.code ?: "",
                 onValueChange = { },
                 label = {
                     Text(
@@ -124,8 +126,14 @@ fun ProfileScreenPreview() {
                     username = "username",
                     email = "email",
                     joinedAt = LocalDateTime.now(),
-                    profile = com.sobczal2.biteright.dto.users.ProfileDto(
-                        currencyId = UUID.randomUUID(), timeZoneId = "timeZoneId"
+                    profile = ProfileDto(
+                        currency = CurrencyDto(
+                            id = UUID.randomUUID(),
+                            code = "USD",
+                            symbol = "$",
+                            name = "US Dollar"
+                        ),
+                        timeZoneId = "Europe/Warsaw"
                     )
                 )
             ),

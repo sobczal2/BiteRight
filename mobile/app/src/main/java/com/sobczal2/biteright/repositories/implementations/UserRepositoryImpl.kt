@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.sobczal2.biteright.data.api.abstractions.UsersApi
 import com.sobczal2.biteright.data.api.requests.users.OnboardRequest
 import com.sobczal2.biteright.data.api.responses.users.MeResponse
+import com.sobczal2.biteright.data.api.responses.users.OnboardResponse
 import com.sobczal2.biteright.repositories.abstractions.UserRepository
 import com.sobczal2.biteright.repositories.common.RepositoryError
 import com.sobczal2.biteright.repositories.common.RepositoryImplBase
@@ -22,10 +23,12 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun onboard(onboardRequest: OnboardRequest): Either<Unit, RepositoryError> =
+    override suspend fun onboard(onboardRequest: OnboardRequest): Either<OnboardResponse, RepositoryError> =
         safeApiCall {
             userApi.onboard(onboardRequest).let { response ->
-                response.processResponse { }
+                response.processResponse {
+                    it
+                }
             }
         }
 }

@@ -8,6 +8,7 @@
 #region
 
 using System;
+using BiteRight.Application.Dtos.Currencies;
 
 #endregion
 
@@ -15,6 +16,6 @@ namespace BiteRight.Application.Dtos.Users;
 
 public class ProfileDto
 {
-    public Guid CurrencyId { get; set; }
+    public CurrencyDto Currency { get; set; }
     public string TimeZoneId { get; set; } = default!;
 }

@@ -15,7 +15,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -32,8 +31,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PlatformImeOptions
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.sobczal2.biteright.R
@@ -47,14 +44,18 @@ import java.util.UUID
 
 data class FormPriceWithCurrency(
     val price: Double?,
-    val currency: CurrencyDto?
-)
+    val currency: CurrencyDto
+) {
+    companion object {
+        val Empty = FormPriceWithCurrency(
+            price = null,
+            currency = CurrencyDto.Empty
+        )
+    }
+}
 
 data class PriceFormFieldState(
-    var value: FormPriceWithCurrency = FormPriceWithCurrency(
-        price = null,
-        currency = null
-    ),
+    var value: FormPriceWithCurrency,
     val priceError: String? = null,
     val currencyError: String? = null,
     val availableCurrencies: List<CurrencyDto> = emptyList()
@@ -84,7 +85,7 @@ fun PriceFormField(
     }
 
     var selectedCurrency by remember {
-        mutableStateOf<CurrencyDto?>(null)
+        mutableStateOf(state.value.currency)
     }
 
     val moneyTypingRegex = Regex("""^\d+(\.\d{0,2})?$""")
@@ -135,12 +136,12 @@ fun PriceFormField(
                     bottomStart = CornerSize(0.dp)
                 ),
                 trailingIcon = {
-                    Text(text = state.value.currency?.symbol ?: "")
+                    Text(text = state.value.currency.symbol)
                 },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Number,
 
-                ),
+                    ),
             ),
             modifier = Modifier
                 .weight(0.6f)
@@ -181,7 +182,7 @@ fun PriceFormField(
 
             TextFormField(
                 state = dropDownTextFieldState.copy(
-                    value = state.value.currency?.code ?: stringResource(id = R.string.none),
+                    value = state.value.currency.code,
                     error = state.currencyError
                 ),
                 onChange = {},
@@ -223,26 +224,6 @@ fun PriceFormField(
                 modifier = Modifier
                     .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
             ) {
-                DropdownMenuItem(
-                    leadingIcon = if (state.value.currency == null) {
-                        {
-                            Icon(Icons.Default.Done, contentDescription = null)
-                        }
-                    } else {
-                        null
-                    },
-                    text = {
-                        Text(text = stringResource(id = R.string.none))
-                    },
-                    onClick = {
-                        onChange(
-                            state.value.copy(
-                                currency = null
-                            )
-                        )
-                        dropDownExpanded = false
-                    },
-                )
                 state.availableCurrencies.forEach { currency ->
                     DropdownMenuItem(
                         leadingIcon = if (currency == state.value.currency) {

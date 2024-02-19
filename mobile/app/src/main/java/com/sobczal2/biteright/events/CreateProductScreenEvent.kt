@@ -11,6 +11,6 @@ sealed class CreateProductScreenEvent {
     data class OnDescriptionChange(val value: String) : CreateProductScreenEvent()
     data class OnPriceChange(val value: FormPriceWithCurrency) : CreateProductScreenEvent()
     data class OnExpirationDateChange(val value: ExpirationDate) : CreateProductScreenEvent()
-    data class OnCategoryChange(val value: CategoryDto?) : CreateProductScreenEvent()
+    data class OnCategoryChange(val value: CategoryDto) : CreateProductScreenEvent()
     data class OnAmountChange(val value: FormAmountWithUnit) : CreateProductScreenEvent()
 }

@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Application.Common;
 using BiteRight.Application.Common.Exceptions;
+using BiteRight.Application.Dtos.Currencies;
 using BiteRight.Application.Dtos.Users;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
@@ -59,7 +60,7 @@ public class MeHandler : QueryHandlerBase<MeRequest, MeResponse>
             JoinedAt = user.JoinedAt.Value,
             Profile = new ProfileDto
             {
-                CurrencyId = currency.Id,
+                Currency = CurrencyDto.FromDomain(currency),
                 TimeZoneId = user.Profile.TimeZone.Id
             }
         };

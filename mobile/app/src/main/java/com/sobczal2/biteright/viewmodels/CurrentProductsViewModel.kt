@@ -64,10 +64,10 @@ class CurrentProductsViewModel @Inject constructor(
         )
 
         productsResult.fold(
-            { products ->
+            { response ->
                 _state.update {
                     it.copy(
-                        currentProducts = products
+                        currentProducts = response.products
                     )
                 }
             },

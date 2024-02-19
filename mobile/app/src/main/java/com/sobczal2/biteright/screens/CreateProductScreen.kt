@@ -3,11 +3,14 @@ package com.sobczal2.biteright.screens
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -122,22 +125,39 @@ fun CreateProductScreenContent(
                 onChange = {
                     sendEvent(CreateProductScreenEvent.OnAmountChange(it))
                 }
-            );
+            )
 
-            ButtonWithLoader(
-                onClick = {
-                    focusManager.clearFocus()
-                    sendEvent(
-                        CreateProductScreenEvent.OnSubmitClick(
-                            onSuccess = {
-                                handleNavigationEvent(NavigationEvent.NavigateToCurrentProducts)
-                            }
-                        )
-                    )
-                },
-                loading = state.formSubmitting
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
             ) {
-                Text(text = stringResource(id = R.string.create_product))
+                ButtonWithLoader(
+                    onClick = {
+                        focusManager.clearFocus()
+                        sendEvent(
+                            CreateProductScreenEvent.OnSubmitClick(
+                                onSuccess = {
+                                    handleNavigationEvent(NavigationEvent.NavigateToCurrentProducts)
+                                }
+                            )
+                        )
+                    },
+                    loading = state.formSubmitting,
+                    modifier = Modifier.weight(0.5f)
+                ) {
+                    Text(text = stringResource(id = R.string.create_product))
+                }
+
+                Button(
+                    onClick = { handleNavigationEvent(NavigationEvent.NavigateToCurrentProducts) },
+                    colors = ButtonDefaults.textButtonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError
+                    ),
+                    modifier = Modifier.weight(0.5f)
+                ) {
+                    Text(text = stringResource(id = R.string.cancel))
+                }
             }
         }
     }

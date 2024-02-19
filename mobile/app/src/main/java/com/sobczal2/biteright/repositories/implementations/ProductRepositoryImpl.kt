@@ -6,6 +6,7 @@ import com.sobczal2.biteright.data.api.abstractions.ProductsApi
 import com.sobczal2.biteright.data.api.requests.products.CreateRequest
 import com.sobczal2.biteright.data.api.requests.products.ListCurrentRequest
 import com.sobczal2.biteright.data.api.responses.products.CreateResponse
+import com.sobczal2.biteright.data.api.responses.products.ListCurrentResponse
 import com.sobczal2.biteright.dto.products.SimpleProductDto
 import com.sobczal2.biteright.repositories.abstractions.ProductRepository
 import com.sobczal2.biteright.repositories.common.RepositoryError
@@ -20,10 +21,10 @@ class ProductRepositoryImpl @Inject constructor(
 ) : RepositoryImplBase(gson, stringProvider, "ProductRepositoryImpl"), ProductRepository {
     override suspend fun listCurrent(
         listCurrentRequest: ListCurrentRequest
-    ): Either<List<SimpleProductDto>, RepositoryError> =
+    ): Either<ListCurrentResponse, RepositoryError> =
         safeApiCall {
             productApi.listCurrent(listCurrentRequest.sortingStrategy).let { response ->
-                response.processResponse { it.products }
+                response.processResponse { it }
             }
         }
 

@@ -12,6 +12,7 @@ import com.sobczal2.biteright.repositories.abstractions.CategoryRepository
 import com.sobczal2.biteright.repositories.abstractions.CurrencyRepository
 import com.sobczal2.biteright.repositories.abstractions.ProductRepository
 import com.sobczal2.biteright.repositories.abstractions.UnitRepository
+import com.sobczal2.biteright.repositories.abstractions.UserRepository
 import com.sobczal2.biteright.repositories.common.ApiRepositoryError
 import com.sobczal2.biteright.state.CreateProductScreenState
 import com.sobczal2.biteright.ui.components.amounts.FormAmountWithUnit
@@ -36,6 +37,7 @@ class CreateProductViewModel @Inject constructor(
     private val categoryRepository: CategoryRepository,
     private val unitRepository: UnitRepository,
     private val productRepository: ProductRepository,
+    private val userRepository: UserRepository,
     private val stringProvider: StringProvider,
     imageRequestBuilder: ImageRequest.Builder,
 ) : ViewModel() {
@@ -57,10 +59,14 @@ class CreateProductViewModel @Inject constructor(
             val fetchCurrenciesJob = launch { fetchCurrencies() }
             val fetchCategoriesJob = launch { fetchCategories() }
             val fetchUnitsJob = launch { fetchUnits() }
+            val fetchDefaultCategoryJob = launch { fetchDefaultCategory() }
+            val fetchCurrentUserJob = launch { fetchCurrentUser() }
 
             fetchCurrenciesJob.join()
             fetchCategoriesJob.join()
             fetchUnitsJob.join()
+            fetchDefaultCategoryJob.join()
+            fetchCurrentUserJob.join()
 
             _state.update { it.copy(globalLoading = false) }
         }
@@ -118,7 +124,7 @@ class CreateProductViewModel @Inject constructor(
         }
     }
 
-    private fun onCategoryChange(value: CategoryDto?) {
+    private fun onCategoryChange(value: CategoryDto) {
         _state.update {
             it.copy(
                 categoryFieldState = it.categoryFieldState.copy(
@@ -179,11 +185,11 @@ class CreateProductViewModel @Inject constructor(
         val currenciesResult = currencyRepository.list()
 
         currenciesResult.fold(
-            { currencies ->
+            { response ->
                 _state.update {
                     it.copy(
                         priceFieldState = it.priceFieldState.copy(
-                            availableCurrencies = currencies
+                            availableCurrencies = response.currencies
                         )
                     )
                 }
@@ -206,11 +212,11 @@ class CreateProductViewModel @Inject constructor(
         )
 
         categoriesResult.fold(
-            { categories ->
+            { response ->
                 _state.update {
                     it.copy(
                         categoryFieldState = it.categoryFieldState.copy(
-                            availableCategories = categories.items
+                            availableCategories = response.categories.items
                         )
                     )
                 }
@@ -233,11 +239,59 @@ class CreateProductViewModel @Inject constructor(
         )
 
         unitsResult.fold(
-            { units ->
+            { response ->
                 _state.update {
                     it.copy(
                         amountFormFieldState = it.amountFormFieldState.copy(
-                            availableUnits = units.items
+                            availableUnits = response.units.items
+                        )
+                    )
+                }
+            },
+            { repositoryError ->
+                _state.update { state ->
+                    state.copy(
+                        globalError = repositoryError.message
+                    )
+                }
+            }
+        )
+    }
+
+    private suspend fun fetchDefaultCategory() {
+        val defaultCategoryResult = categoryRepository.getDefault()
+
+        defaultCategoryResult.fold(
+            { response ->
+                _state.update {
+                    it.copy(
+                        categoryFieldState = it.categoryFieldState.copy(
+                            value = response.category
+                        )
+                    )
+                }
+            },
+            { repositoryError ->
+                _state.update { state ->
+                    state.copy(
+                        globalError = repositoryError.message
+                    )
+                }
+            }
+        )
+    }
+
+    private suspend fun fetchCurrentUser() {
+        val currentUserResult = userRepository.me()
+
+        currentUserResult.fold(
+            { response ->
+                _state.update { state ->
+                    state.copy(
+                        priceFieldState = state.priceFieldState.copy(
+                            value = state.priceFieldState.value.copy(
+                                currency = response.user.profile.currency
+                            )
                         )
                     )
                 }

@@ -8,7 +8,15 @@ import java.util.UUID
 data class CategoryDto(
     @SerializedName("id") val id: UUID,
     @SerializedName("name") val name: String,
-)
+) {
+    companion object {
+        val Empty = CategoryDto(
+            id = UUID.randomUUID(),
+            name = ""
+        )
+    }
+}
+
 
 @Composable
 fun CategoryDto.imageUri(): String {

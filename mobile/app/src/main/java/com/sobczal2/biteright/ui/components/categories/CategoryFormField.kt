@@ -44,7 +44,7 @@ import com.sobczal2.biteright.util.BiteRightPreview
 import java.util.UUID
 
 data class CategoryFormFieldState(
-    override val value: CategoryDto? = null,
+    override val value: CategoryDto,
     override val error: String? = null,
     val availableCategories: List<CategoryDto> = emptyList(),
     val inPreview: Boolean = false
@@ -53,7 +53,7 @@ data class CategoryFormFieldState(
 @Composable
 fun CategoryFormField(
     state: CategoryFormFieldState,
-    onChange: (CategoryDto?) -> Unit,
+    onChange: (CategoryDto) -> Unit,
     imageRequestBuilder: ImageRequest.Builder? = null
 ) {
     var dropDownExpanded by remember { mutableStateOf(false) }
@@ -78,7 +78,7 @@ fun CategoryFormField(
 
         TextFormField(
             state = dropDownTextFieldState.copy(
-                value = state.value?.name ?: stringResource(id = R.string.none),
+                value = state.value.name,
                 error = state.error
             ),
             onChange = {},
@@ -120,24 +120,6 @@ fun CategoryFormField(
             modifier = Modifier
                 .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
         ) {
-            DropdownMenuItem(
-                leadingIcon = if (state.value == null) {
-                    {
-                        Icon(Icons.Default.Done, contentDescription = null)
-                    }
-                } else {
-                    null
-                },
-                text = {
-                    Text(text = stringResource(id = R.string.none))
-                },
-                onClick = {
-                    onChange(
-                        null
-                    )
-                    dropDownExpanded = false
-                },
-            )
             state.availableCategories.forEach { category ->
                 DropdownMenuItem(
                     leadingIcon = if (category == state.value) {
