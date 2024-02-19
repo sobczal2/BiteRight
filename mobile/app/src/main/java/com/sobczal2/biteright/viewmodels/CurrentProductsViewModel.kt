@@ -2,6 +2,7 @@ package com.sobczal2.biteright.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.request.ImageRequest
 import com.sobczal2.biteright.data.api.requests.products.ListCurrentRequest
 import com.sobczal2.biteright.dto.products.ProductSortingStrategy
 import com.sobczal2.biteright.events.CurrentProductsScreenEvent
@@ -20,8 +21,11 @@ import javax.inject.Inject
 @HiltViewModel
 class CurrentProductsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
+    imageRequestBuilder: ImageRequest.Builder
 ) : ViewModel() {
-    private val _state = MutableStateFlow(CurrentProductsScreenState())
+    private val _state = MutableStateFlow(CurrentProductsScreenState(
+        imageRequestBuilder = imageRequestBuilder
+    ))
     val state = _state.asStateFlow()
 
     private val _events = Channel<CurrentProductsScreenEvent>()

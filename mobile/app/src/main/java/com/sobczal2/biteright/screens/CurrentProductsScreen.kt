@@ -116,7 +116,8 @@ fun CurrentProductsScreenContent(
                                         simpleProductDto.id
                                     )
                                 )
-                            }
+                            },
+                            imageRequestBuilder = state.imageRequestBuilder,
                         )
                     }
                 },

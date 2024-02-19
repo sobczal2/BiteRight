@@ -13,7 +13,7 @@ class TokenInterceptor(private val authManager: AuthManager) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val original = chain.request()
 
-        val jwt = runBlocking { getJwt() }
+        val jwt = runBlocking { authManager.getJwt() }
         if (jwt != null) {
             val requestBuilder = original.newBuilder()
                 .addHeader("Authorization", "Bearer $jwt")
@@ -23,20 +23,5 @@ class TokenInterceptor(private val authManager: AuthManager) : Interceptor {
         }
 
         return chain.proceed(original)
-    }
-
-    private suspend fun getJwt(): String? {
-        return suspendCoroutine { continuation ->
-            authManager.credentialsManager.getCredentials(object :
-                Callback<Credentials, CredentialsManagerException> {
-                override fun onFailure(error: CredentialsManagerException) {
-                    continuation.resumeWith(Result.success(null))
-                }
-
-                override fun onSuccess(result: Credentials) {
-                    continuation.resumeWith(Result.success(result.idToken))
-                }
-            })
-        }
     }
 }

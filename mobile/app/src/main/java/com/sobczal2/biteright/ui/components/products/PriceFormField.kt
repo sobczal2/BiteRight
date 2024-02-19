@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -31,6 +32,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PlatformImeOptions
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.sobczal2.biteright.R
@@ -126,7 +129,7 @@ fun PriceFormField(
             },
             options = TextFormFieldOptions(
                 label = { Text(text = stringResource(id = R.string.price)) },
-                shape = MaterialTheme.shapes.extraSmall.copy(
+                shape = MaterialTheme.shapes.small.copy(
                     topEnd = CornerSize(0.dp),
                     bottomEnd = CornerSize(0.dp),
                     bottomStart = CornerSize(0.dp)
@@ -135,11 +138,12 @@ fun PriceFormField(
                     Text(text = state.value.currency?.symbol ?: "")
                 },
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Number
+                    keyboardType = KeyboardType.Number,
+
                 ),
             ),
             modifier = Modifier
-                .weight(0.5f)
+                .weight(0.6f)
                 .onFocusChanged {
                     priceFieldFocused = it.isFocused
                     if (!it.isFocused) {
@@ -163,7 +167,7 @@ fun PriceFormField(
         )
         Column(
             modifier = Modifier
-                .weight(0.5f)
+                .weight(0.4f)
         ) {
             var textFieldSize by remember { mutableStateOf(Size.Zero) }
             val interactionSource = remember { MutableInteractionSource() }

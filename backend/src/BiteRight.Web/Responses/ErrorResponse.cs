@@ -50,8 +50,12 @@ public class ErrorResponse
         IStringLocalizer<Resources.Resources.Common.Common> commonLocalizer
     )
     {
-        var errors = exception.Errors.ToDictionary(error => error.PropertyName,
-            error => new List<string> { error.ErrorMessage });
+        var errors = exception.Errors
+            .GroupBy(x => x.PropertyName)
+            .ToDictionary(
+                x => x.Key,
+                x => x.Select(y => y.ErrorMessage).ToList()
+            );
         return new ErrorResponse(
             commonLocalizer[nameof(Resources.Resources.Common.Common.validation_error)],
             errors

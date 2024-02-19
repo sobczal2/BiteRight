@@ -140,7 +140,7 @@ fun AmountFormField(
                 ),
             ),
             modifier = Modifier
-                .weight(0.5f)
+                .weight(0.4f)
                 .onFocusChanged {
                     amountFieldFocused = it.isFocused
                     if (!it.isFocused) {
@@ -164,7 +164,7 @@ fun AmountFormField(
         )
         Column(
             modifier = Modifier
-                .weight(0.5f)
+                .weight(0.6f)
         ) {
             var textFieldSize by remember { mutableStateOf(Size.Zero) }
             val interactionSource = remember { MutableInteractionSource() }

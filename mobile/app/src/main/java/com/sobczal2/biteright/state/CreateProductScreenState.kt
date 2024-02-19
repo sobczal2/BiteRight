@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.state
 
+import coil.request.ImageRequest
 import com.sobczal2.biteright.ui.components.amounts.AmountFormFieldState
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
 import com.sobczal2.biteright.ui.components.categories.CategoryFormFieldState
@@ -14,6 +15,7 @@ data class CreateProductScreenState(
     val categoryFieldState: CategoryFormFieldState = CategoryFormFieldState(),
     val amountFormFieldState: AmountFormFieldState = AmountFormFieldState(),
     val formSubmitting: Boolean = false,
+    val imageRequestBuilder: ImageRequest.Builder? = null,
     override val globalLoading: Boolean = false,
     override val globalError: String? = null,
 ) : ScreenStateBase

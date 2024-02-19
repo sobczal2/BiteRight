@@ -5,6 +5,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -14,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
 data class TextFormFieldState(
@@ -34,6 +36,7 @@ data class TextFormFieldOptions(
     val readOnly: Boolean = false,
     val colors: TextFieldColors? = null,
     val interactionSource: MutableInteractionSource? = null,
+    val textStyle: TextStyle? = null,
 )
 
 @Composable
@@ -75,6 +78,7 @@ fun TextFormField(
         enabled = options.enabled,
         readOnly = options.readOnly,
         colors = options.colors ?: TextFieldDefaults.colors(),
-        interactionSource = options.interactionSource ?: remember { MutableInteractionSource() }
+        interactionSource = options.interactionSource ?: remember { MutableInteractionSource() },
+        textStyle = options.textStyle ?: LocalTextStyle.current,
     )
 }

@@ -51,8 +51,7 @@ public class CreateValidator : AbstractValidator<CreateRequest>
 
         RuleFor(x => x.ExpirationDate)
             .Null()
-            .When(x => x.ExpirationDateKind == ExpirationDateKindDto.Infinite ||
-                       x.ExpirationDateKind == ExpirationDateKindDto.Unknown)
+            .When(x => x.ExpirationDateKind is ExpirationDateKindDto.Infinite or ExpirationDateKindDto.Unknown)
             .WithMessage(_ =>
                 productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_not_null)]);
 
@@ -64,7 +63,7 @@ public class CreateValidator : AbstractValidator<CreateRequest>
         RuleFor(x => x.CategoryId)
             .NotEmpty()
             .WithMessage(_ => categoriesLocalizer[nameof(Categories.category_id_empty)]);
-        
+
         RuleFor(x => x.AmountUnitId)
             .NotEmpty()
             .WithMessage(_ => productsLocalizer[nameof(Resources.Resources.Products.Products.amount_unit_id_empty)]);

@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.ui.components.categories.CategoryImage
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
@@ -73,7 +74,8 @@ fun ProductSummaryItem(
     inPreview: Boolean = false,
     animationDuration: Duration = Duration.ofMillis(300),
     onRestored: () -> Unit = {},
-    onDeleted: () -> Unit = {}
+    onDeleted: () -> Unit = {},
+    imageRequestBuilder: ImageRequest.Builder? = null
 ) {
     var isDeleted by remember { mutableStateOf(false) }
     var isRestored by remember { mutableStateOf(false) }
@@ -132,6 +134,7 @@ fun ProductSummaryItem(
                 Row {
                     CategoryImage(
                         imageUri = productSummaryItemState.categoryImageUri,
+                        imageRequestBuilder = imageRequestBuilder,
                         inPreview = inPreview
                     )
                     ProductDetails(

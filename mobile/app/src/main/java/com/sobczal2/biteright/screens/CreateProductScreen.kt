@@ -114,6 +114,7 @@ fun CreateProductScreenContent(
                 onChange = {
                     sendEvent(CreateProductScreenEvent.OnCategoryChange(it))
                 },
+                imageRequestBuilder = state.imageRequestBuilder
             )
 
             AmountFormField(

@@ -50,4 +50,5 @@
     <string name="validation_amount_empty">Amount can\'t be empty</string>
     <string name="validation_unit_empty">Unit can\'t be empty</string>
     <string name="validation_description_characters_not_valid">Description contains illegal characters. Allowed characters: %1$s</string>
+    <string name="expiration_date_kind">Expiration date kind</string>
 </resources>

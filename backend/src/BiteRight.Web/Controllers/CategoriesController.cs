@@ -10,7 +10,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using BiteRight.Application.Dtos.Categories;
 using BiteRight.Application.Dtos.Common;
+using BiteRight.Application.Queries.Categories.GetDefault;
 using BiteRight.Application.Queries.Categories.GetPhoto;
 using BiteRight.Application.Queries.Categories.Search;
 using BiteRight.Web.Authorization;
@@ -48,8 +50,8 @@ public class CategoriesController : WebController
         return Ok(response);
     }
 
-    // TODO: add authorization
     [HttpGet("{categoryId:guid}/photo")]
+    [AuthorizeUserExists]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetPhoto(
@@ -66,5 +68,21 @@ public class CategoriesController : WebController
         {
             FileDownloadName = photo.FileName
         };
+    }
+    
+    [HttpGet("default")]
+    [AuthorizeUserExists]
+    [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetDefault(
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Mediator.Send(
+            new GetDefaultRequest(),
+            cancellationToken
+        );
+
+        return Ok(response);
     }
 }

@@ -14,12 +14,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.BiteRightPreview
 
 @Composable
-fun CategoryImage(imageUri: String?, inPreview: Boolean) {
+fun CategoryImage(
+    imageUri: String?,
+    inPreview: Boolean = false,
+    imageRequestBuilder: ImageRequest.Builder? = null
+) {
     if (inPreview) {
         Box(modifier = Modifier.size(64.dp), contentAlignment = Alignment.Center) {
             Icon(
@@ -36,7 +41,7 @@ fun CategoryImage(imageUri: String?, inPreview: Boolean) {
                 .background(MaterialTheme.colorScheme.inverseSurface, CircleShape)
         ) {
             AsyncImage(
-                model = imageUri,
+                model = imageRequestBuilder?.data(imageUri)?.build() ?: imageUri,
                 contentDescription = "Product Image",
                 modifier = Modifier.size(64.dp)
             )

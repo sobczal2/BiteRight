@@ -2,6 +2,7 @@ package com.sobczal2.biteright.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.request.ImageRequest
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.data.api.requests.products.CreateRequest
 import com.sobczal2.biteright.dto.categories.CategoryDto
@@ -11,6 +12,7 @@ import com.sobczal2.biteright.repositories.abstractions.CategoryRepository
 import com.sobczal2.biteright.repositories.abstractions.CurrencyRepository
 import com.sobczal2.biteright.repositories.abstractions.ProductRepository
 import com.sobczal2.biteright.repositories.abstractions.UnitRepository
+import com.sobczal2.biteright.repositories.common.ApiRepositoryError
 import com.sobczal2.biteright.state.CreateProductScreenState
 import com.sobczal2.biteright.ui.components.amounts.FormAmountWithUnit
 import com.sobczal2.biteright.ui.components.products.ExpirationDate
@@ -34,9 +36,14 @@ class CreateProductViewModel @Inject constructor(
     private val categoryRepository: CategoryRepository,
     private val unitRepository: UnitRepository,
     private val productRepository: ProductRepository,
-    private val stringProvider: StringProvider
+    private val stringProvider: StringProvider,
+    imageRequestBuilder: ImageRequest.Builder,
 ) : ViewModel() {
-    private val _state = MutableStateFlow(CreateProductScreenState())
+    private val _state = MutableStateFlow(
+        CreateProductScreenState(
+            imageRequestBuilder = imageRequestBuilder
+        )
+    )
     val state = _state.asStateFlow()
 
     private val _events = Channel<CreateProductScreenEvent>()
@@ -44,10 +51,18 @@ class CreateProductViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            launch { events.collect { event -> handleEvent(event) } }
-            launch { fetchCurrencies() }
-            launch { fetchCategories() }
-            launch { fetchUnits() }
+            launch {  _events.receiveAsFlow().collect { handleEvent(it) } }
+            _state.update { it.copy(globalLoading = true) }
+
+            val fetchCurrenciesJob = launch { fetchCurrencies() }
+            val fetchCategoriesJob = launch { fetchCategories() }
+            val fetchUnitsJob = launch { fetchUnits() }
+
+            fetchCurrenciesJob.join()
+            fetchCategoriesJob.join()
+            fetchUnitsJob.join()
+
+            _state.update { it.copy(globalLoading = false) }
         }
     }
 
@@ -161,12 +176,6 @@ class CreateProductViewModel @Inject constructor(
     }
 
     private suspend fun fetchCurrencies() {
-        _state.update {
-            it.copy(
-                globalLoading = true
-            )
-        }
-
         val currenciesResult = currencyRepository.list()
 
         currenciesResult.fold(
@@ -185,18 +194,9 @@ class CreateProductViewModel @Inject constructor(
                 )
             }
         )
-
-        _state.value = state.value.copy(
-            globalLoading = false
-        )
     }
 
     private suspend fun fetchCategories() {
-        _state.update {
-            it.copy(
-                globalLoading = true
-            )
-        }
 
         val categoriesResult = categoryRepository.search(
             CategoriesSearchRequest(
@@ -222,18 +222,9 @@ class CreateProductViewModel @Inject constructor(
             }
         )
 
-        _state.value = state.value.copy(
-            globalLoading = false
-        )
     }
 
     private suspend fun fetchUnits() {
-        _state.update {
-            it.copy(
-                globalLoading = true
-            )
-        }
-
         val unitsResult = unitRepository.search(
             UnitsSearchRequest(
                 query = "",
@@ -252,14 +243,12 @@ class CreateProductViewModel @Inject constructor(
                 }
             },
             { repositoryError ->
-                _state.value = state.value.copy(
-                    globalError = repositoryError.message
-                )
+                _state.update { state ->
+                    state.copy(
+                        globalError = repositoryError.message
+                    )
+                }
             }
-        )
-
-        _state.value = state.value.copy(
-            globalLoading = false
         )
     }
 
@@ -275,7 +264,7 @@ class CreateProductViewModel @Inject constructor(
             )
         }
 
-        productRepository.createProduct(
+        val createResult = productRepository.createProduct(
             CreateRequest(
                 name = state.value.nameFieldState.value,
                 description = state.value.descriptionFieldState.value,
@@ -289,13 +278,118 @@ class CreateProductViewModel @Inject constructor(
             )
         )
 
+        createResult.fold(
+            {
+                onSuccess()
+            },
+            { repositoryError ->
+                if (repositoryError is ApiRepositoryError) {
+                    repositoryError.apiErrors.forEach { (key, value) ->
+                        when (key.lowercase()) {
+                            CreateRequest::name.name.lowercase() -> {
+                                _state.update {
+                                    it.copy(
+                                        nameFieldState = it.nameFieldState.copy(
+                                            error = value.firstOrNull()
+                                        )
+                                    )
+                                }
+                            }
+
+                            CreateRequest::description.name.lowercase() -> {
+                                _state.update {
+                                    it.copy(
+                                        descriptionFieldState = it.descriptionFieldState.copy(
+                                            error = value.firstOrNull()
+                                        )
+                                    )
+                                }
+                            }
+
+                            CreateRequest::price.name.lowercase() -> {
+                                _state.update {
+                                    it.copy(
+                                        priceFieldState = it.priceFieldState.copy(
+                                            priceError = value.firstOrNull()
+                                        )
+                                    )
+                                }
+                            }
+
+                            CreateRequest::currencyId.name.lowercase() -> {
+                                _state.update {
+                                    it.copy(
+                                        priceFieldState = it.priceFieldState.copy(
+                                            currencyError = value.firstOrNull()
+                                        )
+                                    )
+                                }
+                            }
+
+                            CreateRequest::expirationDateKind.name.lowercase() -> {
+                                _state.update {
+                                    it.copy(
+                                        expirationDateFieldState = it.expirationDateFieldState.copy(
+                                            expirationDateKindError = value.firstOrNull()
+                                        )
+                                    )
+                                }
+                            }
+
+                            CreateRequest::expirationDate.name.lowercase() -> {
+                                _state.update {
+                                    it.copy(
+                                        expirationDateFieldState = it.expirationDateFieldState.copy(
+                                            localDateError = value.firstOrNull()
+                                        )
+                                    )
+                                }
+                            }
+
+                            CreateRequest::categoryId.name.lowercase() -> {
+                                _state.update {
+                                    it.copy(
+                                        categoryFieldState = it.categoryFieldState.copy(
+                                            error = value.firstOrNull()
+                                        )
+                                    )
+                                }
+                            }
+
+                            CreateRequest::maximumAmountValue.name.lowercase() -> {
+                                _state.update {
+                                    it.copy(
+                                        amountFormFieldState = it.amountFormFieldState.copy(
+                                            amountError = value.firstOrNull()
+                                        )
+                                    )
+                                }
+                            }
+
+                            CreateRequest::amountUnitId.name.lowercase() -> {
+                                _state.update {
+                                    it.copy(
+                                        amountFormFieldState = it.amountFormFieldState.copy(
+                                            unitError = value.firstOrNull()
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    _state.value = state.value.copy(
+                        globalError = repositoryError.message
+                    )
+                }
+            }
+        )
+
         _state.update {
             it.copy(
                 formSubmitting = false
             )
         }
-
-        onSuccess()
     }
 
     private fun validate(): Boolean {

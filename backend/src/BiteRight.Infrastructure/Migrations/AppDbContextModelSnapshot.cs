@@ -28,6 +28,10 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_default");
+
                     b.Property<Guid?>("PhotoId")
                         .HasColumnType("uuid")
                         .HasColumnName("photo_id");
@@ -44,46 +48,55 @@ namespace BiteRight.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757")
+                            Id = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
+                            IsDefault = true
                         },
                         new
                         {
                             Id = new Guid("e8c78317-70ac-4051-805e-ece2bb37656f"),
+                            IsDefault = false,
                             PhotoId = new Guid("98eb4dc2-11b5-440b-bfc1-742fda8279b7")
                         },
                         new
                         {
                             Id = new Guid("1fd7ed59-9e34-40ab-a03d-6282b5d9fd86"),
+                            IsDefault = false,
                             PhotoId = new Guid("5e4d81da-841b-493a-a47b-9f69791e1063")
                         },
                         new
                         {
                             Id = new Guid("349774c7-3249-4245-a1e2-5b70c5725bbf"),
+                            IsDefault = false,
                             PhotoId = new Guid("2eaee2ac-3ebf-49f2-807b-1b0509f528ba")
                         },
                         new
                         {
                             Id = new Guid("5e40ba93-d28c-4cf3-9e75-379040a18e52"),
+                            IsDefault = false,
                             PhotoId = new Guid("4d4c96bc-6990-4b94-982e-d5e7860019a1")
                         },
                         new
                         {
                             Id = new Guid("17c56168-c9ec-4ffb-a074-495a02ab0359"),
+                            IsDefault = false,
                             PhotoId = new Guid("2bfd1c0c-8882-44fa-b73d-8588ad8ec50b")
                         },
                         new
                         {
                             Id = new Guid("7289cbc9-8249-4fc1-b2d3-bac90ad32595"),
+                            IsDefault = false,
                             PhotoId = new Guid("a186163e-0551-4968-8706-543c470db6db")
                         },
                         new
                         {
                             Id = new Guid("e86caf03-ea3b-49ab-b499-68e387919fb6"),
+                            IsDefault = false,
                             PhotoId = new Guid("4ceca44a-b13b-456a-9315-46b506076af4")
                         },
                         new
                         {
                             Id = new Guid("bf69966b-0cbc-4f5d-9388-c05926775cbf"),
+                            IsDefault = false,
                             PhotoId = new Guid("a2f14ba8-b9be-40cd-9be0-b3c587be2fc3")
                         });
                 });

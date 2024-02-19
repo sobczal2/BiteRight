@@ -2,6 +2,7 @@ package com.sobczal2.biteright.di
 
 import android.content.Context
 import androidx.core.content.ContextCompat.getString
+import coil.request.ImageRequest
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.sobczal2.biteright.AuthManager
@@ -17,6 +18,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -80,5 +82,20 @@ object AppModule {
     @Singleton
     fun provideStringProvider(@ApplicationContext context: Context): StringProvider {
         return StringProvider(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideImageRequestBuilder(
+        @ApplicationContext context: Context,
+        authManager: AuthManager
+    ): ImageRequest.Builder {
+        val jwt = runBlocking {
+            authManager.getJwt()
+        }
+
+        return ImageRequest
+            .Builder(context)
+            .addHeader("Authorization", "Bearer $jwt")
     }
 }

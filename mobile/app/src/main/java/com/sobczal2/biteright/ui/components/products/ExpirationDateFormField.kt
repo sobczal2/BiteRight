@@ -11,12 +11,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
@@ -35,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.products.ExpirationDateKindDto
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
@@ -90,7 +93,9 @@ fun ExpirationDateFormField(
     }
 
 
-    Column {
+    Column(
+        modifier = modifier,
+    ) {
         Column {
             var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -115,11 +120,6 @@ fun ExpirationDateFormField(
                 ),
                 onChange = {},
                 options = TextFormFieldOptions(
-                    shape = MaterialTheme.shapes.extraSmall.copy(
-                        topStart = CornerSize(0.dp),
-                        bottomStart = CornerSize(0.dp),
-                        bottomEnd = CornerSize(0.dp)
-                    ),
                     trailingIcon = {
                         Icon(
                             imageVector = if (dropDownExpanded) {
@@ -136,6 +136,11 @@ fun ExpirationDateFormField(
                         .copy(
                             errorTextColor = MaterialTheme.colorScheme.error
                         ),
+                    label = {
+                        Text(
+                            text = stringResource(id = R.string.expiration_date_kind),
+                        )
+                    },
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -183,10 +188,19 @@ fun ExpirationDateFormField(
         }
 
         if (ExpirationDateKindDto.shouldIncludeDate(state.value.expirationDateKind)) {
-            DatePicker(
-                state = datePickerState,
+            Card(
+                shape = MaterialTheme.shapes.small.copy(
+                    topStart = CornerSize(0.dp),
+                    topEnd = CornerSize(0.dp),
+                ),
                 modifier = Modifier.fillMaxWidth(),
-            )
+
+            ) {
+                DatePicker(
+                    state = datePickerState,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
         }
     }
 }
@@ -198,7 +212,12 @@ fun ExpirationDateFormField(
 fun ExpirationDateFormFieldPreview() {
     BiteRightTheme {
         ExpirationDateFormField(
-            state = ExpirationDateFormFieldState(),
+            state = ExpirationDateFormFieldState(
+                value = ExpirationDate(
+                    expirationDateKind = ExpirationDateKindDto.BestBefore,
+                    localDate = null,
+                ),
+            ),
             onChange = {},
         )
     }

@@ -29,27 +29,32 @@ public class Category : AggregateRoot<CategoryId>
 
     private Category(
         CategoryId id,
-        PhotoId? photoId
+        PhotoId? photoId,
+        bool isDefault
     )
         : base(id)
     {
         PhotoId = photoId;
         Photo = default!;
         Translations = default!;
+        IsDefault = isDefault;
     }
 
     public PhotoId? PhotoId { get; private set; }
     public virtual Photo? Photo { get; }
     public IEnumerable<Translation> Translations { get; }
+    public bool IsDefault { get; set; }
 
     public static Category Create(
         PhotoId? photoId,
+        bool isDefault,
         CategoryId? id = null
     )
     {
         var category = new Category(
             id ?? new CategoryId(),
-            photoId
+            photoId,
+            isDefault
         );
 
 

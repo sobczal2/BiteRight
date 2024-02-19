@@ -55,11 +55,10 @@ public class GetPhotoHandler : QueryHandlerBase<GetPhotoRequest, GetPhotoRespons
         const string directory = Photo.Directory;
         var fileStream = _fileProvider.GetStream(directory, photoName);
 
-        return new GetPhotoResponse
-        {
-            PhotoStream = fileStream,
-            ContentType = Photo.ContentType,
-            FileName = photoName
-        };
+        return new GetPhotoResponse(
+            fileStream,
+            Photo.ContentType,
+            photoName
+        );
     }
 }

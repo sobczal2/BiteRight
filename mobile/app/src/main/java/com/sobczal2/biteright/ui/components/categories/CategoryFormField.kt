@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import coil.request.ImageRequest
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.categories.CategoryDto
 import com.sobczal2.biteright.dto.categories.imageUri
@@ -53,6 +54,7 @@ data class CategoryFormFieldState(
 fun CategoryFormField(
     state: CategoryFormFieldState,
     onChange: (CategoryDto?) -> Unit,
+    imageRequestBuilder: ImageRequest.Builder? = null
 ) {
     var dropDownExpanded by remember { mutableStateOf(false) }
     val dropDownTextFieldState by remember {
@@ -151,7 +153,10 @@ fun CategoryFormField(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            CategoryImage(imageUri = category.imageUri(), inPreview = false)
+                            CategoryImage(
+                                imageUri = category.imageUri(),
+                                imageRequestBuilder = imageRequestBuilder,
+                            )
                             Text(text = category.name)
                         }
                     },
