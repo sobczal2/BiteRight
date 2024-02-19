@@ -22,6 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.dto.categories.CategoryDto
+import com.sobczal2.biteright.dto.common.PaginatedList
+import com.sobczal2.biteright.dto.common.PaginationParams
+import com.sobczal2.biteright.dto.common.emptyPaginatedList
 import com.sobczal2.biteright.events.CreateProductScreenEvent
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.state.CreateProductScreenState
@@ -48,6 +52,7 @@ fun CreateProductScreen(
         CreateProductScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,
+            searchCategories = viewModel::searchCategories,
             handleNavigationEvent = handleNavigationEvent
         )
     }
@@ -57,6 +62,7 @@ fun CreateProductScreen(
 fun CreateProductScreenContent(
     state: CreateProductScreenState = CreateProductScreenState(),
     sendEvent: (CreateProductScreenEvent) -> Unit = {},
+    searchCategories: suspend (String, PaginationParams) -> PaginatedList<CategoryDto> = { _, _ -> emptyPaginatedList() },
     handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
@@ -117,6 +123,7 @@ fun CreateProductScreenContent(
                 onChange = {
                     sendEvent(CreateProductScreenEvent.OnCategoryChange(it))
                 },
+                searchCategories = searchCategories,
                 imageRequestBuilder = state.imageRequestBuilder
             )
 

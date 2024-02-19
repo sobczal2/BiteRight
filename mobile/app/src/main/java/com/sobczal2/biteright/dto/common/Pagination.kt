@@ -8,6 +8,16 @@ data class PaginatedList<T>(
     @SerializedName("totalCount") val totalCount: Int,
     @SerializedName("totalPages") val totalPages: Int,
     @SerializedName("items") val items: List<T>,
+) {
+    fun hasMore() = pageNumber < totalPages - 1
+}
+
+fun <T> emptyPaginatedList() = PaginatedList<T>(
+    pageNumber = 0,
+    pageSize = 0,
+    totalCount = 0,
+    totalPages = 0,
+    items = emptyList()
 )
 
 data class PaginationParams(

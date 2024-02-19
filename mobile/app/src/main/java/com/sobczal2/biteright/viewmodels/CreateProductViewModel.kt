@@ -6,7 +6,9 @@ import coil.request.ImageRequest
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.data.api.requests.products.CreateRequest
 import com.sobczal2.biteright.dto.categories.CategoryDto
+import com.sobczal2.biteright.dto.common.PaginatedList
 import com.sobczal2.biteright.dto.common.PaginationParams
+import com.sobczal2.biteright.dto.common.emptyPaginatedList
 import com.sobczal2.biteright.events.CreateProductScreenEvent
 import com.sobczal2.biteright.repositories.abstractions.CategoryRepository
 import com.sobczal2.biteright.repositories.abstractions.CurrencyRepository
@@ -22,6 +24,7 @@ import com.sobczal2.biteright.util.CommonRegexes
 import com.sobczal2.biteright.util.StringProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -57,13 +60,11 @@ class CreateProductViewModel @Inject constructor(
             _state.update { it.copy(globalLoading = true) }
 
             val fetchCurrenciesJob = launch { fetchCurrencies() }
-            val fetchCategoriesJob = launch { fetchCategories() }
             val fetchUnitsJob = launch { fetchUnits() }
             val fetchDefaultCategoryJob = launch { fetchDefaultCategory() }
             val fetchCurrentUserJob = launch { fetchCurrentUser() }
 
             fetchCurrenciesJob.join()
-            fetchCategoriesJob.join()
             fetchUnitsJob.join()
             fetchDefaultCategoryJob.join()
             fetchCurrentUserJob.join()
@@ -202,24 +203,21 @@ class CreateProductViewModel @Inject constructor(
         )
     }
 
-    private suspend fun fetchCategories() {
+    suspend fun searchCategories(
+        query: String,
+        paginationParams: PaginationParams
+    ): PaginatedList<CategoryDto> {
 
         val categoriesResult = categoryRepository.search(
             CategoriesSearchRequest(
-                query = "",
-                paginationParams = PaginationParams(0, 10)
+                query = query,
+                paginationParams = paginationParams
             )
         )
 
         categoriesResult.fold(
             { response ->
-                _state.update {
-                    it.copy(
-                        categoryFieldState = it.categoryFieldState.copy(
-                            availableCategories = response.categories.items
-                        )
-                    )
-                }
+                return response.categories
             },
             { repositoryError ->
                 _state.value = state.value.copy(
@@ -227,7 +225,7 @@ class CreateProductViewModel @Inject constructor(
                 )
             }
         )
-
+        return emptyPaginatedList()
     }
 
     private suspend fun fetchUnits() {
@@ -323,10 +321,10 @@ class CreateProductViewModel @Inject constructor(
                 name = state.value.nameFieldState.value,
                 description = state.value.descriptionFieldState.value,
                 price = state.value.priceFieldState.value.price,
-                currencyId = state.value.priceFieldState.value.currency?.id,
+                currencyId = state.value.priceFieldState.value.currency.id,
                 expirationDateKind = state.value.expirationDateFieldState.value.expirationDateKind,
                 expirationDate = state.value.expirationDateFieldState.value.localDate,
-                categoryId = state.value.categoryFieldState.value?.id!!,
+                categoryId = state.value.categoryFieldState.value.id,
                 maximumAmountValue = state.value.amountFormFieldState.value.amount!!,
                 amountUnitId = state.value.amountFormFieldState.value.unit!!.id
             )

@@ -19,7 +19,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
 data class TextFormFieldState(
-    override val value: String = "",
+    override var value: String = "",
     override val error: String? = null
 ) : FormFieldState<String>
 
