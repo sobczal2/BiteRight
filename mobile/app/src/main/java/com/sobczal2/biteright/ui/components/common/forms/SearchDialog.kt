@@ -11,6 +11,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -111,7 +112,7 @@ fun <T> SearchDialog(
 
     LaunchedEffect(Unit) {
         queryFieldStateFlow
-            .debounce(debounceDuration)
+            .debounce(if (initialLoading) Duration.ZERO else debounceDuration)
             .collect {
                 fetchItemsForNewQuery()
             }
