@@ -19,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
@@ -26,20 +27,22 @@ import com.sobczal2.biteright.dto.categories.CategoryDto
 import com.sobczal2.biteright.dto.common.PaginatedList
 import com.sobczal2.biteright.dto.common.PaginationParams
 import com.sobczal2.biteright.dto.common.emptyPaginatedList
+import com.sobczal2.biteright.dto.currencies.CurrencyDto
+import com.sobczal2.biteright.dto.units.UnitDto
 import com.sobczal2.biteright.events.CreateProductScreenEvent
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.state.CreateProductScreenState
-import com.sobczal2.biteright.ui.components.amounts.AmountFormField
+import com.sobczal2.biteright.ui.components.products.AmountFormField
 import com.sobczal2.biteright.ui.components.categories.CategoryFormField
 import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
-import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.products.ExpirationDateFormField
 import com.sobczal2.biteright.ui.components.products.PriceFormField
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
+import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.viewmodels.CreateProductViewModel
 
 @Composable
@@ -56,6 +59,8 @@ fun CreateProductScreen(
             state = state.value,
             sendEvent = viewModel::sendEvent,
             searchCategories = viewModel::searchCategories,
+            searchCurrencies = viewModel::searchCurrencies,
+            searchUnits = viewModel::searchUnits,
             handleNavigationEvent = handleNavigationEvent
         )
     }
@@ -66,6 +71,8 @@ fun CreateProductScreenContent(
     state: CreateProductScreenState = CreateProductScreenState(),
     sendEvent: (CreateProductScreenEvent) -> Unit = {},
     searchCategories: suspend (String, PaginationParams) -> PaginatedList<CategoryDto> = { _, _ -> emptyPaginatedList() },
+    searchCurrencies: suspend (String, PaginationParams) -> PaginatedList<CurrencyDto> = { _, _ -> emptyPaginatedList() },
+    searchUnits: suspend (String, PaginationParams) -> PaginatedList<UnitDto> = { _, _ -> emptyPaginatedList() },
     handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
@@ -81,7 +88,10 @@ fun CreateProductScreenContent(
         ) {
             Text(
                 text = stringResource(id = R.string.create_product),
-                style = MaterialTheme.typography.displayMedium
+                style = MaterialTheme.typography.displaySmall.copy(
+                    textAlign = TextAlign.Center
+                ),
+                modifier = Modifier.fillMaxWidth()
             )
             TextFormField(
                 modifier = Modifier.fillMaxWidth(),
@@ -107,11 +117,11 @@ fun CreateProductScreenContent(
                 )
             )
             PriceFormField(
-                modifier = Modifier.fillMaxWidth(),
                 state = state.priceFieldState,
                 onChange = {
                     sendEvent(CreateProductScreenEvent.OnPriceChange(it))
                 },
+                searchCurrencies = searchCurrencies
             )
             ExpirationDateFormField(
                 modifier = Modifier,
@@ -134,7 +144,8 @@ fun CreateProductScreenContent(
                 state = state.amountFormFieldState,
                 onChange = {
                     sendEvent(CreateProductScreenEvent.OnAmountChange(it))
-                }
+                },
+                searchUnits = searchUnits,
             )
 
             Row(
@@ -175,8 +186,7 @@ fun CreateProductScreenContent(
 
 
 @Composable
-@Preview(apiLevel = 33)
-@Preview(apiLevel = 33, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@BiteRightPreview
 fun CreateProductScreenPreview() {
     BiteRightTheme {
         CreateProductScreenContent()

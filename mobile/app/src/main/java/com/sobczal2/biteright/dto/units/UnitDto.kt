@@ -7,4 +7,13 @@ data class UnitDto(
     val name: String,
     val abbreviation: String,
     val unitSystem: UnitSystemDto
-)
+) {
+    companion object {
+        val Empty = UnitDto(
+            id = UUID.randomUUID(),
+            name = "",
+            abbreviation = "",
+            unitSystem = UnitSystemDto.Empty
+        )
+    }
+}

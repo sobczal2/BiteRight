@@ -8,21 +8,19 @@ enum class ExpirationDateKindDto(val value: Int) {
     BestBefore(2),
     UseBy(3);
 
-    companion object {
-        fun toLocalizedResourceID(kind: ExpirationDateKindDto) = when (kind) {
-            Unknown -> R.string.unknown
-            Infinite -> R.string.infinite
-            BestBefore -> R.string.best_before
-            UseBy -> R.string.use_by
-            else -> throw IllegalArgumentException("Unknown expiration date kind: $kind")
-        }
+    fun toLocalizedResourceID() = when (this) {
+        Unknown -> R.string.unknown
+        Infinite -> R.string.infinite
+        BestBefore -> R.string.best_before
+        UseBy -> R.string.use_by
+        else -> throw IllegalArgumentException("Unknown expiration date kind: $this")
+    }
 
-        fun shouldIncludeDate(kind: ExpirationDateKindDto) = when (kind) {
-            Unknown -> false
-            Infinite -> false
-            BestBefore -> true
-            UseBy -> true
-            else -> throw IllegalArgumentException("Unknown expiration date kind: $kind")
-        }
+    fun shouldIncludeDate() = when (this) {
+        Unknown -> false
+        Infinite -> false
+        BestBefore -> true
+        UseBy -> true
+        else -> throw IllegalArgumentException("Unknown expiration date kind: $this")
     }
 }

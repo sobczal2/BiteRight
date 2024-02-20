@@ -50,10 +50,14 @@
     <string name="validation_amount_empty">Amount can\'t be empty</string>
     <string name="validation_unit_empty">Unit can\'t be empty</string>
     <string name="validation_description_characters_not_valid">Description contains illegal characters. Allowed characters: %1$s</string>
-    <string name="expiration_date_kind">Expiration date kind</string>
+    <string name="expiration_kind">Expiration kind</string>
     <string name="search">Search</string>
     <string name="selected">Selected</string>
     <string name="category">Category</string>
     <string name="deleted">Deleted</string>
     <string name="no_results">No results</string>
+    <string name="confirm">Confirm</string>
+    <string name="date">Date</string>
+    <string name="unit">Unit</string>
+    <string name="validation_expiration_date_empty">Expiration date can\'t be empty when \"best by\" or \"use by\" kind are selected</string>
 </resources>

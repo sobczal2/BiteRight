@@ -1,10 +1,11 @@
 package com.sobczal2.biteright.ui.components.products
 
 import android.content.res.Configuration
-import androidx.compose.foundation.background
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
@@ -12,9 +13,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,7 +46,9 @@ import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.util.toEpochMillis
+import com.sobczal2.biteright.util.toLocalDate
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 data class ExpirationDate(
     val expirationDateKind: ExpirationDateKindDto,
@@ -77,6 +80,16 @@ fun ExpirationDateFormField(
         )
     }
 
+    val datePickerTextFieldState by remember {
+        mutableStateOf(
+            TextFormFieldState(
+                value = state.value.localDate?.toString() ?: ""
+            )
+        )
+    }
+
+    var datePickerDialogOpen by remember { mutableStateOf(false) }
+
     val datePickerState = rememberDatePickerState()
 
     LaunchedEffect(state.value) {
@@ -85,19 +98,14 @@ fun ExpirationDateFormField(
         }
     }
 
-    LaunchedEffect(datePickerState.selectedDateMillis) {
-        onChange(
-            state.value.copy(
-                localDate = datePickerState.selectedDateMillis?.let { LocalDate.ofEpochDay(it / (24 * 60 * 60 * 1000)) }
-            )
-        )
-    }
-
-
-    Column(
+    Row(
         modifier = modifier,
     ) {
-        Column {
+        Column(
+            modifier = Modifier
+                .animateContentSize()
+                .weight(0.5f)
+        ) {
             var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
             val interactionSource = remember { MutableInteractionSource() }
@@ -110,52 +118,47 @@ fun ExpirationDateFormField(
             }
 
 
-            TextFormField(
-                state = dropDownTextFieldState.copy(
-                    value = stringResource(
-                        id = ExpirationDateKindDto.toLocalizedResourceID(
-                            state.value.expirationDateKind
-                        )
+            TextFormField(state = dropDownTextFieldState.copy(
+                value = stringResource(
+                    id = state.value.expirationDateKind.toLocalizedResourceID()
+                ), error = state.expirationDateKindError
+            ), onChange = {}, options = TextFormFieldOptions(
+                trailingIcon = {
+                    Icon(
+                        imageVector = if (dropDownExpanded) {
+                            Icons.Default.KeyboardArrowUp
+                        } else {
+                            Icons.Default.KeyboardArrowDown
+                        }, contentDescription = null
+                    )
+                },
+                readOnly = true,
+                interactionSource = interactionSource,
+                colors = TextFieldDefaults.colors().copy(
+                        errorTextColor = MaterialTheme.colorScheme.error
                     ),
-                    error = state.expirationDateKindError
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.expiration_kind),
+                    )
+                },
+                shape = MaterialTheme.shapes.extraSmall.copy(
+                    topEnd = if (state.value.expirationDateKind.shouldIncludeDate()) {
+                        CornerSize(0.dp)
+                    } else {
+                        MaterialTheme.shapes.extraSmall.bottomEnd
+                    }, bottomEnd = CornerSize(0.dp), bottomStart = CornerSize(0.dp)
                 ),
-                onChange = {},
-                options = TextFormFieldOptions(
-                    trailingIcon = {
-                        Icon(
-                            imageVector = if (dropDownExpanded) {
-                                Icons.Default.KeyboardArrowUp
-                            } else {
-                                Icons.Default.KeyboardArrowDown
-                            },
-                            contentDescription = null
-                        )
-                    },
-                    readOnly = true,
-                    interactionSource = interactionSource,
-                    colors = TextFieldDefaults.colors()
-                        .copy(
-                            errorTextColor = MaterialTheme.colorScheme.error
-                        ),
-                    label = {
-                        Text(
-                            text = stringResource(id = R.string.expiration_date_kind),
-                        )
-                    },
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onGloballyPositioned {
-                        textFieldSize = it.size.toSize()
-                    }
-            )
-            DropdownMenu(
-                expanded = dropDownExpanded,
+            ), modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned {
+                    textFieldSize = it.size.toSize()
+                })
+            DropdownMenu(expanded = dropDownExpanded,
                 onDismissRequest = {
                     dropDownExpanded = false
                 },
-                modifier = Modifier
-                    .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+                modifier = Modifier.width(with(LocalDensity.current) { textFieldSize.width.toDp() })
             ) {
                 ExpirationDateKindDto.entries.forEach { expirationDateKind ->
                     DropdownMenuItem(
@@ -169,9 +172,7 @@ fun ExpirationDateFormField(
                         text = {
                             Text(
                                 text = stringResource(
-                                    id = ExpirationDateKindDto.toLocalizedResourceID(
-                                        expirationDateKind
-                                    )
+                                    id = expirationDateKind.toLocalizedResourceID()
                                 ),
                             )
                         },
@@ -179,6 +180,11 @@ fun ExpirationDateFormField(
                             onChange(
                                 state.value.copy(
                                     expirationDateKind = expirationDateKind,
+                                    localDate = if (expirationDateKind.shouldIncludeDate()) {
+                                        null
+                                    } else {
+                                        state.value.localDate
+                                    }
                                 )
                             )
                             dropDownExpanded = false
@@ -188,17 +194,69 @@ fun ExpirationDateFormField(
             }
         }
 
-        if (ExpirationDateKindDto.shouldIncludeDate(state.value.expirationDateKind)) {
-            DatePicker(
-                state = datePickerState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        CardDefaults.cardColors().containerColor, MaterialTheme.shapes.small.copy(
-                            topStart = CornerSize(0.dp),
-                            topEnd = CornerSize(0.dp),
-                        )
+        if (state.value.expirationDateKind.shouldIncludeDate()) {
+            val interactionSource = remember { MutableInteractionSource() }
+            val isPressed by interactionSource.collectIsPressedAsState()
+
+            LaunchedEffect(isPressed) {
+                if (isPressed) {
+                    datePickerDialogOpen = true
+                }
+            }
+
+            TextFormField(
+                state = datePickerTextFieldState.copy(
+                    value = state.value.localDate?.format(DateTimeFormatter.ISO_LOCAL_DATE) ?: "",
+                    error = state.localDateError
+                ),
+                onChange = {},
+                options = TextFormFieldOptions(shape = MaterialTheme.shapes.extraSmall.copy(
+                    topStart = CornerSize(0.dp),
+                    bottomStart = CornerSize(0.dp),
+                    bottomEnd = CornerSize(0.dp)
+                ),
+                    readOnly = true,
+                    interactionSource = interactionSource,
+                    colors = TextFieldDefaults.colors().copy(
+                        errorTextColor = MaterialTheme.colorScheme.error
                     ),
+                    label = {
+                        Text(
+                            text = stringResource(id = R.string.date),
+                        )
+                    }),
+                modifier = Modifier
+                    .weight(0.5f)
+            )
+        }
+    }
+    if (datePickerDialogOpen) {
+        DatePickerDialog(
+            onDismissRequest = {
+                datePickerDialogOpen = false
+            },
+            confirmButton = {
+                Button(onClick = {
+                    datePickerDialogOpen = false
+                    onChange(
+                        state.value.copy(
+                            localDate = datePickerState.selectedDateMillis?.toLocalDate()
+                        )
+                    )
+                }) {
+                    Text(text = stringResource(id = R.string.confirm))
+                }
+            },
+            dismissButton = {
+                Button(onClick = {
+                    datePickerDialogOpen = false
+                }) {
+                    Text(text = stringResource(id = R.string.cancel))
+                }
+            },
+        ) {
+            DatePicker(
+                state = datePickerState, modifier = Modifier
             )
         }
     }

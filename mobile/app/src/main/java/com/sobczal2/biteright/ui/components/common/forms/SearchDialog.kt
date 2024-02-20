@@ -1,4 +1,4 @@
-package com.sobczal2.biteright.ui.components.categories
+package com.sobczal2.biteright.ui.components.common.forms
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,39 +25,34 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
-import coil.request.ImageRequest
 import com.sobczal2.biteright.R
-import com.sobczal2.biteright.dto.categories.CategoryDto
 import com.sobczal2.biteright.dto.common.PaginatedList
 import com.sobczal2.biteright.dto.common.PaginationParams
-import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
-import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
-import com.sobczal2.biteright.util.BiteRightPreview
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.debounce
 import java.time.Duration
-import java.util.UUID
 
 @OptIn(FlowPreview::class)
 @Composable
-fun CategorySearchDialog(
-    selectedCategory: CategoryDto,
+fun <T> SearchDialog(
     modifier: Modifier = Modifier,
-    searchCategories: suspend (String, PaginationParams) -> PaginatedList<CategoryDto>,
-    onCategorySelected: (CategoryDto) -> Unit,
-    onDismissRequest: () -> Unit,
-    debounceDuration: Duration = Duration.ofMillis(300),
+    initialPaginationParams: PaginationParams = PaginationParams.Default,
+    search: suspend (String, PaginationParams) -> PaginatedList<T>,
     inPreview: Boolean = false,
-    imageRequestBuilder: ImageRequest.Builder? = null,
+    debounceDuration: Duration = Duration.ofMillis(300),
+    keySelector: (T) -> Any,
+    onDismissRequest: () -> Unit,
+    selectedItem: T,
+    listItem: @Composable (item: T, selected: Boolean) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val categories = remember {
-        mutableStateListOf<CategoryDto>()
+    val items = remember {
+        mutableStateListOf<T>()
     }
 
     val queryFieldStateFlow = remember {
@@ -77,29 +72,24 @@ fun CategorySearchDialog(
     }
 
     var paginationParams by remember {
-        mutableStateOf(
-            PaginationParams(
-                pageNumber = 0,
-                pageSize = 10
-            )
-        )
+        mutableStateOf(initialPaginationParams)
     }
 
     var hasMore by remember {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
 
-    fun fetchNewQueryCategories() {
+    fun fetchItemsForNewQuery() {
         if (loading) return
         loading = true
         coroutineScope.launch {
             paginationParams = paginationParams.copy(pageNumber = 0)
-            val searchedCategories = searchCategories(queryFieldState.value.value, paginationParams)
-            hasMore = searchedCategories.hasMore()
-            categories.clear()
-            categories.addAll(searchedCategories.items)
-            loading = false
+            val searchedItems = search(queryFieldState.value.value, paginationParams)
+            hasMore = searchedItems.hasMore()
+            items.clear()
+            items.addAll(searchedItems.items)
             initialLoading = false
+            loading = false
         }
     }
 
@@ -107,15 +97,15 @@ fun CategorySearchDialog(
         if (loading || !hasMore) return
         coroutineScope.launch {
             paginationParams = paginationParams.copy(pageNumber = paginationParams.pageNumber + 1)
-            val searchedCategories = searchCategories(queryFieldState.value.value, paginationParams)
-            hasMore = searchedCategories.hasMore()
-            categories.addAll(searchedCategories.items)
+            val searchedItems = search(queryFieldState.value.value, paginationParams)
+            hasMore = searchedItems.hasMore()
+            items.addAll(searchedItems.items)
         }
     }
 
     if (inPreview) {
         LaunchedEffect(Unit) {
-            fetchNewQueryCategories()
+            fetchItemsForNewQuery()
         }
     }
 
@@ -123,7 +113,7 @@ fun CategorySearchDialog(
         queryFieldStateFlow
             .debounce(debounceDuration)
             .collect {
-                fetchNewQueryCategories()
+                fetchItemsForNewQuery()
             }
     }
 
@@ -161,19 +151,10 @@ fun CategorySearchDialog(
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
                     content = {
-                        items(categories, key = { it.id }) { category ->
-                            CategoryItem(
-                                category = category,
-                                selected = category == selectedCategory,
-                                onClick = {
-                                    onCategorySelected(category)
-                                    onDismissRequest()
-                                },
-                                inPreview = inPreview,
-                                imageRequestBuilder = imageRequestBuilder
-                            )
+                        items(items, key = keySelector) { item ->
+                            listItem(item, item == selectedItem)
 
-                            if (category != categories.last()) {
+                            if (item != items.last()) {
                                 HorizontalDivider(
                                     modifier = Modifier.fillMaxWidth(),
                                     color = MaterialTheme.colorScheme.onSurface
@@ -196,7 +177,7 @@ fun CategorySearchDialog(
                         }
 
                         item {
-                            if (!initialLoading && !loading && !hasMore && categories.isEmpty()) {
+                            if (!initialLoading && !loading && !hasMore && items.isEmpty()) {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.Center
@@ -213,44 +194,5 @@ fun CategorySearchDialog(
                 )
             }
         }
-    }
-}
-
-@Composable
-@BiteRightPreview
-fun CategorySearchDialogPreview() {
-
-    val categories = listOf(
-        CategoryDto(
-            id = UUID.randomUUID(),
-            name = "Fruits",
-        ),
-        CategoryDto(
-            id = UUID.randomUUID(),
-            name = "Vegetables",
-        ),
-        CategoryDto(
-            id = UUID.randomUUID(),
-            name = "Meat",
-        ),
-    )
-    BiteRightTheme {
-        CategorySearchDialog(
-            selectedCategory = categories.first(),
-            searchCategories = { query, paginationParams ->
-                PaginatedList(
-                    pageNumber = paginationParams.pageNumber,
-                    pageSize = paginationParams.pageSize,
-                    totalCount = 3,
-                    totalPages = 1,
-                    items = categories.filter {
-                        it.name.contains(query)
-                    }
-                )
-            },
-            onCategorySelected = {},
-            onDismissRequest = {},
-            inPreview = true
-        )
     }
 }

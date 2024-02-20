@@ -18,6 +18,7 @@ import com.sobczal2.biteright.dto.categories.CategoryDto
 import com.sobczal2.biteright.dto.common.PaginatedList
 import com.sobczal2.biteright.dto.common.PaginationParams
 import com.sobczal2.biteright.ui.components.common.forms.FormFieldState
+import com.sobczal2.biteright.ui.components.common.forms.SearchDialog
 import com.sobczal2.biteright.util.BiteRightPreview
 import java.util.UUID
 
@@ -32,11 +33,14 @@ fun CategoryFormField(
     state: CategoryFormFieldState,
     onChange: (CategoryDto) -> Unit,
     searchCategories: suspend (String, PaginationParams) -> PaginatedList<CategoryDto>,
-    imageRequestBuilder: ImageRequest.Builder? = null
+    modifier: Modifier = Modifier,
+    imageRequestBuilder: ImageRequest.Builder? = null,
 ) {
     var dialogOpen by remember { mutableStateOf(false) }
 
-    Column {
+    Column(
+        modifier = modifier
+    ) {
         Card {
             CategoryItem(
                 category = state.value,
@@ -49,17 +53,25 @@ fun CategoryFormField(
         }
 
         if (dialogOpen) {
-            CategorySearchDialog(
-                selectedCategory = state.value,
-                modifier = Modifier.fillMaxHeight(0.5f),
-                searchCategories = searchCategories,
-                onCategorySelected = {
-                    onChange(it)
-                    dialogOpen = false
-                },
+            SearchDialog(
+                search = searchCategories,
+                keySelector = { it.id },
                 onDismissRequest = { dialogOpen = false },
-                imageRequestBuilder = imageRequestBuilder,
-            )
+                selectedItem = state.value,
+                modifier = Modifier
+                    .height(500.dp)
+            ) {category, selected ->
+                CategoryItem(
+                    category = category,
+                    selected = selected,
+                    onClick = {
+                        onChange(category)
+                        dialogOpen = false
+                    },
+                    inPreview = state.inPreview,
+                    imageRequestBuilder = imageRequestBuilder
+                )
+            }
         }
     }
 }

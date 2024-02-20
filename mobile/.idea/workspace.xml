@@ -17,34 +17,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="656647fa-75dd-4f3b-89da-2c91dd013bac" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Currencies/Search/SearchRequest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Currencies/Search/SearchResponse.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Currencies/Search/SearchValidator.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/requests/currencies/SearchRequest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Dtos/Common/ISortingStrategyHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Dtos/Common/ISortingStrategyHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Dtos/Products/ProductSortingSortingStrategyHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Dtos/Products/ProductSortingSortingStrategyHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Currencies/List/ListHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Currencies/List/ListRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Currencies/Search/SearchHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Currencies/List/ListResponse.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Products/ListCurrent/ListCurrentHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Products/ListCurrent/ListCurrentHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Products/Search/SearchHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Products/Search/SearchHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Products/Search/SearchRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Products/Search/SearchRequest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Products/Search/SearchResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Products/Search/SearchResponse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Products/Search/SearchValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Products/Search/SearchValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Units/Search/SearchValidator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Application/Queries/Units/Search/SearchValidator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Domain/Abstracts/Repositories/ICurrencyRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Domain/Abstracts/Repositories/ICurrencyRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Infrastructure/Domain/Repositories/CachedEfCoreCurrencyRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Infrastructure/Domain/Repositories/CachedEfCoreCurrencyRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Infrastructure/Domain/Repositories/CachedEfCoreUnitRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Infrastructure/Domain/Repositories/CachedEfCoreUnitRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Resources/Resources/Currencies/Currencies.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Resources/Resources/Currencies/Currencies.Designer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Resources/Resources/Currencies/Currencies.resx" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Resources/Resources/Currencies/Currencies.resx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Web/Controllers/CurrenciesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Web/Controllers/CurrenciesController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/BiteRight.Web/Controllers/ProductsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/BiteRight.Web/Controllers/ProductsController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/LabeledItem.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/forms/SearchDialog.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/currencies/CurrencyItem.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/units/UnitItem.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/abstractions/CurrenciesApi.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/abstractions/CurrenciesApi.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/responses/currencies/ListResponse.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/data/api/responses/currencies/SearchResponse.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/abstractions/CurrencyRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/abstractions/CurrencyRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/implementations/CurrencyRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/repositories/implementations/CurrencyRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/common/Pagination.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/common/Pagination.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/products/ExpirationDateKindDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/products/ExpirationDateKindDto.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/units/UnitDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/units/UnitDto.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/units/UnitSystemDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/dto/units/UnitSystemDto.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/events/CreateProductScreenEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/events/CreateProductScreenEvent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/CreateProductScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/screens/CreateProductScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/state/CreateProductScreenState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/state/CreateProductScreenState.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/amounts/AmountFormField.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/products/AmountFormField.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/categories/CategoryFormField.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/categories/CategoryFormField.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/categories/CategoryItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/categories/CategoryItem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/categories/CategorySearchDialog.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/products/ExpirationDateFormField.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/products/ExpirationDateFormField.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/products/PriceFormField.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/products/PriceFormField.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/util/LocalDateExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/util/LocalDateExtensions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/util/PreviewUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/util/PreviewUtils.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/CreateProductViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/CreateProductViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-en/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-en/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,6 +147,7 @@
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/products" />
       <recent name="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/categories" />
       <recent name="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/forms" />
       <recent name="$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common" />
@@ -477,14 +473,19 @@
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/categories/CategorySearchDialog.kt</url>
-          <line>106</line>
-          <option name="timeStamp" value="11" />
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/forms/SearchDialog.kt</url>
+          <line>96</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/categories/CategorySearchDialog.kt</url>
-          <line>97</line>
-          <option name="timeStamp" value="13" />
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/ui/components/common/forms/SearchDialog.kt</url>
+          <line>85</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/sobczal2/biteright/viewmodels/CreateProductViewModel.kt</url>
+          <line>282</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -31,12 +31,13 @@ fun CategoryItem(
     category: CategoryDto,
     selected: Boolean,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     label: String? = null,
     inPreview: Boolean = false,
-    imageRequestBuilder: ImageRequest.Builder? = null
+    imageRequestBuilder: ImageRequest.Builder? = null,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() },
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.sm),

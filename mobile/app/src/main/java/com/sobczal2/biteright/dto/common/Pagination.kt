@@ -23,4 +23,11 @@ fun <T> emptyPaginatedList() = PaginatedList<T>(
 data class PaginationParams(
     @SerializedName("pageNumber") val pageNumber: Int,
     @SerializedName("pageSize") val pageSize: Int,
-)
+) {
+    companion object {
+        val Default = PaginationParams(
+            pageNumber = 0,
+            pageSize = 10
+        )
+    }
+}

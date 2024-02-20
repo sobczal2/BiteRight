@@ -1,7 +1,7 @@
 package com.sobczal2.biteright.events
 
 import com.sobczal2.biteright.dto.categories.CategoryDto
-import com.sobczal2.biteright.ui.components.amounts.FormAmountWithUnit
+import com.sobczal2.biteright.ui.components.products.FormAmountWithUnit
 import com.sobczal2.biteright.ui.components.products.ExpirationDate
 import com.sobczal2.biteright.ui.components.products.FormPriceWithCurrency
 
