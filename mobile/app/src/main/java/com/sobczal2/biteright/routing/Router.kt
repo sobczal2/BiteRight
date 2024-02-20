@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sobczal2.biteright.AuthManager
 import com.sobczal2.biteright.events.NavigationEvent
+import com.sobczal2.biteright.screens.AllProductsScreen
 import com.sobczal2.biteright.screens.CreateProductScreen
 import com.sobczal2.biteright.screens.CurrentProductsScreen
 import com.sobczal2.biteright.screens.ProfileScreen
@@ -38,6 +39,11 @@ fun Router(authManager: AuthManager) {
         }
         composable(Routes.CURRENT_PRODUCTS) {
             CurrentProductsScreen(
+                handleNavigationEvent = { event -> handleNavigationEvent(event, navController) }
+            )
+        }
+        composable(Routes.ALL_PRODUCTS) {
+            AllProductsScreen(
                 handleNavigationEvent = { event -> handleNavigationEvent(event, navController) }
             )
         }

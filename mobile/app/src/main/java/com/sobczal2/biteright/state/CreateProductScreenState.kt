@@ -3,7 +3,6 @@ package com.sobczal2.biteright.state
 import coil.request.ImageRequest
 import com.sobczal2.biteright.dto.categories.CategoryDto
 import com.sobczal2.biteright.dto.common.PaginatedList
-import com.sobczal2.biteright.dto.common.emptyPaginatedList
 import com.sobczal2.biteright.dto.currencies.CurrencyDto
 import com.sobczal2.biteright.dto.units.UnitDto
 import com.sobczal2.biteright.ui.components.products.AmountFormFieldState
@@ -28,4 +27,4 @@ data class CreateProductScreenState(
     val startingUnits: PaginatedList<UnitDto>? = null,
     override val globalLoading: Boolean = false,
     override val globalError: String? = null,
-) : ScreenStateBase
+) : ScreenState

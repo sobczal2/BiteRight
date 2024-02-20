@@ -34,6 +34,7 @@ import com.sobczal2.biteright.ui.components.products.ProductSummaryItem
 import com.sobczal2.biteright.ui.components.products.ProductSummaryItemState
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
+import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.util.getCategoryPhotoUrl
 import com.sobczal2.biteright.viewmodels.CurrentProductsViewModel
 import java.time.LocalDate
@@ -53,7 +54,7 @@ fun CurrentProductsScreen(
         CurrentProductsScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,
-            handleNavigationEvent = handleNavigationEvent
+            handleNavigationEvent = handleNavigationEvent,
         )
     }
 }
@@ -139,8 +140,7 @@ fun CurrentProductsScreenContent(
 }
 
 @Composable
-@Preview(apiLevel = 33)
-@Preview("Dark Theme", apiLevel = 33, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@BiteRightPreview
 fun CurrentProductsScreenPreview() {
     BiteRightTheme {
         CurrentProductsScreenContent(
