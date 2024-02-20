@@ -1,13 +1,13 @@
 // # ==============================================================================
 // # Solution: BiteRight
-// # File: ListResponse.cs
+// # File: SearchResponse.cs
 // # Author: Łukasz Sobczak
-// # Created: 16-02-2024
+// # Created: 20-02-2024
 // # ==============================================================================
 
 using BiteRight.Application.Dtos.Common;
-using BiteRight.Application.Dtos.Products;
+using BiteRight.Application.Dtos.Currencies;
 
-namespace BiteRight.Application.Queries.Products.Search;
+namespace BiteRight.Application.Queries.Currencies.Search;
 
-public record SearchResponse(PaginatedList<SimpleProductDto> Products);
+public record SearchResponse(PaginatedList<CurrencyDto> Currencies);

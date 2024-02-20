@@ -7,8 +7,9 @@
 
 #region
 
+using System.Threading;
 using System.Threading.Tasks;
-using BiteRight.Application.Queries.Currencies.List;
+using BiteRight.Application.Queries.Currencies.Search;
 using BiteRight.Web.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -26,13 +27,21 @@ public class CurrenciesController : WebController
         : base(mediator)
     {
     }
-
-    [HttpGet]
+    
+    [HttpPost("search")]
     [AuthorizeUserExists]
-    [ProducesResponseType(typeof(ListResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> List()
+    [ProducesResponseType(typeof(SearchResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Search(
+        [FromBody] SearchRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        var response = await Mediator.Send(new ListRequest());
+        var response = await Mediator.Send(
+            request,
+            cancellationToken
+        );
+
         return Ok(response);
     }
 }

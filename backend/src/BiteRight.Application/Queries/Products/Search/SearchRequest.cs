@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using BiteRight.Application.Dtos.Common;
 using BiteRight.Application.Dtos.Products;
-using BiteRight.Application.Queries.Products.List;
 using MediatR;
 
 namespace BiteRight.Application.Queries.Products.Search;

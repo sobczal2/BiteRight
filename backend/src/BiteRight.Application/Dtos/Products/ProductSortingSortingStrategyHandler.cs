@@ -7,11 +7,10 @@
 
 using System;
 using System.Linq;
-using BiteRight.Application.Dtos.Products;
-using BiteRight.Application.Queries.Common;
+using BiteRight.Application.Dtos.Common;
 using BiteRight.Domain.Products;
 
-namespace BiteRight.Application.Queries.Products.Common;
+namespace BiteRight.Application.Dtos.Products;
 
 public class ProductSortingSortingStrategyHandler : ISortingStrategyHandler<ProductSortingStrategy, Product>
 {

@@ -14,7 +14,6 @@ using BiteRight.Application.Commands.Products.Create;
 using BiteRight.Application.Commands.Products.Dispose;
 using BiteRight.Application.Commands.Products.Restore;
 using BiteRight.Application.Dtos.Products;
-using BiteRight.Application.Queries.Products.List;
 using BiteRight.Application.Queries.Products.ListCurrent;
 using BiteRight.Application.Queries.Products.Search;
 using BiteRight.Web.Authorization;

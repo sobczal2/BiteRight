@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 using BiteRight.Application.Common;
 using BiteRight.Application.Common.Exceptions;
 using BiteRight.Application.Dtos.Products;
-using BiteRight.Application.Queries.Products.Common;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Products;

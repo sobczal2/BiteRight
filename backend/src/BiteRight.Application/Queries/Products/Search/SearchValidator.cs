@@ -5,11 +5,10 @@
 // # Created: 16-02-2024
 // # ==============================================================================
 
-using BiteRight.Application.Queries.Products.Search;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace BiteRight.Application.Queries.Products.List;
+namespace BiteRight.Application.Queries.Products.Search;
 
 public class SearchValidator : AbstractValidator<SearchRequest>
 {

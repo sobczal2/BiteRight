@@ -24,7 +24,6 @@ import com.sobczal2.biteright.util.CommonRegexes
 import com.sobczal2.biteright.util.StringProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -33,6 +32,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.sobczal2.biteright.data.api.requests.categories.SearchRequest as CategoriesSearchRequest
 import com.sobczal2.biteright.data.api.requests.units.SearchRequest as UnitsSearchRequest
+import com.sobczal2.biteright.data.api.requests.currencies.SearchRequest as CurrenciesSearchRequest
 
 @HiltViewModel
 class CreateProductViewModel @Inject constructor(
@@ -183,14 +183,17 @@ class CreateProductViewModel @Inject constructor(
     }
 
     private suspend fun fetchCurrencies() {
-        val currenciesResult = currencyRepository.list()
+        val currenciesResult = currencyRepository.search(CurrenciesSearchRequest(
+            query = "",
+            paginationParams = PaginationParams(0, 10)
+        ))
 
         currenciesResult.fold(
             { response ->
                 _state.update {
                     it.copy(
                         priceFieldState = it.priceFieldState.copy(
-                            availableCurrencies = response.currencies
+                            availableCurrencies = response.currencies.items
                         )
                     )
                 }

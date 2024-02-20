@@ -68,8 +68,7 @@ public class CachedEfCoreUnitRepository : IUnitRepository
 #pragma warning disable CA1862
                         (
                             ((string)translation.Name).ToLower().Contains(query.ToLower())
-                            ||
-                            ((string)translation.Abbreviation).ToLower().Contains(query.ToLower())
+                            || ((string)translation.Abbreviation).ToLower().Contains(query.ToLower())
                         )
 #pragma warning restore CA1862
                         && Equals(translation.LanguageId, languageId)

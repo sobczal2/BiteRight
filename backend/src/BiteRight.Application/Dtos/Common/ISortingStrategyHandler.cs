@@ -7,7 +7,7 @@
 
 using System.Linq;
 
-namespace BiteRight.Application.Queries.Common;
+namespace BiteRight.Application.Dtos.Common;
 
 public interface ISortingStrategyHandler<in TStrategy, TEntity>
 {

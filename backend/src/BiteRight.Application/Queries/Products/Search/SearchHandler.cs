@@ -11,14 +11,12 @@ using System.Threading.Tasks;
 using BiteRight.Application.Common;
 using BiteRight.Application.Dtos.Common;
 using BiteRight.Application.Dtos.Products;
-using BiteRight.Application.Queries.Products.Common;
-using BiteRight.Application.Queries.Products.Search;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace BiteRight.Application.Queries.Products.List;
+namespace BiteRight.Application.Queries.Products.Search;
 
 public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
 {
