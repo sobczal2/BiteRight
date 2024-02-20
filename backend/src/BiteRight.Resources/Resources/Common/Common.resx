@@ -31,7 +31,7 @@
         <value>Page size must be between {0} and {1}</value>
     </data>
     <data name="pagination_params_null" xml:space="preserve">
-        <value>Pagination params are required</value>
+        <value>Pagination params can't be null</value>
     </data>
     <data name="unknown_error" xml:space="preserve">
         <value>Unknown error occurred</value>
@@ -41,5 +41,14 @@
     </data>
     <data name="internal_error" xml:space="preserve">
         <value>Internal error</value>
+    </data>
+    <data name="validation_error" xml:space="preserve">
+        <value>Validation error</value>
+    </data>
+    <data name="query_too_long" xml:space="preserve">
+        <value>Query can't be longer than {0} characters</value>
+    </data>
+    <data name="filtering_params_null" xml:space="preserve">
+        <value>Filtering params can't be null</value>
     </data>
 </root>

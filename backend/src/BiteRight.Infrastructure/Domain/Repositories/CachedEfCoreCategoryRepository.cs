@@ -100,6 +100,17 @@ public class CachedEfCoreCategoryRepository : ICategoryRepository
         return category;
     }
 
+    public async Task<Category> GetDefault(
+        LanguageId languageId,
+        CancellationToken cancellationToken
+    )
+    {
+        return await _appDbContext.Categories
+            .Include(c => c.Translations.Where(t => t.LanguageId == languageId))
+            .Include(c => c.Photo)
+            .SingleAsync(c => c.IsDefault, cancellationToken);
+    }
+
 
     private static string GetCacheKey(
         CategoryId id,

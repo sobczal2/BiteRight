@@ -16,13 +16,10 @@ namespace BiteRight.Application.Queries.Units.Search;
 
 public class SearchRequest : IRequest<SearchResponse>
 {
-    public SearchRequest(
-        string query,
-        PaginationParams paginationParams
-    )
+    public SearchRequest()
     {
-        Query = query;
-        PaginationParams = paginationParams;
+        Query = string.Empty;
+        PaginationParams = PaginationParams.Default;
     }
 
     public string Query { get; set; }

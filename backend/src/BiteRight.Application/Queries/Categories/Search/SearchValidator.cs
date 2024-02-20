@@ -18,7 +18,6 @@ namespace BiteRight.Application.Queries.Categories.Search;
 public class SearchValidator : AbstractValidator<SearchRequest>
 {
     public SearchValidator(
-        IStringLocalizer<Resources.Resources.Categories.Categories> categoriesLocalizer,
         IStringLocalizer<Resources.Resources.Common.Common> commonLocalizer
     )
     {
@@ -26,7 +25,8 @@ public class SearchValidator : AbstractValidator<SearchRequest>
         RuleFor(x => x.Query)
             .MaximumLength(maxQueryLength)
             .WithMessage(string.Format(
-                categoriesLocalizer[nameof(Resources.Resources.Categories.Categories.query_too_long)], maxQueryLength));
+                commonLocalizer[nameof(Resources.Resources.Common.Common.query_too_long)], maxQueryLength));
+        
         RuleFor(x => x.PaginationParams)
             .NotNull()
             .WithMessage(commonLocalizer[nameof(Resources.Resources.Common.Common.pagination_params_null)]);

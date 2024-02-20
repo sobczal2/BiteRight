@@ -56,5 +56,11 @@ namespace BiteRight.Resources.Resources.Currencies {
                 return ResourceManager.GetString("currency_id_empty", resourceCulture);
             }
         }
+        
+        public static string query_too_long {
+            get {
+                return ResourceManager.GetString("query_too_long", resourceCulture);
+            }
+        }
     }
 }

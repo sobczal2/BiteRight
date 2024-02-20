@@ -13,6 +13,7 @@ using System.IO;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Options;
 using BiteRight.Web.Authorization;
@@ -54,7 +55,12 @@ public static class WebRegistrations
     )
     {
         services.AddControllers(opt => { opt.Filters.Add<ApplicationExceptionFilter>(); })
-            .AddJsonOptions(opt => { opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; });
+            .AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                var enumConverter = new JsonStringEnumConverter();
+                opt.JsonSerializerOptions.Converters.Add(enumConverter);
+            });
     }
 
     private static void AddSwagger(

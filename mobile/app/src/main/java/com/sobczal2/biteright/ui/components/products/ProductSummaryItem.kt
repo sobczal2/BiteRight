@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,9 +16,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,15 +43,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.ui.components.categories.CategoryImage
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.humanizePeriod
 import com.sobczal2.biteright.util.truncateString
 import kotlinx.coroutines.delay
-import java.time.LocalDate
 import java.time.Duration
+import java.time.LocalDate
 import java.time.Period
 import kotlin.math.roundToInt
 
@@ -71,7 +73,8 @@ fun ProductSummaryItem(
     inPreview: Boolean = false,
     animationDuration: Duration = Duration.ofMillis(300),
     onRestored: () -> Unit = {},
-    onDeleted: () -> Unit = {}
+    onDeleted: () -> Unit = {},
+    imageRequestBuilder: ImageRequest.Builder? = null
 ) {
     var isDeleted by remember { mutableStateOf(false) }
     var isRestored by remember { mutableStateOf(false) }
@@ -127,9 +130,15 @@ fun ProductSummaryItem(
                     .clickable(onClick = onClick)
                     .fillMaxWidth()
             ) {
-                Row {
-                    ProductImage(
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.sm),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CategoryImage(
                         imageUri = productSummaryItemState.categoryImageUri,
+                        imageRequestBuilder = imageRequestBuilder,
                         inPreview = inPreview
                     )
                     ProductDetails(
@@ -137,7 +146,10 @@ fun ProductSummaryItem(
                         modifier = Modifier
                             .weight(1f)
                     )
-                    ProductConsumptionIndicator(amountPercentage = productSummaryItemState.amountPercentage)
+                    ProductConsumptionIndicator(
+                        amountPercentage = productSummaryItemState.amountPercentage,
+                        disposed = productSummaryItemState.disposed
+                    )
                 }
             }
         }
@@ -146,53 +158,51 @@ fun ProductSummaryItem(
 
 @Composable
 fun ProductConsumptionIndicator(
-    amountPercentage: Double
+    amountPercentage: Double,
+    disposed: Boolean
 ) {
-    Box(
-        modifier = Modifier
-            .padding(8.dp)
-            .width(48.dp)
-    ) {
-        CircularProgressIndicator(
-            progress = { amountPercentage.toFloat() / 100 },
-            modifier = Modifier.size(48.dp),
-            color = getColorForAmountPercentage(amountPercentage)
-        )
-        Text(
-            text = "${amountPercentage.roundToInt()}%",
-            modifier = Modifier.align(Alignment.Center),
-            style = MaterialTheme.typography.labelMedium
-                .copy(textAlign = TextAlign.Center)
-        )
+    if (disposed) {
+        Box(
+            modifier = Modifier
+                .padding(MaterialTheme.dimension.sm)
+                .size(MaterialTheme.dimension.xxl),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = stringResource(id = R.string.deleted),
+                modifier = Modifier.size(MaterialTheme.dimension.xl),
+                tint = MaterialTheme.colorScheme.error
+            )
+        }
+    } else {
+        Box(
+            modifier = Modifier
+                .padding(8.dp)
+                .width(MaterialTheme.dimension.xxl),
+        ) {
+            CircularProgressIndicator(
+                progress = { amountPercentage.toFloat() / 100 },
+                modifier = Modifier.size(MaterialTheme.dimension.xxl),
+                color = getColorForAmountPercentage(amountPercentage)
+            )
+            Text(
+                text = "${amountPercentage.roundToInt()}%",
+                modifier = Modifier.align(Alignment.Center),
+                style = MaterialTheme.typography.labelMedium
+                    .copy(textAlign = TextAlign.Center)
+            )
+        }
     }
 }
 
 private fun getColorForAmountPercentage(amountPercentage: Double): Color {
     return when (amountPercentage) {
-        in 0.0..25.0 -> Color.Green
-        in 25.0..50.0 -> Color.Yellow
-        in 50.0..75.0 -> Color(0xFFFFA500)
-        in 75.0..100.0 -> Color.Red
+        in 0.0..25.0 -> Color.Red
+        in 25.0..50.0 -> Color(0xFFFFA500)
+        in 50.0..75.0 -> Color.Yellow
+        in 75.0..100.0 -> Color.Green
         else -> Color.Black
-    }
-}
-
-@Composable
-fun ProductImage(imageUri: String?, inPreview: Boolean) {
-    if (inPreview) {
-        Box(modifier = Modifier.size(64.dp), contentAlignment = Alignment.Center) {
-            Icon(
-                Icons.Default.Image,
-                contentDescription = "Preview Image",
-                modifier = Modifier.size(50.dp)
-            )
-        }
-    } else {
-        AsyncImage(
-            model = imageUri,
-            contentDescription = "Product Image",
-            modifier = Modifier.size(64.dp)
-        )
     }
 }
 
@@ -285,8 +295,8 @@ fun SwipeToDismissBackground(state: SwipeToDismissBoxState) {
 
 
 @Composable
-@Preview
-@Preview("Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(apiLevel = 33)
+@Preview("Dark Theme", apiLevel = 33, uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun ProductSummaryItemPreview() {
     BiteRightTheme {
         ProductSummaryItem(
@@ -294,7 +304,8 @@ fun ProductSummaryItemPreview() {
                 name = "Product name Product name Product name",
                 expirationDate = LocalDate.now().plusDays(5),
                 categoryImageUri = null,
-                amountPercentage = 50.0
+                amountPercentage = 50.0,
+                disposed = false
             ),
             inPreview = true
         )

@@ -1,6 +1,5 @@
 package com.sobczal2.biteright.screens
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,57 +9,51 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.dto.products.SimpleProductDto
+import com.sobczal2.biteright.events.CurrentProductsScreenEvent
+import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.state.CurrentProductsScreenState
-import com.sobczal2.biteright.ui.components.common.BigLoader
-import com.sobczal2.biteright.ui.components.common.MainAppLayoutTab
-import com.sobczal2.biteright.ui.components.common.MainAppLayout
-import com.sobczal2.biteright.ui.components.common.MainAppLayoutActions
+import com.sobczal2.biteright.ui.components.common.HomeLayout
+import com.sobczal2.biteright.ui.components.common.HomeLayoutTab
+import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
+import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.components.products.ProductSummaryItem
 import com.sobczal2.biteright.ui.components.products.ProductSummaryItemState
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.getCategoryPhotoUrl
 import com.sobczal2.biteright.viewmodels.CurrentProductsViewModel
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.UUID
 
 @Composable
 fun CurrentProductsScreen(
     viewModel: CurrentProductsViewModel = hiltViewModel(),
-    navigateToStart: () -> Unit,
-    mainAppLayoutActions: MainAppLayoutActions
+    handleNavigationEvent: (NavigationEvent) -> Unit,
 ) {
     val state = viewModel.state.collectAsState()
 
-    LaunchedEffect(Unit) {
-        if (!viewModel.isOnboarded()) {
-            navigateToStart()
-        } else {
-            viewModel.fetchCurrentProducts()
-        }
-    }
-
-    if (state.value.loading) {
-        BigLoader()
-    } else {
+    ScaffoldLoader(
+        loading = state.value.globalLoading
+    ) {
         CurrentProductsScreenContent(
             state = state.value,
-            mainAppLayoutActions = mainAppLayoutActions,
-            disposeProduct = { viewModel.disposeProduct(it) }
+            sendEvent = viewModel::sendEvent,
+            handleNavigationEvent = handleNavigationEvent
         )
     }
 }
@@ -68,16 +61,17 @@ fun CurrentProductsScreen(
 @Composable
 fun CurrentProductsScreenContent(
     state: CurrentProductsScreenState = CurrentProductsScreenState(),
-    mainAppLayoutActions: MainAppLayoutActions = MainAppLayoutActions(),
-    navigateToCreateProduct: () -> Unit = {},
-    disposeProduct: (UUID) -> Unit = {}
+    sendEvent: (CurrentProductsScreenEvent) -> Unit = {},
+    handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
-    MainAppLayout(
-        currentTab = MainAppLayoutTab.CURRENT_PRODUCTS,
-        mainAppLayoutActions = mainAppLayoutActions,
+    HomeLayout(
+        currentTab = HomeLayoutTab.CURRENT_PRODUCTS,
+        handleNavigationEvent = handleNavigationEvent,
         floatingActionButton = {
             FloatingActionButton(
-                onClick = navigateToCreateProduct
+                onClick = {
+                    handleNavigationEvent(NavigationEvent.NavigateToCreateProduct)
+                },
             ) {
                 Column(
                     modifier = Modifier.padding(MaterialTheme.dimension.sm),
@@ -92,24 +86,22 @@ fun CurrentProductsScreenContent(
             }
         }
     ) { paddingValues ->
-        Surface(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues = paddingValues)
+                .padding(paddingValues)
+                .padding(MaterialTheme.dimension.xl),
         ) {
+            Text(
+                text = "Current Products",
+                style = MaterialTheme.typography.displayMedium.plus(
+                    TextStyle(textAlign = TextAlign.Center)
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
             LazyColumn(
                 content = {
-                    item {
-                        Text(
-                            text = "Current Products",
-                            style = MaterialTheme.typography.displayMedium.plus(
-                                TextStyle(textAlign = TextAlign.Center)
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(MaterialTheme.dimension.sm)
-                        )
-                    }
                     items(
                         items = state.currentProducts,
                         key = { it.id }
@@ -117,14 +109,28 @@ fun CurrentProductsScreenContent(
                         ProductSummaryItem(
                             productSummaryItemState = ProductSummaryItemState(
                                 name = simpleProductDto.name,
-                                expirationDate = simpleProductDto.expirationDate,
+                                expirationDate = simpleProductDto.expirationDate ?: LocalDate.MIN, // TODO: workaround for now
                                 categoryImageUri = getCategoryPhotoUrl(categoryId = simpleProductDto.categoryId),
                                 amountPercentage = simpleProductDto.amountPercentage,
                                 disposed = simpleProductDto.disposed,
                             ),
                             onClick = { /*TODO*/ },
-                            onDeleted = { disposeProduct(simpleProductDto.id) }
+                            onDeleted = {
+                                sendEvent(
+                                    CurrentProductsScreenEvent.OnProductDispose(
+                                        simpleProductDto.id
+                                    )
+                                )
+                            },
+                            imageRequestBuilder = state.imageRequestBuilder,
                         )
+
+                        if (simpleProductDto != state.currentProducts.last()) {
+                            HorizontalDivider(
+                                modifier = Modifier.fillMaxWidth(),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
                     }
                 },
             )
@@ -133,10 +139,24 @@ fun CurrentProductsScreenContent(
 }
 
 @Composable
-@Preview
-@Preview("Dark Theme", uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(apiLevel = 33)
+@Preview("Dark Theme", apiLevel = 33, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 fun CurrentProductsScreenPreview() {
     BiteRightTheme {
-        CurrentProductsScreenContent()
+        CurrentProductsScreenContent(
+            state = CurrentProductsScreenState(
+                currentProducts = listOf(
+                    SimpleProductDto(
+                        id = UUID.randomUUID(),
+                        name = "Product 1",
+                        expirationDate = LocalDate.now(),
+                        categoryId = UUID.randomUUID(),
+                        amountPercentage = 50.0,
+                        disposed = false,
+                        addedDateTime = LocalDateTime.now()
+                    ),
+                )
+            )
+        )
     }
 }

@@ -147,15 +147,33 @@ namespace BiteRight.Resources.Resources.Products {
             }
         }
         
-        public static string amount_max_value_less_than_zero {
-            get {
-                return ResourceManager.GetString("amount_max_value_less_than_zero", resourceCulture);
-            }
-        }
-        
         public static string amount_current_value_greater_than_max_value {
             get {
                 return ResourceManager.GetString("amount_current_value_greater_than_max_value", resourceCulture);
+            }
+        }
+        
+        public static string product_not_disposed {
+            get {
+                return ResourceManager.GetString("product_not_disposed", resourceCulture);
+            }
+        }
+        
+        public static string amount_unit_id_empty {
+            get {
+                return ResourceManager.GetString("amount_unit_id_empty", resourceCulture);
+            }
+        }
+        
+        public static string amount_max_value_invalid_value {
+            get {
+                return ResourceManager.GetString("amount_max_value_invalid_value", resourceCulture);
+            }
+        }
+        
+        public static string amount_current_value_invalid_value {
+            get {
+                return ResourceManager.GetString("amount_current_value_invalid_value", resourceCulture);
             }
         }
     }

@@ -7,6 +7,10 @@
 
 namespace BiteRight.Application.Dtos.Products;
 
+// TODO na ekranie z listą wszystkich produktów,
+// sortowanie, wyszukiwanie(nazwa, kategoria, opisie)
+// i filtrowanie(po stanie daty ważnośc - expired, nie expired,
+// po kategorii)
 public enum ProductSortingStrategy
 {
     NameAsc = 0,
@@ -15,6 +19,7 @@ public enum ProductSortingStrategy
     ExpirationDateDesc = 3,
     AddedDateTimeAsc = 4,
     AddedDateTimeDesc = 5,
-    ConsumptionAsc = 6,
-    ConsumptionDesc = 7
+    PercentageAmountAsc = 6,
+    PercentageAmountDesc = 7,
+    Default = NameAsc
 }

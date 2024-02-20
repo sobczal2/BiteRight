@@ -25,7 +25,7 @@
         </value>
     </resheader>
     <data name="unit_not_found" xml:space="preserve">
-        <value/>
+        <value>Unit was not found</value>
     </data>
     <data name="query_too_long" xml:space="preserve">
         <value>Query length cannot exceed {0} characters</value>

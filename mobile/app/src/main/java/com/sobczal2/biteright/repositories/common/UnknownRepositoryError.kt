@@ -1,9 +1,11 @@
 package com.sobczal2.biteright.repositories.common
 
 import com.sobczal2.biteright.R
-import com.sobczal2.biteright.util.ResourceIdOrString
+import com.sobczal2.biteright.util.StringProvider
 
-class UnknownRepositoryError : RepositoryError {
-    override val message: ResourceIdOrString
-        get() = ResourceIdOrString(R.string.unknown_error)
+class UnknownRepositoryError(
+    private val stringProvider: StringProvider
+) : RepositoryError {
+    override val message: String
+        get() = stringProvider.getString(R.string.unknown_error)
 }

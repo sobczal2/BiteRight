@@ -59,7 +59,7 @@ public class DisposeHandler : CommandHandlerBase<DisposeRequest>
                 _productLocalizer[nameof(Resources.Resources.Products.Products.product_already_disposed)]
             );
 
-        product.SetDisposed(_dateTimeProvider.UtcNow);
+        product.Dispose(_dateTimeProvider.UtcNow);
 
         return Unit.Value;
     }

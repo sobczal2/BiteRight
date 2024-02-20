@@ -41,12 +41,10 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
     private readonly IStringLocalizer<Resources.Resources.Products.Products> _productsLocalizer;
     private readonly IUnitRepository _unitRepository;
     private readonly IStringLocalizer<Units> _unitsLocalizer;
-    private readonly IUserRepository _userRepository;
 
     public CreateHandler(
         IIdentityProvider identityProvider,
         IDateTimeProvider dateTimeProvider,
-        IUserRepository userRepository,
         ICurrencyRepository currencyRepository,
         IProductRepository productRepository,
         ICategoryRepository categoryRepository,
@@ -61,7 +59,6 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
     {
         _identityProvider = identityProvider;
         _dateTimeProvider = dateTimeProvider;
-        _userRepository = userRepository;
         _currencyRepository = currencyRepository;
         _productRepository = productRepository;
         _categoryRepository = categoryRepository;
@@ -77,9 +74,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
         CancellationToken cancellationToken
     )
     {
-        var currentIdentityId = _identityProvider.RequireCurrent();
-        var user = await _userRepository.FindByIdentityId(currentIdentityId, cancellationToken)
-                   ?? throw new InternalErrorException();
+        var user = await _identityProvider.RequireCurrentUser(cancellationToken);
 
         var name = Name.Create(request.Name);
         var description = Description.Create(request.Description);
@@ -89,6 +84,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
         {
             var currency = await _currencyRepository.FindById(request.CurrencyId, cancellationToken)
                            ?? throw ValidationException(
+                               nameof(CreateRequest.CurrencyId),
                                _currenciesLocalizer[
                                    nameof(Currencies.currency_not_found)]);
             price = Price.Create(request.Price.Value, currency);
@@ -107,12 +103,14 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
 
         var category = await _categoryRepository.FindById(request.CategoryId, languageId, cancellationToken)
                        ?? throw ValidationException(
+                           nameof(CreateRequest.CategoryId),
                            _productsLocalizer[
                                nameof(Categories.category_not_found)]
                        );
 
         var amountUnit = await _unitRepository.FindById(request.AmountUnitId, languageId, cancellationToken)
                          ?? throw ValidationException(
+                             nameof(CreateRequest.AmountUnitId),
                              _unitsLocalizer[
                                  nameof(Units.unit_not_found)]
                          );
@@ -186,13 +184,22 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                 nameof(CreateRequest.ExpirationDateKind),
                 _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_infinite)]
             ),
-            AmountCurrentValueLessThanZeroException => ValidationException(
+            AmountCurrentValueInvalidValueException e => ValidationException(
                 nameof(CreateRequest.MaximumAmountValue),
-                _productsLocalizer[nameof(Resources.Resources.Products.Products.amount_current_value_less_than_zero)]
+                string.Format(
+                    _productsLocalizer
+                        [nameof(Resources.Resources.Products.Products.amount_current_value_invalid_value)],
+                    e.MinValue,
+                    e.MaxValue
+                )
             ),
-            AmountMaxValueLessThanZeroException => ValidationException(
+            AmountMaxValueInvalidValueException e => ValidationException(
                 nameof(CreateRequest.MaximumAmountValue),
-                _productsLocalizer[nameof(Resources.Resources.Products.Products.amount_max_value_less_than_zero)]
+                string.Format(
+                    _productsLocalizer[nameof(Resources.Resources.Products.Products.amount_max_value_invalid_value)],
+                    e.MinValue,
+                    e.MaxValue
+                )
             ),
             AmountCurrentValueGreaterThanMaxValueException => ValidationException(
                 nameof(CreateRequest.MaximumAmountValue),

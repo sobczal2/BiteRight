@@ -20,14 +20,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
-import com.sobczal2.biteright.util.ResourceIdOrString
-import com.sobczal2.biteright.util.asString
 
 @Composable
 fun ErrorBox(
-    message: String,
+    error: String?,
     modifier: Modifier = Modifier
 ) {
+    if (error == null) return
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.errorContainer,
@@ -51,7 +50,7 @@ fun ErrorBox(
                     .size(MaterialTheme.dimension.md)
             )
             Text(
-                text = message,
+                text = error,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.error,
@@ -59,18 +58,6 @@ fun ErrorBox(
             )
         }
     }
-}
-
-@Composable
-fun ErrorBoxWrapped(
-    message: ResourceIdOrString?,
-    modifier: Modifier = Modifier
-) {
-    if (message == null) return
-    ErrorBox(
-        message = message.asString(),
-        modifier = modifier
-    )
 }
 
 @Composable
@@ -83,9 +70,10 @@ fun ErrorBoxPreview() {
 
 @Composable
 fun ErrorBox(
-    errors: Map<String, List<String>>,
+    errors: Map<String, List<String>>?,
     modifier: Modifier = Modifier
 ) {
+    if (errors == null) return
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.errorContainer,
@@ -134,20 +122,6 @@ fun ErrorBox(
             }
         }
     }
-}
-
-@Composable
-fun ErrorBoxWrapped(
-    errors: Map<ResourceIdOrString, List<ResourceIdOrString>>?,
-    modifier: Modifier = Modifier
-) {
-    if (errors == null) return
-    ErrorBox(
-        errors.map { (key, value) ->
-            key.asString() to value.map { it.asString() }
-        }.toMap(),
-        modifier
-    )
 }
 
 @Composable

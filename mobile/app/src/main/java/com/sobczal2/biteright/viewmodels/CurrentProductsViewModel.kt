@@ -1,67 +1,59 @@
 package com.sobczal2.biteright.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import coil.request.ImageRequest
 import com.sobczal2.biteright.data.api.requests.products.ListCurrentRequest
 import com.sobczal2.biteright.dto.products.ProductSortingStrategy
+import com.sobczal2.biteright.events.CurrentProductsScreenEvent
 import com.sobczal2.biteright.repositories.abstractions.ProductRepository
-import com.sobczal2.biteright.repositories.abstractions.UserRepository
-import com.sobczal2.biteright.repositories.common.ApiRepositoryError
 import com.sobczal2.biteright.state.CurrentProductsScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class CurrentProductsViewModel @Inject constructor(
-    private val userRepository: UserRepository,
     private val productRepository: ProductRepository,
+    imageRequestBuilder: ImageRequest.Builder
 ) : ViewModel() {
-    private val _state = MutableStateFlow(CurrentProductsScreenState())
+    private val _state = MutableStateFlow(CurrentProductsScreenState(
+        imageRequestBuilder = imageRequestBuilder
+    ))
     val state = _state.asStateFlow()
 
-    suspend fun isOnboarded(): Boolean {
-        _state.update {
-            it.copy(
-                loading = true
-            )
+    private val _events = Channel<CurrentProductsScreenEvent>()
+    val events = _events.receiveAsFlow()
+
+    init {
+        viewModelScope.launch {
+            launch { events.collect { event -> handleEvent(event) } }
+            launch { fetchCurrentProducts() }
         }
-        val meResult = userRepository.me()
-
-        val isOnboarded = meResult.fold(
-            {
-                true
-            },
-            { repositoryError ->
-                if (repositoryError is ApiRepositoryError && repositoryError.apiErrorCode == 404) {
-                    false
-                } else {
-                    _state.update {
-                        it.copy(
-                            loading = false,
-                            error = repositoryError.message
-                        )
-                    }
-                    false
-                }
-            }
-        )
-
-        _state.update {
-            it.copy(
-                loading = false
-            )
-        }
-
-        return isOnboarded
     }
 
-    suspend fun fetchCurrentProducts() {
+    fun sendEvent(event: CurrentProductsScreenEvent) {
+        viewModelScope.launch {
+            _events.send(event)
+        }
+    }
+
+    private fun handleEvent(event: CurrentProductsScreenEvent) {
+        when (event) {
+            is CurrentProductsScreenEvent.OnProductDispose -> disposeProduct(event.productId)
+        }
+    }
+
+    private suspend fun fetchCurrentProducts() {
         _state.update {
             it.copy(
-                loading = true
+                 globalLoading = true
             )
         }
 
@@ -72,26 +64,30 @@ class CurrentProductsViewModel @Inject constructor(
         )
 
         productsResult.fold(
-            { products ->
+            { response ->
                 _state.update {
                     it.copy(
-                        loading = false,
-                        currentProducts = products
+                        currentProducts = response.products
                     )
                 }
             },
             { repositoryError ->
                 _state.update {
                     it.copy(
-                        loading = false,
-                        error = repositoryError.message
+                        globalError = repositoryError.message
                     )
                 }
             }
         )
+
+        _state.update {
+            it.copy(
+                globalLoading = false
+            )
+        }
     }
 
-    fun disposeProduct(productId: UUID) {
+    private fun disposeProduct(productId: UUID) {
         _state.update {
             it.copy(
                 currentProducts = it.currentProducts.filter { product ->

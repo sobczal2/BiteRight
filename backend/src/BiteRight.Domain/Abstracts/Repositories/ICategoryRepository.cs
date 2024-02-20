@@ -32,4 +32,9 @@ public interface ICategoryRepository
         LanguageId languageId,
         CancellationToken cancellationToken = default
     );
+
+    Task<Category> GetDefault(
+        LanguageId languageId,
+        CancellationToken cancellationToken
+    );
 }

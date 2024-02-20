@@ -1,6 +1,8 @@
 package com.sobczal2.biteright.dto.users
 
 import com.google.gson.annotations.SerializedName
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.Date
 import java.util.UUID
 
@@ -9,6 +11,6 @@ data class UserDto(
     @SerializedName("identityId") val identityId: String,
     @SerializedName("username") val username: String,
     @SerializedName("email") val email: String,
-    @SerializedName("joinedAt") val joinedAt: Date,
+    @SerializedName("joinedAt") val joinedAt: LocalDateTime,
     @SerializedName("profile") val profile: ProfileDto
 )

@@ -7,6 +7,7 @@
 
 #region
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -62,7 +63,6 @@ public class CachedEfCoreCurrencyRepository : ICurrencyRepository
     }
 
 
-
     public Task<bool> ExistsById(
         CurrencyId id,
         CancellationToken cancellationToken = default
@@ -71,6 +71,36 @@ public class CachedEfCoreCurrencyRepository : ICurrencyRepository
         return _appDbContext.Currencies
             .Where(currency => currency.Id == id)
             .AnyAsync(cancellationToken);
+    }
+
+    public async Task<(IEnumerable<Currency> Currencies, int TotalCount)> Search(
+        string query,
+        int pageNumber,
+        int pageSize,
+        CancellationToken cancellationToken
+    )
+    {
+        var baseQuery = _appDbContext.Currencies
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(query))
+            baseQuery = baseQuery.Where(
+#pragma warning disable CA1862
+                currency => ((string)currency.Name).ToLower().Contains(query.ToLower())
+                            || ((string)currency.ISO4217Code).ToLower().Contains(query.ToLower())
+                            || ((string)currency.Symbol).ToLower().Contains(query.ToLower())
+#pragma warning restore CA1862
+            );
+        
+        var totalCount = await baseQuery.CountAsync(cancellationToken);
+        
+        var currencies = await baseQuery
+            .OrderBy(currency => currency.Name)
+            .Skip(pageNumber * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+        
+        return (currencies, totalCount);
     }
 
     private static string GetCacheKey(

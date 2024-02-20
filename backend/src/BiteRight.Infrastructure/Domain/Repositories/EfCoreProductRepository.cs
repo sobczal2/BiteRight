@@ -40,6 +40,7 @@ public class EfCoreProductRepository : IProductRepository
     {
         return await _appDbContext
             .Products
+            .Include(product => product.Amount)
             .FirstOrDefaultAsync(product => product.Id == id, cancellationToken);
     }
 }

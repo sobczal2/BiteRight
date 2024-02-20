@@ -76,7 +76,7 @@ public class ExpirationDate : ValueObject
 
     public static ExpirationDate CreateUnknown()
     {
-        return Create(DateOnly.MaxValue, ExpirationDateKind.Unknown);
+        return Create(DateOnly.MinValue, ExpirationDateKind.Unknown);
     }
 
     public static ExpirationDate CreateInfinite()

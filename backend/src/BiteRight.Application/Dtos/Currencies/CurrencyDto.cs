@@ -8,6 +8,7 @@
 #region
 
 using System;
+using BiteRight.Domain.Currencies;
 
 #endregion
 
@@ -18,7 +19,18 @@ public class CurrencyDto
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;
     public string Symbol { get; set; } = default!;
+    public string Code { get; set; } = default!;
 
-    // ReSharper disable once InconsistentNaming
-    public string ISO4217Code { get; set; } = default!;
+    public static CurrencyDto FromDomain(
+        Currency currency
+    )
+    {
+        return new CurrencyDto
+        {
+            Id = currency.Id,
+            Name = currency.Name,
+            Symbol = currency.Symbol,
+            Code = currency.ISO4217Code
+        };
+    }
 }

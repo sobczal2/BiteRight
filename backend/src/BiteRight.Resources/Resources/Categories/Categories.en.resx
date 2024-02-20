@@ -24,9 +24,6 @@
             PublicKeyToken=b77a5c561934e089
         </value>
     </resheader>
-    <data name="query_too_long" xml:space="preserve">
-        <value>Query length cannot exceed {0} characters</value>
-    </data>
     <data name="category_not_found" xml:space="preserve">
         <value>Category not found</value>
     </data>

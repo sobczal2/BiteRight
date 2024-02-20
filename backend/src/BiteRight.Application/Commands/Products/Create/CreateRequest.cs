@@ -20,8 +20,8 @@ public record CreateRequest(
     string Description,
     decimal? Price,
     Guid? CurrencyId,
-    DateOnly? ExpirationDate,
     ExpirationDateKindDto ExpirationDateKind,
+    DateOnly? ExpirationDate,
     Guid CategoryId,
     double MaximumAmountValue,
     Guid AmountUnitId

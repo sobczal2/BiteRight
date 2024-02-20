@@ -24,7 +24,4 @@
             PublicKeyToken=b77a5c561934e089
         </value>
     </resheader>
-    <data name="query_too_long" xml:space="preserve">
-        <value>Die Länge der Abfrage darf {0} Zeichen nicht überschreiten</value>
-    </data>
 </root>

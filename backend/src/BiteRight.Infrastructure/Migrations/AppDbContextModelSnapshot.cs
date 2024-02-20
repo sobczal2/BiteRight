@@ -28,6 +28,10 @@ namespace BiteRight.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_default");
+
                     b.Property<Guid?>("PhotoId")
                         .HasColumnType("uuid")
                         .HasColumnName("photo_id");
@@ -44,32 +48,56 @@ namespace BiteRight.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
+                            Id = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
+                            IsDefault = true
+                        },
+                        new
+                        {
                             Id = new Guid("e8c78317-70ac-4051-805e-ece2bb37656f"),
+                            IsDefault = false,
                             PhotoId = new Guid("98eb4dc2-11b5-440b-bfc1-742fda8279b7")
                         },
                         new
                         {
                             Id = new Guid("1fd7ed59-9e34-40ab-a03d-6282b5d9fd86"),
+                            IsDefault = false,
                             PhotoId = new Guid("5e4d81da-841b-493a-a47b-9f69791e1063")
                         },
                         new
                         {
                             Id = new Guid("349774c7-3249-4245-a1e2-5b70c5725bbf"),
+                            IsDefault = false,
                             PhotoId = new Guid("2eaee2ac-3ebf-49f2-807b-1b0509f528ba")
                         },
                         new
                         {
                             Id = new Guid("5e40ba93-d28c-4cf3-9e75-379040a18e52"),
+                            IsDefault = false,
                             PhotoId = new Guid("4d4c96bc-6990-4b94-982e-d5e7860019a1")
                         },
                         new
                         {
                             Id = new Guid("17c56168-c9ec-4ffb-a074-495a02ab0359"),
+                            IsDefault = false,
                             PhotoId = new Guid("2bfd1c0c-8882-44fa-b73d-8588ad8ec50b")
                         },
                         new
                         {
-                            Id = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757")
+                            Id = new Guid("7289cbc9-8249-4fc1-b2d3-bac90ad32595"),
+                            IsDefault = false,
+                            PhotoId = new Guid("a186163e-0551-4968-8706-543c470db6db")
+                        },
+                        new
+                        {
+                            Id = new Guid("e86caf03-ea3b-49ab-b499-68e387919fb6"),
+                            IsDefault = false,
+                            PhotoId = new Guid("4ceca44a-b13b-456a-9315-46b506076af4")
+                        },
+                        new
+                        {
+                            Id = new Guid("bf69966b-0cbc-4f5d-9388-c05926775cbf"),
+                            IsDefault = false,
+                            PhotoId = new Guid("a2f14ba8-b9be-40cd-9be0-b3c587be2fc3")
                         });
                 });
 
@@ -119,6 +147,21 @@ namespace BiteRight.Infrastructure.Migrations
                         {
                             Id = new Guid("2bfd1c0c-8882-44fa-b73d-8588ad8ec50b"),
                             Name = "fish.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("a186163e-0551-4968-8706-543c470db6db"),
+                            Name = "beverage.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("4ceca44a-b13b-456a-9315-46b506076af4"),
+                            Name = "snack.webp"
+                        },
+                        new
+                        {
+                            Id = new Guid("a2f14ba8-b9be-40cd-9be0-b3c587be2fc3"),
+                            Name = "wheat.webp"
                         });
                 });
 
@@ -153,6 +196,27 @@ namespace BiteRight.Infrastructure.Migrations
                     b.ToTable("category_translations", "category");
 
                     b.HasData(
+                        new
+                        {
+                            Id = new Guid("f7b5e10f-0719-4731-831a-ffe0a1a1ed07"),
+                            CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
+                            LanguageId = new Guid("454faf9a-644c-445c-89e3-b57203957c1a"),
+                            Name = "None"
+                        },
+                        new
+                        {
+                            Id = new Guid("abed62c9-41b4-462f-866b-06d714dec958"),
+                            CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
+                            LanguageId = new Guid("24d48691-7325-4703-b69f-8db933a6736d"),
+                            Name = "Brak"
+                        },
+                        new
+                        {
+                            Id = new Guid("206a3c95-fb6d-4127-a37b-9f328c021021"),
+                            CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
+                            LanguageId = new Guid("c1dd0a3b-70d3-4aa1-b53e-4c08a03b57c3"),
+                            Name = "Keine"
+                        },
                         new
                         {
                             Id = new Guid("38097234-329c-4372-a54f-13e6c41004fa"),
@@ -260,24 +324,66 @@ namespace BiteRight.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f7b5e10f-0719-4731-831a-ffe0a1a1ed07"),
-                            CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
+                            Id = new Guid("2e24ca76-c17c-4a80-874b-98a33b825567"),
+                            CategoryId = new Guid("7289cbc9-8249-4fc1-b2d3-bac90ad32595"),
                             LanguageId = new Guid("454faf9a-644c-445c-89e3-b57203957c1a"),
-                            Name = "None"
+                            Name = "Beverage"
                         },
                         new
                         {
-                            Id = new Guid("abed62c9-41b4-462f-866b-06d714dec958"),
-                            CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
+                            Id = new Guid("329f0e4b-b364-41f9-ad75-804d796bcc74"),
+                            CategoryId = new Guid("7289cbc9-8249-4fc1-b2d3-bac90ad32595"),
                             LanguageId = new Guid("24d48691-7325-4703-b69f-8db933a6736d"),
-                            Name = "Brak"
+                            Name = "Napój"
                         },
                         new
                         {
-                            Id = new Guid("206a3c95-fb6d-4127-a37b-9f328c021021"),
-                            CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
+                            Id = new Guid("62334e0c-acba-47c7-a98a-9a606fed9084"),
+                            CategoryId = new Guid("7289cbc9-8249-4fc1-b2d3-bac90ad32595"),
                             LanguageId = new Guid("c1dd0a3b-70d3-4aa1-b53e-4c08a03b57c3"),
-                            Name = "Keine"
+                            Name = "Getränk"
+                        },
+                        new
+                        {
+                            Id = new Guid("718badd8-b2c2-4d4d-bd2b-2959f4949080"),
+                            CategoryId = new Guid("e86caf03-ea3b-49ab-b499-68e387919fb6"),
+                            LanguageId = new Guid("454faf9a-644c-445c-89e3-b57203957c1a"),
+                            Name = "Snack"
+                        },
+                        new
+                        {
+                            Id = new Guid("4daa9144-5f43-401b-8622-3ac7b1cc14ff"),
+                            CategoryId = new Guid("e86caf03-ea3b-49ab-b499-68e387919fb6"),
+                            LanguageId = new Guid("24d48691-7325-4703-b69f-8db933a6736d"),
+                            Name = "Przekąska"
+                        },
+                        new
+                        {
+                            Id = new Guid("b151fa8f-6361-40e5-99da-1ad19108af04"),
+                            CategoryId = new Guid("e86caf03-ea3b-49ab-b499-68e387919fb6"),
+                            LanguageId = new Guid("c1dd0a3b-70d3-4aa1-b53e-4c08a03b57c3"),
+                            Name = "Snack"
+                        },
+                        new
+                        {
+                            Id = new Guid("f121fb7f-ce98-4348-9e1d-9353c1d82df9"),
+                            CategoryId = new Guid("bf69966b-0cbc-4f5d-9388-c05926775cbf"),
+                            LanguageId = new Guid("454faf9a-644c-445c-89e3-b57203957c1a"),
+                            Name = "Wheat"
+                        },
+                        new
+                        {
+                            Id = new Guid("432866df-ef78-4eae-8cc3-0e2ab2efb801"),
+                            CategoryId = new Guid("bf69966b-0cbc-4f5d-9388-c05926775cbf"),
+                            LanguageId = new Guid("24d48691-7325-4703-b69f-8db933a6736d"),
+                            Name = "Pszenica"
+                        },
+                        new
+                        {
+                            Id = new Guid("24ba2bc6-8bc6-4a11-96dc-0de686de742f"),
+                            CategoryId = new Guid("bf69966b-0cbc-4f5d-9388-c05926775cbf"),
+                            LanguageId = new Guid("c1dd0a3b-70d3-4aa1-b53e-4c08a03b57c3"),
+                            Name = "Weizen"
                         });
                 });
 
