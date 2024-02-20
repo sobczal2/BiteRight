@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 fun Router(authManager: AuthManager) {
     val navController = rememberNavController()
     authManager.subscribeToLogoutEvent {
-        navController.navigate(Routes.WELCOME)
+        handleNavigationEvent(NavigationEvent.NavigateToWelcome, navController)
     }
     NavHost(
         navController = navController,
