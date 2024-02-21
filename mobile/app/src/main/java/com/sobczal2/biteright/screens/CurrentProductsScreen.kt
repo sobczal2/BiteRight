@@ -114,7 +114,7 @@ fun CurrentProductsScreenContent(
                                 expirationDate = simpleProductDto.expirationDate
                                     ?: LocalDate.MIN, // TODO: workaround for now
                                 categoryImageUri = getCategoryPhotoUrl(categoryId = simpleProductDto.categoryId),
-                                amountPercentage = simpleProductDto.amountPercentage,
+                                amountPercentage = simpleProductDto.getAmountPercentage(),
                                 disposed = simpleProductDto.disposed,
                             ),
                             onClick = { /*TODO*/ },
@@ -157,7 +157,9 @@ fun CurrentProductsScreenPreview() {
                         name = "Product 1",
                         expirationDate = LocalDate.now(),
                         categoryId = UUID.randomUUID(),
-                        amountPercentage = 50.0,
+                        currentAmount = 10.0,
+                        maxAmount = 100.0,
+                        unitAbbreviation = "kg",
                         disposed = false,
                         addedDateTime = LocalDateTime.now()
                     ),

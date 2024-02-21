@@ -64,7 +64,7 @@ fun AllProductsScreenContent(
                             expirationDate = simpleProductDto.expirationDate
                                 ?: LocalDate.MIN, // TODO: workaround for now
                             categoryImageUri = getCategoryPhotoUrl(categoryId = simpleProductDto.categoryId),
-                            amountPercentage = simpleProductDto.amountPercentage,
+                            amountPercentage = simpleProductDto.getAmountPercentage(),
                             disposed = simpleProductDto.disposed,
                         ),
                         onClick = { /*TODO*/ },

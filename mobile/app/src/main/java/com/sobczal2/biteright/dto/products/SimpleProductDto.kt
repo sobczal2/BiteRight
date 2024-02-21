@@ -11,6 +11,12 @@ data class SimpleProductDto(
     @SerializedName("expirationDate") val expirationDate: LocalDate?,
     @SerializedName("categoryId") val categoryId: UUID,
     @SerializedName("addedDateTime") val addedDateTime: LocalDateTime,
-    @SerializedName("amountPercentage") val amountPercentage: Double,
+    @SerializedName("currentAmount") val currentAmount: Double,
+    @SerializedName("maxAmount") val maxAmount: Double,
+    @SerializedName("unitAbbreviation") val unitAbbreviation: String,
     @SerializedName("disposed") val disposed: Boolean
-)
+) {
+    fun getAmountPercentage(): Double {
+        return currentAmount / maxAmount * 100
+    }
+}
