@@ -21,6 +21,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
@@ -248,7 +249,7 @@ fun ExpirationDateFormField(
                 }
             },
             dismissButton = {
-                Button(onClick = {
+                OutlinedButton(onClick = {
                     datePickerDialogOpen = false
                 }) {
                     Text(text = stringResource(id = R.string.cancel))

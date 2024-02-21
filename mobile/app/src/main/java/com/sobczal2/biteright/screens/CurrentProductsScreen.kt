@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -74,21 +74,17 @@ fun CurrentProductsScreenContent(
         currentTab = HomeLayoutTab.CURRENT_PRODUCTS,
         handleNavigationEvent = handleNavigationEvent,
         floatingActionButton = {
-            FloatingActionButton(
+            ExtendedFloatingActionButton(
                 onClick = {
                     handleNavigationEvent(NavigationEvent.NavigateToCreateProduct)
                 },
             ) {
-                Column(
-                    modifier = Modifier.padding(MaterialTheme.dimension.sm),
-                    horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
-                ) {
-                    Text(text = stringResource(id = R.string.add_product))
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(id = R.string.add_product)
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(id = R.string.add_product),
+                    modifier = Modifier.padding(end = MaterialTheme.dimension.sm)
+                )
+                Text(text = stringResource(id = R.string.add_product))
             }
         }
     ) { paddingValues ->

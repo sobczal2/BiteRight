@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -79,72 +80,79 @@ fun CreateProductScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(MaterialTheme.dimension.xl)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md),
+                .padding(MaterialTheme.dimension.xl),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = stringResource(id = R.string.create_product),
-                style = MaterialTheme.typography.displaySmall.copy(
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
-            TextFormField(
-                modifier = Modifier.fillMaxWidth(),
-                state = state.nameFieldState,
-                onChange = {
-                    sendEvent(CreateProductScreenEvent.OnNameChange(it))
-                },
-                options = TextFormFieldOptions(
-                    label = { Text(text = stringResource(id = R.string.name)) },
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.create_product),
+                    style = MaterialTheme.typography.displaySmall.copy(
+                        textAlign = TextAlign.Center
+                    ),
+                    modifier = Modifier.fillMaxWidth()
                 )
-            )
-            TextFormField(
-                modifier = Modifier.fillMaxWidth(),
-                state = state.descriptionFieldState,
-                onChange = {
-                    sendEvent(CreateProductScreenEvent.OnDescriptionChange(it))
-                },
-                options = TextFormFieldOptions(
-                    label = { Text(text = stringResource(id = R.string.description)) },
-                    singleLine = false,
-                    minLines = 3,
-                    maxLines = 5,
+                TextFormField(
+                    modifier = Modifier.fillMaxWidth(),
+                    state = state.nameFieldState,
+                    onChange = {
+                        sendEvent(CreateProductScreenEvent.OnNameChange(it))
+                    },
+                    options = TextFormFieldOptions(
+                        label = { Text(text = stringResource(id = R.string.name)) },
+                    )
                 )
-            )
-            PriceFormField(
-                state = state.priceFieldState,
-                onChange = {
-                    sendEvent(CreateProductScreenEvent.OnPriceChange(it))
-                },
-                searchCurrencies = searchCurrencies
-            )
-            ExpirationDateFormField(
-                modifier = Modifier,
-                state = state.expirationDateFieldState,
-                onChange = {
-                    sendEvent(CreateProductScreenEvent.OnExpirationDateChange(it))
-                },
-            )
 
-            CategoryFormField(
-                state = state.categoryFieldState,
-                onChange = {
-                    sendEvent(CreateProductScreenEvent.OnCategoryChange(it))
-                },
-                searchCategories = searchCategories,
-                imageRequestBuilder = state.imageRequestBuilder
-            )
+                CategoryFormField(
+                    state = state.categoryFieldState,
+                    onChange = {
+                        sendEvent(CreateProductScreenEvent.OnCategoryChange(it))
+                    },
+                    searchCategories = searchCategories,
+                    imageRequestBuilder = state.imageRequestBuilder
+                )
 
-            AmountFormField(
-                state = state.amountFormFieldState,
-                onChange = {
-                    sendEvent(CreateProductScreenEvent.OnAmountChange(it))
-                },
-                searchUnits = searchUnits,
-            )
+                ExpirationDateFormField(
+                    modifier = Modifier,
+                    state = state.expirationDateFieldState,
+                    onChange = {
+                        sendEvent(CreateProductScreenEvent.OnExpirationDateChange(it))
+                    },
+                )
 
+                AmountFormField(
+                    state = state.amountFormFieldState,
+                    onChange = {
+                        sendEvent(CreateProductScreenEvent.OnAmountChange(it))
+                    },
+                    searchUnits = searchUnits,
+                )
+
+                PriceFormField(
+                    state = state.priceFieldState,
+                    onChange = {
+                        sendEvent(CreateProductScreenEvent.OnPriceChange(it))
+                    },
+                    searchCurrencies = searchCurrencies
+                )
+
+                TextFormField(
+                    modifier = Modifier.fillMaxWidth(),
+                    state = state.descriptionFieldState,
+                    onChange = {
+                        sendEvent(CreateProductScreenEvent.OnDescriptionChange(it))
+                    },
+                    options = TextFormFieldOptions(
+                        label = { Text(text = stringResource(id = R.string.description)) },
+                        singleLine = false,
+                        minLines = 3,
+                        maxLines = 5,
+                    )
+                )
+            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
