@@ -3,6 +3,7 @@ package com.sobczal2.biteright.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.request.ImageRequest
+import com.sobczal2.biteright.data.api.requests.products.DisposeRequest
 import com.sobczal2.biteright.data.api.requests.products.ListCurrentRequest
 import com.sobczal2.biteright.dto.products.ProductSortingStrategy
 import com.sobczal2.biteright.events.CurrentProductsScreenEvent
@@ -23,9 +24,11 @@ class CurrentProductsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     imageRequestBuilder: ImageRequest.Builder
 ) : ViewModel() {
-    private val _state = MutableStateFlow(CurrentProductsScreenState(
-        imageRequestBuilder = imageRequestBuilder
-    ))
+    private val _state = MutableStateFlow(
+        CurrentProductsScreenState(
+            imageRequestBuilder = imageRequestBuilder
+        )
+    )
     val state = _state.asStateFlow()
 
     private val _events = Channel<CurrentProductsScreenEvent>()
@@ -46,14 +49,18 @@ class CurrentProductsViewModel @Inject constructor(
 
     private fun handleEvent(event: CurrentProductsScreenEvent) {
         when (event) {
-            is CurrentProductsScreenEvent.OnProductDispose -> disposeProduct(event.productId)
+            is CurrentProductsScreenEvent.OnProductDispose -> {
+                viewModelScope.launch {
+                    disposeProduct(event.productId)
+                }
+            }
         }
     }
 
     private suspend fun fetchCurrentProducts() {
         _state.update {
             it.copy(
-                 globalLoading = true
+                globalLoading = true
             )
         }
 
@@ -87,13 +94,30 @@ class CurrentProductsViewModel @Inject constructor(
         }
     }
 
-    private fun disposeProduct(productId: UUID) {
-        _state.update {
-            it.copy(
-                currentProducts = it.currentProducts.filter { product ->
-                    product.id != productId
-                }
+    private suspend fun disposeProduct(productId: UUID) {
+        val disposeResponse = productRepository.dispose(
+            DisposeRequest(
+                productId = productId
             )
-        }
+        )
+
+        disposeResponse.fold(
+            { _ ->
+                _state.update {
+                    it.copy(
+                        currentProducts = it.currentProducts.filter { product ->
+                            product.id != productId
+                        }
+                    )
+                }
+            },
+            { repositoryError ->
+                _state.update {
+                    it.copy(
+                        globalError = repositoryError.message
+                    )
+                }
+            }
+        )
     }
 }
