@@ -16,7 +16,7 @@ using Microsoft.Extensions.Localization;
 
 namespace BiteRight.Application.Commands.Products.Restore;
 
-public class RestoreHandler : CommandHandlerBase<RestoreRequest>
+public class RestoreHandler : CommandHandlerBase<RestoreRequest, RestoreResponse>
 {
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IIdentityProvider _identityProvider;
@@ -38,12 +38,12 @@ public class RestoreHandler : CommandHandlerBase<RestoreRequest>
         _productRepository = productRepository;
     }
 
-    protected override async Task<Unit> HandleImpl(
+    protected override async Task<RestoreResponse> HandleImpl(
         RestoreRequest request,
         CancellationToken cancellationToken
     )
     {
-        var user = await _identityProvider.RequireCurrentUser();
+        var user = await _identityProvider.RequireCurrentUser(cancellationToken);
 
         var product = await _productRepository.FindById(request.ProductId, cancellationToken);
 
@@ -56,9 +56,9 @@ public class RestoreHandler : CommandHandlerBase<RestoreRequest>
             throw ValidationException(nameof(RestoreRequest.ProductId),
                 _productLocalizer[nameof(Resources.Resources.Products.Products.product_not_disposed)]
             );
-        
+
         product.Restore();
-        
-        return Unit.Value;
+
+        return new RestoreResponse();
     }
 }

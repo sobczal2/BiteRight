@@ -20,7 +20,7 @@ using Microsoft.Extensions.Localization;
 
 namespace BiteRight.Application.Commands.Products.ChangeAmount;
 
-public class ChangeAmountHandler : CommandHandlerBase<ChangeAmountRequest>
+public class ChangeAmountHandler : CommandHandlerBase<ChangeAmountRequest, ChangeAmountResponse>
 {
     private readonly IIdentityProvider _identityProvider;
     private readonly IProductRepository _productRepository;
@@ -39,7 +39,7 @@ public class ChangeAmountHandler : CommandHandlerBase<ChangeAmountRequest>
         _productsLocalizer = productsLocalizer;
     }
 
-    protected override async Task<Unit> HandleImpl(
+    protected override async Task<ChangeAmountResponse> HandleImpl(
         ChangeAmountRequest request,
         CancellationToken cancellationToken
     )
@@ -58,7 +58,7 @@ public class ChangeAmountHandler : CommandHandlerBase<ChangeAmountRequest>
 
         product.Amount.ChangeCurrent(request.Amount);
 
-        return Unit.Value;
+        return new ChangeAmountResponse();
     }
 
     protected override ValidationException MapExceptionToValidationException(

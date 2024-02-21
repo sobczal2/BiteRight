@@ -1,13 +1,10 @@
 // # ==============================================================================
 // # Solution: BiteRight
-// # File: RestoreRequest.cs
+// # File: ChangeAmountResponse.cs
 // # Author: Łukasz Sobczak
-// # Created: 15-02-2024
+// # Created: 21-02-2024
 // # ==============================================================================
 
-using System;
-using MediatR;
+namespace BiteRight.Application.Commands.Products.ChangeAmount;
 
-namespace BiteRight.Application.Commands.Products.Restore;
-
-public record RestoreRequest(Guid ProductId) : IRequest<RestoreResponse>;
+public class ChangeAmountResponse;

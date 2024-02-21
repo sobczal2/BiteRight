@@ -11,7 +11,7 @@ using MediatR;
 
 namespace BiteRight.Application.Commands.Products.ChangeAmount;
 
-public class ChangeAmountRequest : IRequest<Unit>
+public class ChangeAmountRequest : IRequest<ChangeAmountResponse>
 {
     [JsonIgnore]
     public Guid ProductId { get; set; }

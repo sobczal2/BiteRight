@@ -15,11 +15,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.products.SimpleProductDto
@@ -29,17 +29,19 @@ import com.sobczal2.biteright.state.CurrentProductsScreenState
 import com.sobczal2.biteright.ui.components.common.HomeLayout
 import com.sobczal2.biteright.ui.components.common.HomeLayoutTab
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
-import com.sobczal2.biteright.ui.components.common.SurfaceLoader
-import com.sobczal2.biteright.ui.components.products.ProductSummaryItem
+import com.sobczal2.biteright.ui.components.products.ProductItem
 import com.sobczal2.biteright.ui.components.products.ProductSummaryItemState
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.util.getCategoryPhotoUrl
 import com.sobczal2.biteright.viewmodels.CurrentProductsViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun CurrentProductsScreen(
@@ -65,6 +67,9 @@ fun CurrentProductsScreenContent(
     sendEvent: (CurrentProductsScreenEvent) -> Unit = {},
     handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val animationDuration = 300.milliseconds
+
     HomeLayout(
         currentTab = HomeLayoutTab.CURRENT_PRODUCTS,
         handleNavigationEvent = handleNavigationEvent,
@@ -107,21 +112,26 @@ fun CurrentProductsScreenContent(
                         items = state.currentProducts,
                         key = { it.id }
                     ) { simpleProductDto ->
-                        ProductSummaryItem(
+                        ProductItem(
                             productSummaryItemState = ProductSummaryItemState(
                                 name = simpleProductDto.name,
-                                expirationDate = simpleProductDto.expirationDate ?: LocalDate.MIN, // TODO: workaround for now
+                                expirationDate = simpleProductDto.expirationDate
+                                    ?: LocalDate.MIN, // TODO: workaround for now
                                 categoryImageUri = getCategoryPhotoUrl(categoryId = simpleProductDto.categoryId),
                                 amountPercentage = simpleProductDto.amountPercentage,
                                 disposed = simpleProductDto.disposed,
                             ),
                             onClick = { /*TODO*/ },
-                            onDeleted = {
-                                sendEvent(
-                                    CurrentProductsScreenEvent.OnProductDispose(
-                                        simpleProductDto.id
+                            onDisposed = {
+                                coroutineScope.launch {
+                                    delay(animationDuration)
+                                    sendEvent(
+                                        CurrentProductsScreenEvent.OnProductDispose(
+                                            simpleProductDto.id
+                                        )
                                     )
-                                )
+                                }
+                                true
                             },
                             imageRequestBuilder = state.imageRequestBuilder,
                         )

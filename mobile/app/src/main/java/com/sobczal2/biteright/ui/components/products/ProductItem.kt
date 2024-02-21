@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Restore
@@ -31,7 +30,6 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,13 +46,14 @@ import com.sobczal2.biteright.R
 import com.sobczal2.biteright.ui.components.categories.CategoryImage
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
-import com.sobczal2.biteright.util.humanizePeriod
+import com.sobczal2.biteright.util.between
+import com.sobczal2.biteright.util.humanize
 import com.sobczal2.biteright.util.truncateString
-import kotlinx.coroutines.delay
-import java.time.Duration
 import java.time.LocalDate
-import java.time.Period
 import kotlin.math.roundToInt
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.DurationUnit
 
 data class ProductSummaryItemState(
     val name: String,
@@ -66,28 +65,36 @@ data class ProductSummaryItemState(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductSummaryItem(
+fun ProductItem(
     productSummaryItemState: ProductSummaryItemState,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     inPreview: Boolean = false,
-    animationDuration: Duration = Duration.ofMillis(300),
-    onRestored: () -> Unit = {},
-    onDeleted: () -> Unit = {},
+    animationDuration: Duration = 300.milliseconds,
+    onRestored: () -> /* should disappear */ Boolean = { true },
+    onDisposed: () -> /* should disappear */ Boolean = { false },
     imageRequestBuilder: ImageRequest.Builder? = null
 ) {
-    var isDeleted by remember { mutableStateOf(false) }
-    var isRestored by remember { mutableStateOf(false) }
+    var visible by remember { mutableStateOf(true) }
+
     val swipeState = rememberSwipeToDismissBoxState(
         initialValue = SwipeToDismissBoxValue.Settled,
         confirmValueChange = {
             when (it) {
                 SwipeToDismissBoxValue.EndToStart -> {
-                    isDeleted = true; true
+                    val shouldDisappear = onDisposed()
+                    if (shouldDisappear) {
+                        visible = false
+                    }
+                    true
                 }
 
                 SwipeToDismissBoxValue.StartToEnd -> {
-                    isRestored = true; true
+                    val shouldDisappear = onRestored()
+                    if (shouldDisappear) {
+                        visible = false
+                    }
+                    true
                 }
 
                 else -> false
@@ -95,25 +102,10 @@ fun ProductSummaryItem(
         }
     )
 
-    LaunchedEffect(isRestored) {
-        if (isRestored) {
-            swipeState.reset()
-            onRestored()
-            isRestored = false
-        }
-    }
-
-    LaunchedEffect(isDeleted) {
-        if (isDeleted) {
-            delay(animationDuration.toMillis())
-            onDeleted()
-        }
-    }
-
     AnimatedVisibility(
-        visible = !isDeleted,
+        visible = visible,
         exit = shrinkVertically(
-            animationSpec = tween(durationMillis = animationDuration.toMillis().toInt()),
+            animationSpec = tween(durationMillis = animationDuration.toInt(DurationUnit.MILLISECONDS)),
             shrinkTowards = Alignment.Top
         ) + fadeOut()
     ) {
@@ -230,30 +222,16 @@ fun ProductDetails(
 fun ProductExpirationIndicator(
     expirationDate: LocalDate
 ) {
-
+    val humanizedDuration = between(LocalDate.now(), expirationDate).humanize()
     if (expirationDate.isBefore(LocalDate.now())) {
         Text(
-            text = "${stringResource(id = R.string.expired_for)} ${
-                humanizePeriod(
-                    period = Period.between(
-                        expirationDate,
-                        LocalDate.now()
-                    )
-                )
-            }",
+            text = "${stringResource(id = R.string.expired_for)} $humanizedDuration",
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.error
         )
     } else {
         Text(
-            text = "${stringResource(id = R.string.expires_in)} ${
-                humanizePeriod(
-                    period = Period.between(
-                        LocalDate.now(),
-                        expirationDate
-                    )
-                )
-            }",
+            text = "${stringResource(id = R.string.expires_in)} $humanizedDuration",
             style = MaterialTheme.typography.labelMedium,
         )
 
@@ -299,7 +277,7 @@ fun SwipeToDismissBackground(state: SwipeToDismissBoxState) {
 @Preview("Dark Theme", apiLevel = 33, uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun ProductSummaryItemPreview() {
     BiteRightTheme {
-        ProductSummaryItem(
+        ProductItem(
             productSummaryItemState = ProductSummaryItemState(
                 name = "Product name Product name Product name",
                 expirationDate = LocalDate.now().plusDays(5),
