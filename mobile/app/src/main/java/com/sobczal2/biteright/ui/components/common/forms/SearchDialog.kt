@@ -11,6 +11,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -121,15 +123,16 @@ fun <T> SearchDialog(
     Dialog(
         onDismissRequest = onDismissRequest
     ) {
-        Card(
-            modifier = modifier
+        Surface(
+            modifier = modifier,
+            shape = MaterialTheme.shapes.medium,
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(MaterialTheme.dimension.sm)
             ) {
-                TextField(
+                OutlinedTextField(
                     value = queryFieldState.value.value,
                     onValueChange = { value ->
                         queryFieldStateFlow.update {

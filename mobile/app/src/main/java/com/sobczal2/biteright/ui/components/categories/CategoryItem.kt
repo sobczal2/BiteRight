@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -84,6 +85,34 @@ fun CategoryItem(
             }
         }
     }
+}
+
+@Composable
+fun CategoryListItem(
+    category: CategoryDto,
+    selected: Boolean,
+    modifier: Modifier = Modifier,
+    inPreview: Boolean = false,
+    imageRequestBuilder: ImageRequest.Builder? = null,
+) {
+    ListItem(
+        headlineContent = {
+            Text(text = category.name)
+        },
+        leadingContent = {
+            CategoryImage(
+                imageUri = category.imageUri(),
+                inPreview = inPreview,
+                imageRequestBuilder = imageRequestBuilder
+            )
+        },
+        trailingContent = {
+            if (selected) {
+                Icon(imageVector = Icons.Default.Done, contentDescription = "Selected")
+            }
+        },
+        modifier = modifier
+    )
 }
 
 @Composable

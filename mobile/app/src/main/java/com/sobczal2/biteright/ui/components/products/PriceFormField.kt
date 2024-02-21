@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.ui.components.products
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,6 +28,7 @@ import com.sobczal2.biteright.ui.components.common.forms.SearchDialog
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
+import com.sobczal2.biteright.ui.components.currencies.CurrencyListItem
 import com.sobczal2.biteright.ui.components.currencies.FullCurrencyItem
 import com.sobczal2.biteright.ui.components.currencies.SimplifiedCurrencyItem
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
@@ -153,14 +155,15 @@ fun PriceFormField(
                 onDismissRequest = { dialogOpen = false },
                 selectedItem = state.value.currency,
             ) { currency, selected ->
-                FullCurrencyItem(currency = currency, selected = selected, onClick = {
-                    onChange(
-                        state.value.copy(
-                            currency = currency
-                        )
-                    )
-                    dialogOpen = false
-                })
+                CurrencyListItem(
+                    currency = currency,
+                    selected = selected,
+                    modifier = Modifier
+                        .clickable {
+                            onChange(state.value.copy(currency = currency))
+                            dialogOpen = false
+                        }
+                )
             }
         }
     }

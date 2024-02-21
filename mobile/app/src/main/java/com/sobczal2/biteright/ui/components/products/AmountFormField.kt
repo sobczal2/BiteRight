@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.ui.components.products
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
@@ -27,8 +28,8 @@ import com.sobczal2.biteright.ui.components.common.forms.SearchDialog
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
-import com.sobczal2.biteright.ui.components.units.FullUnitItem
 import com.sobczal2.biteright.ui.components.units.SimplifiedUnitItem
+import com.sobczal2.biteright.ui.components.units.UnitListItem
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.BiteRightPreview
@@ -157,18 +158,19 @@ fun AmountFormField(
                 keySelector = { it.id },
                 onDismissRequest = { dialogOpen = false },
                 selectedItem = state.value.unit,
-            ) { currency, selected ->
-                FullUnitItem(
-                    unit = currency,
+            ) { unit, selected ->
+                UnitListItem(
+                    unit = unit,
                     selected = selected,
-                    onClick = {
-                        onChange(
-                            state.value.copy(
-                                unit = currency
+                    modifier = Modifier
+                        .clickable {
+                            onChange(
+                                state.value.copy(
+                                    unit = unit
+                                )
                             )
-                        )
-                        dialogOpen = false
-                    }
+                            dialogOpen = false
+                        }
                 )
             }
         }
