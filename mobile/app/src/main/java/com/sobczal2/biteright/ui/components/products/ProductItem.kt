@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -222,16 +223,32 @@ fun ProductDetails(
 fun ProductExpirationIndicator(
     expirationDate: LocalDate
 ) {
-    val humanizedDuration = between(LocalDate.now(), expirationDate).humanize()
-    if (expirationDate.isBefore(LocalDate.now())) {
+    if (expirationDate.isEqual(LocalDate.now())) {
         Text(
-            text = "${stringResource(id = R.string.expired_for)} $humanizedDuration",
+            text = stringResource(id = R.string.expires_today),
+            style = MaterialTheme.typography.labelMedium.copy(
+                fontWeight = FontWeight.Bold
+            )
+        )
+    } else if (expirationDate.isBefore(LocalDate.now())) {
+        Text(
+            text = "${stringResource(id = R.string.expired_for)} ${
+                between(
+                    expirationDate,
+                    LocalDate.now()
+                ).humanize()
+            }",
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.error
         )
     } else {
         Text(
-            text = "${stringResource(id = R.string.expires_in)} $humanizedDuration",
+            text = "${stringResource(id = R.string.expires_in)} ${
+                between(
+                    LocalDate.now(),
+                    expirationDate
+                ).humanize()
+            }",
             style = MaterialTheme.typography.labelMedium,
         )
 
