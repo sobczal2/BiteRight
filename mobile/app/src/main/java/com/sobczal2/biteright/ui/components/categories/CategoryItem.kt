@@ -47,7 +47,8 @@ fun CategoryItem(
         CategoryImage(
             imageUri = category.imageUri(),
             imageRequestBuilder = imageRequestBuilder,
-            inPreview = inPreview
+            inPreview = inPreview,
+            shape = MaterialTheme.shapes.extraSmall,
         )
         Row(
             modifier = Modifier.fillMaxWidth(),

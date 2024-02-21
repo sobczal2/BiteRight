@@ -1,6 +1,5 @@
 package com.sobczal2.biteright.screens
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,9 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.categories.CategoryDto
@@ -32,12 +29,12 @@ import com.sobczal2.biteright.dto.units.UnitDto
 import com.sobczal2.biteright.events.CreateProductScreenEvent
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.state.CreateProductScreenState
-import com.sobczal2.biteright.ui.components.products.AmountFormField
 import com.sobczal2.biteright.ui.components.categories.CategoryFormField
 import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
+import com.sobczal2.biteright.ui.components.products.AmountFormField
 import com.sobczal2.biteright.ui.components.products.ExpirationDateFormField
 import com.sobczal2.biteright.ui.components.products.PriceFormField
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
@@ -152,6 +149,14 @@ fun CreateProductScreenContent(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
             ) {
+                OutlinedButton(
+                    onClick = { handleNavigationEvent(NavigationEvent.NavigateToCurrentProducts) },
+                    modifier = Modifier.weight(0.5f),
+                    shape = MaterialTheme.shapes.extraSmall,
+                ) {
+                    Text(text = stringResource(id = R.string.cancel))
+                }
+
                 ButtonWithLoader(
                     onClick = {
                         focusManager.clearFocus()
@@ -164,20 +169,9 @@ fun CreateProductScreenContent(
                         )
                     },
                     loading = state.formSubmitting,
-                    modifier = Modifier.weight(0.5f)
+                    modifier = Modifier.weight(0.5f),
                 ) {
                     Text(text = stringResource(id = R.string.create_product))
-                }
-
-                Button(
-                    onClick = { handleNavigationEvent(NavigationEvent.NavigateToCurrentProducts) },
-                    colors = ButtonDefaults.textButtonColors(
-                        containerColor = MaterialTheme.colorScheme.error,
-                        contentColor = MaterialTheme.colorScheme.onError
-                    ),
-                    modifier = Modifier.weight(0.5f)
-                ) {
-                    Text(text = stringResource(id = R.string.cancel))
                 }
             }
         }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +42,9 @@ fun CategoryFormField(
     Column(
         modifier = modifier
     ) {
-        Card {
+        Card(
+            shape = MaterialTheme.shapes.extraSmall,
+        ) {
             CategoryItem(
                 category = state.value,
                 selected = false,
@@ -49,6 +52,7 @@ fun CategoryFormField(
                 onClick = {
                     dialogOpen = true
                 },
+                imageRequestBuilder = imageRequestBuilder,
             )
         }
 

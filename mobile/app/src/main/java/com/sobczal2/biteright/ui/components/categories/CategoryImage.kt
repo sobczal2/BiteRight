@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -22,6 +23,7 @@ import com.sobczal2.biteright.util.BiteRightPreview
 @Composable
 fun CategoryImage(
     imageUri: String?,
+    shape: Shape = CircleShape,
     inPreview: Boolean = false,
     imageRequestBuilder: ImageRequest.Builder? = null
 ) {
@@ -42,7 +44,7 @@ fun CategoryImage(
             modifier = Modifier
                 .size(64.dp)
                 .padding(MaterialTheme.dimension.sm)
-                .background(MaterialTheme.colorScheme.inverseSurface, CircleShape)
+                .background(color = MaterialTheme.colorScheme.inverseSurface, shape = shape)
         ) {
             AsyncImage(
                 model = imageRequestBuilder?.data(imageUri)?.build() ?: imageUri,

@@ -61,4 +61,5 @@
     <string name="unit">Unit</string>
     <string name="validation_expiration_date_empty">Expiration date can\'t be empty when \"best by\" or \"use by\" kind are selected</string>
     <string name="expires_today">Expires today</string>
+    <string name="change_amount_for">Change amount for</string>
 </resources>

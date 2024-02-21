@@ -129,7 +129,6 @@ fun <T> SearchDialog(
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .padding(MaterialTheme.dimension.sm)
             ) {
                 OutlinedTextField(

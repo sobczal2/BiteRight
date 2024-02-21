@@ -29,10 +29,10 @@ import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
 import com.sobczal2.biteright.ui.components.currencies.CurrencyListItem
-import com.sobczal2.biteright.ui.components.currencies.FullCurrencyItem
 import com.sobczal2.biteright.ui.components.currencies.SimplifiedCurrencyItem
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
+import com.sobczal2.biteright.ui.theme.extraSmallTop
 import com.sobczal2.biteright.util.BiteRightPreview
 import java.util.UUID
 
@@ -92,10 +92,8 @@ fun PriceFormField(
             }
         }, options = TextFormFieldOptions(
             label = { Text(text = stringResource(id = R.string.price)) },
-            shape = MaterialTheme.shapes.small.copy(
-                topEnd = CornerSize(0.dp),
-                bottomEnd = CornerSize(0.dp),
-                bottomStart = CornerSize(0.dp)
+            shape = MaterialTheme.shapes.extraSmallTop.copy(
+                topEnd = CornerSize(0.dp)
             ),
             trailingIcon = {
                 Text(text = state.value.currency.symbol)
