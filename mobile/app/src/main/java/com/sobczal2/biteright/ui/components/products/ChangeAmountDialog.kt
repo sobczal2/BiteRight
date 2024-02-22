@@ -1,23 +1,25 @@
 package com.sobczal2.biteright.ui.components.products
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.BiteRightPreview
 
@@ -26,6 +28,7 @@ import com.sobczal2.biteright.util.BiteRightPreview
 fun ChangeAmountDialog(
     onDismiss: () -> Unit,
     onConfirm: (Double) -> Unit,
+    loading: Boolean,
     currentAmount: Double,
     maxAmount: Double,
     unitName: String,
@@ -63,6 +66,27 @@ fun ChangeAmountDialog(
                 Slider(
                     state = sliderState.value,
                 )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    OutlinedButton(
+                        onClick = onDismiss,
+                        shape = MaterialTheme.shapes.extraSmall
+                    ) {
+                        Text(text = stringResource(id = R.string.cancel))
+                    }
+                    ButtonWithLoader(
+                        onClick = {
+                            onConfirm(sliderState.value.value.toDouble())
+                        },
+                        loading = loading
+                    ) {
+                        Text(text = stringResource(id = R.string.confirm))
+
+                    }
+                }
             }
         }
     }
@@ -78,6 +102,7 @@ fun ChangeAmountDialogPreview() {
         currentAmount = 50.0,
         maxAmount = 100.0,
         unitName = "g",
+        loading = false,
         productName = "Banana"
     )
 }
