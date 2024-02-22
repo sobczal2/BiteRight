@@ -24,4 +24,13 @@
             PublicKeyToken=b77a5c561934e089
         </value>
     </resheader>
+    <data name="currency_not_found" xml:space="preserve">
+        <value>Währung nicht gefunden</value>
+    </data>
+    <data name="currency_id_empty" xml:space="preserve">
+        <value>Die Währung kann nicht leer sein</value>
+    </data>
+    <data name="query_too_long" xml:space="preserve">
+        <value>Abfragelänge darf {0} Zeichen nicht überschreiten</value>
+    </data>
 </root>
