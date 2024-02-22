@@ -8,4 +8,10 @@
     <string name="network_error">Błąd sieci</string>
     <string name="loading">Ładowanie...</string>
     <string name="login_canceled">Logowanie zostało anulowane</string>
+    <string name="username_length_error">Nazwa użytkownika musi mieć długość pomiędzy 3 a 30 znakami</string>
+    <string name="username_invalid_characters_error"> Nazwa użytkownika może zawierać jedynie małe litery, duże litery, liczby lub podkreślniki</string>
+    <string name="today">Dzisiaj</string>
+    <string name="expired_for">Przeterminowane od</string>
+    <string name="expires_in">Przeterminuje się za</string>
+    <string name="add_product">Dodaj produkt</string>
 </resources>
