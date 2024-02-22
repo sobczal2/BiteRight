@@ -59,7 +59,7 @@ fun ChangeAmountDialog(
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
-                    text = "${sliderState.value.value} / $maxAmount $unitName",
+                    text = "${"%.2f".format(sliderState.value.value)} / ${"%.2f".format(maxAmount)} $unitName",
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier
                 )
@@ -68,7 +68,8 @@ fun ChangeAmountDialog(
                 )
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     OutlinedButton(

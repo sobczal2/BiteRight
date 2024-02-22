@@ -116,7 +116,7 @@ fun PriceFormField(
 
                             else -> {
                                 priceTextFieldState.copy(
-                                    value = String.format("%.2f", price)
+                                    value = "%.2f".format(price)
                                 )
                             }
 

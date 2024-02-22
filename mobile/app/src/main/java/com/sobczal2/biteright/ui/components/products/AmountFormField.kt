@@ -122,7 +122,7 @@ fun AmountFormField(
 
                                 else -> {
                                     amountTextFieldState.copy(
-                                        value = String.format("%.2f", price)
+                                        value = "%.2f".format(price)
                                     )
                                 }
 
