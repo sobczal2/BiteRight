@@ -25,6 +25,7 @@ public class Amount : Entity<AmountId>
         CurrentValue = default!;
         MaxValue = default!;
         UnitId = default!;
+        Unit = default!;
     }
 
     private Amount(
@@ -37,11 +38,13 @@ public class Amount : Entity<AmountId>
         CurrentValue = currentValue;
         MaxValue = maxValue;
         UnitId = unitId;
+        Unit = default!;
     }
 
     public double CurrentValue { get; private set; }
     public double MaxValue { get; }
     public UnitId UnitId { get; private set; }
+    public virtual Unit Unit { get; private set; }
 
     public static Amount Create(
         double currentValue,

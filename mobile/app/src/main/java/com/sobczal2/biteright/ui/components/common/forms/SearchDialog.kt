@@ -7,18 +7,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SearchBar
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -29,13 +27,15 @@ import androidx.compose.ui.window.Dialog
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.common.PaginatedList
 import com.sobczal2.biteright.dto.common.PaginationParams
+import com.sobczal2.biteright.util.PaginationSource
 import com.sobczal2.biteright.ui.theme.dimension
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.time.debounce
-import java.time.Duration
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(FlowPreview::class)
 @Composable
@@ -43,8 +43,7 @@ fun <T> SearchDialog(
     modifier: Modifier = Modifier,
     initialPaginationParams: PaginationParams = PaginationParams.Default,
     search: suspend (String, PaginationParams) -> PaginatedList<T>,
-    inPreview: Boolean = false,
-    debounceDuration: Duration = Duration.ofMillis(300),
+    debounceDuration: Duration = 300.milliseconds,
     keySelector: (T) -> Any,
     onDismissRequest: () -> Unit,
     selectedItem: T,
@@ -52,8 +51,11 @@ fun <T> SearchDialog(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val items = remember {
-        mutableStateListOf<T>()
+    val paginationSource = remember {
+        PaginationSource(
+            initialPaginationParams = initialPaginationParams,
+            search = search
+        )
     }
 
     val queryFieldStateFlow = remember {
@@ -64,72 +66,29 @@ fun <T> SearchDialog(
 
     val queryFieldState = queryFieldStateFlow.collectAsState()
 
-    var initialLoading by remember {
-        mutableStateOf(true)
-    }
-
-    var loading by remember {
-        mutableStateOf(false)
-    }
-
-    var paginationParams by remember {
-        mutableStateOf(initialPaginationParams)
-    }
-
-    var hasMore by remember {
-        mutableStateOf(false)
-    }
-
-    fun fetchItemsForNewQuery() {
-        if (loading) return
-        loading = true
-        coroutineScope.launch {
-            paginationParams = paginationParams.copy(pageNumber = 0)
-            val searchedItems = search(queryFieldState.value.value, paginationParams)
-            hasMore = searchedItems.hasMore()
-            items.clear()
-            items.addAll(searchedItems.items)
-            initialLoading = false
-            loading = false
-        }
-    }
-
-    fun loadMore() {
-        if (loading || !hasMore) return
-        coroutineScope.launch {
-            paginationParams = paginationParams.copy(pageNumber = paginationParams.pageNumber + 1)
-            val searchedItems = search(queryFieldState.value.value, paginationParams)
-            hasMore = searchedItems.hasMore()
-            items.addAll(searchedItems.items)
-        }
-    }
-
-    if (inPreview) {
-        LaunchedEffect(Unit) {
-            fetchItemsForNewQuery()
-        }
-    }
+    var initialized by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         queryFieldStateFlow
-            .debounce(if (initialLoading) Duration.ZERO else debounceDuration)
+            .debounce(if (initialized) debounceDuration else Duration.ZERO)
             .collect {
-                fetchItemsForNewQuery()
+                initialized = true
+                paginationSource.fetchInitialItems(queryFieldState.value.value)
             }
     }
 
     Dialog(
         onDismissRequest = onDismissRequest
     ) {
-        Card(
-            modifier = modifier
+        Surface(
+            modifier = modifier,
+            shape = MaterialTheme.shapes.medium,
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .padding(MaterialTheme.dimension.sm)
             ) {
-                TextField(
+                OutlinedTextField(
                     value = queryFieldState.value.value,
                     onValueChange = { value ->
                         queryFieldStateFlow.update {
@@ -142,7 +101,7 @@ fun <T> SearchDialog(
                         )
                     },
                     trailingIcon = {
-                        if (initialLoading || loading) {
+                        if (paginationSource.initialFetching.value) {
                             CircularProgressIndicator()
                         }
                     },
@@ -152,10 +111,10 @@ fun <T> SearchDialog(
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
                     content = {
-                        items(items, key = keySelector) { item ->
+                        items(paginationSource.items, key = keySelector) { item ->
                             listItem(item, item == selectedItem)
 
-                            if (item != items.last()) {
+                            if (item != paginationSource.items.last()) {
                                 HorizontalDivider(
                                     modifier = Modifier.fillMaxWidth(),
                                     color = MaterialTheme.colorScheme.onSurface
@@ -164,7 +123,7 @@ fun <T> SearchDialog(
                         }
 
                         item {
-                            if (!loading && hasMore) {
+                            if (paginationSource.hasMore.value) {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.Center
@@ -172,13 +131,19 @@ fun <T> SearchDialog(
                                     CircularProgressIndicator()
                                 }
                                 LaunchedEffect(Unit) {
-                                    loadMore()
+                                    coroutineScope.launch {
+                                        paginationSource.fetchMoreItems(queryFieldState.value.value)
+                                    }
                                 }
                             }
                         }
 
                         item {
-                            if (!initialLoading && !loading && !hasMore && items.isEmpty()) {
+                            if (
+                                !paginationSource.isFetching()
+                                && !paginationSource.hasMore.value
+                                && paginationSource.items.isEmpty()
+                            ) {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.Center

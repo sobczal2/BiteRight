@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,9 +45,10 @@ fun CategoryItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CategoryImage(
-            imageUri = category.imageUri(),
+            categoryId = category.id,
             imageRequestBuilder = imageRequestBuilder,
-            inPreview = inPreview
+            inPreview = inPreview,
+            shape = MaterialTheme.shapes.extraSmall,
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -84,6 +86,34 @@ fun CategoryItem(
             }
         }
     }
+}
+
+@Composable
+fun CategoryListItem(
+    category: CategoryDto,
+    selected: Boolean,
+    modifier: Modifier = Modifier,
+    inPreview: Boolean = false,
+    imageRequestBuilder: ImageRequest.Builder? = null,
+) {
+    ListItem(
+        headlineContent = {
+            Text(text = category.name)
+        },
+        leadingContent = {
+            CategoryImage(
+                categoryId = category.id,
+                inPreview = inPreview,
+                imageRequestBuilder = imageRequestBuilder
+            )
+        },
+        trailingContent = {
+            if (selected) {
+                Icon(imageVector = Icons.Default.Done, contentDescription = "Selected")
+            }
+        },
+        modifier = modifier
+    )
 }
 
 @Composable

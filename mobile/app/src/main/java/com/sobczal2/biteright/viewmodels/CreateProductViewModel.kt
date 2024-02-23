@@ -392,7 +392,7 @@ class CreateProductViewModel @Inject constructor(
             amountUnitId = state.value.amountFormFieldState.value.unit.id
         )
 
-        val createResult = productRepository.createProduct(request)
+        val createResult = productRepository.create(request)
 
         createResult.fold(
             {

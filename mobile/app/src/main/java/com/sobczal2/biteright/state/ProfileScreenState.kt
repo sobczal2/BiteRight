@@ -6,4 +6,4 @@ data class ProfileScreenState (
     val user: UserDto? = null,
     override val globalLoading: Boolean = false,
     override val globalError: String? = null,
-) : ScreenStateBase
+) : ScreenState

@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.sobczal2.biteright.AuthManager
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.data.api.common.ExclusionAnnotationStrategy
 import com.sobczal2.biteright.data.api.common.LanguageInterceptor
 import com.sobczal2.biteright.data.api.common.LocalDateTimeTypeAdapter
 import com.sobczal2.biteright.data.api.common.LocalDateTypeAdapter
@@ -73,6 +74,8 @@ object AppModule {
         val gson = GsonBuilder()
             .registerTypeAdapter(LocalDate::class.java, LocalDateTypeAdapter())
             .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeTypeAdapter())
+            .addDeserializationExclusionStrategy(ExclusionAnnotationStrategy())
+            .addSerializationExclusionStrategy(ExclusionAnnotationStrategy())
             .create()
 
         return gson

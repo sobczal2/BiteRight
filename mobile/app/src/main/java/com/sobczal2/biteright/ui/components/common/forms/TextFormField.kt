@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import com.sobczal2.biteright.ui.theme.extraSmallTop
 
 data class TextFormFieldState(
     override var value: String = "",
@@ -69,10 +70,7 @@ fun TextFormField(
         minLines = options.minLines,
         maxLines = options.maxLines,
         keyboardOptions = options.keyboardOptions,
-        shape = options.shape ?: MaterialTheme.shapes.small.copy(
-            bottomStart = CornerSize(0.dp),
-            bottomEnd = CornerSize(0.dp),
-        ),
+        shape = options.shape ?: MaterialTheme.shapes.extraSmallTop,
         leadingIcon = options.leadingIcon,
         trailingIcon = options.trailingIcon,
         enabled = options.enabled,

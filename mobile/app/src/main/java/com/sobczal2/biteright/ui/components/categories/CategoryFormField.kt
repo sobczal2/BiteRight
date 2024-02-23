@@ -1,9 +1,10 @@
 package com.sobczal2.biteright.ui.components.categories
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +42,9 @@ fun CategoryFormField(
     Column(
         modifier = modifier
     ) {
-        Card {
+        Card(
+            shape = MaterialTheme.shapes.extraSmall,
+        ) {
             CategoryItem(
                 category = state.value,
                 selected = false,
@@ -49,6 +52,7 @@ fun CategoryFormField(
                 onClick = {
                     dialogOpen = true
                 },
+                imageRequestBuilder = imageRequestBuilder,
             )
         }
 
@@ -60,14 +64,15 @@ fun CategoryFormField(
                 selectedItem = state.value,
                 modifier = Modifier
                     .height(500.dp)
-            ) {category, selected ->
-                CategoryItem(
+            ) { category, selected ->
+                CategoryListItem(
                     category = category,
                     selected = selected,
-                    onClick = {
-                        onChange(category)
-                        dialogOpen = false
-                    },
+                    modifier = Modifier
+                        .clickable {
+                            onChange(category)
+                            dialogOpen = false
+                        },
                     inPreview = state.inPreview,
                     imageRequestBuilder = imageRequestBuilder
                 )

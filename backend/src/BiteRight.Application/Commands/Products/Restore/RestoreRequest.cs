@@ -10,4 +10,4 @@ using MediatR;
 
 namespace BiteRight.Application.Commands.Products.Restore;
 
-public record RestoreRequest(Guid ProductId) : IRequest<Unit>;
+public record RestoreRequest(Guid ProductId) : IRequest<RestoreResponse>;

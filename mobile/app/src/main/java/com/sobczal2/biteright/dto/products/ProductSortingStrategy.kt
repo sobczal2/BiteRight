@@ -12,5 +12,7 @@ enum class ProductSortingStrategy(val value: Int) {
 
     companion object {
         fun fromInt(value: Int) = entries.firstOrNull { it.value == value }
+
+        val Empty = NameAsc
     }
 }

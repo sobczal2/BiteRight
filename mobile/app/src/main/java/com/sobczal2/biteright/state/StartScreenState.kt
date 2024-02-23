@@ -7,4 +7,4 @@ data class StartScreenState(
     val formSubmitting: Boolean = false,
     override val globalLoading: Boolean = true,
     override val globalError: String? = null,
-) : ScreenStateBase
+) : ScreenState

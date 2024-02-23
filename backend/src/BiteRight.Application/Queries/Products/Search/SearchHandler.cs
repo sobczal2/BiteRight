@@ -98,7 +98,9 @@ public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
 
         var products = await baseQuery
             .Include(product => product.Amount)
-            .Select(product => SimpleProductDto.FromDomain(product))
+            .ThenInclude(amount => amount.Unit)
+            .ThenInclude(unit => unit.Translations.Where(translation => translation.LanguageId == languageId))
+            .Select(product => SimpleProductDto.FromDomain(product, languageId))
             .ToListAsync(cancellationToken);
 
         var paginatedList = new PaginatedList<SimpleProductDto>(

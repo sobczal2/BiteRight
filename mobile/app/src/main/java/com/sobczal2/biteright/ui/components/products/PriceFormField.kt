@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.ui.components.products
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,10 +28,11 @@ import com.sobczal2.biteright.ui.components.common.forms.SearchDialog
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
-import com.sobczal2.biteright.ui.components.currencies.FullCurrencyItem
+import com.sobczal2.biteright.ui.components.currencies.CurrencyListItem
 import com.sobczal2.biteright.ui.components.currencies.SimplifiedCurrencyItem
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
+import com.sobczal2.biteright.ui.theme.extraSmallTop
 import com.sobczal2.biteright.util.BiteRightPreview
 import java.util.UUID
 
@@ -90,10 +92,8 @@ fun PriceFormField(
             }
         }, options = TextFormFieldOptions(
             label = { Text(text = stringResource(id = R.string.price)) },
-            shape = MaterialTheme.shapes.small.copy(
-                topEnd = CornerSize(0.dp),
-                bottomEnd = CornerSize(0.dp),
-                bottomStart = CornerSize(0.dp)
+            shape = MaterialTheme.shapes.extraSmallTop.copy(
+                topEnd = CornerSize(0.dp)
             ),
             trailingIcon = {
                 Text(text = state.value.currency.symbol)
@@ -116,7 +116,7 @@ fun PriceFormField(
 
                             else -> {
                                 priceTextFieldState.copy(
-                                    value = String.format("%.2f", price)
+                                    value = "%.2f".format(price)
                                 )
                             }
 
@@ -153,14 +153,15 @@ fun PriceFormField(
                 onDismissRequest = { dialogOpen = false },
                 selectedItem = state.value.currency,
             ) { currency, selected ->
-                FullCurrencyItem(currency = currency, selected = selected, onClick = {
-                    onChange(
-                        state.value.copy(
-                            currency = currency
-                        )
-                    )
-                    dialogOpen = false
-                })
+                CurrencyListItem(
+                    currency = currency,
+                    selected = selected,
+                    modifier = Modifier
+                        .clickable {
+                            onChange(state.value.copy(currency = currency))
+                            dialogOpen = false
+                        }
+                )
             }
         }
     }

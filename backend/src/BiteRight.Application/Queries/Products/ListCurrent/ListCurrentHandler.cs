@@ -28,13 +28,16 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
 {
     private readonly AppDbContext _appDbContext;
     private readonly IIdentityProvider _identityProvider;
+    private readonly ILanguageProvider _languageProvider;
 
     public ListCurrentHandler(
         IIdentityProvider identityProvider,
+        ILanguageProvider languageProvider,
         AppDbContext appDbContext
     )
     {
         _identityProvider = identityProvider;
+        _languageProvider = languageProvider;
         _appDbContext = appDbContext;
     }
 
@@ -44,6 +47,7 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
     )
     {
         var user = await _identityProvider.RequireCurrentUser(cancellationToken);
+        var languageId = await _languageProvider.RequireCurrentId(cancellationToken);
 
         var baseQuery =
             _appDbContext
@@ -63,7 +67,9 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
 
         var products = await baseQuery
             .Include(product => product.Amount)
-            .Select(product => SimpleProductDto.FromDomain(product))
+            .ThenInclude(amount => amount.Unit)
+            .ThenInclude(unit => unit.Translations.Where(translation => translation.LanguageId == languageId))
+            .Select(product => SimpleProductDto.FromDomain(product, languageId))
             .ToListAsync(cancellationToken);
 
         return new ListCurrentResponse(products);

@@ -12,19 +12,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.BiteRightPreview
+import com.sobczal2.biteright.util.getCategoryPhotoUrl
+import java.util.UUID
 
 @Composable
 fun CategoryImage(
-    imageUri: String?,
+    categoryId: UUID,
+    shape: Shape = CircleShape,
     inPreview: Boolean = false,
     imageRequestBuilder: ImageRequest.Builder? = null
 ) {
+    val imageUri = getCategoryPhotoUrl(categoryId = categoryId)
     if (inPreview) {
         Box(
             modifier = Modifier
@@ -42,7 +47,7 @@ fun CategoryImage(
             modifier = Modifier
                 .size(64.dp)
                 .padding(MaterialTheme.dimension.sm)
-                .background(MaterialTheme.colorScheme.inverseSurface, CircleShape)
+                .background(color = MaterialTheme.colorScheme.inverseSurface, shape = shape)
         ) {
             AsyncImage(
                 model = imageRequestBuilder?.data(imageUri)?.build() ?: imageUri,
@@ -57,6 +62,6 @@ fun CategoryImage(
 @BiteRightPreview
 fun CategoryImagePreview() {
     BiteRightTheme {
-        CategoryImage(imageUri = null, inPreview = true)
+        CategoryImage(categoryId = UUID.randomUUID(), inPreview = true)
     }
 }

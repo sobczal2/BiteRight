@@ -20,7 +20,7 @@ using Microsoft.Extensions.Localization;
 
 namespace BiteRight.Application.Commands.Products.Dispose;
 
-public class DisposeHandler : CommandHandlerBase<DisposeRequest>
+public class DisposeHandler : CommandHandlerBase<DisposeRequest, DisposeResponse>
 {
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IIdentityProvider _identityProvider;
@@ -43,9 +43,9 @@ public class DisposeHandler : CommandHandlerBase<DisposeRequest>
         _dateTimeProvider = dateTimeProvider;
     }
 
-    protected override async Task<Unit> HandleImpl(DisposeRequest request, CancellationToken cancellationToken)
+    protected override async Task<DisposeResponse> HandleImpl(DisposeRequest request, CancellationToken cancellationToken)
     {
-        var user = await _identityProvider.RequireCurrentUser();
+        var user = await _identityProvider.RequireCurrentUser(cancellationToken);
 
         var product = await _productRepository.FindById(request.ProductId, cancellationToken);
 
@@ -61,6 +61,6 @@ public class DisposeHandler : CommandHandlerBase<DisposeRequest>
 
         product.Dispose(_dateTimeProvider.UtcNow);
 
-        return Unit.Value;
+        return new DisposeResponse();
     }
 }

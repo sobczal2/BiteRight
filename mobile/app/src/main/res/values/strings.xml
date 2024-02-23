@@ -12,8 +12,8 @@
     <string name="username_length_error">Username must be between %1$d and %2$d characters long</string>
     <string name="username_invalid_characters_error">Username must only contain lowercase letters, uppercase letters, numbers and underscores.</string>
     <string name="today">today</string>
-    <string name="expired_for">Expired for</string>
-    <string name="expires_in">Expires in</string>
+    <string name="expired_for">Expired for %s</string>
+    <string name="expires_in">Expires in %s</string>
     <string name="add_product">Add a product</string>
     <string name="name">Name</string>
     <string name="description">Description</string>
@@ -60,4 +60,10 @@
     <string name="date">Date</string>
     <string name="unit">Unit</string>
     <string name="validation_expiration_date_empty">Expiration date can\'t be empty when \"best by\" or \"use by\" kind are selected</string>
+    <string name="expires_today">Expires today</string>
+    <string name="change_amount_for">Change amount for</string>
+    <string name="expiration_unknown">Expiration unknown</string>
+    <string name="expiration_infinite">Never expires</string>
+    <string name="current_products">Current products</string>
+    <string name="all_products">All products</string>
 </resources>

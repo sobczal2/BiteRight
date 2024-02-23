@@ -39,7 +39,7 @@ public class AmountConfiguration : IEntityTypeConfiguration<Amount>
                 value => new UnitId(value)
             );
 
-        builder.HasOne<Unit>()
+        builder.HasOne(amount => amount.Unit)
             .WithMany()
             .HasForeignKey(amount => amount.UnitId);
     }

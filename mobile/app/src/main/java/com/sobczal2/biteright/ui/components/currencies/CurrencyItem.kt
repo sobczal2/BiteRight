@@ -6,11 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -112,6 +113,37 @@ fun FullCurrencyItem(
             }
         }
     }
+}
+
+@Composable
+fun CurrencyListItem(
+    currency: CurrencyDto,
+    selected: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    ListItem(
+        headlineContent = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = currency.symbol,
+                    modifier = Modifier.width(
+                        MaterialTheme.dimension.xxl
+                    )
+                )
+                Text(text = currency.name)
+            }
+        },
+        trailingContent = {
+            if (selected) {
+                Icon(imageVector = Icons.Default.Done, contentDescription = "Selected")
+            }
+        },
+        modifier = modifier
+    )
 }
 
 @Composable
