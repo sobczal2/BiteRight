@@ -1,7 +1,9 @@
 package com.sobczal2.biteright.data.api.abstractions
 
+import com.sobczal2.biteright.data.api.requests.products.ChangeAmountRequest
 import com.sobczal2.biteright.data.api.requests.products.CreateRequest
 import com.sobczal2.biteright.data.api.requests.products.SearchRequest
+import com.sobczal2.biteright.data.api.responses.products.ChangeAmountResponse
 import com.sobczal2.biteright.data.api.responses.products.CreateResponse
 import com.sobczal2.biteright.data.api.responses.products.DisposeResponse
 import com.sobczal2.biteright.data.api.responses.products.ListCurrentResponse
@@ -32,4 +34,7 @@ interface ProductsApi {
 
     @PUT("products/{productId}/restore")
     suspend fun restoreProduct(@Path("productId") productId: UUID): Response<RestoreResponse>
+
+    @PUT("products/{productId}/amount")
+    suspend fun changeAmount(@Path("productId") productId: UUID, @Body request: ChangeAmountRequest): Response<ChangeAmountResponse>
 }

@@ -19,6 +19,7 @@ public class SimpleProductDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;
+    public ExpirationDateKindDto ExpirationDateKind { get; set; }
     public DateOnly? ExpirationDate { get; set; }
     public Guid CategoryId { get; set; }
     public DateTime AddedDateTime { get; set; }
@@ -26,13 +27,17 @@ public class SimpleProductDto
     public double MaxAmount { get; set; }
     public string UnitAbbreviation { get; set; } = default!;
     public bool Disposed { get; set; }
-    
-    public static SimpleProductDto FromDomain(Product product, LanguageId languageId)
+
+    public static SimpleProductDto FromDomain(
+        Product product,
+        LanguageId languageId
+    )
     {
         return new SimpleProductDto
         {
             Id = product.Id,
             Name = product.Name,
+            ExpirationDateKind = (ExpirationDateKindDto)product.ExpirationDate.Kind,
             ExpirationDate = product.ExpirationDate.GetDateIfKnown(),
             CategoryId = product.CategoryId,
             AddedDateTime = product.AddedDateTime,

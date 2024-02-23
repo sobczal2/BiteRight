@@ -4,18 +4,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.request.ImageRequest
 import com.sobczal2.biteright.data.api.requests.products.DisposeRequest
-import com.sobczal2.biteright.data.api.requests.products.FilteringParams
 import com.sobczal2.biteright.data.api.requests.products.RestoreRequest
 import com.sobczal2.biteright.data.api.requests.products.SearchRequest
 import com.sobczal2.biteright.dto.common.PaginatedList
 import com.sobczal2.biteright.dto.common.PaginationParams
 import com.sobczal2.biteright.dto.common.emptyPaginatedList
-import com.sobczal2.biteright.dto.products.ProductSortingStrategy
 import com.sobczal2.biteright.dto.products.SimpleProductDto
 import com.sobczal2.biteright.events.AllProductsScreenEvent
 import com.sobczal2.biteright.repositories.abstractions.ProductRepository
 import com.sobczal2.biteright.state.AllProductsScreenState
+import com.sobczal2.biteright.util.PaginationSource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,9 +41,14 @@ class AllProductsViewModel @Inject constructor(
     val events = _events.receiveAsFlow()
 
     init {
+        _state.value.paginatedProductSource = PaginationSource(
+            initialPaginationParams = PaginationParams.Default,
+            search = ::searchProducts
+        )
         viewModelScope.launch {
-            launch { events.collect { event -> handleEvent(event) } }
-            launch { fetchProductsForNewQuery() }
+            val jobs = mutableListOf<Job>()
+            jobs.add(launch { events.collect { event -> handleEvent(event) } })
+            jobs.add(launch { _state.value.paginatedProductSource.fetchInitialItems(_state.value.searchQuery) })
         }
     }
 
@@ -67,37 +72,24 @@ class AllProductsViewModel @Inject constructor(
                 }
             }
 
-            AllProductsScreenEvent.ReloadProducts -> {
+            is AllProductsScreenEvent.FetchMoreProducts -> {
                 viewModelScope.launch {
-                    fetchProductsForNewQuery()
+                    _state.value.paginatedProductSource.fetchMoreItems(_state.value.searchQuery)
                 }
             }
         }
     }
 
-    private suspend fun fetchProductsForNewQuery() {
-        val products = searchProducts(
-            "",
-            emptyList(),
-            ProductSortingStrategy.AddedDateTimeAsc,
-            PaginationParams.Default
-        )
-        _state.update {
-            it.copy(products = products)
-        }
-    }
 
     private suspend fun searchProducts(
-        query: String,
-        categoryIds: List<UUID>,
-        sortingStrategy: ProductSortingStrategy,
+        searchQuery: AllProductsScreenState.SearchQuery,
         paginationParams: PaginationParams
     ): PaginatedList<SimpleProductDto> {
         val productsResult = productRepository.search(
             SearchRequest(
-                query = query,
-                filteringParams = FilteringParams(categoryIds = categoryIds),
-                sortingStrategy = sortingStrategy,
+                query = searchQuery.query,
+                filteringParams = searchQuery.filteringParams,
+                sortingStrategy = searchQuery.sortingStrategy,
                 paginationParams = paginationParams
             )
         )
@@ -120,9 +112,7 @@ class AllProductsViewModel @Inject constructor(
             )
         )
         disposeResult.fold(
-            { _ ->
-                handleEvent(AllProductsScreenEvent.ReloadProducts) // TODO: This is a workaround, we should update the state instead
-            },
+            {},
             { repositoryError ->
                 _state.update {
                     it.copy(globalError = repositoryError.message)
@@ -138,8 +128,7 @@ class AllProductsViewModel @Inject constructor(
             )
         )
         restoreResult.fold(
-            { _ ->
-                handleEvent(AllProductsScreenEvent.ReloadProducts) // TODO: This is a workaround, we should update the state instead
+            {
             },
             { repositoryError ->
                 _state.update {

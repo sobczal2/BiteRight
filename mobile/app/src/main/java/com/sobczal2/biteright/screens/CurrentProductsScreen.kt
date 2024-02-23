@@ -1,5 +1,7 @@
 package com.sobczal2.biteright.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,13 +19,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.dto.products.ExpirationDateKindDto
 import com.sobczal2.biteright.dto.products.SimpleProductDto
 import com.sobczal2.biteright.events.CurrentProductsScreenEvent
 import com.sobczal2.biteright.events.NavigationEvent
@@ -31,12 +38,11 @@ import com.sobczal2.biteright.state.CurrentProductsScreenState
 import com.sobczal2.biteright.ui.components.common.HomeLayout
 import com.sobczal2.biteright.ui.components.common.HomeLayoutTab
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
-import com.sobczal2.biteright.ui.components.products.ProductItem
-import com.sobczal2.biteright.ui.components.products.ProductSummaryItemState
+import com.sobczal2.biteright.ui.components.products.ChangeAmountDialog
+import com.sobczal2.biteright.ui.components.products.SwipeableProductListItem
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.BiteRightPreview
-import com.sobczal2.biteright.util.getCategoryPhotoUrl
 import com.sobczal2.biteright.viewmodels.CurrentProductsViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -63,6 +69,7 @@ fun CurrentProductsScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CurrentProductsScreenContent(
     state: CurrentProductsScreenState = CurrentProductsScreenState(),
@@ -70,7 +77,23 @@ fun CurrentProductsScreenContent(
     handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val animationDuration = 300.milliseconds
+
+    if (state.changeAmountDialogTargetId != null) {
+        val product = state.currentProducts.find { it.id == state.changeAmountDialogTargetId } ?: return
+        ChangeAmountDialog(
+            onDismiss = {
+                sendEvent(CurrentProductsScreenEvent.OnChangeAmountDialogDismiss)
+            },
+            onConfirm = {
+                sendEvent(CurrentProductsScreenEvent.OnChangeAmountDialogConfirm(product.id, it))
+            },
+            loading = state.changeAmountDialogLoading,
+            currentAmount = product.currentAmount,
+            maxAmount = product.maxAmount,
+            unitName = product.unitAbbreviation,
+            productName = product.name,
+        )
+    }
 
     HomeLayout(
         currentTab = HomeLayoutTab.CURRENT_PRODUCTS,
@@ -94,10 +117,10 @@ fun CurrentProductsScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(MaterialTheme.dimension.xl),
+                .padding(start = MaterialTheme.dimension.xl, end = MaterialTheme.dimension.xl, top = MaterialTheme.dimension.xl),
         ) {
             Text(
-                text = "Current Products",
+                text = stringResource(id = R.string.current_products),
                 style = MaterialTheme.typography.displayMedium.plus(
                     TextStyle(textAlign = TextAlign.Center)
                 ),
@@ -110,28 +133,30 @@ fun CurrentProductsScreenContent(
                         items = state.currentProducts,
                         key = { it.id }
                     ) { simpleProductDto ->
-                        ProductItem(
-                            productSummaryItemState = ProductSummaryItemState(
-                                name = simpleProductDto.name,
-                                expirationDate = simpleProductDto.expirationDate
-                                    ?: LocalDate.MIN, // TODO: workaround for now
-                                categoryImageUri = getCategoryPhotoUrl(categoryId = simpleProductDto.categoryId),
-                                amountPercentage = simpleProductDto.getAmountPercentage(),
-                                disposed = simpleProductDto.disposed,
-                            ),
-                            onClick = { /*TODO*/ },
-                            onDisposed = {
+                        var visible by remember { mutableStateOf(true) }
+                        SwipeableProductListItem(
+                            simpleProductDto = simpleProductDto,
+                            onDispose = {animationDuration ->
+                                visible = false
                                 coroutineScope.launch {
-                                    delay(animationDuration)
-                                    sendEvent(
-                                        CurrentProductsScreenEvent.OnProductDispose(
-                                            simpleProductDto.id
-                                        )
-                                    )
+                                    delay(animationDuration.toLong())
+                                    sendEvent(CurrentProductsScreenEvent.OnProductDispose(simpleProductDto.id))
                                 }
                                 true
                             },
                             imageRequestBuilder = state.imageRequestBuilder,
+                            visible = visible,
+                            modifier = Modifier
+                                .combinedClickable(
+                                    onClick = {},
+                                    onLongClick = {
+                                        sendEvent(
+                                            CurrentProductsScreenEvent.OnProductLongClick(
+                                                simpleProductDto.id
+                                            )
+                                        )
+                                    }
+                                )
                         )
 
                         if (simpleProductDto != state.currentProducts.last()) {
@@ -143,8 +168,9 @@ fun CurrentProductsScreenContent(
                     }
 
                     item {
-                        Box(modifier = Modifier
-                            .height(MaterialTheme.dimension.xxl)
+                        Box(
+                            modifier = Modifier
+                                .height(MaterialTheme.dimension.xxl)
                         )
                     }
                 },
@@ -163,6 +189,7 @@ fun CurrentProductsScreenPreview() {
                     SimpleProductDto(
                         id = UUID.randomUUID(),
                         name = "Product 1",
+                        expirationDateKind = ExpirationDateKindDto.BestBefore,
                         expirationDate = LocalDate.now(),
                         categoryId = UUID.randomUUID(),
                         currentAmount = 10.0,

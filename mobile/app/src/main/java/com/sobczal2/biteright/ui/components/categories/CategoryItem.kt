@@ -45,7 +45,7 @@ fun CategoryItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CategoryImage(
-            imageUri = category.imageUri(),
+            categoryId = category.id,
             imageRequestBuilder = imageRequestBuilder,
             inPreview = inPreview,
             shape = MaterialTheme.shapes.extraSmall,
@@ -102,7 +102,7 @@ fun CategoryListItem(
         },
         leadingContent = {
             CategoryImage(
-                imageUri = category.imageUri(),
+                categoryId = category.id,
                 inPreview = inPreview,
                 imageRequestBuilder = imageRequestBuilder
             )

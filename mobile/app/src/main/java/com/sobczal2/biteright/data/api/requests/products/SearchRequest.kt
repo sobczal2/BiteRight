@@ -15,4 +15,8 @@ data class SearchRequest(
 
 data class FilteringParams(
     @SerializedName("categoryIds") val categoryIds: List<UUID>
-)
+) {
+    companion object {
+        val Empty = FilteringParams(categoryIds = emptyList())
+    }
+}

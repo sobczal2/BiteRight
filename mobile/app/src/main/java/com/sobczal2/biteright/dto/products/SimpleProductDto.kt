@@ -8,6 +8,7 @@ import java.util.UUID
 data class SimpleProductDto(
     @SerializedName("id") val id: UUID,
     @SerializedName("name") val name: String,
+    @SerializedName("expirationDateKind") val expirationDateKind: ExpirationDateKindDto,
     @SerializedName("expirationDate") val expirationDate: LocalDate?,
     @SerializedName("categoryId") val categoryId: UUID,
     @SerializedName("addedDateTime") val addedDateTime: LocalDateTime,

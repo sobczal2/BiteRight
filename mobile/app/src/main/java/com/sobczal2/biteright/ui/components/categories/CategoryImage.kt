@@ -19,14 +19,17 @@ import coil.request.ImageRequest
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.BiteRightPreview
+import com.sobczal2.biteright.util.getCategoryPhotoUrl
+import java.util.UUID
 
 @Composable
 fun CategoryImage(
-    imageUri: String?,
+    categoryId: UUID,
     shape: Shape = CircleShape,
     inPreview: Boolean = false,
     imageRequestBuilder: ImageRequest.Builder? = null
 ) {
+    val imageUri = getCategoryPhotoUrl(categoryId = categoryId)
     if (inPreview) {
         Box(
             modifier = Modifier
@@ -59,6 +62,6 @@ fun CategoryImage(
 @BiteRightPreview
 fun CategoryImagePreview() {
     BiteRightTheme {
-        CategoryImage(imageUri = null, inPreview = true)
+        CategoryImage(categoryId = UUID.randomUUID(), inPreview = true)
     }
 }
