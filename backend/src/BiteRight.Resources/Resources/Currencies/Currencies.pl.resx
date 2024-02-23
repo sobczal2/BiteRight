@@ -25,6 +25,12 @@
         </value>
     </resheader>
     <data name="currency_not_found" xml:space="preserve">
-        <value>Nie znaleziono waluty</value>
+        <value>Waluta nie została znaleziona</value>
+    </data>
+    <data name="currency_id_empty" xml:space="preserve">
+        <value>Waluta nie może być pusta</value>
+    </data>
+    <data name="query_too_long" xml:space="preserve">
+        <value>Długość zapytania nie może przekraczać {0} znaków</value>
     </data>
 </root>

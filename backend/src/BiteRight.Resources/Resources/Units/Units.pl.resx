@@ -24,4 +24,10 @@
             PublicKeyToken=b77a5c561934e089
         </value>
     </resheader>
+    <data name="unit_not_found" xml:space="preserve">
+        <value>Jednostka nie została znaleziona</value>
+    </data>
+    <data name="query_too_long" xml:space="preserve">
+        <value>Długość zapytania nie może przekraczać {0} znaków</value>
+    </data>
 </root>
