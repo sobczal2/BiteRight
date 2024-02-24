@@ -2,36 +2,8 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="AllProductsScreenPreview - Light">
+      <entry key="App">
         <State />
-      </entry>
-      <entry key="ChangeAmountDialogPreview - Dark">
-        <State />
-      </entry>
-      <entry key="ExpirationDateFormFieldPreview">
-        <State />
-      </entry>
-      <entry key="PriceFormFieldPreview">
-        <State />
-      </entry>
-      <entry key="WelcomeScreenPreview">
-        <State />
-      </entry>
-      <entry key="app">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="$USER_HOME$/.android/avd/Pixel_7_Pro_API_33.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-02-18T14:42:26.686059012Z" />
-        </State>
       </entry>
     </value>
   </component>

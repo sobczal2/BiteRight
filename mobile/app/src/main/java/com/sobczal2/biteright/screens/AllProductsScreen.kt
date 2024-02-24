@@ -30,6 +30,7 @@ import com.sobczal2.biteright.R
 import com.sobczal2.biteright.events.AllProductsScreenEvent
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.state.AllProductsScreenState
+import com.sobczal2.biteright.ui.components.common.ErrorBox
 import com.sobczal2.biteright.ui.components.common.HomeLayout
 import com.sobczal2.biteright.ui.components.common.HomeLayoutTab
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
@@ -81,7 +82,11 @@ fun AllProductsScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(start = MaterialTheme.dimension.xl, end = MaterialTheme.dimension.xl, top = MaterialTheme.dimension.xl),
+                .padding(
+                    start = MaterialTheme.dimension.xl,
+                    end = MaterialTheme.dimension.xl,
+                    top = MaterialTheme.dimension.xl
+                ),
         ) {
             Text(
                 text = stringResource(id = R.string.all_products),
@@ -90,6 +95,8 @@ fun AllProductsScreenContent(
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
+
+            ErrorBox(error = state.globalError)
 
             LazyColumn(content = {
                 items(items = state.paginatedProductSource.items,

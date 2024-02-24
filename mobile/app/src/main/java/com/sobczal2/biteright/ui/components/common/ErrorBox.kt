@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
+import com.sobczal2.biteright.util.BiteRightPreview
 
 @Composable
 fun ErrorBox(
@@ -61,7 +62,7 @@ fun ErrorBox(
 }
 
 @Composable
-@Preview
+@BiteRightPreview
 fun ErrorBoxPreview() {
     BiteRightTheme {
         ErrorBox("Something went wrong!")
@@ -125,7 +126,7 @@ fun ErrorBox(
 }
 
 @Composable
-@Preview
+@BiteRightPreview
 fun ErrorBox2Preview() {
     BiteRightTheme {
         ErrorBox(

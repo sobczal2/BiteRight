@@ -9,11 +9,10 @@ import com.sobczal2.biteright.dto.common.PaginationParams
 
 class PaginationSource<TItem, TQuery>(
     private val initialPaginationParams: PaginationParams,
-    private val search: suspend (TQuery, PaginationParams) -> PaginatedList<TItem>,
 ) {
     private var _items = mutableStateListOf<TItem>()
     private var _paginationParams = mutableStateOf(initialPaginationParams)
-    private var _hasMore = mutableStateOf(false)
+    private var _hasMore = mutableStateOf(true)
     private var _initialFetching = mutableStateOf(false)
     private var _moreFetching = mutableStateOf(false)
 
@@ -31,21 +30,21 @@ class PaginationSource<TItem, TQuery>(
     private var lastQueryData: QueryData<TQuery>? = null
 
     fun isFetching() = _initialFetching.value || _moreFetching.value
-    suspend fun fetchInitialItems(query: TQuery) {
+    suspend fun fetchInitialItems(query: TQuery, search: suspend (TQuery, PaginationParams) -> PaginatedList<TItem>) {
         val queryData = QueryData(query, _paginationParams.value)
         if (isFetching() || !isQueryDataChanged(queryData)) return
         _initialFetching.value = true
         resetPagination()
-        val result = searchInternal(queryData)
+        val result = searchInternal(queryData, search)
         updateStateWithResult(result)
         _initialFetching.value = false
     }
 
-    suspend fun fetchMoreItems(query: TQuery) {
+    suspend fun fetchMoreItems(query: TQuery,        search: suspend (TQuery, PaginationParams) -> PaginatedList<TItem>) {
         val queryData = QueryData(query, _paginationParams.value.copy(pageNumber = _paginationParams.value.pageNumber + 1))
         if (isFetching() || !_hasMore.value || !isQueryDataChanged(queryData)) return
         _moreFetching.value = true
-        val result = searchInternal(queryData)
+        val result = searchInternal(queryData, search)
         updateStateWithResult(result, append = true)
         _paginationParams.value = queryData.paginationParams
         _moreFetching.value = false
@@ -70,9 +69,17 @@ class PaginationSource<TItem, TQuery>(
     }
 
     private suspend fun searchInternal(
-        queryData: QueryData<TQuery>
+        queryData: QueryData<TQuery>,
+        search: suspend (TQuery, PaginationParams) -> PaginatedList<TItem>
     ): PaginatedList<TItem> {
         lastQueryData = queryData
         return search(queryData.query, queryData.paginationParams)
+    }
+
+    fun updateItem(item: TItem, predicate: (TItem) -> Boolean) {
+        val index = _items.indexOfFirst(predicate)
+        if (index != -1) {
+            _items[index] = item
+        }
     }
 }

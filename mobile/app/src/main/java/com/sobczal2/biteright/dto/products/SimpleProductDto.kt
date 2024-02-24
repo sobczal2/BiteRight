@@ -15,7 +15,7 @@ data class SimpleProductDto(
     @SerializedName("currentAmount") val currentAmount: Double,
     @SerializedName("maxAmount") val maxAmount: Double,
     @SerializedName("unitAbbreviation") val unitAbbreviation: String,
-    @SerializedName("disposed") val disposed: Boolean
+    @SerializedName("disposed") var disposed: Boolean
 ) {
     fun getAmountPercentage(): Double {
         return currentAmount / maxAmount * 100
