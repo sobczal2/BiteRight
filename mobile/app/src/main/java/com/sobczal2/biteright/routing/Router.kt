@@ -32,21 +32,9 @@ fun Router(authManager: AuthManager) {
     authManager.subscribeToLogoutEvent {
         handleNavigationEvent(NavigationEvent.NavigateToWelcome, navController)
     }
-    var screenSize by remember { mutableStateOf(Size.Zero) }
     NavHost(
         navController = navController,
         startDestination = if (authManager.isLoggedIn) Routes.START else Routes.WELCOME,
-        enterTransition =
-        {
-            scaleIn(
-                animationSpec = tween(1000)
-            )
-        },
-        exitTransition = {
-            scaleOut(
-                animationSpec = tween(1000)
-            )
-        },
         modifier = Modifier
     ) {
         composable(Routes.WELCOME) {

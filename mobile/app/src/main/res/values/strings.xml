@@ -7,7 +7,7 @@
     <string name="next">Next</string>
     <string name="username">Username</string>
     <string name="network_error">Network error</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="login_canceled">Login has been cancelled</string>
     <string name="username_length_error">Username must be between %1$d and %2$d characters long</string>
     <string name="username_invalid_characters_error">Username must only contain lowercase letters, uppercase letters, numbers and underscores.</string>

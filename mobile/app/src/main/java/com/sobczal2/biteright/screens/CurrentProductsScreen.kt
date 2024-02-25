@@ -117,7 +117,7 @@ fun CurrentProductsScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(start = MaterialTheme.dimension.xl, end = MaterialTheme.dimension.xl, top = MaterialTheme.dimension.xl),
+                .padding(start = MaterialTheme.dimension.md, end = MaterialTheme.dimension.md, top = MaterialTheme.dimension.md),
         ) {
             Text(
                 text = stringResource(id = R.string.current_products),
