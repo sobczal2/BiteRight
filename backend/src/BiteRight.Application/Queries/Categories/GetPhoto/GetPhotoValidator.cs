@@ -16,14 +16,12 @@ namespace BiteRight.Application.Queries.Categories.GetPhoto;
 
 public class GetPhotoValidator : AbstractValidator<GetPhotoRequest>
 {
-    private const int MaxPhotoNameLength = 64;
-
     public GetPhotoValidator(
-        IStringLocalizer<Resources.Resources.Categories.Categories> localizer
+        IStringLocalizer<Resources.Resources.Categories.Categories> categoriesLocalizer
     )
     {
         RuleFor(x => x.CategoryId)
             .NotEmpty()
-            .WithMessage(localizer[nameof(Resources.Resources.Categories.Categories.category_id_empty)]);
+            .WithMessage(categoriesLocalizer[nameof(Resources.Resources.Categories.Categories.category_id_empty)]);
     }
 }

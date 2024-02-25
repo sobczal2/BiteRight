@@ -28,7 +28,6 @@ public class DetailedProductDto
     public double AmountCurrentValue { get; set; }
     public double AmountMaxValue { get; set; }
     public UnitDto Unit { get; set; }
-    public UserDto CreatedBy { get; set; }
     public bool DisposedStateValue { get; set; }
     public DateTime? DisposedStateDateTime { get; set; }
 
@@ -44,7 +43,6 @@ public class DetailedProductDto
         double amountCurrentValue,
         double amountMaxValue,
         UnitDto unit,
-        UserDto createdBy,
         bool disposedStateValue,
         DateTime? disposedStateDateTime
     )
@@ -60,7 +58,6 @@ public class DetailedProductDto
         AmountCurrentValue = amountCurrentValue;
         AmountMaxValue = amountMaxValue;
         Unit = unit;
-        CreatedBy = createdBy;
         DisposedStateValue = disposedStateValue;
         DisposedStateDateTime = disposedStateDateTime;
     }
@@ -82,7 +79,6 @@ public class DetailedProductDto
             product.Amount.CurrentValue,
             product.Amount.MaxValue,
             UnitDto.FromDomain(product.Amount.Unit, languageId),
-            UserDto.FromDomain(product.CreatedBy),
             product.DisposedState.Value,
             product.DisposedState.DateTime
         );

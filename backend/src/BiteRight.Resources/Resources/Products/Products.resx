@@ -48,9 +48,6 @@
     <data name="price_not_valid" xml:space="preserve">
         <value>Price must be between {0} and {1}</value>
     </data>
-    <data name="expiration_date_infinite" xml:space="preserve">
-        <value>Expiration date has invalid value for infinity kind</value>
-    </data>
     <data name="expiration_date_kind_invalid" xml:space="preserve">
         <value>Expiration date kind has invalid value</value>
     </data>
@@ -89,5 +86,17 @@
     </data>
     <data name="amount_current_value_invalid_value" xml:space="preserve">
         <value>Current amount must be be between {0} and {1}</value>
+    </data>
+    <data name="expiration_date_invalid_for_unknown" xml:space="preserve">
+        <value>When kind is unknown, date must be null</value>
+    </data>
+    <data name="expiration_date_invalid_for_infinite" xml:space="preserve">
+        <value>When kind is infinite, date must be null</value>
+    </data>
+    <data name="expiration_date_invalid_for_best_before" xml:space="preserve">
+        <value>When kind is best before, date mustnot  be null</value>
+    </data>
+    <data name="expiration_date_invalid_for_use_by" xml:space="preserve">
+        <value>When kind is use by, date must not be null</value>
     </data>
 </root>

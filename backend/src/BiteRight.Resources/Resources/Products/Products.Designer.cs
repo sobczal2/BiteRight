@@ -93,12 +93,6 @@ namespace BiteRight.Resources.Resources.Products {
             }
         }
         
-        public static string expiration_date_infinite {
-            get {
-                return ResourceManager.GetString("expiration_date_infinite", resourceCulture);
-            }
-        }
-        
         public static string expiration_date_kind_invalid {
             get {
                 return ResourceManager.GetString("expiration_date_kind_invalid", resourceCulture);
@@ -174,6 +168,30 @@ namespace BiteRight.Resources.Resources.Products {
         public static string amount_current_value_invalid_value {
             get {
                 return ResourceManager.GetString("amount_current_value_invalid_value", resourceCulture);
+            }
+        }
+        
+        public static string expiration_date_invalid_for_unknown {
+            get {
+                return ResourceManager.GetString("expiration_date_invalid_for_unknown", resourceCulture);
+            }
+        }
+        
+        public static string expiration_date_invalid_for_infinite {
+            get {
+                return ResourceManager.GetString("expiration_date_invalid_for_infinite", resourceCulture);
+            }
+        }
+        
+        public static string expiration_date_invalid_for_best_before {
+            get {
+                return ResourceManager.GetString("expiration_date_invalid_for_best_before", resourceCulture);
+            }
+        }
+        
+        public static string expiration_date_invalid_for_use_by {
+            get {
+                return ResourceManager.GetString("expiration_date_invalid_for_use_by", resourceCulture);
             }
         }
     }

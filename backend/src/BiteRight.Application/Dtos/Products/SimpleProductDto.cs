@@ -38,7 +38,7 @@ public class SimpleProductDto
             Id = product.Id,
             Name = product.Name,
             ExpirationDateKind = (ExpirationDateKindDto)product.ExpirationDate.Kind,
-            ExpirationDate = product.ExpirationDate.GetDateIfKnown(),
+            ExpirationDate = product.ExpirationDate.Value,
             CategoryId = product.CategoryId,
             AddedDateTime = product.AddedDateTime,
             CurrentAmount = product.Amount.CurrentValue,

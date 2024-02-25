@@ -34,7 +34,7 @@ public class ExpirationDate : ValueObject
     }
 
     private ExpirationDate(
-        DateOnly value,
+        DateOnly? value,
         ExpirationDateKind kind
     )
     {
@@ -42,16 +42,17 @@ public class ExpirationDate : ValueObject
         Kind = kind;
     }
 
-    public DateOnly Value { get; }
+    public DateOnly? Value { get; }
     public ExpirationDateKind Kind { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
+        yield return Kind;
     }
 
     private static ExpirationDate Create(
-        DateOnly value,
+        DateOnly? value,
         ExpirationDateKind kind
     )
     {
@@ -76,38 +77,39 @@ public class ExpirationDate : ValueObject
 
     public static ExpirationDate CreateUnknown()
     {
-        return Create(DateOnly.MinValue, ExpirationDateKind.Unknown);
+        return Create(null, ExpirationDateKind.Unknown);
     }
 
     public static ExpirationDate CreateInfinite()
     {
-        return Create(DateOnly.MaxValue, ExpirationDateKind.Infinite);
+        return Create(null, ExpirationDateKind.Infinite);
     }
-
-    public static ExpirationDate CreateSkipValidation(
-        DateOnly value,
-        ExpirationDateKind kind
-    )
-    {
-        return new ExpirationDate(value, kind);
-    }
-
+    
     private static void Validate(
-        DateOnly value,
+        DateOnly? value,
         ExpirationDateKind kind
     )
     {
-        if (kind == ExpirationDateKind.Infinite && value != DateOnly.MaxValue)
-            throw new ExpirationDateInfiniteValueException();
-    }
-
-    public DateOnly? GetDateIfKnown()
-    {
-        return Kind switch
+        switch (kind)
         {
-            ExpirationDateKind.Unknown => null,
-            ExpirationDateKind.Infinite => null,
-            _ => Value
-        };
+            case ExpirationDateKind.Unknown:
+                if (value is not null)
+                    throw new ExpirationDateUnknownValueException();
+                break;
+            case ExpirationDateKind.Infinite:
+                if (value is not null)
+                    throw new ExpirationDateInfiniteValueException();
+                break;
+            case ExpirationDateKind.BestBefore:
+                if (value is null)
+                    throw new ExpirationDateBestBeforeValueException();
+                break;
+            case ExpirationDateKind.UseBy:
+                if (value is null)
+                    throw new ExpirationDateUseByValueException();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(kind), kind, null);
+        }
     }
 }

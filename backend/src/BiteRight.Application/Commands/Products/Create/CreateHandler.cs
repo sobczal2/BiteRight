@@ -183,9 +183,21 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                     e.MaxValue
                 )
             ),
+            ExpirationDateUnknownValueException => ValidationException(
+                nameof(CreateRequest.ExpirationDate),
+                _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_invalid_for_unknown)]
+            ),
             ExpirationDateInfiniteValueException => ValidationException(
-                nameof(CreateRequest.ExpirationDateKind),
-                _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_infinite)]
+                nameof(CreateRequest.ExpirationDate),
+                _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_invalid_for_infinite)]
+            ),
+            ExpirationDateBestBeforeValueException => ValidationException(
+                nameof(CreateRequest.ExpirationDate),
+                _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_invalid_for_best_before)]
+            ),
+            ExpirationDateUseByValueException => ValidationException(
+                nameof(CreateRequest.ExpirationDate),
+                _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_invalid_for_use_by)]
             ),
             AmountCurrentValueInvalidValueException e => ValidationException(
                 nameof(CreateRequest.MaximumAmountValue),

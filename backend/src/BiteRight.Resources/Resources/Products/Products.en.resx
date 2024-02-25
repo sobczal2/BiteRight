@@ -39,9 +39,6 @@
     <data name="price_not_valid" xml:space="preserve">
         <value>Price must be between {0} and {1}</value>
     </data>
-    <data name="expiration_date_infinite" xml:space="preserve">
-        <value>Expiration date has invalid value for infinity kind</value>
-    </data>
     <data name="expiration_date_kind_invalid" xml:space="preserve">
         <value>Expiration date kind has invalid value</value>
     </data>
