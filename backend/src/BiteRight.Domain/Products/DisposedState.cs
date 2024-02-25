@@ -21,27 +21,27 @@ public class DisposedState : ValueObject
     // EF Core
     private DisposedState()
     {
-        Disposed = default!;
-        DisposedDate = default!;
+        Value = default!;
+        DateTime = default!;
     }
 
     private DisposedState(
-        bool disposed,
-        DateTime? disposedDate
+        bool value,
+        DateTime? dateTime
     )
     {
-        Disposed = disposed;
-        DisposedDate = disposedDate;
+        Value = value;
+        DateTime = dateTime;
     }
 
-    public bool Disposed { get; }
+    public bool Value { get; }
 
-    public DateTime? DisposedDate { get; }
+    public DateTime? DateTime { get; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        yield return Disposed;
-        yield return DisposedDate!;
+        yield return Value;
+        yield return DateTime!;
     }
 
     private static DisposedState Create(

@@ -32,5 +32,5 @@ fun ProductDetailsScreenContent(
     sendEvent: (ProductDetailsScreenEvent) -> Unit = {},
     handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
-    Text(text = "ProductDetailsScreenContent for ${state.productId}")
+//    Text(text = "ProductDetailsScreenContent for ${state.productId}")
 }

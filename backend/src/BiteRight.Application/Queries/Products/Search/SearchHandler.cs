@@ -51,7 +51,7 @@ public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
                 .Products
                 .AsNoTracking()
                 .Where(product =>
-                    product.UserId == user.Id);
+                    product.CreatedById == user.Id);
 
 
         var queryToLower = request.Query.ToLower();

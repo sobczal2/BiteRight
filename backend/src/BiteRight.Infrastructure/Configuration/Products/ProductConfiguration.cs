@@ -44,21 +44,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                 value => Description.CreateSkipValidation(value)
             );
 
-        builder.OwnsOne(product => product.Price, priceBuilder =>
-        {
-            priceBuilder
-                .Property(price => price.Value)
-                .HasColumnName("price_value");
-
-            priceBuilder
-                .Property(price => price.CurrencyId)
-                .HasConversion(
-                    currencyId => currencyId.Value,
-                    value => value
-                )
-                .HasColumnName("price_currency_id");
-        });
-
         builder.OwnsOne(product => product.ExpirationDate, expirationDateBuilder =>
         {
             expirationDateBuilder
@@ -87,36 +72,25 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                 value => value.ToUniversalTime()
             );
 
-        builder.Property(product => product.AmountId)
-            .HasConversion(
-                amountId => amountId.Value,
-                value => value
-            );
-
-        builder.HasOne(product => product.Amount)
-            .WithOne()
-            .HasForeignKey<Product>(product => product.AmountId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Property(product => product.UserId)
+        builder.Property(product => product.CreatedById)
             .HasConversion(
                 userId => userId.Value,
                 value => value
             );
 
-        builder.HasOne(product => product.User)
+        builder.HasOne(product => product.CreatedBy)
             .WithMany()
-            .HasForeignKey(p => p.UserId)
+            .HasForeignKey(p => p.CreatedById)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.OwnsOne(product => product.DisposedState, disposedStateBuilder =>
         {
             disposedStateBuilder
-                .Property(disposedState => disposedState.Disposed)
+                .Property(disposedState => disposedState.Value)
                 .HasColumnName("disposed_state_disposed");
 
             disposedStateBuilder
-                .Property(disposedState => disposedState.DisposedDate)
+                .Property(disposedState => disposedState.DateTime)
                 .HasColumnName("disposed_state_disposed_date");
         });
     }

@@ -18,14 +18,16 @@ namespace BiteRight.Infrastructure.Configuration.Products;
 
 public class AmountConfiguration : IEntityTypeConfiguration<Amount>
 {
-    public void Configure(EntityTypeBuilder<Amount> builder)
+    public void Configure(
+        EntityTypeBuilder<Amount> builder
+    )
     {
         builder.ToTable("amounts", "product");
         builder.HasKey(amount => amount.Id);
         builder.Property(amount => amount.Id)
             .HasConversion(
                 id => id.Value,
-                value => new AmountId(value)
+                value => value
             )
             .ValueGeneratedNever();
 
@@ -36,11 +38,22 @@ public class AmountConfiguration : IEntityTypeConfiguration<Amount>
         builder.Property(amount => amount.UnitId)
             .HasConversion(
                 unitId => unitId.Value,
-                value => new UnitId(value)
+                value => value
             );
 
         builder.HasOne(amount => amount.Unit)
             .WithMany()
             .HasForeignKey(amount => amount.UnitId);
+        
+        builder.Property(amount => amount.ProductId)
+            .HasConversion(
+                productId => productId.Value,
+                value => value
+            );
+
+        builder.HasOne(amount => amount.Product)
+            .WithOne(product => product.Amount)
+            .HasForeignKey<Amount>(price => price.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

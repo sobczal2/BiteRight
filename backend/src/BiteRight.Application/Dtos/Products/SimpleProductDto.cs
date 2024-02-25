@@ -44,7 +44,7 @@ public class SimpleProductDto
             CurrentAmount = product.Amount.CurrentValue,
             MaxAmount = product.Amount.MaxValue,
             UnitAbbreviation = product.Amount.Unit.GetAbbreviation(languageId),
-            Disposed = product.DisposedState.Disposed
+            Disposed = product.DisposedState.Value
         };
     }
 }

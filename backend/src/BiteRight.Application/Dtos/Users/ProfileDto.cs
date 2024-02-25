@@ -9,6 +9,7 @@
 
 using System;
 using BiteRight.Application.Dtos.Currencies;
+using BiteRight.Domain.Users;
 
 #endregion
 
@@ -17,5 +18,24 @@ namespace BiteRight.Application.Dtos.Users;
 public class ProfileDto
 {
     public CurrencyDto Currency { get; set; }
-    public string TimeZoneId { get; set; } = default!;
+    public string TimeZoneId { get; set; }
+
+    public ProfileDto(
+        CurrencyDto currency,
+        string timeZoneId
+    )
+    {
+        Currency = currency;
+        TimeZoneId = timeZoneId;
+    }
+
+    public static ProfileDto FromDomain(
+        Profile profile
+    )
+    {
+        return new ProfileDto(
+            CurrencyDto.FromDomain(profile.Currency),
+            profile.TimeZone.Id
+        );
+    }
 }

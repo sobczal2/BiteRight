@@ -52,13 +52,7 @@ public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
             request.PaginationParams.PageNumber,
             request.PaginationParams.PageSize,
             searchResult.TotalCount,
-            searchResult.Units.Select(unit => new UnitDto
-            {
-                Id = unit.Id,
-                Name = unit.GetName(languageId),
-                Abbreviation = unit.GetAbbreviation(languageId),
-                UnitSystem = (UnitSystemDto)(int)unit.UnitSystem
-            })
+            searchResult.Units.Select(unit => UnitDto.FromDomain(unit, languageId))
         );
 
         return new SearchResponse(pagedList);

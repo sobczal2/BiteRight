@@ -61,7 +61,7 @@ public class CreateProductsTests : IAsyncDisposable
         var createRequest = new CreateRequest(
             "Example Product",
             "This is an example product description.",
-            19.99m,
+            19.99,
             CurrencyConfiguration.USD.Id,
             ExpirationDateKindDto.BestBefore,
             new DateOnly(2025, 12, 31),

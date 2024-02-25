@@ -16,10 +16,10 @@ using BiteRight.Domain.Products.Exceptions;
 
 namespace BiteRight.Domain.Products;
 
-public class Price : ValueObject
+public class Price : Entity<PriceId>
 {
-    private const decimal MinValue = 0.00m;
-    private const decimal MaxValue = 1e6m;
+    private const double MinValue = 0;
+    private const double MaxValue = 1e6;
 
     // EF Core
     private Price()
@@ -27,55 +27,58 @@ public class Price : ValueObject
         Value = default!;
         CurrencyId = default!;
         Currency = default!;
+        ProductId = default!;
+        Product = default!;
     }
 
     private Price(
-        decimal value,
-        Currency currency
+        PriceId id,
+        double value,
+        CurrencyId currencyId,
+        ProductId productId
     )
+        : base(id)
     {
         Value = value;
-        CurrencyId = currency.Id;
-        Currency = currency;
+        CurrencyId = currencyId;
+        Currency = default!;
+        ProductId = productId;
+        Product = default!;
     }
 
-    public decimal Value { get; }
+    public double Value { get; }
     public CurrencyId CurrencyId { get; }
     public virtual Currency Currency { get; }
-
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
-        yield return CurrencyId;
-    }
+    public ProductId ProductId { get; }
+    public virtual Product Product { get; }
 
     public static Price Create(
-        decimal value,
-        Currency currency
+        double value,
+        CurrencyId currencyId,
+        ProductId productId,
+        PriceId? id = null
     )
     {
-        Validate(value, currency);
+        Validate(value, currencyId, productId);
 
-        return new Price(value, currency);
-    }
-
-    public static Price CreateSkipValidation(
-        decimal value,
-        Currency currency
-    )
-    {
-        return new Price(value, currency);
+        return new Price(
+            id ?? new PriceId(),
+            value,
+            currencyId,
+            productId
+        );
     }
 
     private static void Validate(
-        decimal value,
-        Currency currency
+        double value,
+        CurrencyId currencyId,
+        ProductId productId
     )
     {
         if (value is < MinValue or > MaxValue) throw new PriceInvalidValueException(MinValue, MaxValue);
     }
 
-    public static implicit operator decimal(
+    public static implicit operator double(
         Price price
     )
     {

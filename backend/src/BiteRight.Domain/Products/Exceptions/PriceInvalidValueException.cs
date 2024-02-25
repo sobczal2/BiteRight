@@ -16,14 +16,14 @@ namespace BiteRight.Domain.Products.Exceptions;
 public class PriceInvalidValueException : BusinessRuleDomainException
 {
     public PriceInvalidValueException(
-        decimal minValue,
-        decimal maxValue
+        double minValue,
+        double maxValue
     )
     {
         MinValue = minValue;
         MaxValue = maxValue;
     }
 
-    public decimal MinValue { get; }
-    public decimal MaxValue { get; }
+    public double MinValue { get; }
+    public double MaxValue { get; }
 }

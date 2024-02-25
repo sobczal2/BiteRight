@@ -28,10 +28,9 @@ public class Product : AggregateRoot<ProductId>
         CategoryId = default!;
         Category = default!;
         AddedDateTime = default!;
-        AmountId = default!;
         Amount = default!;
-        UserId = default!;
-        User = default!;
+        CreatedById = default!;
+        CreatedBy = default!;
         DisposedState = default!;
     }
 
@@ -45,7 +44,7 @@ public class Product : AggregateRoot<ProductId>
         AddedDateTime addedDateTime,
         Amount amount,
         DisposedState disposedState,
-        UserId userId
+        UserId createdById
     )
         : base(id)
     {
@@ -56,25 +55,22 @@ public class Product : AggregateRoot<ProductId>
         CategoryId = categoryId;
         Category = default!;
         AddedDateTime = addedDateTime;
-        AmountId = amount.Id;
         Amount = amount;
         DisposedState = disposedState;
-        UserId = userId;
-        User = default!;
+        CreatedById = createdById;
+        CreatedBy = default!;
     }
 
     public Name Name { get; private set; }
     public Description Description { get; private set; }
-    public Price? Price { get; private set; }
+    public virtual Price? Price { get; private set; }
     public ExpirationDate ExpirationDate { get; private set; }
     public CategoryId CategoryId { get; private set; }
     public virtual Category Category { get; private set; }
     public AddedDateTime AddedDateTime { get; private set; }
-    public AmountId AmountId { get; private set; }
     public virtual Amount Amount { get; private set; }
-    public UserId UserId { get; private set; }
-    public virtual User User { get; private set; }
-
+    public UserId CreatedById { get; private set; }
+    public virtual User CreatedBy { get; private set; }
     public DisposedState DisposedState { get; private set; }
 
     public static Product Create(
@@ -107,7 +103,7 @@ public class Product : AggregateRoot<ProductId>
 
     public bool IsDisposed()
     {
-        return DisposedState.Disposed;
+        return DisposedState.Value;
     }
 
     public void Dispose(

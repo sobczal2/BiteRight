@@ -50,7 +50,7 @@ public class ChangeAmountHandler : CommandHandlerBase<ChangeAmountRequest, Chang
                       ?? throw ValidationException(nameof(request.ProductId),
                           _productsLocalizer[nameof(Resources.Resources.Products.Products.product_not_found)]);
 
-        if (!Equals(product.UserId, user.Id))
+        if (!Equals(product.CreatedById, user.Id))
         {
             throw ValidationException(nameof(request.ProductId),
                 _productsLocalizer[nameof(Resources.Resources.Products.Products.product_not_found)]);

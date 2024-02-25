@@ -18,7 +18,7 @@ namespace BiteRight.Application.Commands.Products.Create;
 public record CreateRequest(
     string Name,
     string Description,
-    decimal? Price,
+    double? Price,
     Guid? CurrencyId,
     ExpirationDateKindDto ExpirationDateKind,
     DateOnly? ExpirationDate,

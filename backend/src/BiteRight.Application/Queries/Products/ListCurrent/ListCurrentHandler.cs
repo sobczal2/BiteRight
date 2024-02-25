@@ -54,10 +54,10 @@ public class ListCurrentHandler : QueryHandlerBase<ListCurrentRequest, ListCurre
                 .Products
                 .AsNoTracking()
                 .Where(product =>
-                    product.UserId == user.Id
+                    product.CreatedById == user.Id
                 )
                 .Where(product =>
-                    !product.DisposedState.Disposed
+                    !product.DisposedState.Value
                 );
 
         var sortingStrategyHandler = new ProductSortingSortingStrategyHandler();

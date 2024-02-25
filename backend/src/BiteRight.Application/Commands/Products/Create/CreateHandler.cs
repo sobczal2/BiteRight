@@ -76,6 +76,8 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
     {
         var user = await _identityProvider.RequireCurrentUser(cancellationToken);
 
+        var productId = new ProductId();
+
         var name = Name.Create(request.Name);
         var description = Description.Create(request.Description);
 
@@ -87,7 +89,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                                nameof(CreateRequest.CurrencyId),
                                _currenciesLocalizer[
                                    nameof(Currencies.currency_not_found)]);
-            price = Price.Create(request.Price.Value, currency);
+            price = Price.Create(request.Price.Value, currency.Id, productId);
         }
 
         var expirationDate = request.ExpirationDateKind switch
@@ -115,7 +117,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                                  nameof(Units.unit_not_found)]
                          );
 
-        var amount = Amount.CreateFull(amountUnit.Id, request.MaximumAmountValue);
+        var amount = Amount.CreateFull(request.MaximumAmountValue, amountUnit.Id, productId);
 
         var product = Product.Create(
             name,
@@ -125,12 +127,13 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
             category.Id,
             user.Id,
             amount,
-            _dateTimeProvider.UtcNow
+            _dateTimeProvider.UtcNow,
+            productId
         );
 
         _productRepository.Add(product);
 
-        return new CreateResponse(product.Id);
+        return new CreateResponse(productId);
     }
 
     protected override ValidationException MapExceptionToValidationException(
