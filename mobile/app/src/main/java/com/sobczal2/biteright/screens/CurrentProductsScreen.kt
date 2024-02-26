@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.products.ExpirationDateKindDto
 import com.sobczal2.biteright.dto.products.SimpleProductDto
@@ -56,7 +57,7 @@ fun CurrentProductsScreen(
     viewModel: CurrentProductsViewModel = hiltViewModel(),
     handleNavigationEvent: (NavigationEvent) -> Unit,
 ) {
-    val state = viewModel.state.collectAsState()
+    val state = viewModel.state.collectAsStateWithLifecycle()
 
     ScaffoldLoader(
         loading = state.value.globalLoading

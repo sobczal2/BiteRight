@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.events.ProductDetailsScreenEvent
 import com.sobczal2.biteright.state.ProductDetailsScreenState
@@ -27,7 +28,7 @@ fun ProductDetailsScreen(
     handleNavigationEvent: (NavigationEvent) -> Unit,
     productId: UUID
 ) {
-    val state = viewModel.state.collectAsState()
+    val state = viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.sendEvent(ProductDetailsScreenEvent.LoadDetails(productId))

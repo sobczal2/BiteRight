@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.events.WelcomeScreenEvent
@@ -36,7 +37,7 @@ fun WelcomeScreen(
     viewModel: WelcomeViewModel = hiltViewModel(),
     handleNavigationEvent: (NavigationEvent) -> Unit,
 ) {
-    val state = viewModel.state.collectAsState()
+    val state = viewModel.state.collectAsStateWithLifecycle()
 
     WelcomeScreenContent(
         state = state.value,
