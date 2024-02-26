@@ -79,7 +79,8 @@ fun CurrentProductsScreenContent(
     val coroutineScope = rememberCoroutineScope()
 
     if (state.changeAmountDialogTargetId != null) {
-        val product = state.currentProducts.find { it.id == state.changeAmountDialogTargetId } ?: return
+        val product =
+            state.currentProducts.find { it.id == state.changeAmountDialogTargetId } ?: return
         ChangeAmountDialog(
             onDismiss = {
                 sendEvent(CurrentProductsScreenEvent.OnChangeAmountDialogDismiss)
@@ -117,7 +118,11 @@ fun CurrentProductsScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(start = MaterialTheme.dimension.md, end = MaterialTheme.dimension.md, top = MaterialTheme.dimension.md),
+                .padding(
+                    start = MaterialTheme.dimension.md,
+                    end = MaterialTheme.dimension.md,
+                    top = MaterialTheme.dimension.md
+                ),
         ) {
             Text(
                 text = stringResource(id = R.string.current_products),
@@ -136,11 +141,15 @@ fun CurrentProductsScreenContent(
                         var visible by remember { mutableStateOf(true) }
                         SwipeableProductListItem(
                             simpleProductDto = simpleProductDto,
-                            onDispose = {animationDuration ->
+                            onDispose = { animationDuration ->
                                 visible = false
                                 coroutineScope.launch {
                                     delay(animationDuration.toLong())
-                                    sendEvent(CurrentProductsScreenEvent.OnProductDispose(simpleProductDto.id))
+                                    sendEvent(
+                                        CurrentProductsScreenEvent.OnProductDispose(
+                                            simpleProductDto.id
+                                        )
+                                    )
                                 }
                                 true
                             },
@@ -148,7 +157,13 @@ fun CurrentProductsScreenContent(
                             visible = visible,
                             modifier = Modifier
                                 .combinedClickable(
-                                    onClick = {},
+                                    onClick = {
+                                        handleNavigationEvent(
+                                            NavigationEvent.NavigateToProductDetails(
+                                                simpleProductDto.id
+                                            )
+                                        )
+                                    },
                                     onLongClick = {
                                         sendEvent(
                                             CurrentProductsScreenEvent.OnProductLongClick(

@@ -10,6 +10,9 @@ data class PaginatedList<T>(
     @SerializedName("items") val items: List<T>,
 ) {
     fun hasMore() = pageNumber < totalPages - 1
+    companion object {
+        val StartPage = 0
+    }
 }
 
 fun <T> emptyPaginatedList() = PaginatedList<T>(

@@ -1,22 +1,21 @@
 // # ==============================================================================
 // # Solution: BiteRight
-// # File: CreateRequest.cs
+// # File: EditRequest.cs
 // # Author: Łukasz Sobczak
-// # Created: 12-02-2024
+// # Created: 26-02-2024
 // # ==============================================================================
-
-#region
 
 using System;
 using BiteRight.Application.Dtos.Products;
 using MediatR;
+using Newtonsoft.Json;
 
-#endregion
+namespace BiteRight.Application.Commands.Products.Edit;
 
-namespace BiteRight.Application.Commands.Products.Create;
-
-public class CreateRequest : IRequest<CreateResponse>
+public class EditRequest : IRequest<EditResponse>
 {
+    [JsonIgnore]
+    public Guid Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public double? PriceValue { get; set; }
@@ -24,10 +23,12 @@ public class CreateRequest : IRequest<CreateResponse>
     public ExpirationDateKindDto ExpirationDateKind { get; set; }
     public DateOnly? ExpirationDate { get; set; }
     public Guid CategoryId { get; set; }
+    public double AmountCurrentValue { get; set; }
     public double AmountMaxValue { get; set; }
     public Guid AmountUnitId { get; set; }
 
-    public CreateRequest(
+    public EditRequest(
+        Guid id,
         string name,
         string description,
         double? priceValue,
@@ -35,9 +36,12 @@ public class CreateRequest : IRequest<CreateResponse>
         ExpirationDateKindDto expirationDateKind,
         DateOnly? expirationDate,
         Guid categoryId,
+        double amountCurrentValue,
         double amountMaxValue,
-        Guid amountUnitId)
+        Guid amountUnitId
+    )
     {
+        Id = id;
         Name = name;
         Description = description;
         PriceValue = priceValue;
@@ -45,6 +49,7 @@ public class CreateRequest : IRequest<CreateResponse>
         ExpirationDateKind = expirationDateKind;
         ExpirationDate = expirationDate;
         CategoryId = categoryId;
+        AmountCurrentValue = amountCurrentValue;
         AmountMaxValue = amountMaxValue;
         AmountUnitId = amountUnitId;
     }

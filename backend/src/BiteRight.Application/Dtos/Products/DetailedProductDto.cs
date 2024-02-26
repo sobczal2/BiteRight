@@ -9,7 +9,6 @@ using System;
 using BiteRight.Application.Dtos.Categories;
 using BiteRight.Application.Dtos.Currencies;
 using BiteRight.Application.Dtos.Units;
-using BiteRight.Application.Dtos.Users;
 using BiteRight.Domain.Languages;
 using BiteRight.Domain.Products;
 
@@ -17,6 +16,7 @@ namespace BiteRight.Application.Dtos.Products;
 
 public class DetailedProductDto
 {
+    public Guid Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public double? PriceValue { get; set; }
@@ -27,11 +27,12 @@ public class DetailedProductDto
     public DateTime AddedDateTime { get; set; }
     public double AmountCurrentValue { get; set; }
     public double AmountMaxValue { get; set; }
-    public UnitDto Unit { get; set; }
+    public UnitDto AmountUnit { get; set; }
     public bool DisposedStateValue { get; set; }
     public DateTime? DisposedStateDateTime { get; set; }
 
     public DetailedProductDto(
+        Guid id,
         string name,
         string description,
         double? priceValue,
@@ -42,11 +43,12 @@ public class DetailedProductDto
         DateTime addedDateTime,
         double amountCurrentValue,
         double amountMaxValue,
-        UnitDto unit,
+        UnitDto amountUnit,
         bool disposedStateValue,
         DateTime? disposedStateDateTime
     )
     {
+        Id = id;
         Name = name;
         Description = description;
         PriceValue = priceValue;
@@ -57,7 +59,7 @@ public class DetailedProductDto
         AddedDateTime = addedDateTime;
         AmountCurrentValue = amountCurrentValue;
         AmountMaxValue = amountMaxValue;
-        Unit = unit;
+        AmountUnit = amountUnit;
         DisposedStateValue = disposedStateValue;
         DisposedStateDateTime = disposedStateDateTime;
     }
@@ -68,6 +70,7 @@ public class DetailedProductDto
     )
     {
         return new DetailedProductDto(
+            product.Id,
             product.Name,
             product.Description,
             product.Price?.Value,

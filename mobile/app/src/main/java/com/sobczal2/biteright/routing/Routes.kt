@@ -1,5 +1,7 @@
 package com.sobczal2.biteright.routing
 
+import java.util.UUID
+
 object Routes {
     const val WELCOME = "welcome"
     const val START = "start"
@@ -8,4 +10,6 @@ object Routes {
     const val TEMPLATES = "templates"
     const val PROFILE = "profile"
     const val CREATE_PRODUCT = "create_product"
+    const val PRODUCT_DETAILS = "product_details/{productId}"
+    fun productDetails(productId: UUID) = "product_details/$productId"
 }

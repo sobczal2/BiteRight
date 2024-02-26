@@ -8,11 +8,11 @@ import java.util.UUID
 data class CreateRequest(
     @SerializedName("name") val name: String,
     @SerializedName("description") val description: String,
-    @SerializedName("price") val price: Double?,
-    @SerializedName("currencyId") val currencyId: UUID?,
+    @SerializedName("priceValue") val priceValue: Double?,
+    @SerializedName("priceCurrencyId") val priceCurrencyId: UUID?,
     @SerializedName("expirationDateKind") val expirationDateKind: ExpirationDateKindDto,
     @SerializedName("expirationDate") val expirationDate: LocalDate?,
     @SerializedName("categoryId") val categoryId: UUID,
-    @SerializedName("maximumAmountValue") val maximumAmountValue: Double,
+    @SerializedName("amountMaxValue") val amountMaxValue: Double,
     @SerializedName("amountUnitId") val amountUnitId: UUID,
 )

@@ -20,8 +20,11 @@ namespace BiteRight.Application.Commands.Products.Create;
 public class CreateValidator : AbstractValidator<CreateRequest>
 {
     public CreateValidator(
+        // ReSharper disable once SuggestBaseTypeForParameterInConstructor
         IStringLocalizer<Resources.Resources.Products.Products> productsLocalizer,
+        // ReSharper disable once SuggestBaseTypeForParameterInConstructor
         IStringLocalizer<Currencies> currenciesLocalizer,
+        // ReSharper disable once SuggestBaseTypeForParameterInConstructor
         IStringLocalizer<Categories> categoriesLocalizer
     )
     {
@@ -33,14 +36,14 @@ public class CreateValidator : AbstractValidator<CreateRequest>
             .NotNull()
             .WithMessage(_ => productsLocalizer[nameof(Resources.Resources.Products.Products.description_null)]);
 
-        RuleFor(x => x.Price)
+        RuleFor(x => x.PriceValue)
             .NotNull()
-            .When(x => x.Price.HasValue)
+            .When(x => x.PriceValue.HasValue)
             .WithMessage(_ => productsLocalizer[nameof(Resources.Resources.Products.Products.price_empty)]);
 
-        RuleFor(x => x.CurrencyId)
+        RuleFor(x => x.PriceCurrencyId)
             .NotEmpty()
-            .When(x => x.Price.HasValue)
+            .When(x => x.PriceValue.HasValue)
             .WithMessage(_ => currenciesLocalizer[nameof(Currencies.currency_id_empty)]);
 
         RuleFor(x => x.ExpirationDate)

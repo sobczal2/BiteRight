@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -82,7 +83,11 @@ fun AllProductsScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(start = MaterialTheme.dimension.md, end = MaterialTheme.dimension.md, top = MaterialTheme.dimension.md),
+                .padding(
+                    start = MaterialTheme.dimension.md,
+                    end = MaterialTheme.dimension.md,
+                    top = MaterialTheme.dimension.md
+                ),
         ) {
             Text(
                 text = stringResource(id = R.string.all_products),
@@ -97,13 +102,23 @@ fun AllProductsScreenContent(
             LazyColumn(content = {
                 items(items = state.paginatedProductSource.items,
                     key = { it.id }) { simpleProductDto ->
-                    SwipeableProductListItem(simpleProductDto = simpleProductDto, onDispose = {
-                        sendEvent(AllProductsScreenEvent.OnProductDispose(simpleProductDto.id))
-                        false
-                    }, onRestore = {
-                        sendEvent(AllProductsScreenEvent.OnProductRestore(simpleProductDto.id))
-                        false
-                    }, imageRequestBuilder = state.imageRequestBuilder
+                    SwipeableProductListItem(
+                        simpleProductDto = simpleProductDto,
+                        onDispose = {
+                            sendEvent(AllProductsScreenEvent.OnProductDispose(simpleProductDto.id))
+                            false
+                        },
+                        onRestore = {
+                            sendEvent(AllProductsScreenEvent.OnProductRestore(simpleProductDto.id))
+                            false
+                        },
+                        imageRequestBuilder = state.imageRequestBuilder,
+                        modifier = Modifier
+                            .clickable {
+                                handleNavigationEvent(
+                                    NavigationEvent.NavigateToProductDetails(simpleProductDto.id)
+                                )
+                            }
                     )
 
                     if (simpleProductDto != state.paginatedProductSource.items.last()) {

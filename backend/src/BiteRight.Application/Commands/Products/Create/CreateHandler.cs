@@ -82,14 +82,14 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
         var description = Description.Create(request.Description);
 
         Price? price = null;
-        if (request.CurrencyId is not null && request.Price.HasValue)
+        if (request.PriceCurrencyId is not null && request.PriceValue.HasValue)
         {
-            var currency = await _currencyRepository.FindById(request.CurrencyId, cancellationToken)
+            var currency = await _currencyRepository.FindById(request.PriceCurrencyId, cancellationToken)
                            ?? throw ValidationException(
-                               nameof(CreateRequest.CurrencyId),
+                               nameof(CreateRequest.PriceCurrencyId),
                                _currenciesLocalizer[
                                    nameof(Currencies.currency_not_found)]);
-            price = Price.Create(request.Price.Value, currency.Id, productId);
+            price = Price.Create(request.PriceValue.Value, currency.Id, productId);
         }
 
         var expirationDate = request.ExpirationDateKind switch
@@ -117,7 +117,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                                  nameof(Units.unit_not_found)]
                          );
 
-        var amount = Amount.CreateFull(request.MaximumAmountValue, amountUnit.Id, productId);
+        var amount = Amount.CreateFull(request.AmountMaxValue, amountUnit.Id, productId);
 
         var product = Product.Create(
             name,
@@ -176,7 +176,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                 )
             ),
             PriceInvalidValueException e => ValidationException(
-                nameof(CreateRequest.Price),
+                nameof(CreateRequest.PriceValue),
                 string.Format(
                     _productsLocalizer[nameof(Resources.Resources.Products.Products.price_not_valid)],
                     e.MinValue,
@@ -200,7 +200,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                 _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_invalid_for_use_by)]
             ),
             AmountCurrentValueInvalidValueException e => ValidationException(
-                nameof(CreateRequest.MaximumAmountValue),
+                nameof(CreateRequest.AmountMaxValue),
                 string.Format(
                     _productsLocalizer
                         [nameof(Resources.Resources.Products.Products.amount_current_value_invalid_value)],
@@ -209,7 +209,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                 )
             ),
             AmountMaxValueInvalidValueException e => ValidationException(
-                nameof(CreateRequest.MaximumAmountValue),
+                nameof(CreateRequest.AmountMaxValue),
                 string.Format(
                     _productsLocalizer[nameof(Resources.Resources.Products.Products.amount_max_value_invalid_value)],
                     e.MinValue,
@@ -217,7 +217,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                 )
             ),
             AmountCurrentValueGreaterThanMaxValueException => ValidationException(
-                nameof(CreateRequest.MaximumAmountValue),
+                nameof(CreateRequest.AmountMaxValue),
                 _productsLocalizer[
                     nameof(Resources.Resources.Products.Products.amount_current_value_greater_than_max_value)]
             ),

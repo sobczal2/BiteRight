@@ -383,12 +383,12 @@ class CreateProductViewModel @Inject constructor(
         val request = CreateRequest(
             name = state.value.nameFieldState.value,
             description = state.value.descriptionFieldState.value,
-            price = state.value.priceFieldState.value.price,
-            currencyId = if (state.value.priceFieldState.value.price != null) state.value.priceFieldState.value.currency.id else null,
+            priceValue = state.value.priceFieldState.value.price,
+            priceCurrencyId = if (state.value.priceFieldState.value.price != null) state.value.priceFieldState.value.currency.id else null,
             expirationDateKind = state.value.expirationDateFieldState.value.expirationDateKind,
             expirationDate = state.value.expirationDateFieldState.value.localDate,
             categoryId = state.value.categoryFieldState.value.id,
-            maximumAmountValue = state.value.amountFormFieldState.value.amount!!,
+            amountMaxValue = state.value.amountFormFieldState.value.amount!!,
             amountUnitId = state.value.amountFormFieldState.value.unit.id
         )
 
@@ -422,7 +422,7 @@ class CreateProductViewModel @Inject constructor(
                                 }
                             }
 
-                            CreateRequest::price.name.lowercase() -> {
+                            CreateRequest::priceValue.name.lowercase() -> {
                                 _state.update {
                                     it.copy(
                                         priceFieldState = it.priceFieldState.copy(
@@ -432,7 +432,7 @@ class CreateProductViewModel @Inject constructor(
                                 }
                             }
 
-                            CreateRequest::currencyId.name.lowercase() -> {
+                            CreateRequest::priceCurrencyId.name.lowercase() -> {
                                 _state.update {
                                     it.copy(
                                         priceFieldState = it.priceFieldState.copy(
@@ -472,7 +472,7 @@ class CreateProductViewModel @Inject constructor(
                                 }
                             }
 
-                            CreateRequest::maximumAmountValue.name.lowercase() -> {
+                            CreateRequest::amountMaxValue.name.lowercase() -> {
                                 _state.update {
                                     it.copy(
                                         amountFormFieldState = it.amountFormFieldState.copy(
