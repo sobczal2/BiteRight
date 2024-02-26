@@ -46,8 +46,8 @@ public class Price : Entity<PriceId>
         Product = default!;
     }
 
-    public double Value { get; }
-    public CurrencyId CurrencyId { get; }
+    public double Value { get; private set; }
+    public CurrencyId CurrencyId { get; private set; }
     public virtual Currency Currency { get; }
     public ProductId ProductId { get; }
     public virtual Product Product { get; }
@@ -83,5 +83,21 @@ public class Price : Entity<PriceId>
     )
     {
         return price.Value;
+    }
+
+    public void UpdateValue(
+        double value
+    )
+    {
+        Validate(value, CurrencyId, ProductId);
+        Value = value;
+    }
+
+    public void UpdateCurrency(
+        CurrencyId currencyId
+    )
+    {
+        Validate(Value, currencyId, ProductId);
+        CurrencyId = currencyId;
     }
 }

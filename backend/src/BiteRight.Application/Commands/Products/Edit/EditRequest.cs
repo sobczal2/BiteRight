@@ -15,7 +15,7 @@ namespace BiteRight.Application.Commands.Products.Edit;
 public class EditRequest : IRequest<EditResponse>
 {
     [JsonIgnore]
-    public Guid Id { get; set; }
+    public Guid ProductId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public double? PriceValue { get; set; }
@@ -28,7 +28,7 @@ public class EditRequest : IRequest<EditResponse>
     public Guid AmountUnitId { get; set; }
 
     public EditRequest(
-        Guid id,
+        Guid productId,
         string name,
         string description,
         double? priceValue,
@@ -41,7 +41,7 @@ public class EditRequest : IRequest<EditResponse>
         Guid amountUnitId
     )
     {
-        Id = id;
+        ProductId = productId;
         Name = name;
         Description = description;
         PriceValue = priceValue;

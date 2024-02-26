@@ -47,8 +47,8 @@ public class Amount : Entity<AmountId>
     }
 
     public double CurrentValue { get; private set; }
-    public double MaxValue { get; }
-    public UnitId UnitId { get; }
+    public double MaxValue { get; private set;  }
+    public UnitId UnitId { get; private set;  }
     public virtual Unit Unit { get; }
     public ProductId ProductId { get; }
     public virtual Product Product { get; }
@@ -61,7 +61,7 @@ public class Amount : Entity<AmountId>
         AmountId? id = null
     )
     {
-        ValidateAmount(currentValue, maxValue, unitId, productId);
+        Validate(currentValue, maxValue, unitId, productId);
 
         var amount = new Amount(
             id ?? new AmountId(),
@@ -74,7 +74,7 @@ public class Amount : Entity<AmountId>
         return amount;
     }
 
-    private static void ValidateAmount(
+    private static void Validate(
         double currentValue,
         double maxValue,
         UnitId unitId,
@@ -114,5 +114,23 @@ public class Amount : Entity<AmountId>
         if (amount > MaxValue) throw new AmountCurrentValueGreaterThanMaxValueException();
 
         CurrentValue = amount;
+    }
+
+    public void UpdateValue(
+        double currentValue,
+        double maxValue
+    )
+    {
+        Validate(currentValue, maxValue, UnitId, ProductId);
+        CurrentValue = currentValue;
+        MaxValue = maxValue;
+    }
+
+    public void UpdateUnit(
+        UnitId unitId
+    )
+    {
+        Validate(CurrentValue, MaxValue, unitId, ProductId);
+        UnitId = unitId;
     }
 }

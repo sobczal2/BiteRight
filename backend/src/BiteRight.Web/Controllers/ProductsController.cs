@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using BiteRight.Application.Commands.Products.ChangeAmount;
 using BiteRight.Application.Commands.Products.Create;
 using BiteRight.Application.Commands.Products.Dispose;
+using BiteRight.Application.Commands.Products.Edit;
 using BiteRight.Application.Commands.Products.Restore;
 using BiteRight.Application.Dtos.Products;
 using BiteRight.Application.Queries.Products.GetDetails;
@@ -144,6 +145,20 @@ public class ProductsController : WebController
     )
     {
         var request = new GetDetailsRequest(productId);
+        var response = await Mediator.Send(request);
+        return Ok(response);
+    }
+
+    [HttpPut("{productId:guid}")]
+    [AuthorizeUserExists]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Edit(
+        [FromRoute] Guid productId,
+        [FromBody] EditRequest request
+    )
+    {
+        request.ProductId = productId;
         var response = await Mediator.Send(request);
         return Ok(response);
     }

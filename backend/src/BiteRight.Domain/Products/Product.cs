@@ -10,6 +10,7 @@
 using System;
 using BiteRight.Domain.Categories;
 using BiteRight.Domain.Common;
+using BiteRight.Domain.Units;
 using BiteRight.Domain.Users;
 
 #endregion
@@ -118,5 +119,71 @@ public class Product : AggregateRoot<ProductId>
     public void Restore()
     {
         DisposedState = DisposedState.CreateNotDisposed();
+    }
+
+    public void UpdateName(
+        string name
+    )
+    {
+        Name = Name.Create(name);
+    }
+
+    public void UpdateDescription(
+        string description
+    )
+    {
+        Description = Description.Create(description);
+    }
+
+    public void UpdatePrice(
+        double priceValue,
+        Guid priceCurrencyId
+    )
+    {
+        if (Price is null)
+        {
+            Price = Price.Create(priceValue, priceCurrencyId, Id);
+        }
+        else
+        {
+            Price.UpdateValue(priceValue);
+            Price.UpdateCurrency(priceCurrencyId);
+        }
+    }
+
+    public void ClearPrice()
+    {
+        Price = null;
+    }
+
+    // TODO: this should be handled differently also taking creation into account
+    public void UpdateExpirationDate(
+        ExpirationDate expirationDate
+    )
+    {
+        ExpirationDate = expirationDate;
+    }
+
+    public void UpdateCategory(
+        Guid categoryId
+    )
+    {
+        CategoryId = categoryId;
+    }
+
+    public void UpdateAmount(
+        double amountCurrentValue,
+        double amountMaxValue,
+        UnitId amountUnitId
+    )
+    {
+        Amount.UpdateValue(
+            amountCurrentValue,
+            amountMaxValue
+        );
+        
+        Amount.UpdateUnit(
+            amountUnitId
+        );
     }
 }

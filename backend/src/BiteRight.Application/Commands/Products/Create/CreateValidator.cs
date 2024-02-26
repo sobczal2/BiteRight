@@ -8,8 +8,6 @@
 #region
 
 using BiteRight.Application.Dtos.Products;
-using BiteRight.Resources.Resources.Categories;
-using BiteRight.Resources.Resources.Currencies;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
@@ -23,9 +21,9 @@ public class CreateValidator : AbstractValidator<CreateRequest>
         // ReSharper disable once SuggestBaseTypeForParameterInConstructor
         IStringLocalizer<Resources.Resources.Products.Products> productsLocalizer,
         // ReSharper disable once SuggestBaseTypeForParameterInConstructor
-        IStringLocalizer<Currencies> currenciesLocalizer,
+        IStringLocalizer<Resources.Resources.Currencies.Currencies> currenciesLocalizer,
         // ReSharper disable once SuggestBaseTypeForParameterInConstructor
-        IStringLocalizer<Categories> categoriesLocalizer
+        IStringLocalizer<Resources.Resources.Categories.Categories> categoriesLocalizer
     )
     {
         RuleFor(x => x.Name)
@@ -44,7 +42,7 @@ public class CreateValidator : AbstractValidator<CreateRequest>
         RuleFor(x => x.PriceCurrencyId)
             .NotEmpty()
             .When(x => x.PriceValue.HasValue)
-            .WithMessage(_ => currenciesLocalizer[nameof(Currencies.currency_id_empty)]);
+            .WithMessage(_ => currenciesLocalizer[nameof(Resources.Resources.Currencies.Currencies.currency_id_empty)]);
 
         RuleFor(x => x.ExpirationDate)
             .NotNull()
@@ -65,7 +63,7 @@ public class CreateValidator : AbstractValidator<CreateRequest>
 
         RuleFor(x => x.CategoryId)
             .NotEmpty()
-            .WithMessage(_ => categoriesLocalizer[nameof(Categories.category_id_empty)]);
+            .WithMessage(_ => categoriesLocalizer[nameof(Resources.Resources.Categories.Categories.category_id_empty)]);
 
         RuleFor(x => x.AmountUnitId)
             .NotEmpty()
