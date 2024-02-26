@@ -57,4 +57,10 @@
     <data name="username" xml:space="preserve">
         <value>Benutzername</value>
     </data>
+    <data name="time_zone_id_not_found" xml:space="preserve">
+        <value>Die ausgewählte Zeitzone wurde nicht gefunden</value>
+    </data>
+    <data name="time_zone_empty" xml:space="preserve">
+        <value>Die Zeitzonen-ID darf nicht leer sein</value>
+    </data>
 </root>
