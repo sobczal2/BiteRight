@@ -3,10 +3,9 @@ package com.sobczal2.biteright.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sobczal2.biteright.data.api.requests.products.GetDetailsRequest
-import com.sobczal2.biteright.events.ProductDetailsScreenEvent
-import com.sobczal2.biteright.events.WelcomeScreenEvent
+import com.sobczal2.biteright.events.EditProductScreenEvent
 import com.sobczal2.biteright.repositories.abstractions.ProductRepository
-import com.sobczal2.biteright.state.ProductDetailsScreenState
+import com.sobczal2.biteright.state.EditProductScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,13 +17,13 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductDetailsViewModel @Inject constructor(
+class EditProductViewModel @Inject constructor(
     private val productRepository: ProductRepository
 ) : ViewModel() {
-    private val _state = MutableStateFlow(ProductDetailsScreenState())
+    private val _state = MutableStateFlow(EditProductScreenState())
     val state = _state.asStateFlow()
 
-    private val _events = Channel<ProductDetailsScreenEvent>()
+    private val _events = Channel<EditProductScreenEvent>()
     private val events = _events.receiveAsFlow()
 
     init {
@@ -35,15 +34,15 @@ class ProductDetailsViewModel @Inject constructor(
         }
     }
 
-    fun sendEvent(event: ProductDetailsScreenEvent) {
+    fun sendEvent(event: EditProductScreenEvent) {
         viewModelScope.launch {
             _events.send(event)
         }
     }
 
-    private fun handleEvent(event: ProductDetailsScreenEvent) {
+    private fun handleEvent(event: EditProductScreenEvent) {
         when (event) {
-            is ProductDetailsScreenEvent.LoadDetails -> {
+            is EditProductScreenEvent.LoadDetails -> {
                 loadDetails(event.productId)
             }
         }

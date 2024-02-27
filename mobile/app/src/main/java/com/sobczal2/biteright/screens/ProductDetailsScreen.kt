@@ -11,6 +11,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,13 +31,15 @@ import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.events.ProductDetailsScreenEvent
 import com.sobczal2.biteright.state.ProductDetailsScreenState
 import com.sobczal2.biteright.ui.components.categories.CategoryImage
+import com.sobczal2.biteright.ui.components.common.DisplayPair
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.ui.theme.mediumStart
 import com.sobczal2.biteright.util.BiteRightPreview
+import com.sobczal2.biteright.util.humanize
 import com.sobczal2.biteright.viewmodels.ProductDetailsViewModel
+import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.UUID
 
 @Composable
@@ -73,53 +76,103 @@ fun ProductDetailsScreenContent(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(MaterialTheme.dimension.md),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
             ) {
-                Row {
-                    CategoryImage(
-                        categoryId = product.category.id,
-                        shape = MaterialTheme.shapes.mediumStart,
-                        modifier = Modifier.size(MaterialTheme.dimension.xxxl)
-                    )
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row {
+                        CategoryImage(
+                            categoryId = product.category.id,
+                            shape = MaterialTheme.shapes.mediumStart,
+                            modifier = Modifier.size(MaterialTheme.dimension.xxxl)
+                        )
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(MaterialTheme.dimension.sm),
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = product.name,
+                                style = MaterialTheme.typography.headlineMedium
+                            )
+                            Text(
+                                text = product.category.name,
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
+                    }
+                }
+
+
+                Card {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(MaterialTheme.dimension.sm),
-                        verticalArrangement = Arrangement.Center
+                            .padding(MaterialTheme.dimension.md),
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.sm)
                     ) {
-                        Text(
-                            text = product.name,
-                            style = MaterialTheme.typography.headlineMedium
-                        )
-                        Text(
-                            text = product.category.name,
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                    }
-                }
-            }
+                        if (product.priceValue != null && product.priceCurrency != null) {
+                            DisplayPair(
+                                label = "${stringResource(id = R.string.price)}:",
+                                value = "${"%.2f".format(product.priceValue)} ${product.priceCurrency.symbol}",
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
 
-            Card {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(MaterialTheme.dimension.md),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.sm)
-                ) {
-                    Text(
-                        text = product.description,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = stringResource(
-                            id = product.expirationDateKind.toLocalizedResourceID(),
-                        ),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                        DisplayPair(
+                            label = "${stringResource(id = R.string.expiration_date)}:",
+                            value = "${stringResource(product.expirationDateKind.toLocalizedResourceID())} ${product.expirationDateValue?.humanize() ?: ""}",
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        DisplayPair(
+                            label = "${stringResource(id = R.string.category)}:",
+                            value = product.category.name,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        DisplayPair(
+                            label = "${stringResource(id = R.string.current_amount)}:",
+                            value = "${"%.2f".format(product.amountCurrentValue)} ${product.amountUnit.abbreviation}",
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        DisplayPair(
+                            label = "${stringResource(id = R.string.max_amount)}:",
+                            value = "${"%.2f".format(product.amountMaxValue)} ${product.amountUnit.abbreviation}",
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        DisplayPair(
+                            label = "${stringResource(id = R.string.added_at)}:",
+                            value = product.addedDateTime.humanize(),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        OutlinedTextField(
+                            value = product.description,
+                            onValueChange = {},
+                            label = { Text(text = stringResource(id = R.string.description)) },
+                            modifier = Modifier.fillMaxWidth(),
+                            minLines = 3,
+                            readOnly = true
+                        )
+
+                        if (product.disposedStateValue) {
+                            DisplayPair(
+                                label = "${stringResource(id = R.string.disposed_at)}:",
+                                value = product.disposedStateDateTime!!.humanize(),
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    }
                 }
             }
 
@@ -174,7 +227,7 @@ fun ProductDetailsScreenPreview() {
                     UUID.randomUUID(),
                     "Category name"
                 ),
-                LocalDateTime.now(),
+                Instant.now(),
                 10.0,
                 100.0,
                 UnitDto(

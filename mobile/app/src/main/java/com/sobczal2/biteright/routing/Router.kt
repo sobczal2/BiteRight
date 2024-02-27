@@ -19,6 +19,7 @@ import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.screens.AllProductsScreen
 import com.sobczal2.biteright.screens.CreateProductScreen
 import com.sobczal2.biteright.screens.CurrentProductsScreen
+import com.sobczal2.biteright.screens.EditProductScreen
 import com.sobczal2.biteright.screens.ProductDetailsScreen
 import com.sobczal2.biteright.screens.ProfileScreen
 import com.sobczal2.biteright.screens.StartScreen
@@ -74,6 +75,12 @@ fun Router(authManager: AuthManager) {
         }
         composable(Routes.PRODUCT_DETAILS) {
             ProductDetailsScreen(
+                handleNavigationEvent = handleNavigationEvent,
+                productId = it.arguments?.getUUID("productId")!!
+            )
+        }
+        composable(Routes.EDIT_PRODUCT) {
+            EditProductScreen(
                 handleNavigationEvent = handleNavigationEvent,
                 productId = it.arguments?.getUUID("productId")!!
             )

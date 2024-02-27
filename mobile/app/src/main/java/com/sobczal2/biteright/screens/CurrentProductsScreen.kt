@@ -48,6 +48,7 @@ import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.viewmodels.CurrentProductsViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
@@ -204,7 +205,7 @@ fun CurrentProductsScreenPreview() {
                         maxAmount = 100.0,
                         unitAbbreviation = "kg",
                         disposed = false,
-                        addedDateTime = LocalDateTime.now()
+                        addedDateTime = Instant.now()
                     ),
                 )
             )

@@ -83,7 +83,9 @@ fun PriceFormField(
         modifier = modifier
     ) {
         Card(
-            shape = MaterialTheme.shapes.extraSmall,
+            shape = MaterialTheme.shapes.extraSmall.copy(
+                bottomStart = CornerSize(0.dp),
+            ),
             modifier = Modifier
         ) {
             Row(

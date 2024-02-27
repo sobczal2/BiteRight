@@ -11,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,12 +26,12 @@ import com.sobczal2.biteright.state.ProfileScreenState
 import com.sobczal2.biteright.ui.components.common.HomeLayout
 import com.sobczal2.biteright.ui.components.common.HomeLayoutTab
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
-import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
+import com.sobczal2.biteright.util.humanize
 import com.sobczal2.biteright.viewmodels.ProfileViewModel
+import java.time.Instant
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 @Composable
@@ -85,7 +84,8 @@ fun ProfileScreenContent(
             }, modifier = Modifier.fillMaxWidth(), enabled = false
 
             )
-            TextField(value = state.user?.profile?.currency?.code ?: "",
+            TextField(
+                value = state.user?.profile?.currency?.code ?: "",
                 onValueChange = { },
                 label = {
                     Text(
@@ -102,11 +102,8 @@ fun ProfileScreenContent(
             }, modifier = Modifier.fillMaxWidth(), enabled = false
             )
             Text(
-                text = "${stringResource(id = R.string.joined_at)}: ${
-                    state.user?.joinedAt?.format(
-                        DateTimeFormatter.ISO_DATE
-                    )
-                }", style = MaterialTheme.typography.bodyLarge
+                text = "${stringResource(id = R.string.joined_at)}: ${state.user?.joinedAt?.humanize() ?: ""}",
+                style = MaterialTheme.typography.bodyLarge
             )
             Button(onClick = {
                 sendEvent(ProfileScreenEvent.OnLogoutClick)
@@ -129,7 +126,7 @@ fun ProfileScreenPreview() {
                     identityId = "identityId",
                     username = "username",
                     email = "email",
-                    joinedAt = LocalDateTime.now(),
+                    joinedAt = Instant.now(),
                     profile = ProfileDto(
                         currency = CurrencyDto(
                             id = UUID.randomUUID(),

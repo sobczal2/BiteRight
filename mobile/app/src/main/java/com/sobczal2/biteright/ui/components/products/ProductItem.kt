@@ -29,6 +29,7 @@ import com.sobczal2.biteright.ui.components.common.SwipeableItem
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.util.toExpirationString
+import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
 
@@ -136,7 +137,7 @@ fun ProductListItemPreview() {
             expirationDateKind = ExpirationDateKindDto.BestBefore,
             expirationDate = LocalDate.now().plusDays(7),
             categoryId = UUID.randomUUID(),
-            addedDateTime = LocalDate.now().atStartOfDay(),
+            addedDateTime = Instant.now(),
             currentAmount = 0.1,
             maxAmount = 1.0,
             unitAbbreviation = "L",
