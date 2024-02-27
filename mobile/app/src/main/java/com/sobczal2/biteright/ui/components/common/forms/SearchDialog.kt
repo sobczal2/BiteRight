@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.common.PaginatedList
 import com.sobczal2.biteright.dto.common.PaginationParams
@@ -52,10 +53,7 @@ fun <T> SearchDialog(
     val coroutineScope = rememberCoroutineScope()
 
     val paginationSource = remember {
-        PaginationSource(
-            initialPaginationParams = initialPaginationParams,
-            search = search
-        )
+        PaginationSource<T, String>(initialPaginationParams = initialPaginationParams)
     }
 
     val queryFieldStateFlow = remember {
@@ -64,7 +62,7 @@ fun <T> SearchDialog(
         )
     }
 
-    val queryFieldState = queryFieldStateFlow.collectAsState()
+    val queryFieldState = queryFieldStateFlow.collectAsStateWithLifecycle()
 
     var initialized by remember { mutableStateOf(false) }
 
@@ -73,7 +71,7 @@ fun <T> SearchDialog(
             .debounce(if (initialized) debounceDuration else Duration.ZERO)
             .collect {
                 initialized = true
-                paginationSource.fetchInitialItems(queryFieldState.value.value)
+                paginationSource.fetchInitialItems(queryFieldState.value.value, search)
             }
     }
 
@@ -132,7 +130,7 @@ fun <T> SearchDialog(
                                 }
                                 LaunchedEffect(Unit) {
                                     coroutineScope.launch {
-                                        paginationSource.fetchMoreItems(queryFieldState.value.value)
+                                        paginationSource.fetchMoreItems(queryFieldState.value.value, search)
                                     }
                                 }
                             }

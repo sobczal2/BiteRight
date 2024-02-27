@@ -59,4 +59,14 @@
     <string name="expiration_infinite">Never expires</string>
     <string name="current_products">Current products</string>
     <string name="all_products">All products</string>
+    <string name="back">Back</string>
+    <string name="edit">Edit</string>
+    <string name="disposed">Disposed</string>
+    <string name="expiration_date">Expiration date</string>
+    <string name="current_amount">Current amount</string>
+    <string name="max_amount">Max amount</string>
+    <string name="added_at">Added at</string>
+    <string name="disposed_at">Disposed at</string>
+    <string name="save">Save</string>
+    <string name="edit_product">Edit product</string>
 </resources>

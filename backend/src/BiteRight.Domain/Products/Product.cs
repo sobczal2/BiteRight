@@ -10,6 +10,7 @@
 using System;
 using BiteRight.Domain.Categories;
 using BiteRight.Domain.Common;
+using BiteRight.Domain.Units;
 using BiteRight.Domain.Users;
 
 #endregion
@@ -28,10 +29,9 @@ public class Product : AggregateRoot<ProductId>
         CategoryId = default!;
         Category = default!;
         AddedDateTime = default!;
-        AmountId = default!;
         Amount = default!;
-        UserId = default!;
-        User = default!;
+        CreatedById = default!;
+        CreatedBy = default!;
         DisposedState = default!;
     }
 
@@ -45,7 +45,7 @@ public class Product : AggregateRoot<ProductId>
         AddedDateTime addedDateTime,
         Amount amount,
         DisposedState disposedState,
-        UserId userId
+        UserId createdById
     )
         : base(id)
     {
@@ -56,25 +56,22 @@ public class Product : AggregateRoot<ProductId>
         CategoryId = categoryId;
         Category = default!;
         AddedDateTime = addedDateTime;
-        AmountId = amount.Id;
         Amount = amount;
         DisposedState = disposedState;
-        UserId = userId;
-        User = default!;
+        CreatedById = createdById;
+        CreatedBy = default!;
     }
 
     public Name Name { get; private set; }
     public Description Description { get; private set; }
-    public Price? Price { get; private set; }
+    public virtual Price? Price { get; private set; }
     public ExpirationDate ExpirationDate { get; private set; }
     public CategoryId CategoryId { get; private set; }
     public virtual Category Category { get; private set; }
     public AddedDateTime AddedDateTime { get; private set; }
-    public AmountId AmountId { get; private set; }
     public virtual Amount Amount { get; private set; }
-    public UserId UserId { get; private set; }
-    public virtual User User { get; private set; }
-
+    public UserId CreatedById { get; private set; }
+    public virtual User CreatedBy { get; private set; }
     public DisposedState DisposedState { get; private set; }
 
     public static Product Create(
@@ -107,7 +104,7 @@ public class Product : AggregateRoot<ProductId>
 
     public bool IsDisposed()
     {
-        return DisposedState.Disposed;
+        return DisposedState.Value;
     }
 
     public void Dispose(
@@ -122,5 +119,71 @@ public class Product : AggregateRoot<ProductId>
     public void Restore()
     {
         DisposedState = DisposedState.CreateNotDisposed();
+    }
+
+    public void UpdateName(
+        string name
+    )
+    {
+        Name = Name.Create(name);
+    }
+
+    public void UpdateDescription(
+        string description
+    )
+    {
+        Description = Description.Create(description);
+    }
+
+    public void UpdatePrice(
+        double priceValue,
+        Guid priceCurrencyId
+    )
+    {
+        if (Price is null)
+        {
+            Price = Price.Create(priceValue, priceCurrencyId, Id);
+        }
+        else
+        {
+            Price.UpdateValue(priceValue);
+            Price.UpdateCurrency(priceCurrencyId);
+        }
+    }
+
+    public void ClearPrice()
+    {
+        Price = null;
+    }
+
+    // TODO: this should be handled differently also taking creation into account
+    public void UpdateExpirationDate(
+        ExpirationDate expirationDate
+    )
+    {
+        ExpirationDate = expirationDate;
+    }
+
+    public void UpdateCategory(
+        Guid categoryId
+    )
+    {
+        CategoryId = categoryId;
+    }
+
+    public void UpdateAmount(
+        double amountCurrentValue,
+        double amountMaxValue,
+        UnitId amountUnitId
+    )
+    {
+        Amount.UpdateValue(
+            amountCurrentValue,
+            amountMaxValue
+        );
+        
+        Amount.UpdateUnit(
+            amountUnitId
+        );
     }
 }

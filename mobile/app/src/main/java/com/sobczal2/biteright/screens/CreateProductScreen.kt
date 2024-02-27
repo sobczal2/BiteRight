@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.categories.CategoryDto
 import com.sobczal2.biteright.dto.common.PaginatedList
@@ -48,7 +49,7 @@ fun CreateProductScreen(
     viewModel: CreateProductViewModel = hiltViewModel(),
     handleNavigationEvent: (NavigationEvent) -> Unit,
 ) {
-    val state = viewModel.state.collectAsState()
+    val state = viewModel.state.collectAsStateWithLifecycle()
 
     ScaffoldLoader(
         loading = state.value.globalLoading
@@ -80,7 +81,7 @@ fun CreateProductScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(MaterialTheme.dimension.xl),
+                .padding(MaterialTheme.dimension.md),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(

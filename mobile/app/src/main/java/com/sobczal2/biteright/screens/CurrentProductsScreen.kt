@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.products.ExpirationDateKindDto
 import com.sobczal2.biteright.dto.products.SimpleProductDto
@@ -38,6 +39,7 @@ import com.sobczal2.biteright.state.CurrentProductsScreenState
 import com.sobczal2.biteright.ui.components.common.HomeLayout
 import com.sobczal2.biteright.ui.components.common.HomeLayoutTab
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
+import com.sobczal2.biteright.ui.components.products.AddProductActionButton
 import com.sobczal2.biteright.ui.components.products.ChangeAmountDialog
 import com.sobczal2.biteright.ui.components.products.SwipeableProductListItem
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
@@ -46,6 +48,7 @@ import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.viewmodels.CurrentProductsViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
@@ -56,7 +59,7 @@ fun CurrentProductsScreen(
     viewModel: CurrentProductsViewModel = hiltViewModel(),
     handleNavigationEvent: (NavigationEvent) -> Unit,
 ) {
-    val state = viewModel.state.collectAsState()
+    val state = viewModel.state.collectAsStateWithLifecycle()
 
     ScaffoldLoader(
         loading = state.value.globalLoading
@@ -79,7 +82,8 @@ fun CurrentProductsScreenContent(
     val coroutineScope = rememberCoroutineScope()
 
     if (state.changeAmountDialogTargetId != null) {
-        val product = state.currentProducts.find { it.id == state.changeAmountDialogTargetId } ?: return
+        val product =
+            state.currentProducts.find { it.id == state.changeAmountDialogTargetId } ?: return
         ChangeAmountDialog(
             onDismiss = {
                 sendEvent(CurrentProductsScreenEvent.OnChangeAmountDialogDismiss)
@@ -99,17 +103,8 @@ fun CurrentProductsScreenContent(
         currentTab = HomeLayoutTab.CURRENT_PRODUCTS,
         handleNavigationEvent = handleNavigationEvent,
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = {
-                    handleNavigationEvent(NavigationEvent.NavigateToCreateProduct)
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(id = R.string.add_product),
-                    modifier = Modifier.padding(end = MaterialTheme.dimension.sm)
-                )
-                Text(text = stringResource(id = R.string.add_product))
+            AddProductActionButton {
+                handleNavigationEvent(NavigationEvent.NavigateToCreateProduct)
             }
         }
     ) { paddingValues ->
@@ -117,7 +112,11 @@ fun CurrentProductsScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(start = MaterialTheme.dimension.xl, end = MaterialTheme.dimension.xl, top = MaterialTheme.dimension.xl),
+                .padding(
+                    start = MaterialTheme.dimension.md,
+                    end = MaterialTheme.dimension.md,
+                    top = MaterialTheme.dimension.md
+                ),
         ) {
             Text(
                 text = stringResource(id = R.string.current_products),
@@ -136,11 +135,15 @@ fun CurrentProductsScreenContent(
                         var visible by remember { mutableStateOf(true) }
                         SwipeableProductListItem(
                             simpleProductDto = simpleProductDto,
-                            onDispose = {animationDuration ->
+                            onDispose = { animationDuration ->
                                 visible = false
                                 coroutineScope.launch {
                                     delay(animationDuration.toLong())
-                                    sendEvent(CurrentProductsScreenEvent.OnProductDispose(simpleProductDto.id))
+                                    sendEvent(
+                                        CurrentProductsScreenEvent.OnProductDispose(
+                                            simpleProductDto.id
+                                        )
+                                    )
                                 }
                                 true
                             },
@@ -148,7 +151,13 @@ fun CurrentProductsScreenContent(
                             visible = visible,
                             modifier = Modifier
                                 .combinedClickable(
-                                    onClick = {},
+                                    onClick = {
+                                        handleNavigationEvent(
+                                            NavigationEvent.NavigateToProductDetails(
+                                                simpleProductDto.id
+                                            )
+                                        )
+                                    },
                                     onLongClick = {
                                         sendEvent(
                                             CurrentProductsScreenEvent.OnProductLongClick(
@@ -196,7 +205,7 @@ fun CurrentProductsScreenPreview() {
                         maxAmount = 100.0,
                         unitAbbreviation = "kg",
                         disposed = false,
-                        addedDateTime = LocalDateTime.now()
+                        addedDateTime = Instant.now()
                     ),
                 )
             )

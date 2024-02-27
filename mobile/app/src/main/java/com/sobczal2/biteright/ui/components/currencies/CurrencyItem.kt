@@ -37,6 +37,7 @@ fun SimplifiedCurrencyItem(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() },
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column {
             if (label != null) {

@@ -12,8 +12,10 @@ using System.Threading.Tasks;
 using BiteRight.Application.Commands.Products.ChangeAmount;
 using BiteRight.Application.Commands.Products.Create;
 using BiteRight.Application.Commands.Products.Dispose;
+using BiteRight.Application.Commands.Products.Edit;
 using BiteRight.Application.Commands.Products.Restore;
 using BiteRight.Application.Dtos.Products;
+using BiteRight.Application.Queries.Products.GetDetails;
 using BiteRight.Application.Queries.Products.ListCurrent;
 using BiteRight.Application.Queries.Products.Search;
 using BiteRight.Web.Authorization;
@@ -125,8 +127,35 @@ public class ProductsController : WebController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ChangeAmount(
-        Guid productId,
+        [FromRoute] Guid productId,
         [FromBody] ChangeAmountRequest request
+    )
+    {
+        request.ProductId = productId;
+        var response = await Mediator.Send(request);
+        return Ok(response);
+    }
+
+    [HttpGet("{productId:guid}/details")]
+    [AuthorizeUserExists]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetDetails(
+        [FromRoute] Guid productId
+    )
+    {
+        var request = new GetDetailsRequest(productId);
+        var response = await Mediator.Send(request);
+        return Ok(response);
+    }
+
+    [HttpPut("{productId:guid}")]
+    [AuthorizeUserExists]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Edit(
+        [FromRoute] Guid productId,
+        [FromBody] EditRequest request
     )
     {
         request.ProductId = productId;

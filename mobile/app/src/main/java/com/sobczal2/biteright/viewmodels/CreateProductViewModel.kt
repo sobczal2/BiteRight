@@ -27,7 +27,6 @@ import com.sobczal2.biteright.util.StringProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -74,7 +73,9 @@ class CreateProductViewModel @Inject constructor(
             _state.update { currentState ->
                 currentState.copy(
                     amountFormFieldState = currentState.amountFormFieldState.copy(
-                        value = FormAmountWithUnit.Empty.copy(unit = currentState.startingUnits?.items?.firstOrNull() ?: UnitDto.Empty)
+                        value = FormAmountWithUnit.Empty.copy(
+                            unit = currentState.startingUnits?.items?.firstOrNull() ?: UnitDto.Empty
+                        )
                     )
                 )
             }
@@ -163,8 +164,7 @@ class CreateProductViewModel @Inject constructor(
             it.copy(
                 amountFormFieldState = it.amountFormFieldState.copy(
                     value = value,
-                    amountError = null,
-                    unitError = null,
+                    error = null,
                 )
             )
         }
@@ -220,8 +220,7 @@ class CreateProductViewModel @Inject constructor(
             it.copy(
                 priceFieldState = it.priceFieldState.copy(
                     value = value,
-                    priceError = null,
-                    currencyError = null,
+                    error = null,
                 )
             )
         }
@@ -383,12 +382,12 @@ class CreateProductViewModel @Inject constructor(
         val request = CreateRequest(
             name = state.value.nameFieldState.value,
             description = state.value.descriptionFieldState.value,
-            price = state.value.priceFieldState.value.price,
-            currencyId = if (state.value.priceFieldState.value.price != null) state.value.priceFieldState.value.currency.id else null,
+            priceValue = state.value.priceFieldState.value.price,
+            priceCurrencyId = if (state.value.priceFieldState.value.price != null) state.value.priceFieldState.value.currency.id else null,
             expirationDateKind = state.value.expirationDateFieldState.value.expirationDateKind,
             expirationDate = state.value.expirationDateFieldState.value.localDate,
             categoryId = state.value.categoryFieldState.value.id,
-            maximumAmountValue = state.value.amountFormFieldState.value.amount!!,
+            amountMaxValue = state.value.amountFormFieldState.value.amount!!,
             amountUnitId = state.value.amountFormFieldState.value.unit.id
         )
 
@@ -422,21 +421,21 @@ class CreateProductViewModel @Inject constructor(
                                 }
                             }
 
-                            CreateRequest::price.name.lowercase() -> {
+                            CreateRequest::priceValue.name.lowercase() -> {
                                 _state.update {
                                     it.copy(
                                         priceFieldState = it.priceFieldState.copy(
-                                            priceError = value.firstOrNull()
+                                            error = value.firstOrNull()
                                         )
                                     )
                                 }
                             }
 
-                            CreateRequest::currencyId.name.lowercase() -> {
+                            CreateRequest::priceCurrencyId.name.lowercase() -> {
                                 _state.update {
                                     it.copy(
                                         priceFieldState = it.priceFieldState.copy(
-                                            currencyError = value.firstOrNull()
+                                            error = value.firstOrNull()
                                         )
                                     )
                                 }
@@ -472,11 +471,11 @@ class CreateProductViewModel @Inject constructor(
                                 }
                             }
 
-                            CreateRequest::maximumAmountValue.name.lowercase() -> {
+                            CreateRequest::amountMaxValue.name.lowercase() -> {
                                 _state.update {
                                     it.copy(
                                         amountFormFieldState = it.amountFormFieldState.copy(
-                                            amountError = value.firstOrNull()
+                                            error = value.firstOrNull()
                                         )
                                     )
                                 }
@@ -486,7 +485,7 @@ class CreateProductViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         amountFormFieldState = it.amountFormFieldState.copy(
-                                            unitError = value.firstOrNull()
+                                            error = value.firstOrNull()
                                         )
                                     )
                                 }
@@ -529,7 +528,7 @@ class CreateProductViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     amountFormFieldState = it.amountFormFieldState.copy(
-                        amountError = stringProvider.getString(R.string.validation_amount_empty)
+                        error = stringProvider.getString(R.string.validation_amount_empty)
                     )
                 )
             }
@@ -552,7 +551,7 @@ class CreateProductViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     priceFieldState = it.priceFieldState.copy(
-                        priceError = stringProvider.getString(
+                        error = stringProvider.getString(
                             R.string.validation_price_not_valid,
                             minPrice,
                             maxPrice

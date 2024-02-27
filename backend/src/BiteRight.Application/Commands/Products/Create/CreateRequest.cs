@@ -15,14 +15,37 @@ using MediatR;
 
 namespace BiteRight.Application.Commands.Products.Create;
 
-public record CreateRequest(
-    string Name,
-    string Description,
-    decimal? Price,
-    Guid? CurrencyId,
-    ExpirationDateKindDto ExpirationDateKind,
-    DateOnly? ExpirationDate,
-    Guid CategoryId,
-    double MaximumAmountValue,
-    Guid AmountUnitId
-) : IRequest<CreateResponse>;
+public class CreateRequest : IRequest<CreateResponse>
+{
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public double? PriceValue { get; set; }
+    public Guid? PriceCurrencyId { get; set; }
+    public ExpirationDateKindDto ExpirationDateKind { get; set; }
+    public DateOnly? ExpirationDate { get; set; }
+    public Guid CategoryId { get; set; }
+    public double AmountMaxValue { get; set; }
+    public Guid AmountUnitId { get; set; }
+
+    public CreateRequest(
+        string name,
+        string description,
+        double? priceValue,
+        Guid? priceCurrencyId,
+        ExpirationDateKindDto expirationDateKind,
+        DateOnly? expirationDate,
+        Guid categoryId,
+        double amountMaxValue,
+        Guid amountUnitId)
+    {
+        Name = name;
+        Description = description;
+        PriceValue = priceValue;
+        PriceCurrencyId = priceCurrencyId;
+        ExpirationDateKind = expirationDateKind;
+        ExpirationDate = expirationDate;
+        CategoryId = categoryId;
+        AmountMaxValue = amountMaxValue;
+        AmountUnitId = amountUnitId;
+    }
+}

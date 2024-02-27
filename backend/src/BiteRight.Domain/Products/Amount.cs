@@ -26,48 +26,59 @@ public class Amount : Entity<AmountId>
         MaxValue = default!;
         UnitId = default!;
         Unit = default!;
+        ProductId = default!;
+        Product = default!;
     }
 
     private Amount(
         AmountId id,
         double currentValue,
         double maxValue,
-        UnitId unitId
+        UnitId unitId,
+        ProductId productId
     ) : base(id)
     {
         CurrentValue = currentValue;
         MaxValue = maxValue;
         UnitId = unitId;
         Unit = default!;
+        ProductId = productId;
+        Product = default!;
     }
 
     public double CurrentValue { get; private set; }
-    public double MaxValue { get; }
-    public UnitId UnitId { get; private set; }
-    public virtual Unit Unit { get; private set; }
+    public double MaxValue { get; private set;  }
+    public UnitId UnitId { get; private set;  }
+    public virtual Unit Unit { get; }
+    public ProductId ProductId { get; }
+    public virtual Product Product { get; }
 
     public static Amount Create(
         double currentValue,
         double maxValue,
         UnitId unitId,
+        ProductId productId,
         AmountId? id = null
     )
     {
-        ValidateAmount(currentValue, maxValue);
+        Validate(currentValue, maxValue, unitId, productId);
 
         var amount = new Amount(
             id ?? new AmountId(),
             currentValue,
             maxValue,
-            unitId
+            unitId,
+            productId
         );
 
         return amount;
     }
 
-    private static void ValidateAmount(
+    private static void Validate(
         double currentValue,
-        double maxValue
+        double maxValue,
+        UnitId unitId,
+        ProductId productId
     )
     {
         if (currentValue is < MinValidValue or > MaxValidValue)
@@ -79,9 +90,13 @@ public class Amount : Entity<AmountId>
         if (currentValue > maxValue) throw new AmountCurrentValueGreaterThanMaxValueException();
     }
 
-    public static Amount CreateFull(UnitId unitId, double maxValue)
+    public static Amount CreateFull(
+        double maxValue,
+        UnitId unitId,
+        ProductId productId
+        )
     {
-        return Create(maxValue, maxValue, unitId);
+        return Create(maxValue, maxValue, unitId, productId);
     }
 
     public double GetPercentage()
@@ -99,5 +114,23 @@ public class Amount : Entity<AmountId>
         if (amount > MaxValue) throw new AmountCurrentValueGreaterThanMaxValueException();
 
         CurrentValue = amount;
+    }
+
+    public void UpdateValue(
+        double currentValue,
+        double maxValue
+    )
+    {
+        Validate(currentValue, maxValue, UnitId, ProductId);
+        CurrentValue = currentValue;
+        MaxValue = maxValue;
+    }
+
+    public void UpdateUnit(
+        UnitId unitId
+    )
+    {
+        Validate(CurrentValue, MaxValue, unitId, ProductId);
+        UnitId = unitId;
     }
 }

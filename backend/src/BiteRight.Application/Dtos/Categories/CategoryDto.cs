@@ -8,6 +8,8 @@
 #region
 
 using System;
+using BiteRight.Domain.Categories;
+using BiteRight.Domain.Languages;
 
 #endregion
 
@@ -16,5 +18,25 @@ namespace BiteRight.Application.Dtos.Categories;
 public class CategoryDto
 {
     public Guid Id { get; set; }
-    public string Name { get; set; } = default!;
+    public string Name { get; set; }
+
+    public CategoryDto(
+        Guid id,
+        string name
+    )
+    {
+        Id = id;
+        Name = name;
+    }
+
+    public static CategoryDto FromDomain(
+        Category category,
+        LanguageId languageId
+    )
+    {
+        return new CategoryDto(
+            category.Id,
+            category.GetName(languageId)
+        );
+    }
 }

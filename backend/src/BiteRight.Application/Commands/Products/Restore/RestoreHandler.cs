@@ -47,7 +47,7 @@ public class RestoreHandler : CommandHandlerBase<RestoreRequest, RestoreResponse
 
         var product = await _productRepository.FindById(request.ProductId, cancellationToken);
 
-        if (product is null || !Equals(product.UserId, user.Id))
+        if (product is null || !Equals(product.CreatedById, user.Id))
             throw ValidationException(nameof(RestoreRequest.ProductId),
                 _productLocalizer[nameof(Resources.Resources.Products.Products.product_not_found)]
             );

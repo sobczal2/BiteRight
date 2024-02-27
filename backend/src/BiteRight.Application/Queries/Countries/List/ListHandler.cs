@@ -37,15 +37,7 @@ public class ListHandler : QueryHandlerBase<ListRequest, ListResponse>
     {
         var countries = await _appDbContext
             .Countries
-            .Select(country => new CountryDto
-            {
-                Id = country.Id,
-                NativeName = country.NativeName,
-                EnglishName = country.EnglishName,
-                Alpha2Code = country.Alpha2Code,
-                OfficialLanguageId = country.OfficialLanguageId,
-                CurrencyId = country.CurrencyId
-            })
+            .Select(country => CountryDto.FromDomain(country))
             .ToListAsync(cancellationToken);
 
         return new ListResponse(countries);

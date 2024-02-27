@@ -1,6 +1,7 @@
 package com.sobczal2.biteright.ui.components.products
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
@@ -14,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
@@ -36,21 +38,18 @@ import com.sobczal2.biteright.util.BiteRightPreview
 import java.util.UUID
 
 data class FormAmountWithUnit(
-    val amount: Double?,
-    val unit: UnitDto
+    val amount: Double?, val unit: UnitDto
 ) {
     companion object {
         val Empty = FormAmountWithUnit(
-            amount = null,
-            unit = UnitDto.Empty
+            amount = null, unit = UnitDto.Empty
         )
     }
 }
 
 data class AmountFormFieldState(
     var value: FormAmountWithUnit,
-    val amountError: String? = null,
-    val unitError: String? = null,
+    val error: String? = null,
 )
 
 @Composable
@@ -80,99 +79,100 @@ fun AmountFormField(
     }
 
 
-    Row(
+    Column(
         modifier = modifier
     ) {
-        TextFormField(
-            state = amountTextFieldState.copy(
-                error = state.amountError
-            ),
-            onChange = {
-                if (it.isEmpty() || amountTypingRegex.matches(it)) {
-                    amountTextFieldState = amountTextFieldState.copy(
-                        value = it
-                    )
-                }
-            },
-            options = TextFormFieldOptions(
-                label = { Text(text = stringResource(id = R.string.amount)) },
+            Card(
                 shape = MaterialTheme.shapes.extraSmall.copy(
-                    topEnd = CornerSize(0.dp),
-                    bottomEnd = CornerSize(0.dp),
-                    bottomStart = CornerSize(0.dp)
+                    bottomStart = CornerSize(0.dp),
                 ),
-                trailingIcon = {
-                    Text(text = state.value.unit.abbreviation)
-                },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Number
-                ),
-            ),
-            modifier = Modifier
-                .weight(0.6f)
-                .onFocusChanged {
-                    if (!it.isFocused) {
-                        amountTextFieldState =
-                            when (val price = amountTextFieldState.value.toDoubleOrNull()) {
-                                null -> {
-                                    amountTextFieldState.copy(
-                                        value = "",
-                                    )
-                                }
-
-                                else -> {
-                                    amountTextFieldState.copy(
-                                        value = "%.2f".format(price)
-                                    )
-                                }
-
-                            }
-                    }
-                }
-        )
-
-
-        Card(
-            shape = MaterialTheme.shapes.extraSmall.copy(
-                topStart = CornerSize(0.dp),
-                bottomStart = CornerSize(0.dp),
-            ),
-            modifier = Modifier
-                .weight(0.4f)
-        ) {
-            SimplifiedUnitItem(
-                unit = state.value.unit,
-                selected = false,
-                onClick = {
-                    dialogOpen = true
-                },
-                label = stringResource(id = R.string.unit),
                 modifier = Modifier
-                    .padding(MaterialTheme.dimension.sm)
-            )
-        }
-
-        if (dialogOpen) {
-            SearchDialog(
-                search = searchUnits,
-                keySelector = { it.id },
-                onDismissRequest = { dialogOpen = false },
-                selectedItem = state.value.unit,
-            ) { unit, selected ->
-                UnitListItem(
-                    unit = unit,
-                    selected = selected,
-                    modifier = Modifier
-                        .clickable {
-                            onChange(
-                                state.value.copy(
-                                    unit = unit
-                                )
+            ) {
+                Row(
+                    modifier = Modifier,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                TextFormField(
+                    state = amountTextFieldState,
+                    onChange = {
+                        if (it.isEmpty() || amountTypingRegex.matches(it)) {
+                            amountTextFieldState = amountTextFieldState.copy(
+                                value = it
                             )
-                            dialogOpen = false
+                        }
+                    }, options = TextFormFieldOptions(
+                        label = { Text(text = stringResource(id = R.string.amount)) },
+                        shape = MaterialTheme.shapes.extraSmall.copy(
+                            topEnd = CornerSize(0.dp),
+                            bottomEnd = CornerSize(0.dp),
+                            bottomStart = CornerSize(0.dp)
+                        ),
+                        trailingIcon = {
+                            Text(text = state.value.unit.abbreviation)
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Number
+                        ),
+                    ),
+                    modifier = Modifier
+                        .weight(0.6f)
+                        .onFocusChanged {
+                            if (!it.isFocused) {
+                                amountTextFieldState =
+                                    when (val price = amountTextFieldState.value.toDoubleOrNull()) {
+                                        null -> {
+                                            amountTextFieldState.copy(
+                                                value = "",
+                                            )
+                                        }
+
+                                        else -> {
+                                            amountTextFieldState.copy(
+                                                value = "%.2f".format(price)
+                                            )
+                                        }
+                                    }
+                            }
                         }
                 )
+                SimplifiedUnitItem(
+                    unit = state.value.unit,
+                    selected = false,
+                    onClick = {
+                        dialogOpen = true
+                    },
+                    label = stringResource(id = R.string.unit),
+                    modifier = Modifier
+                        .weight(0.4f)
+                )
+
             }
+        }
+        if (state.error != null) {
+            Text(
+                text = state.error,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(start = MaterialTheme.dimension.sm)
+            )
+        }
+    }
+
+    if (dialogOpen) {
+        SearchDialog(
+            search = searchUnits,
+            keySelector = { it.id },
+            onDismissRequest = { dialogOpen = false },
+            selectedItem = state.value.unit,
+        ) { unit, selected ->
+            UnitListItem(unit = unit, selected = selected, modifier = Modifier.clickable {
+                onChange(
+                    state.value.copy(
+                        unit = unit
+                    )
+                )
+                dialogOpen = false
+            })
         }
     }
 }
@@ -186,14 +186,12 @@ fun AmountFormFieldPreview() {
             name = "Gram",
             abbreviation = "g",
             unitSystem = UnitSystemDto.Metric
-        ),
-        UnitDto(
+        ), UnitDto(
             id = UUID.randomUUID(),
             name = "Kilogram",
             abbreviation = "kg",
             unitSystem = UnitSystemDto.Metric
-        ),
-        UnitDto(
+        ), UnitDto(
             id = UUID.randomUUID(),
             name = "Pound",
             abbreviation = "lb",
@@ -202,23 +200,18 @@ fun AmountFormFieldPreview() {
     )
 
     BiteRightTheme {
-        AmountFormField(
-            state = AmountFormFieldState(
-                value = FormAmountWithUnit(
-                    amount = 20.0,
-                    unit = units.first()
-                ),
-            ),
-            onChange = {},
-            searchUnits = { _, _ ->
-                PaginatedList(
-                    items = units,
-                    pageNumber = 0,
-                    pageSize = 3,
-                    totalPages = 1,
-                    totalCount = 3,
-                )
-            }
-        )
+        AmountFormField(state = AmountFormFieldState(
+            value = FormAmountWithUnit(
+                amount = 20.0, unit = units.first()
+            ), error = "Amount is required"
+        ), onChange = {}, searchUnits = { _, _ ->
+            PaginatedList(
+                items = units,
+                pageNumber = 0,
+                pageSize = 3,
+                totalPages = 1,
+                totalCount = 3,
+            )
+        })
     }
 }

@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.events.WelcomeScreenEvent
@@ -28,6 +29,7 @@ import com.sobczal2.biteright.ui.components.common.BiteRightLogo
 import com.sobczal2.biteright.ui.components.common.ErrorBox
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
+import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.viewmodels.WelcomeViewModel
 
 @Composable
@@ -35,7 +37,7 @@ fun WelcomeScreen(
     viewModel: WelcomeViewModel = hiltViewModel(),
     handleNavigationEvent: (NavigationEvent) -> Unit,
 ) {
-    val state = viewModel.state.collectAsState()
+    val state = viewModel.state.collectAsStateWithLifecycle()
 
     WelcomeScreenContent(
         state = state.value,
@@ -57,7 +59,7 @@ fun WelcomeScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(MaterialTheme.dimension.xl),
+                .padding(MaterialTheme.dimension.md),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceAround
         ) {
@@ -83,8 +85,7 @@ fun WelcomeScreenContent(
 }
 
 @Composable
-@Preview(apiLevel = 33, device = Devices.PIXEL_6_PRO)
-@Preview(apiLevel = 33, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@BiteRightPreview
 fun WelcomeScreenPreview() {
     BiteRightTheme {
         WelcomeScreenContent()

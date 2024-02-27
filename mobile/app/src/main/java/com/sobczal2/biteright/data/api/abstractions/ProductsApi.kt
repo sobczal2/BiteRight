@@ -6,6 +6,7 @@ import com.sobczal2.biteright.data.api.requests.products.SearchRequest
 import com.sobczal2.biteright.data.api.responses.products.ChangeAmountResponse
 import com.sobczal2.biteright.data.api.responses.products.CreateResponse
 import com.sobczal2.biteright.data.api.responses.products.DisposeResponse
+import com.sobczal2.biteright.data.api.responses.products.GetDetailsResponse
 import com.sobczal2.biteright.data.api.responses.products.ListCurrentResponse
 import com.sobczal2.biteright.data.api.responses.products.RestoreResponse
 import com.sobczal2.biteright.data.api.responses.products.SearchResponse
@@ -37,4 +38,7 @@ interface ProductsApi {
 
     @PUT("products/{productId}/amount")
     suspend fun changeAmount(@Path("productId") productId: UUID, @Body request: ChangeAmountRequest): Response<ChangeAmountResponse>
+
+    @GET("products/{productId}/details")
+    suspend fun getDetails(@Path("productId") productId: UUID): Response<GetDetailsResponse>
 }

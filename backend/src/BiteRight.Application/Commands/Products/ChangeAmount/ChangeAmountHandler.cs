@@ -50,7 +50,7 @@ public class ChangeAmountHandler : CommandHandlerBase<ChangeAmountRequest, Chang
                       ?? throw ValidationException(nameof(request.ProductId),
                           _productsLocalizer[nameof(Resources.Resources.Products.Products.product_not_found)]);
 
-        if (!Equals(product.UserId, user.Id))
+        if (!Equals(product.CreatedById, user.Id))
         {
             throw ValidationException(nameof(request.ProductId),
                 _productsLocalizer[nameof(Resources.Resources.Products.Products.product_not_found)]);
@@ -68,11 +68,11 @@ public class ChangeAmountHandler : CommandHandlerBase<ChangeAmountRequest, Chang
         return exception switch
         {
             AmountCurrentValueInvalidValueException => ValidationException(
-                nameof(CreateRequest.MaximumAmountValue),
-                _productsLocalizer[nameof(Resources.Resources.Products.Products.amount_current_value_less_than_zero)]
+                nameof(CreateRequest.AmountMaxValue),
+                _productsLocalizer[nameof(Resources.Resources.Products.Products.amount_current_value_invalid_value)]
             ),
             AmountCurrentValueGreaterThanMaxValueException => ValidationException(
-                nameof(CreateRequest.MaximumAmountValue),
+                nameof(CreateRequest.AmountMaxValue),
                 _productsLocalizer[
                     nameof(Resources.Resources.Products.Products.amount_current_value_greater_than_max_value)]
             ),

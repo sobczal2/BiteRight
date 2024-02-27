@@ -52,11 +52,7 @@ public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
             request.PaginationParams.PageNumber,
             request.PaginationParams.PageSize,
             searchResult.TotalCount,
-            searchResult.Categories.Select(category => new CategoryDto
-            {
-                Id = category.Id,
-                Name = category.GetName(languageId)
-            })
+            searchResult.Categories.Select(category => CategoryDto.FromDomain(category, languageId))
         );
 
         return new SearchResponse(pagedList);

@@ -29,6 +29,7 @@ import com.sobczal2.biteright.ui.components.common.SwipeableItem
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.util.toExpirationString
+import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
 
@@ -62,7 +63,8 @@ fun ProductListItem(
             CategoryImage(
                 categoryId = simpleProductDto.categoryId,
                 inPreview = inPreview,
-                imageRequestBuilder = imageRequestBuilder
+                imageRequestBuilder = imageRequestBuilder,
+                modifier = Modifier.size(MaterialTheme.dimension.xl),
             )
         },
         modifier = modifier
@@ -72,10 +74,18 @@ fun ProductListItem(
 @Composable
 fun ExpirationText(expirationDateKindDto: ExpirationDateKindDto, expirationDate: LocalDate?) {
     when (expirationDateKindDto) {
-        ExpirationDateKindDto.Unknown -> Text(text = stringResource(id = R.string.expiration_unknown))
-        ExpirationDateKindDto.Infinite -> Text(text = stringResource(id = R.string.expiration_infinite))
-        ExpirationDateKindDto.BestBefore -> Text(text = expirationDate!!.toExpirationString())
-        ExpirationDateKindDto.UseBy -> Text(text = expirationDate!!.toExpirationString())
+        ExpirationDateKindDto.Unknown -> Text(
+            text = stringResource(id = R.string.expiration_unknown),
+        )
+        ExpirationDateKindDto.Infinite -> Text(
+            text = stringResource(id = R.string.expiration_infinite),
+        )
+        ExpirationDateKindDto.BestBefore -> Text(
+            text = expirationDate!!.toExpirationString(),
+        )
+        ExpirationDateKindDto.UseBy -> Text(
+            text = expirationDate!!.toExpirationString(),
+        )
     }
 }
 
@@ -127,7 +137,7 @@ fun ProductListItemPreview() {
             expirationDateKind = ExpirationDateKindDto.BestBefore,
             expirationDate = LocalDate.now().plusDays(7),
             categoryId = UUID.randomUUID(),
-            addedDateTime = LocalDate.now().atStartOfDay(),
+            addedDateTime = Instant.now(),
             currentAmount = 0.1,
             maxAmount = 1.0,
             unitAbbreviation = "L",

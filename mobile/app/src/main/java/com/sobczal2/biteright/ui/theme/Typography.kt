@@ -16,25 +16,46 @@ private val averiaLibreFamily = FontFamily(
     Font(R.font.averialibre_regular, FontWeight.Normal),
 )
 
+private val caveatFamily = FontFamily(
+    Font(R.font.caveat_bold, FontWeight.Bold),
+    Font(R.font.caveat_regular, FontWeight.Normal),
+    Font(R.font.caveat_medium, FontWeight.Medium),
+    Font(R.font.caveat_semibold, FontWeight.SemiBold),
+)
+
+private val portable1980Family = FontFamily(
+    Font(R.font.portable_1980, FontWeight.Normal),
+)
+
+private val shlopFamily = FontFamily(
+    Font(R.font.shlop, FontWeight.Normal),
+)
+
+private val ghostmeatFamily = FontFamily(
+    Font(R.font.ghostmeat, FontWeight.Normal),
+)
+
+private val currentFontFamily = averiaLibreFamily;
+
 private val defaultTypography = Typography()
 val Typography = Typography(
-    displayLarge = defaultTypography.displayLarge.copy(fontFamily = averiaLibreFamily),
-    displayMedium = defaultTypography.displayMedium.copy(fontFamily = averiaLibreFamily),
-    displaySmall = defaultTypography.displaySmall.copy(fontFamily = averiaLibreFamily),
+    displayLarge = defaultTypography.displayLarge.copy(fontFamily = currentFontFamily),
+    displayMedium = defaultTypography.displayMedium.copy(fontFamily = currentFontFamily),
+    displaySmall = defaultTypography.displaySmall.copy(fontFamily = currentFontFamily),
 
-    headlineLarge = defaultTypography.headlineLarge.copy(fontFamily = averiaLibreFamily),
-    headlineMedium = defaultTypography.headlineMedium.copy(fontFamily = averiaLibreFamily),
-    headlineSmall = defaultTypography.headlineSmall.copy(fontFamily = averiaLibreFamily),
+    headlineLarge = defaultTypography.headlineLarge.copy(fontFamily = currentFontFamily),
+    headlineMedium = defaultTypography.headlineMedium.copy(fontFamily = currentFontFamily),
+    headlineSmall = defaultTypography.headlineSmall.copy(fontFamily = currentFontFamily),
 
-    titleLarge = defaultTypography.titleLarge.copy(fontFamily = averiaLibreFamily),
-    titleMedium = defaultTypography.titleMedium.copy(fontFamily = averiaLibreFamily),
-    titleSmall = defaultTypography.titleSmall.copy(fontFamily = averiaLibreFamily),
+    titleLarge = defaultTypography.titleLarge.copy(fontFamily = currentFontFamily),
+    titleMedium = defaultTypography.titleMedium.copy(fontFamily = currentFontFamily),
+    titleSmall = defaultTypography.titleSmall.copy(fontFamily = currentFontFamily),
 
-    bodyLarge = defaultTypography.bodyLarge.copy(fontFamily = averiaLibreFamily),
-    bodyMedium = defaultTypography.bodyMedium.copy(fontFamily = averiaLibreFamily),
-    bodySmall = defaultTypography.bodySmall.copy(fontFamily = averiaLibreFamily),
+    bodyLarge = defaultTypography.bodyLarge.copy(fontFamily = currentFontFamily),
+    bodyMedium = defaultTypography.bodyMedium.copy(fontFamily = currentFontFamily),
+    bodySmall = defaultTypography.bodySmall.copy(fontFamily = currentFontFamily),
 
-    labelLarge = defaultTypography.labelLarge.copy(fontFamily = averiaLibreFamily),
-    labelMedium = defaultTypography.labelMedium.copy(fontFamily = averiaLibreFamily),
-    labelSmall = defaultTypography.labelSmall.copy(fontFamily = averiaLibreFamily)
+    labelLarge = defaultTypography.labelLarge.copy(fontFamily = currentFontFamily),
+    labelMedium = defaultTypography.labelMedium.copy(fontFamily = currentFontFamily),
+    labelSmall = defaultTypography.labelSmall.copy(fontFamily = currentFontFamily)
 )

@@ -36,10 +36,6 @@ public class GetDefaultHandler : QueryHandlerBase<GetDefaultRequest, GetDefaultR
         var languageId = await _languageProvider.RequireCurrentId(cancellationToken);
         var category = await _categoryRepository.GetDefault(languageId, cancellationToken);
 
-        return new GetDefaultResponse(new CategoryDto
-        {
-            Id = category.Id,
-            Name = category.GetName(languageId)
-        });
+        return new GetDefaultResponse(CategoryDto.FromDomain(category, languageId));
     }
 }

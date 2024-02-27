@@ -59,6 +59,7 @@ public class CachedEfCoreUserRepository : IUserRepository
 
         var user = await _appDbContext.Users
             .Include(u => u.Profile)
+            .ThenInclude(u => u.Currency)
             .FirstOrDefaultAsync(u => u.IdentityId == identityId, cancellationToken);
 
         if (user is not null)

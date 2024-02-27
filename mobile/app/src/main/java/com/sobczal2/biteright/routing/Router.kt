@@ -19,9 +19,12 @@ import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.screens.AllProductsScreen
 import com.sobczal2.biteright.screens.CreateProductScreen
 import com.sobczal2.biteright.screens.CurrentProductsScreen
+import com.sobczal2.biteright.screens.EditProductScreen
+import com.sobczal2.biteright.screens.ProductDetailsScreen
 import com.sobczal2.biteright.screens.ProfileScreen
 import com.sobczal2.biteright.screens.StartScreen
 import com.sobczal2.biteright.screens.WelcomeScreen
+import com.sobczal2.biteright.util.getUUID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,51 +35,54 @@ fun Router(authManager: AuthManager) {
     authManager.subscribeToLogoutEvent {
         handleNavigationEvent(NavigationEvent.NavigateToWelcome, navController)
     }
-    var screenSize by remember { mutableStateOf(Size.Zero) }
     NavHost(
         navController = navController,
         startDestination = if (authManager.isLoggedIn) Routes.START else Routes.WELCOME,
-        enterTransition =
-        {
-            scaleIn(
-                animationSpec = tween(1000)
-            )
-        },
-        exitTransition = {
-            scaleOut(
-                animationSpec = tween(1000)
-            )
-        },
         modifier = Modifier
     ) {
+        val handleNavigationEvent: (NavigationEvent) -> Unit = { event ->
+            handleNavigationEvent(event, navController)
+        }
         composable(Routes.WELCOME) {
             WelcomeScreen(
-                handleNavigationEvent = { event -> handleNavigationEvent(event, navController) }
+                handleNavigationEvent = handleNavigationEvent
             )
         }
         composable(Routes.START) {
             StartScreen(
-                handleNavigationEvent = { event -> handleNavigationEvent(event, navController) }
+                handleNavigationEvent = handleNavigationEvent
             )
         }
         composable(Routes.CURRENT_PRODUCTS) {
             CurrentProductsScreen(
-                handleNavigationEvent = { event -> handleNavigationEvent(event, navController) }
+                handleNavigationEvent = handleNavigationEvent
             )
         }
         composable(Routes.ALL_PRODUCTS) {
             AllProductsScreen(
-                handleNavigationEvent = { event -> handleNavigationEvent(event, navController) }
+                handleNavigationEvent = handleNavigationEvent
             )
         }
         composable(Routes.PROFILE) {
             ProfileScreen(
-                handleNavigationEvent = { event -> handleNavigationEvent(event, navController) }
+                handleNavigationEvent = handleNavigationEvent
             )
         }
         composable(Routes.CREATE_PRODUCT) {
             CreateProductScreen(
-                handleNavigationEvent = { event -> handleNavigationEvent(event, navController) }
+                handleNavigationEvent = handleNavigationEvent
+            )
+        }
+        composable(Routes.PRODUCT_DETAILS) {
+            ProductDetailsScreen(
+                handleNavigationEvent = handleNavigationEvent,
+                productId = it.arguments?.getUUID("productId")!!
+            )
+        }
+        composable(Routes.EDIT_PRODUCT) {
+            EditProductScreen(
+                handleNavigationEvent = handleNavigationEvent,
+                productId = it.arguments?.getUUID("productId")!!
             )
         }
     }
@@ -88,6 +94,7 @@ private fun handleNavigationEvent(
 ) {
     CoroutineScope(Dispatchers.Main).launch {
         when (navigationEvent) {
+            is NavigationEvent.NavigateBack -> navController.popBackStack()
             is NavigationEvent.NavigateToWelcome -> navController.navigate(Routes.WELCOME)
             is NavigationEvent.NavigateToStart -> navController.navigate(Routes.START)
             is NavigationEvent.NavigateToCurrentProducts -> navController.navigate(Routes.CURRENT_PRODUCTS)
@@ -95,6 +102,12 @@ private fun handleNavigationEvent(
             is NavigationEvent.NavigateToTemplates -> navController.navigate(Routes.TEMPLATES)
             is NavigationEvent.NavigateToProfile -> navController.navigate(Routes.PROFILE)
             is NavigationEvent.NavigateToCreateProduct -> navController.navigate(Routes.CREATE_PRODUCT)
+            is NavigationEvent.NavigateToProductDetails -> navController.navigate(
+                Routes.productDetails(navigationEvent.productId)
+            )
+            is NavigationEvent.NavigateToEditProduct -> navController.navigate(
+                Routes.editProduct(navigationEvent.productId)
+            )
         }
     }
 }

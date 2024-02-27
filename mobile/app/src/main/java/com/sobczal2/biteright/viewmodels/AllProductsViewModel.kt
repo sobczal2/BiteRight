@@ -13,9 +13,7 @@ import com.sobczal2.biteright.dto.products.SimpleProductDto
 import com.sobczal2.biteright.events.AllProductsScreenEvent
 import com.sobczal2.biteright.repositories.abstractions.ProductRepository
 import com.sobczal2.biteright.state.AllProductsScreenState
-import com.sobczal2.biteright.util.PaginationSource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,14 +39,14 @@ class AllProductsViewModel @Inject constructor(
     val events = _events.receiveAsFlow()
 
     init {
-        _state.value.paginatedProductSource = PaginationSource(
-            initialPaginationParams = PaginationParams.Default,
-            search = ::searchProducts
-        )
         viewModelScope.launch {
-            val jobs = mutableListOf<Job>()
-            jobs.add(launch { events.collect { event -> handleEvent(event) } })
-            jobs.add(launch { _state.value.paginatedProductSource.fetchInitialItems(_state.value.searchQuery) })
+            launch { events.collect { event -> handleEvent(event) } }
+            launch {
+                _state.value.paginatedProductSource.fetchInitialItems(
+                    _state.value.searchQuery,
+                    ::searchProducts
+                )
+            }
         }
     }
 
@@ -74,7 +72,10 @@ class AllProductsViewModel @Inject constructor(
 
             is AllProductsScreenEvent.FetchMoreProducts -> {
                 viewModelScope.launch {
-                    _state.value.paginatedProductSource.fetchMoreItems(_state.value.searchQuery)
+                    _state.value.paginatedProductSource.fetchMoreItems(
+                        _state.value.searchQuery,
+                        ::searchProducts
+                    )
                 }
             }
         }
@@ -112,7 +113,12 @@ class AllProductsViewModel @Inject constructor(
             )
         )
         disposeResult.fold(
-            {},
+            {
+                _state.value.paginatedProductSource.updateItem(
+                    _state.value.paginatedProductSource.items.first { it.id == productId }
+                        .copy(disposed = true)
+                ) { it.id == productId }
+            },
             { repositoryError ->
                 _state.update {
                     it.copy(globalError = repositoryError.message)
@@ -129,6 +135,10 @@ class AllProductsViewModel @Inject constructor(
         )
         restoreResult.fold(
             {
+                _state.value.paginatedProductSource.updateItem(
+                    _state.value.paginatedProductSource.items.first { it.id == productId }
+                        .copy(disposed = false)
+                ) { it.id == productId }
             },
             { repositoryError ->
                 _state.update {

@@ -18,9 +18,6 @@ using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Products;
 using BiteRight.Domain.Products.Exceptions;
 using BiteRight.Infrastructure.Database;
-using BiteRight.Resources.Resources.Categories;
-using BiteRight.Resources.Resources.Currencies;
-using BiteRight.Resources.Resources.Units;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using Name = BiteRight.Domain.Products.Name;
@@ -32,7 +29,7 @@ namespace BiteRight.Application.Commands.Products.Create;
 public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
 {
     private readonly ICategoryRepository _categoryRepository;
-    private readonly IStringLocalizer<Currencies> _currenciesLocalizer;
+    private readonly IStringLocalizer<Resources.Resources.Currencies.Currencies> _currenciesLocalizer;
     private readonly ICurrencyRepository _currencyRepository;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IIdentityProvider _identityProvider;
@@ -40,7 +37,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
     private readonly IProductRepository _productRepository;
     private readonly IStringLocalizer<Resources.Resources.Products.Products> _productsLocalizer;
     private readonly IUnitRepository _unitRepository;
-    private readonly IStringLocalizer<Units> _unitsLocalizer;
+    private readonly IStringLocalizer<Resources.Resources.Units.Units> _unitsLocalizer;
 
     public CreateHandler(
         IIdentityProvider identityProvider,
@@ -52,8 +49,8 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
         AppDbContext appDbContext,
         ILanguageProvider languageProvider,
         IStringLocalizer<Resources.Resources.Products.Products> productsLocalizer,
-        IStringLocalizer<Currencies> currenciesLocalizer,
-        IStringLocalizer<Units> unitsLocalizer
+        IStringLocalizer<Resources.Resources.Currencies.Currencies> currenciesLocalizer,
+        IStringLocalizer<Resources.Resources.Units.Units> unitsLocalizer
     )
         : base(appDbContext)
     {
@@ -76,18 +73,20 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
     {
         var user = await _identityProvider.RequireCurrentUser(cancellationToken);
 
+        var productId = new ProductId();
+
         var name = Name.Create(request.Name);
         var description = Description.Create(request.Description);
 
         Price? price = null;
-        if (request.CurrencyId is not null && request.Price.HasValue)
+        if (request.PriceCurrencyId is not null && request.PriceValue.HasValue)
         {
-            var currency = await _currencyRepository.FindById(request.CurrencyId, cancellationToken)
+            var currency = await _currencyRepository.FindById(request.PriceCurrencyId, cancellationToken)
                            ?? throw ValidationException(
-                               nameof(CreateRequest.CurrencyId),
+                               nameof(CreateRequest.PriceCurrencyId),
                                _currenciesLocalizer[
-                                   nameof(Currencies.currency_not_found)]);
-            price = Price.Create(request.Price.Value, currency);
+                                   nameof(Resources.Resources.Currencies.Currencies.currency_not_found)]);
+            price = Price.Create(request.PriceValue.Value, currency.Id, productId);
         }
 
         var expirationDate = request.ExpirationDateKind switch
@@ -105,17 +104,17 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                        ?? throw ValidationException(
                            nameof(CreateRequest.CategoryId),
                            _productsLocalizer[
-                               nameof(Categories.category_not_found)]
+                               nameof(Resources.Resources.Categories.Categories.category_not_found)]
                        );
 
         var amountUnit = await _unitRepository.FindById(request.AmountUnitId, languageId, cancellationToken)
                          ?? throw ValidationException(
                              nameof(CreateRequest.AmountUnitId),
                              _unitsLocalizer[
-                                 nameof(Units.unit_not_found)]
+                                 nameof(Resources.Resources.Units.Units.unit_not_found)]
                          );
 
-        var amount = Amount.CreateFull(amountUnit.Id, request.MaximumAmountValue);
+        var amount = Amount.CreateFull(request.AmountMaxValue, amountUnit.Id, productId);
 
         var product = Product.Create(
             name,
@@ -125,12 +124,13 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
             category.Id,
             user.Id,
             amount,
-            _dateTimeProvider.UtcNow
+            _dateTimeProvider.UtcNow,
+            productId
         );
 
         _productRepository.Add(product);
 
-        return new CreateResponse(product.Id);
+        return new CreateResponse(productId);
     }
 
     protected override ValidationException MapExceptionToValidationException(
@@ -173,19 +173,31 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                 )
             ),
             PriceInvalidValueException e => ValidationException(
-                nameof(CreateRequest.Price),
+                nameof(CreateRequest.PriceValue),
                 string.Format(
                     _productsLocalizer[nameof(Resources.Resources.Products.Products.price_not_valid)],
                     e.MinValue,
                     e.MaxValue
                 )
             ),
+            ExpirationDateUnknownValueException => ValidationException(
+                nameof(CreateRequest.ExpirationDate),
+                _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_invalid_for_unknown)]
+            ),
             ExpirationDateInfiniteValueException => ValidationException(
-                nameof(CreateRequest.ExpirationDateKind),
-                _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_infinite)]
+                nameof(CreateRequest.ExpirationDate),
+                _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_invalid_for_infinite)]
+            ),
+            ExpirationDateBestBeforeValueException => ValidationException(
+                nameof(CreateRequest.ExpirationDate),
+                _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_invalid_for_best_before)]
+            ),
+            ExpirationDateUseByValueException => ValidationException(
+                nameof(CreateRequest.ExpirationDate),
+                _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_invalid_for_use_by)]
             ),
             AmountCurrentValueInvalidValueException e => ValidationException(
-                nameof(CreateRequest.MaximumAmountValue),
+                nameof(CreateRequest.AmountMaxValue),
                 string.Format(
                     _productsLocalizer
                         [nameof(Resources.Resources.Products.Products.amount_current_value_invalid_value)],
@@ -194,7 +206,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                 )
             ),
             AmountMaxValueInvalidValueException e => ValidationException(
-                nameof(CreateRequest.MaximumAmountValue),
+                nameof(CreateRequest.AmountMaxValue),
                 string.Format(
                     _productsLocalizer[nameof(Resources.Resources.Products.Products.amount_max_value_invalid_value)],
                     e.MinValue,
@@ -202,7 +214,7 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
                 )
             ),
             AmountCurrentValueGreaterThanMaxValueException => ValidationException(
-                nameof(CreateRequest.MaximumAmountValue),
+                nameof(CreateRequest.AmountMaxValue),
                 _productsLocalizer[
                     nameof(Resources.Resources.Products.Products.amount_current_value_greater_than_max_value)]
             ),

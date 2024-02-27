@@ -8,8 +8,8 @@ import com.google.gson.GsonBuilder
 import com.sobczal2.biteright.AuthManager
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.data.api.common.ExclusionAnnotationStrategy
+import com.sobczal2.biteright.data.api.common.InstantTypeAdapter
 import com.sobczal2.biteright.data.api.common.LanguageInterceptor
-import com.sobczal2.biteright.data.api.common.LocalDateTimeTypeAdapter
 import com.sobczal2.biteright.data.api.common.LocalDateTypeAdapter
 import com.sobczal2.biteright.data.api.common.TokenInterceptor
 import com.sobczal2.biteright.data.api.common.UnauthorizedInterceptor
@@ -24,6 +24,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.inject.Singleton
@@ -73,7 +74,7 @@ object AppModule {
     fun provideGson(): Gson {
         val gson = GsonBuilder()
             .registerTypeAdapter(LocalDate::class.java, LocalDateTypeAdapter())
-            .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeTypeAdapter())
+            .registerTypeAdapter(Instant::class.java, InstantTypeAdapter())
             .addDeserializationExclusionStrategy(ExclusionAnnotationStrategy())
             .addSerializationExclusionStrategy(ExclusionAnnotationStrategy())
             .create()
