@@ -11,12 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +31,7 @@ import com.sobczal2.biteright.ui.components.common.ErrorBox
 import com.sobczal2.biteright.ui.components.common.HomeLayout
 import com.sobczal2.biteright.ui.components.common.HomeLayoutTab
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
+import com.sobczal2.biteright.ui.components.products.AddProductActionButton
 import com.sobczal2.biteright.ui.components.products.SwipeableProductListItem
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
@@ -66,17 +63,8 @@ fun AllProductsScreenContent(
     HomeLayout(currentTab = HomeLayoutTab.ALL_PRODUCTS,
         handleNavigationEvent = handleNavigationEvent,
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = {
-                    handleNavigationEvent(NavigationEvent.NavigateToCreateProduct)
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(id = R.string.add_product),
-                    modifier = Modifier.padding(end = MaterialTheme.dimension.sm)
-                )
-                Text(text = stringResource(id = R.string.add_product))
+            AddProductActionButton {
+                handleNavigationEvent(NavigationEvent.NavigateToCreateProduct)
             }
         }) { paddingValues ->
         Column(

@@ -39,6 +39,7 @@ import com.sobczal2.biteright.state.CurrentProductsScreenState
 import com.sobczal2.biteright.ui.components.common.HomeLayout
 import com.sobczal2.biteright.ui.components.common.HomeLayoutTab
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
+import com.sobczal2.biteright.ui.components.products.AddProductActionButton
 import com.sobczal2.biteright.ui.components.products.ChangeAmountDialog
 import com.sobczal2.biteright.ui.components.products.SwipeableProductListItem
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
@@ -101,17 +102,8 @@ fun CurrentProductsScreenContent(
         currentTab = HomeLayoutTab.CURRENT_PRODUCTS,
         handleNavigationEvent = handleNavigationEvent,
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = {
-                    handleNavigationEvent(NavigationEvent.NavigateToCreateProduct)
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(id = R.string.add_product),
-                    modifier = Modifier.padding(end = MaterialTheme.dimension.sm)
-                )
-                Text(text = stringResource(id = R.string.add_product))
+            AddProductActionButton {
+                handleNavigationEvent(NavigationEvent.NavigateToCreateProduct)
             }
         }
     ) { paddingValues ->

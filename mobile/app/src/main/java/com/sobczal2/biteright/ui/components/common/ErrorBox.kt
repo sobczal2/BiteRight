@@ -38,8 +38,8 @@ fun ErrorBox(
         Row(
             modifier = Modifier.padding(
                 start = MaterialTheme.dimension.sm,
-                top = MaterialTheme.dimension.sm,
-                bottom = MaterialTheme.dimension.sm
+                top = MaterialTheme.dimension.xs,
+                bottom = MaterialTheme.dimension.xs
             ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -48,7 +48,7 @@ fun ErrorBox(
                 tint = MaterialTheme.colorScheme.error,
                 contentDescription = "Error icon",
                 modifier = Modifier
-                    .size(MaterialTheme.dimension.md)
+                    .size(MaterialTheme.dimension.sm)
             )
             Text(
                 text = error,
@@ -83,19 +83,22 @@ fun ErrorBox(
             .fillMaxWidth()
     ) {
         errors.forEach { (key, value) ->
-            Row {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Column(
                     modifier = Modifier
                         .padding(
                             start = MaterialTheme.dimension.sm,
-                            top = MaterialTheme.dimension.sm
+                            top = MaterialTheme.dimension.xs,
+                            bottom = MaterialTheme.dimension.xs
                         ),
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Warning,
                         tint = MaterialTheme.colorScheme.error,
                         contentDescription = "Error icon",
-                        modifier = Modifier.size(MaterialTheme.dimension.md)
+                        modifier = Modifier.size(MaterialTheme.dimension.sm)
                     )
                 }
                 Column(

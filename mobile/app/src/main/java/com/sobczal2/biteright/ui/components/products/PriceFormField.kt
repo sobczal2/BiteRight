@@ -1,8 +1,8 @@
 package com.sobczal2.biteright.ui.components.products
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
@@ -48,8 +49,7 @@ data class FormPriceWithCurrency(
 
 data class PriceFormFieldState(
     var value: FormPriceWithCurrency,
-    val priceError: String? = null,
-    val currencyError: String? = null,
+    val error: String? = null,
 )
 
 @Composable
@@ -79,90 +79,99 @@ fun PriceFormField(
     }
 
 
-    Row(
-        modifier = modifier.fillMaxWidth()
+    Column(
+        modifier = modifier
     ) {
-        TextFormField(state = priceTextFieldState.copy(
-            error = state.priceError
-        ), onChange = {
-            if (it.isEmpty() || moneyTypingRegex.matches(it)) {
-                priceTextFieldState = priceTextFieldState.copy(
-                    value = it
+        Card(
+            shape = MaterialTheme.shapes.extraSmall,
+            modifier = Modifier
+        ) {
+            Row(
+                modifier = Modifier,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                TextFormField(
+                    state = priceTextFieldState,
+                    onChange = {
+                        if (it.isEmpty() || moneyTypingRegex.matches(it)) {
+                            priceTextFieldState = priceTextFieldState.copy(
+                                value = it
+                            )
+                        }
+                    },
+                    options = TextFormFieldOptions(
+                        label = { Text(text = stringResource(id = R.string.price)) },
+                        shape = MaterialTheme.shapes.extraSmallTop.copy(
+                            topEnd = CornerSize(0.dp)
+                        ),
+                        trailingIcon = {
+                            Text(text = state.value.currency.symbol)
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Number,
+
+                            ),
+                    ),
+                    modifier = Modifier
+                        .weight(0.6f)
+                        .onFocusChanged {
+                            if (!it.isFocused) {
+                                priceTextFieldState =
+                                    when (val price = priceTextFieldState.value.toDoubleOrNull()) {
+                                        null -> {
+                                            priceTextFieldState.copy(
+                                                value = "",
+                                            )
+                                        }
+
+                                        else -> {
+                                            priceTextFieldState.copy(
+                                                value = "%.2f".format(price)
+                                            )
+                                        }
+
+                                    }
+                            }
+                        }
+                )
+                SimplifiedCurrencyItem(
+                    currency = state.value.currency,
+                    selected = false,
+                    onClick = {
+                        dialogOpen = true
+                    },
+                    label = stringResource(id = R.string.currency),
+                    modifier = Modifier
+                        .weight(0.4f)
                 )
             }
-        }, options = TextFormFieldOptions(
-            label = { Text(text = stringResource(id = R.string.price)) },
-            shape = MaterialTheme.shapes.extraSmallTop.copy(
-                topEnd = CornerSize(0.dp)
-            ),
-            trailingIcon = {
-                Text(text = state.value.currency.symbol)
-            },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number,
-
-                ),
-        ), modifier = Modifier
-            .weight(0.6f)
-            .onFocusChanged {
-                if (!it.isFocused) {
-                    priceTextFieldState =
-                        when (val price = priceTextFieldState.value.toDoubleOrNull()) {
-                            null -> {
-                                priceTextFieldState.copy(
-                                    value = "",
-                                )
-                            }
-
-                            else -> {
-                                priceTextFieldState.copy(
-                                    value = "%.2f".format(price)
-                                )
-                            }
-
-                        }
-                }
-            }
-        )
-
-        Card(
-            shape = MaterialTheme.shapes.extraSmall
-                .copy(
-                    topStart = CornerSize(0.dp),
-                    bottomStart = CornerSize(0.dp)
-                ),
-            modifier = Modifier
-                .weight(0.4f)
-        ) {
-            SimplifiedCurrencyItem(
-                currency = state.value.currency,
-                selected = false,
-                onClick = {
-                    dialogOpen = true
-                },
-                label = stringResource(id = R.string.currency),
-                modifier = Modifier
-                    .padding(MaterialTheme.dimension.sm)
+        }
+        if (state.error != null) {
+            Text(
+                text = state.error,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(start = MaterialTheme.dimension.sm)
             )
         }
+    }
 
-        if (dialogOpen) {
-            SearchDialog(
-                search = searchCurrencies,
-                keySelector = { it.id },
-                onDismissRequest = { dialogOpen = false },
-                selectedItem = state.value.currency,
-            ) { currency, selected ->
-                CurrencyListItem(
-                    currency = currency,
-                    selected = selected,
-                    modifier = Modifier
-                        .clickable {
-                            onChange(state.value.copy(currency = currency))
-                            dialogOpen = false
-                        }
-                )
-            }
+    if (dialogOpen) {
+        SearchDialog(
+            search = searchCurrencies,
+            keySelector = { it.id },
+            onDismissRequest = { dialogOpen = false },
+            selectedItem = state.value.currency,
+        ) { currency, selected ->
+            CurrencyListItem(
+                currency = currency,
+                selected = selected,
+                modifier = Modifier
+                    .clickable {
+                        onChange(state.value.copy(currency = currency))
+                        dialogOpen = false
+                    }
+            )
         }
     }
 }
@@ -185,8 +194,9 @@ fun PriceFormFieldPreview() {
     BiteRightTheme {
         PriceFormField(state = PriceFormFieldState(
             value = FormPriceWithCurrency(
-                price = 20.0, currency = currencies.first()
+                price = 20.0, currency = currencies.first(),
             ),
+            error = "Error",
         ), onChange = {}, searchCurrencies = { _, _ ->
             PaginatedList(
                 items = currencies,

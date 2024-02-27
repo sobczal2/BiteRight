@@ -1,9 +1,7 @@
 package com.sobczal2.biteright.ui.components.common.forms
 
-import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -15,13 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.IntSize
 import com.sobczal2.biteright.ui.theme.extraSmallTop
 
 data class TextFormFieldState(
     override var value: String = "",
-    override val error: String? = null
+    override val error: String? = null,
 ) : FormFieldState<String>
 
 data class TextFormFieldOptions(

@@ -27,7 +27,6 @@ import com.sobczal2.biteright.util.StringProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -74,7 +73,9 @@ class CreateProductViewModel @Inject constructor(
             _state.update { currentState ->
                 currentState.copy(
                     amountFormFieldState = currentState.amountFormFieldState.copy(
-                        value = FormAmountWithUnit.Empty.copy(unit = currentState.startingUnits?.items?.firstOrNull() ?: UnitDto.Empty)
+                        value = FormAmountWithUnit.Empty.copy(
+                            unit = currentState.startingUnits?.items?.firstOrNull() ?: UnitDto.Empty
+                        )
                     )
                 )
             }
@@ -163,8 +164,7 @@ class CreateProductViewModel @Inject constructor(
             it.copy(
                 amountFormFieldState = it.amountFormFieldState.copy(
                     value = value,
-                    amountError = null,
-                    unitError = null,
+                    error = null,
                 )
             )
         }
@@ -220,8 +220,7 @@ class CreateProductViewModel @Inject constructor(
             it.copy(
                 priceFieldState = it.priceFieldState.copy(
                     value = value,
-                    priceError = null,
-                    currencyError = null,
+                    error = null,
                 )
             )
         }
@@ -426,7 +425,7 @@ class CreateProductViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         priceFieldState = it.priceFieldState.copy(
-                                            priceError = value.firstOrNull()
+                                            error = value.firstOrNull()
                                         )
                                     )
                                 }
@@ -436,7 +435,7 @@ class CreateProductViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         priceFieldState = it.priceFieldState.copy(
-                                            currencyError = value.firstOrNull()
+                                            error = value.firstOrNull()
                                         )
                                     )
                                 }
@@ -476,7 +475,7 @@ class CreateProductViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         amountFormFieldState = it.amountFormFieldState.copy(
-                                            amountError = value.firstOrNull()
+                                            error = value.firstOrNull()
                                         )
                                     )
                                 }
@@ -486,7 +485,7 @@ class CreateProductViewModel @Inject constructor(
                                 _state.update {
                                     it.copy(
                                         amountFormFieldState = it.amountFormFieldState.copy(
-                                            unitError = value.firstOrNull()
+                                            error = value.firstOrNull()
                                         )
                                     )
                                 }
@@ -529,7 +528,7 @@ class CreateProductViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     amountFormFieldState = it.amountFormFieldState.copy(
-                        amountError = stringProvider.getString(R.string.validation_amount_empty)
+                        error = stringProvider.getString(R.string.validation_amount_empty)
                     )
                 )
             }
@@ -552,7 +551,7 @@ class CreateProductViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     priceFieldState = it.priceFieldState.copy(
-                        priceError = stringProvider.getString(
+                        error = stringProvider.getString(
                             R.string.validation_price_not_valid,
                             minPrice,
                             maxPrice

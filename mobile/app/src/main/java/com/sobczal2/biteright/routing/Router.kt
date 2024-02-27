@@ -87,6 +87,7 @@ private fun handleNavigationEvent(
 ) {
     CoroutineScope(Dispatchers.Main).launch {
         when (navigationEvent) {
+            is NavigationEvent.NavigateBack -> navController.popBackStack()
             is NavigationEvent.NavigateToWelcome -> navController.navigate(Routes.WELCOME)
             is NavigationEvent.NavigateToStart -> navController.navigate(Routes.START)
             is NavigationEvent.NavigateToCurrentProducts -> navController.navigate(Routes.CURRENT_PRODUCTS)
@@ -96,6 +97,9 @@ private fun handleNavigationEvent(
             is NavigationEvent.NavigateToCreateProduct -> navController.navigate(Routes.CREATE_PRODUCT)
             is NavigationEvent.NavigateToProductDetails -> navController.navigate(
                 Routes.productDetails(navigationEvent.productId)
+            )
+            is NavigationEvent.NavigateToEditProduct -> navController.navigate(
+                Routes.editProduct(navigationEvent.productId)
             )
         }
     }

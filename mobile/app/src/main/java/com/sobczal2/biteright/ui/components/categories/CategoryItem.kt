@@ -22,8 +22,9 @@ import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.categories.CategoryDto
-import com.sobczal2.biteright.dto.categories.imageUri
 import com.sobczal2.biteright.ui.theme.dimension
+import com.sobczal2.biteright.ui.theme.extraSmallEnd
+import com.sobczal2.biteright.ui.theme.extraSmallStart
 import com.sobczal2.biteright.util.BiteRightPreview
 import java.util.UUID
 
@@ -48,7 +49,8 @@ fun CategoryItem(
             categoryId = category.id,
             imageRequestBuilder = imageRequestBuilder,
             inPreview = inPreview,
-            shape = MaterialTheme.shapes.extraSmall,
+            shape = MaterialTheme.shapes.extraSmallStart,
+            modifier = Modifier.size(MaterialTheme.dimension.xxl)
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -104,7 +106,8 @@ fun CategoryListItem(
             CategoryImage(
                 categoryId = category.id,
                 inPreview = inPreview,
-                imageRequestBuilder = imageRequestBuilder
+                imageRequestBuilder = imageRequestBuilder,
+                modifier = Modifier.size(MaterialTheme.dimension.xl)
             )
         },
         trailingContent = {

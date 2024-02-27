@@ -11,5 +11,7 @@ object Routes {
     const val PROFILE = "profile"
     const val CREATE_PRODUCT = "create_product"
     const val PRODUCT_DETAILS = "product_details/{productId}"
+    const val EDIT_PRODUCT = "edit_product/{productId}"
     fun productDetails(productId: UUID) = "product_details/$productId"
+    fun editProduct(productId: UUID) = "edit_product/$productId"
 }

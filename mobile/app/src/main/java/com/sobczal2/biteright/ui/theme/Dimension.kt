@@ -8,12 +8,13 @@ import androidx.compose.material3.Shapes
 import androidx.compose.ui.unit.dp
 
 object Dimension {
-    val xs = 4.dp
-    val sm = 8.dp
-    val md = 16.dp
-    val lg = 24.dp
-    val xl = 32.dp
-    val xxl = 48.dp
+    val xs = 8.dp
+    val sm = 16.dp
+    val md = 24.dp
+    val lg = 32.dp
+    val xl = 48.dp
+    val xxl = 64.dp
+    val xxxl = 96.dp
 }
 
 val MaterialTheme.dimension: Dimension

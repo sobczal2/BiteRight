@@ -62,7 +62,8 @@ fun ProductListItem(
             CategoryImage(
                 categoryId = simpleProductDto.categoryId,
                 inPreview = inPreview,
-                imageRequestBuilder = imageRequestBuilder
+                imageRequestBuilder = imageRequestBuilder,
+                modifier = Modifier.size(MaterialTheme.dimension.xl),
             )
         },
         modifier = modifier

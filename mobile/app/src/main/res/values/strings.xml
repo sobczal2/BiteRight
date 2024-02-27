@@ -66,4 +66,6 @@
     <string name="expiration_infinite">Never expires</string>
     <string name="current_products">Current products</string>
     <string name="all_products">All products</string>
+    <string name="back">Back</string>
+    <string name="edit">Edit</string>
 </resources>
