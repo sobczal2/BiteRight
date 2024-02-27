@@ -1,15 +1,7 @@
 package com.sobczal2.biteright.routing
 
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,10 +12,12 @@ import com.sobczal2.biteright.screens.AllProductsScreen
 import com.sobczal2.biteright.screens.CreateProductScreen
 import com.sobczal2.biteright.screens.CurrentProductsScreen
 import com.sobczal2.biteright.screens.EditProductScreen
+import com.sobczal2.biteright.screens.EditProfileScreen
 import com.sobczal2.biteright.screens.ProductDetailsScreen
 import com.sobczal2.biteright.screens.ProfileScreen
 import com.sobczal2.biteright.screens.StartScreen
 import com.sobczal2.biteright.screens.WelcomeScreen
+import com.sobczal2.biteright.ui.components.common.ComingSoonBanner
 import com.sobczal2.biteright.util.getUUID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -85,6 +79,16 @@ fun Router(authManager: AuthManager) {
                 productId = it.arguments?.getUUID("productId")!!
             )
         }
+        composable(Routes.EDIT_PROFILE) {
+            EditProfileScreen(
+                handleNavigationEvent = handleNavigationEvent
+            )
+        }
+        composable(Routes.TEMPLATES) {
+            ComingSoonBanner {
+                handleNavigationEvent(NavigationEvent.NavigateBack, navController)
+            }
+        }
     }
 }
 
@@ -105,6 +109,7 @@ private fun handleNavigationEvent(
             is NavigationEvent.NavigateToProductDetails -> navController.navigate(
                 Routes.productDetails(navigationEvent.productId)
             )
+
             is NavigationEvent.NavigateToEditProduct -> navController.navigate(
                 Routes.editProduct(navigationEvent.productId)
             )

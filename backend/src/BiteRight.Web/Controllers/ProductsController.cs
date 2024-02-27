@@ -11,6 +11,7 @@ using System;
 using System.Threading.Tasks;
 using BiteRight.Application.Commands.Products.ChangeAmount;
 using BiteRight.Application.Commands.Products.Create;
+using BiteRight.Application.Commands.Products.Delete;
 using BiteRight.Application.Commands.Products.Dispose;
 using BiteRight.Application.Commands.Products.Edit;
 using BiteRight.Application.Commands.Products.Restore;
@@ -158,6 +159,19 @@ public class ProductsController : WebController
     )
     {
         request.ProductId = productId;
+        var response = await Mediator.Send(request);
+        return Ok(response);
+    }
+    
+    [HttpDelete("{productId:guid}")]
+    [AuthorizeUserExists]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Delete(
+        [FromRoute] Guid productId
+    )
+    {
+        var request = new DeleteRequest(productId);
         var response = await Mediator.Send(request);
         return Ok(response);
     }

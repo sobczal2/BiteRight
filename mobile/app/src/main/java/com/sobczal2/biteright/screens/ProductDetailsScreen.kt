@@ -14,6 +14,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -162,7 +163,22 @@ fun ProductDetailsScreenContent(
                             label = { Text(text = stringResource(id = R.string.description)) },
                             modifier = Modifier.fillMaxWidth(),
                             minLines = 3,
-                            readOnly = true
+                            readOnly = true,
+                            enabled = false,
+                            colors = TextFieldDefaults.colors().let {
+                                it.copy(
+                                    disabledTextColor = it.unfocusedTextColor,
+                                    disabledContainerColor = it.unfocusedContainerColor,
+                                    disabledIndicatorColor = it.unfocusedIndicatorColor,
+                                    disabledLeadingIconColor = it.unfocusedLeadingIconColor,
+                                    disabledTrailingIconColor = it.unfocusedTrailingIconColor,
+                                    disabledLabelColor = it.unfocusedLabelColor,
+                                    disabledPlaceholderColor = it.unfocusedPlaceholderColor,
+                                    disabledSupportingTextColor = it.unfocusedSupportingTextColor,
+                                    disabledPrefixColor = it.unfocusedPrefixColor,
+                                    disabledSuffixColor = it.unfocusedSuffixColor
+                                )
+                            }
                         )
 
                         if (product.disposedStateValue) {

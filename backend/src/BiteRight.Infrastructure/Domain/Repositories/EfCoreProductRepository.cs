@@ -37,7 +37,7 @@ public class EfCoreProductRepository : IProductRepository
     }
 
     public async Task<Product?> FindById(
-        ProductId id,
+        ProductId productId,
         CancellationToken cancellationToken = default
     )
     {
@@ -45,6 +45,14 @@ public class EfCoreProductRepository : IProductRepository
             .Products
             .Include(product => product.Amount)
             .Include(product => product.Price)
-            .FirstOrDefaultAsync(product => product.Id == id, cancellationToken);
+            .FirstOrDefaultAsync(product => product.Id == productId, cancellationToken);
+    }
+
+    public void Delete(
+        Product product,
+        CancellationToken cancellationToken
+    )
+    {
+        _appDbContext.Products.Remove(product);
     }
 }

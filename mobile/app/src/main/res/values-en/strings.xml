@@ -78,4 +78,7 @@
     <string name="disposed_at">Disposed at</string>
     <string name="save">Save</string>
     <string name="edit_product">Edit product</string>
+    <string name="preferred_currency">Preferred currency</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="coming_soon">Coming soon</string>
 </resources>

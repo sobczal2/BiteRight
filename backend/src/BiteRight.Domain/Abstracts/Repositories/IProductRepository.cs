@@ -22,7 +22,12 @@ public interface IProductRepository
     );
 
     Task<Product?> FindById(
-        ProductId id,
+        ProductId productId,
         CancellationToken cancellationToken = default
+    );
+
+    void Delete(
+        Product product,
+        CancellationToken cancellationToken
     );
 }
