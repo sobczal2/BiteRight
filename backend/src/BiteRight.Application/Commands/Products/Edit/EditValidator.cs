@@ -5,9 +5,13 @@
 // # Created: 26-02-2024
 // # ==============================================================================
 
+#region
+
 using BiteRight.Application.Dtos.Products;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
+
+#endregion
 
 namespace BiteRight.Application.Commands.Products.Edit;
 
@@ -20,12 +24,12 @@ public class EditValidator : AbstractValidator<EditRequest>
         IStringLocalizer<Resources.Resources.Currencies.Currencies> currenciesLocalizer,
         // ReSharper disable once SuggestBaseTypeForParameterInConstructor
         IStringLocalizer<Resources.Resources.Categories.Categories> categoriesLocalizer
-        )
+    )
     {
         RuleFor(x => x.ProductId)
             .NotEmpty()
             .WithMessage(_ => productsLocalizer[nameof(Resources.Resources.Products.Products.product_id_empty)]);
-        
+
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage(_ => productsLocalizer[nameof(Resources.Resources.Products.Products.name_empty)]);

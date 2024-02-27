@@ -36,7 +36,10 @@ public class EfCoreProductRepository : IProductRepository
         _appDbContext.Products.Add(product);
     }
 
-    public async Task<Product?> FindById(ProductId id, CancellationToken cancellationToken = default)
+    public async Task<Product?> FindById(
+        ProductId id,
+        CancellationToken cancellationToken = default
+    )
     {
         return await _appDbContext
             .Products

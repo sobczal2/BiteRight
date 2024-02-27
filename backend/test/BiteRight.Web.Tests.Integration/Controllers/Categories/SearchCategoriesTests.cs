@@ -5,6 +5,8 @@
 // # Created: 13-02-2024
 // # ==============================================================================
 
+#region
+
 using System;
 using System.Net;
 using System.Net.Http;
@@ -12,6 +14,8 @@ using System.Threading.Tasks;
 using BiteRight.Web.Tests.Integration.TestHelpers;
 using FluentAssertions;
 using Xunit;
+
+#endregion
 
 namespace BiteRight.Web.Tests.Integration.Controllers.Categories;
 
@@ -27,21 +31,23 @@ public class SearchCategoriesTests : IAsyncDisposable
         _client = biteRightBackendFactory.CreateClient();
     }
 
-    private static string GetUrl(
-        int pageNumber,
-        int pageSize,
-        string query
-    ) =>
-        $"api/Categories/search?query={query}&pageNumber={pageNumber}&pageSize={pageSize}";
-    
     public async ValueTask DisposeAsync()
     {
         if (_client is IAsyncDisposable clientAsyncDisposable)
             await clientAsyncDisposable.DisposeAsync();
         else
             _client.Dispose();
-        
+
         GC.SuppressFinalize(this);
+    }
+
+    private static string GetUrl(
+        int pageNumber,
+        int pageSize,
+        string query
+    )
+    {
+        return $"api/Categories/search?query={query}&pageNumber={pageNumber}&pageSize={pageSize}";
     }
 
     [Fact]

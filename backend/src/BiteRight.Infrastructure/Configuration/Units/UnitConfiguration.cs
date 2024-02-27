@@ -29,7 +29,9 @@ public class UnitConfiguration : IEntityTypeConfiguration<Unit>
         new UnitId(Guid.Parse("CDE52E6C-5D9D-4876-978A-BF67C02CC8BE"))
     );
 
-    public void Configure(EntityTypeBuilder<Unit> builder)
+    public void Configure(
+        EntityTypeBuilder<Unit> builder
+    )
     {
         builder.ToTable("units", "unit");
         builder.Ignore(unit => unit.DomainEvents);

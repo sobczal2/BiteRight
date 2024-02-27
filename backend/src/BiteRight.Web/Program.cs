@@ -36,7 +36,11 @@ app.UseSerilogRequestLogging(opt =>
 {
     opt.MessageTemplate =
         "HTTP {RequestMethod} {RequestPath} CorrelationId {CorrelationId} responded {StatusCode} in {Elapsed:0.0000} ms";
-    opt.GetLevel = (ctx, _, _) => LogEventLevel.Information;
+    opt.GetLevel = (
+        ctx,
+        _,
+        _
+    ) => LogEventLevel.Information;
 });
 
 if (app.Environment.IsDevelopment())

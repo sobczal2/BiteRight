@@ -84,7 +84,7 @@ public class ExpirationDate : ValueObject
     {
         return Create(null, ExpirationDateKind.Infinite);
     }
-    
+
     private static void Validate(
         DateOnly? value,
         ExpirationDateKind kind

@@ -5,6 +5,8 @@
 // # Created: 25-02-2024
 // # ==============================================================================
 
+#region
+
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,13 +17,15 @@ using BiteRight.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
+#endregion
+
 namespace BiteRight.Application.Queries.Products.GetDetails;
 
 public class GetDetailsHandler : QueryHandlerBase<GetDetailsRequest, GetDetailsResponse>
 {
+    private readonly AppDbContext _appDbContext;
     private readonly IIdentityProvider _identityProvider;
     private readonly ILanguageProvider _languageProvider;
-    private readonly AppDbContext _appDbContext;
     private readonly IStringLocalizer<Resources.Resources.Products.Products> _productsLocalizer;
 
     public GetDetailsHandler(
@@ -64,12 +68,10 @@ public class GetDetailsHandler : QueryHandlerBase<GetDetailsRequest, GetDetailsR
                 .SingleOrDefaultAsync(cancellationToken);
 
         if (product is null)
-        {
             throw ValidationException(
                 nameof(GetDetailsRequest.ProductId),
                 _productsLocalizer[nameof(Resources.Resources.Products.Products.product_not_found)]
             );
-        }
 
         return new GetDetailsResponse(DetailedProductDto.FromDomain(product, languageId));
     }

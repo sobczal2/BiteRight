@@ -5,6 +5,8 @@
 // # Created: 16-02-2024
 // # ==============================================================================
 
+#region
+
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,14 +18,16 @@ using BiteRight.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
+#endregion
+
 namespace BiteRight.Application.Queries.Products.Search;
 
 public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
 {
-    private readonly IIdentityProvider _identityProvider;
-    private readonly ILanguageProvider _languageProvider;
     private readonly AppDbContext _appDbContext;
     private readonly IStringLocalizer<Resources.Resources.Categories.Categories> _categoriesLocalizer;
+    private readonly IIdentityProvider _identityProvider;
+    private readonly ILanguageProvider _languageProvider;
 
     public SearchHandler(
         IIdentityProvider identityProvider,

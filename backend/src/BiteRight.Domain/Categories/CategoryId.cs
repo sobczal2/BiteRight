@@ -27,12 +27,16 @@ public class CategoryId : GuidId
     {
     }
 
-    public static implicit operator CategoryId(Guid id)
+    public static implicit operator CategoryId(
+        Guid id
+    )
     {
         return new CategoryId(id);
     }
 
-    public static implicit operator Guid(CategoryId id)
+    public static implicit operator Guid(
+        CategoryId id
+    )
     {
         return id.Value;
     }

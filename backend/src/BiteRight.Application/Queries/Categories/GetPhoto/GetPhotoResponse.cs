@@ -1,4 +1,8 @@
+#region
+
 using System.IO;
+
+#endregion
 
 namespace BiteRight.Application.Queries.Categories.GetPhoto;
 

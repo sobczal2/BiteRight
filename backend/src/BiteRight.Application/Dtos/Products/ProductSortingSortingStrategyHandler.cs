@@ -5,10 +5,14 @@
 // # Created: 16-02-2024
 // # ==============================================================================
 
+#region
+
 using System;
 using System.Linq;
 using BiteRight.Application.Dtos.Common;
 using BiteRight.Domain.Products;
+
+#endregion
 
 namespace BiteRight.Application.Dtos.Products;
 

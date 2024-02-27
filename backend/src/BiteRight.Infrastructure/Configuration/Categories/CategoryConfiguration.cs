@@ -24,7 +24,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         true,
         new CategoryId(Guid.Parse("C82E0550-26CF-410D-8CEC-5CF62BADA757"))
     );
-    
+
     public static Category Dairy { get; } = Category.Create(
         PhotoConfiguration.DairyPhoto.Id,
         false,
@@ -54,19 +54,19 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         false,
         new CategoryId(Guid.Parse("17C56168-C9EC-4FFB-A074-495A02AB0359"))
     );
-    
+
     public static Category Beverage { get; } = Category.Create(
         PhotoConfiguration.BeveragePhoto.Id,
         false,
         new CategoryId(Guid.Parse("7289CBC9-8249-4FC1-B2D3-BAC90AD32595"))
     );
-    
+
     public static Category Snack { get; } = Category.Create(
         PhotoConfiguration.SnackPhoto.Id,
         false,
         new CategoryId(Guid.Parse("E86CAF03-EA3B-49AB-B499-68E387919FB6"))
     );
-    
+
     public static Category Wheat { get; } = Category.Create(
         PhotoConfiguration.WheatPhoto.Id,
         false,
@@ -97,7 +97,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .WithOne()
             .HasForeignKey<Category>(category => category.PhotoId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder.Property(category => category.IsDefault);
 
         builder.HasData(GetSeedData());

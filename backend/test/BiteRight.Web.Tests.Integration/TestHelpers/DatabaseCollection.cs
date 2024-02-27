@@ -5,12 +5,15 @@
 // # Created: 13-02-2024
 // # ==============================================================================
 
+#region
+
 using Xunit;
+
+#endregion
 
 namespace BiteRight.Web.Tests.Integration.TestHelpers;
 
 [CollectionDefinition("DatabaseCollection")]
 public class DatabaseCollection : ICollectionFixture<BiteRightBackendFactory>
 {
-    
 }

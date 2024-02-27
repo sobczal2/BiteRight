@@ -60,7 +60,8 @@ public class Name : ValueObject
     {
         if (string.IsNullOrWhiteSpace(value)) throw new NameEmptyException();
 
-        if (value.Length is < MinValidLength or > MaxValidLength) throw new NameInvalidLengthException(MinValidLength, MaxValidLength);
+        if (value.Length is < MinValidLength or > MaxValidLength)
+            throw new NameInvalidLengthException(MinValidLength, MaxValidLength);
 
         if (!ValidCharacters.IsMatch(value)) throw new NameInvalidCharactersException(ValidCharacters.ToString());
     }

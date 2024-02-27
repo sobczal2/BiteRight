@@ -18,6 +18,12 @@ namespace BiteRight.Domain.Abstracts.Common;
 public interface IIdentityProvider
 {
     IdentityId RequireCurrent();
-    Task<UserId> RequireCurrentUserId(CancellationToken cancellationToken = default);
-    Task<User> RequireCurrentUser(CancellationToken cancellationToken = default);
+
+    Task<UserId> RequireCurrentUserId(
+        CancellationToken cancellationToken = default
+    );
+
+    Task<User> RequireCurrentUser(
+        CancellationToken cancellationToken = default
+    );
 }

@@ -5,8 +5,12 @@
 // # Created: 16-02-2024
 // # ==============================================================================
 
+#region
+
 using BiteRight.Application.Dtos.Common;
 using BiteRight.Application.Dtos.Products;
+
+#endregion
 
 namespace BiteRight.Application.Queries.Products.Search;
 

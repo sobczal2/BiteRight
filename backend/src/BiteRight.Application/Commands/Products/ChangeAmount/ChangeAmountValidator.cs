@@ -5,8 +5,12 @@
 // # Created: 17-02-2024
 // # ==============================================================================
 
+#region
+
 using FluentValidation;
 using Microsoft.Extensions.Localization;
+
+#endregion
 
 namespace BiteRight.Application.Commands.Products.ChangeAmount;
 

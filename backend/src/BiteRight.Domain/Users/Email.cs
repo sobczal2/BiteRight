@@ -50,7 +50,9 @@ public class Email : ValueObject
         return new Email(new MailAddress(value));
     }
 
-    public static implicit operator string(Email email)
+    public static implicit operator string(
+        Email email
+    )
     {
         return email.Value;
     }

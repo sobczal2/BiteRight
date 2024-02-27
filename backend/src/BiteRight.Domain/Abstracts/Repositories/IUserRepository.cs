@@ -17,7 +17,9 @@ namespace BiteRight.Domain.Abstracts.Repositories;
 
 public interface IUserRepository
 {
-    void Add(User user);
+    void Add(
+        User user
+    );
 
     Task<User?> FindByIdentityId(
         IdentityId identityId,

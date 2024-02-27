@@ -17,9 +17,6 @@ namespace BiteRight.Application.Dtos.Categories;
 
 public class CategoryDto
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-
     public CategoryDto(
         Guid id,
         string name
@@ -28,6 +25,9 @@ public class CategoryDto
         Id = id;
         Name = name;
     }
+
+    public Guid Id { get; set; }
+    public string Name { get; set; }
 
     public static CategoryDto FromDomain(
         Category category,

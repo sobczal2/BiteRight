@@ -26,7 +26,7 @@ public class SearchValidator : AbstractValidator<SearchRequest>
             .MaximumLength(maxQueryLength)
             .WithMessage(string.Format(
                 commonLocalizer[nameof(Resources.Resources.Common.Common.query_too_long)], maxQueryLength));
-        
+
         RuleFor(x => x.PaginationParams)
             .NotNull()
             .WithMessage(commonLocalizer[nameof(Resources.Resources.Common.Common.pagination_params_null)]);

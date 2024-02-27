@@ -16,13 +16,6 @@ namespace BiteRight.Application.Dtos.Countries;
 
 public class CountryDto
 {
-    public Guid Id { get; set; }
-    public string NativeName { get; set; }
-    public string EnglishName { get; set; }
-    public string Alpha2Code { get; set; }
-    public Guid OfficialLanguageId { get; set; }
-    public Guid CurrencyId { get; set; }
-
     public CountryDto(
         Guid id,
         string nativeName,
@@ -39,6 +32,13 @@ public class CountryDto
         OfficialLanguageId = officialLanguageId;
         CurrencyId = currencyId;
     }
+
+    public Guid Id { get; set; }
+    public string NativeName { get; set; }
+    public string EnglishName { get; set; }
+    public string Alpha2Code { get; set; }
+    public Guid OfficialLanguageId { get; set; }
+    public Guid CurrencyId { get; set; }
 
     public static CountryDto FromDomain(
         Country country

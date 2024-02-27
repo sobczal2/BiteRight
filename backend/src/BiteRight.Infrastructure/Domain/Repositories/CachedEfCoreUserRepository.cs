@@ -7,7 +7,6 @@
 
 #region
 
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Domain.Abstracts.Repositories;
@@ -62,10 +61,7 @@ public class CachedEfCoreUserRepository : IUserRepository
             .ThenInclude(u => u.Currency)
             .FirstOrDefaultAsync(u => u.IdentityId == identityId, cancellationToken);
 
-        if (user is not null)
-        {
-            _cache.Set(cacheKey, user, _cacheEntryOptions);
-        }
+        if (user is not null) _cache.Set(cacheKey, user, _cacheEntryOptions);
 
         return user;
     }

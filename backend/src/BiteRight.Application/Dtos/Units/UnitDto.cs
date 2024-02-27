@@ -17,11 +17,6 @@ namespace BiteRight.Application.Dtos.Units;
 
 public class UnitDto
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string Abbreviation { get; set; }
-    public UnitSystemDto UnitSystem { get; set; }
-
     public UnitDto(
         Guid id,
         string name,
@@ -34,6 +29,11 @@ public class UnitDto
         Abbreviation = abbreviation;
         UnitSystem = unitSystem;
     }
+
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string Abbreviation { get; set; }
+    public UnitSystemDto UnitSystem { get; set; }
 
     public static UnitDto FromDomain(
         Unit unit,

@@ -38,7 +38,8 @@ public class UpdateProfileHandler : CommandHandlerBase<UpdateProfileRequest>
         IUserRepository userRepository,
         IIdentityProvider identityProvider,
         AppDbContext appAppDbContext
-    ) : base(appAppDbContext)
+    )
+        : base(appAppDbContext)
     {
         _currencyRepository = currencyRepository;
         _currenciesLocalizer = currenciesLocalizer;

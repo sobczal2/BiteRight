@@ -11,7 +11,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Application.Common;
-using BiteRight.Application.Common.Exceptions;
 using BiteRight.Application.Dtos.Products;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
@@ -190,7 +189,8 @@ public class CreateHandler : CommandHandlerBase<CreateRequest, CreateResponse>
             ),
             ExpirationDateBestBeforeValueException => ValidationException(
                 nameof(CreateRequest.ExpirationDate),
-                _productsLocalizer[nameof(Resources.Resources.Products.Products.expiration_date_invalid_for_best_before)]
+                _productsLocalizer[
+                    nameof(Resources.Resources.Products.Products.expiration_date_invalid_for_best_before)]
             ),
             ExpirationDateUseByValueException => ValidationException(
                 nameof(CreateRequest.ExpirationDate),

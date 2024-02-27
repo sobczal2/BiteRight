@@ -5,6 +5,8 @@
 // # Created: 12-02-2024
 // # ==============================================================================
 
+#region
+
 using System.Linq;
 using System.Threading.Tasks;
 using BiteRight.Domain.Abstracts.Common;
@@ -22,6 +24,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Testcontainers.PostgreSql;
 using Xunit;
+
+#endregion
 
 namespace BiteRight.Web.Tests.Integration;
 
@@ -65,10 +69,7 @@ public class BiteRightBackendFactory : WebApplicationFactory<IWebAssemblyMarker>
             var descriptor = services.SingleOrDefault(
                 d => d.ServiceType ==
                      typeof(DbContextOptions<AppDbContext>));
-            if (descriptor != null)
-            {
-                services.Remove(descriptor);
-            }
+            if (descriptor != null) services.Remove(descriptor);
 
             services.AddDbContext<AppDbContext>(options =>
             {
@@ -85,7 +86,7 @@ public class BiteRightBackendFactory : WebApplicationFactory<IWebAssemblyMarker>
             TestUsers.SeedOnboardedUser(dbContext);
         });
     }
-    
+
     public IServiceScope CreateScope()
     {
         var scope = Services.CreateScope();

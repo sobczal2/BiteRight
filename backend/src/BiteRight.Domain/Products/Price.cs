@@ -7,7 +7,6 @@
 
 #region
 
-using System.Collections.Generic;
 using BiteRight.Domain.Common;
 using BiteRight.Domain.Currencies;
 using BiteRight.Domain.Products.Exceptions;

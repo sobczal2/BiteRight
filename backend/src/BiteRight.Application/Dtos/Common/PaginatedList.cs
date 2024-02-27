@@ -16,7 +16,12 @@ namespace BiteRight.Application.Dtos.Common;
 
 public class PaginatedList<T>
 {
-    public PaginatedList(int pageNumber, int pageSize, int totalCount, IEnumerable<T> items)
+    public PaginatedList(
+        int pageNumber,
+        int pageSize,
+        int totalCount,
+        IEnumerable<T> items
+    )
     {
         PageNumber = pageNumber;
         PageSize = pageSize;

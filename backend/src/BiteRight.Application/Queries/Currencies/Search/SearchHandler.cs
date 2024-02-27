@@ -5,6 +5,8 @@
 // # Created: 20-02-2024
 // # ==============================================================================
 
+#region
+
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +14,8 @@ using BiteRight.Application.Common;
 using BiteRight.Application.Dtos.Common;
 using BiteRight.Application.Dtos.Currencies;
 using BiteRight.Domain.Abstracts.Repositories;
-using BiteRight.Infrastructure.Database;
+
+#endregion
 
 namespace BiteRight.Application.Queries.Currencies.Search;
 
@@ -38,7 +41,7 @@ public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
             request.PaginationParams.PageSize,
             cancellationToken
         );
-        
+
         var pagedList = new PaginatedList<CurrencyDto>(
             request.PaginationParams.PageNumber,
             request.PaginationParams.PageSize,
@@ -51,7 +54,7 @@ public class SearchHandler : QueryHandlerBase<SearchRequest, SearchResponse>
                 Symbol = currency.Symbol
             })
         );
-        
+
         return new SearchResponse(pagedList);
     }
 }

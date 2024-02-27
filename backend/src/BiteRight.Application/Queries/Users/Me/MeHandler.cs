@@ -11,7 +11,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Application.Common;
 using BiteRight.Application.Common.Exceptions;
-using BiteRight.Application.Dtos.Currencies;
 using BiteRight.Application.Dtos.Users;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;

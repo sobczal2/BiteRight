@@ -18,7 +18,9 @@ namespace BiteRight.Domain.Products;
 public class Amount : Entity<AmountId>
 {
     private const double MinValidValue = 0;
+
     private const double MaxValidValue = 1e6;
+
     // EF Core
     private Amount()
     {
@@ -36,7 +38,8 @@ public class Amount : Entity<AmountId>
         double maxValue,
         UnitId unitId,
         ProductId productId
-    ) : base(id)
+    )
+        : base(id)
     {
         CurrentValue = currentValue;
         MaxValue = maxValue;
@@ -47,8 +50,8 @@ public class Amount : Entity<AmountId>
     }
 
     public double CurrentValue { get; private set; }
-    public double MaxValue { get; private set;  }
-    public UnitId UnitId { get; private set;  }
+    public double MaxValue { get; private set; }
+    public UnitId UnitId { get; private set; }
     public virtual Unit Unit { get; }
     public ProductId ProductId { get; }
     public virtual Product Product { get; }
@@ -94,7 +97,7 @@ public class Amount : Entity<AmountId>
         double maxValue,
         UnitId unitId,
         ProductId productId
-        )
+    )
     {
         return Create(maxValue, maxValue, unitId, productId);
     }

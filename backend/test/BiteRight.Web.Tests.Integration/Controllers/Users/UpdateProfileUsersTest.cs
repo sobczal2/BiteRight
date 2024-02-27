@@ -5,8 +5,9 @@
 // # Created: 13-02-2024
 // # ==============================================================================
 
+#region
+
 using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -14,19 +15,19 @@ using System.Threading.Tasks;
 using BiteRight.Application.Commands.Users.Onboard;
 using BiteRight.Application.Commands.Users.UpdateProfile;
 using BiteRight.Infrastructure.Configuration.Currencies;
-using BiteRight.Infrastructure.Database;
 using BiteRight.Web.Tests.Integration.TestHelpers;
 using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
+
+#endregion
 
 namespace BiteRight.Web.Tests.Integration.Controllers.Users;
 
 [Collection("DatabaseCollection")]
 public class UpdateProfileUsersTest : IAsyncDisposable
 {
-    private readonly HttpClient _client;
     private readonly BiteRightBackendFactory _biteRightBackendFactory;
+    private readonly HttpClient _client;
 
     public UpdateProfileUsersTest(
         BiteRightBackendFactory biteRightBackendFactory
@@ -36,9 +37,6 @@ public class UpdateProfileUsersTest : IAsyncDisposable
         _client = biteRightBackendFactory.CreateClient();
     }
 
-    private static string GetUrl() =>
-        "api/Users/profile";
-
     public async ValueTask DisposeAsync()
     {
         if (_client is IAsyncDisposable clientAsyncDisposable)
@@ -47,6 +45,11 @@ public class UpdateProfileUsersTest : IAsyncDisposable
             _client.Dispose();
 
         GC.SuppressFinalize(this);
+    }
+
+    private static string GetUrl()
+    {
+        return "api/Users/profile";
     }
 
     [Fact]

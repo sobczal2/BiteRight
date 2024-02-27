@@ -13,7 +13,6 @@ using BiteRight.Application.Common;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Infrastructure.Database;
-using MediatR;
 using Microsoft.Extensions.Localization;
 
 #endregion
@@ -33,9 +32,10 @@ public class DisposeHandler : CommandHandlerBase<DisposeRequest, DisposeResponse
         IProductRepository productRepository,
         IStringLocalizer<Resources.Resources.Products.Products> productLocalizer,
         IDateTimeProvider dateTimeProvider
-    ) : base(
-        appDbContext
     )
+        : base(
+            appDbContext
+        )
     {
         _identityProvider = identityProvider;
         _productRepository = productRepository;
@@ -43,7 +43,10 @@ public class DisposeHandler : CommandHandlerBase<DisposeRequest, DisposeResponse
         _dateTimeProvider = dateTimeProvider;
     }
 
-    protected override async Task<DisposeResponse> HandleImpl(DisposeRequest request, CancellationToken cancellationToken)
+    protected override async Task<DisposeResponse> HandleImpl(
+        DisposeRequest request,
+        CancellationToken cancellationToken
+    )
     {
         var user = await _identityProvider.RequireCurrentUser(cancellationToken);
 

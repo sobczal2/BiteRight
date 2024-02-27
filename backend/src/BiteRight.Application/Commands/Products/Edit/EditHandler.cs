@@ -5,6 +5,8 @@
 // # Created: 26-02-2024
 // # ==============================================================================
 
+#region
+
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,18 +20,20 @@ using BiteRight.Infrastructure.Database;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
+#endregion
+
 namespace BiteRight.Application.Commands.Products.Edit;
 
 public class EditHandler : CommandHandlerBase<EditRequest, EditResponse>
 {
+    private readonly ICategoryRepository _categoryRepository;
+    private readonly IStringLocalizer<Resources.Resources.Currencies.Currencies> _currenciesLocalizer;
+    private readonly ICurrencyRepository _currencyRepository;
     private readonly IIdentityProvider _identityProvider;
     private readonly ILanguageProvider _languageProvider;
     private readonly IProductRepository _productRepository;
-    private readonly ICategoryRepository _categoryRepository;
-    private readonly ICurrencyRepository _currencyRepository;
-    private readonly IUnitRepository _unitRepository;
     private readonly IStringLocalizer<Resources.Resources.Products.Products> _productsLocalizer;
-    private readonly IStringLocalizer<Resources.Resources.Currencies.Currencies> _currenciesLocalizer;
+    private readonly IUnitRepository _unitRepository;
     private readonly IStringLocalizer<Resources.Resources.Units.Units> _unitsLocalizer;
 
     public EditHandler(
@@ -67,12 +71,10 @@ public class EditHandler : CommandHandlerBase<EditRequest, EditResponse>
         var existingProduct = await _productRepository.FindById(request.ProductId, cancellationToken);
 
         if (existingProduct is null || !Equals(existingProduct.CreatedById, user.Id))
-        {
             throw ValidationException(
                 nameof(request.ProductId),
                 _productsLocalizer[nameof(Resources.Resources.Products.Products.product_not_found)]
             );
-        }
 
         existingProduct.UpdateName(request.Name);
         existingProduct.UpdateDescription(request.Description);
@@ -82,12 +84,10 @@ public class EditHandler : CommandHandlerBase<EditRequest, EditResponse>
         {
             var currency = await _currencyRepository.FindById(request.PriceCurrencyId, cancellationToken);
             if (currency is null)
-            {
                 throw ValidationException(
                     nameof(EditRequest.PriceCurrencyId),
                     _currenciesLocalizer[
                         nameof(Resources.Resources.Currencies.Currencies.currency_not_found)]);
-            }
 
             existingProduct.UpdatePrice(request.PriceValue.Value, currency.Id);
         }

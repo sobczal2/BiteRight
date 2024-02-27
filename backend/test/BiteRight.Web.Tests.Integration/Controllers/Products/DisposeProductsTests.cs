@@ -5,6 +5,8 @@
 // # Created: 13-02-2024
 // # ==============================================================================
 
+#region
+
 using System;
 using System.Net;
 using System.Net.Http;
@@ -21,13 +23,15 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
+#endregion
+
 namespace BiteRight.Web.Tests.Integration.Controllers.Products;
 
 [Collection("DatabaseCollection")]
 public class DisposeProductsTests : IAsyncDisposable
 {
-    private readonly HttpClient _client;
     private readonly BiteRightBackendFactory _biteRightBackendFactory;
+    private readonly HttpClient _client;
 
     public DisposeProductsTests(
         BiteRightBackendFactory biteRightBackendFactory
@@ -37,25 +41,27 @@ public class DisposeProductsTests : IAsyncDisposable
         _client = biteRightBackendFactory.CreateClient();
     }
 
-    private static string GetUrl(
-        Guid productId
-    ) =>
-        $"api/Products/{productId}/dispose";
-
     public async ValueTask DisposeAsync()
     {
         if (_client is IAsyncDisposable clientAsyncDisposable)
             await clientAsyncDisposable.DisposeAsync();
         else
             _client.Dispose();
-        
+
         using var scope = _biteRightBackendFactory.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         await ProductsCleanup.Execute(dbContext);
 
         GC.SuppressFinalize(this);
     }
-    
+
+    private static string GetUrl(
+        Guid productId
+    )
+    {
+        return $"api/Products/{productId}/dispose";
+    }
+
     [Fact]
     public async Task Dispose_ReturnsOK_WhenRequestIsValid()
     {
@@ -74,11 +80,11 @@ public class DisposeProductsTests : IAsyncDisposable
         var createHttpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "api/Products")
             .AuthorizeAsOnboardedUser();
         createHttpRequestMessage.Content = JsonContent.Create(createRequest);
-        
+
         var createHttpResponse =
             await _client.SendAsync(createHttpRequestMessage);
         createHttpResponse.EnsureSuccessStatusCode();
-        
+
         var createResponse = await createHttpResponse.Content.ReadFromJsonAsync<CreateResponse>();
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, GetUrl(createResponse!.ProductId))
             .AuthorizeAsOnboardedUser();

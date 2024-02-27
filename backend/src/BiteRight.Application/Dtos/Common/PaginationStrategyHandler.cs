@@ -5,7 +5,11 @@
 // # Created: 16-02-2024
 // # ==============================================================================
 
+#region
+
 using System.Linq;
+
+#endregion
 
 namespace BiteRight.Application.Dtos.Common;
 

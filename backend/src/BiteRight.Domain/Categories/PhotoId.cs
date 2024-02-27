@@ -29,12 +29,16 @@ public class PhotoId : GuidId
 
     public static PhotoId Empty => new(Guid.Empty);
 
-    public static implicit operator PhotoId(Guid id)
+    public static implicit operator PhotoId(
+        Guid id
+    )
     {
         return new PhotoId(id);
     }
 
-    public static implicit operator Guid(PhotoId id)
+    public static implicit operator Guid(
+        PhotoId id
+    )
     {
         return id.Value;
     }

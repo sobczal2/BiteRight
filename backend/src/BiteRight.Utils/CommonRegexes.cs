@@ -26,5 +26,6 @@ public static class CommonRegexes
     public static readonly Regex AlphanumericWithSpacesAndSpecialCharacters =
         new(@"^[\p{L}\p{Nd}\s.,!?""'-()]*$", RegexOptions.Compiled);
 
-    public static readonly Regex AlphanumericWithHuphensAndUnderscores = new(@"^[\p{L}\p{Nd}-_]*$", RegexOptions.Compiled);
+    public static readonly Regex AlphanumericWithHuphensAndUnderscores =
+        new(@"^[\p{L}\p{Nd}-_]*$", RegexOptions.Compiled);
 }

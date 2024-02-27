@@ -5,8 +5,12 @@
 // # Created: 25-02-2024
 // # ==============================================================================
 
+#region
+
 using FluentValidation;
 using Microsoft.Extensions.Localization;
+
+#endregion
 
 namespace BiteRight.Application.Queries.Products.GetDetails;
 
@@ -14,7 +18,7 @@ public class GetDetailsValidator : AbstractValidator<GetDetailsRequest>
 {
     public GetDetailsValidator(
         IStringLocalizer<Resources.Resources.Products.Products> productsLocalizer
-        )
+    )
     {
         RuleFor(x => x.ProductId)
             .NotEmpty()

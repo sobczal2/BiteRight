@@ -34,7 +34,7 @@ public class UserExistsRequirementHandler : AuthorizationHandler<UserExistsRequi
         var identityId = context.User.Identity?.Name;
         if (identityId is null) return;
 
-        var user = await _userRepository.FindByIdentityId(identityId);  
+        var user = await _userRepository.FindByIdentityId(identityId);
 
         if (user is null) return;
 

@@ -27,7 +27,7 @@ public class CurrenciesController : WebController
         : base(mediator)
     {
     }
-    
+
     [HttpPost("search")]
     [AuthorizeUserExists]
     [ProducesResponseType(typeof(SearchResponse), StatusCodes.Status200OK)]

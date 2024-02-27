@@ -41,12 +41,16 @@ public class HttpContextIdentityProvider : IIdentityProvider
         return identityId;
     }
 
-    public async Task<UserId> RequireCurrentUserId(CancellationToken cancellationToken = default)
+    public async Task<UserId> RequireCurrentUserId(
+        CancellationToken cancellationToken = default
+    )
     {
         return (await RequireCurrentUser(cancellationToken)).Id;
     }
 
-    public async Task<User> RequireCurrentUser(CancellationToken cancellationToken = default)
+    public async Task<User> RequireCurrentUser(
+        CancellationToken cancellationToken = default
+    )
     {
         var identityId = RequireCurrent();
         var user = await _userRepository.FindByIdentityId(identityId, cancellationToken);

@@ -10,7 +10,9 @@
     <string name="loading">Loading…</string>
     <string name="login_canceled">Login has been cancelled</string>
     <string name="username_length_error">Username must be between %1$d and %2$d characters long</string>
-    <string name="username_invalid_characters_error">Username must only contain lowercase letters, uppercase letters, numbers and underscores.</string>
+    <string name="username_invalid_characters_error">Username must only contain lowercase letters, uppercase letters,
+        numbers and underscores.
+    </string>
     <string name="today">today</string>
     <string name="expired_for">Expired for %s</string>
     <string name="expires_in">Expires in %s</string>
@@ -41,15 +43,20 @@
     <string name="none">None</string>
     <string name="validation_name_empty">Name can\'t be empty</string>
     <string name="validation_name_length_not_valid">Name must be between %1$d and %2$d characters long</string>
-    <string name="validation_name_characters_not_valid">Name contains illegal characters. Allowed characters: %1$s</string>
+    <string name="validation_name_characters_not_valid">Name contains illegal characters. Allowed characters: %1$s
+    </string>
     <string name="validation_description_length_not_valid">Description\'s length cannot exceed %1$s characters</string>
-    <string name="validation_currency_empty_when_price_provided">Currency can\'t be empty when price was provided</string>
-    <string name="validation_price_empty_when_currency_provided">Price can\'t be empty when currency was provided</string>
+    <string name="validation_currency_empty_when_price_provided">Currency can\'t be empty when price was provided
+    </string>
+    <string name="validation_price_empty_when_currency_provided">Price can\'t be empty when currency was provided
+    </string>
     <string name="validation_price_not_valid">Price must be between %1$f and %2$2f</string>
     <string name="validation_category_empty">Category can\'t be empty</string>
     <string name="validation_amount_empty">Amount can\'t be empty</string>
     <string name="validation_unit_empty">Unit can\'t be empty</string>
-    <string name="validation_description_characters_not_valid">Description contains illegal characters. Allowed characters: %1$s</string>
+    <string name="validation_description_characters_not_valid">Description contains illegal characters. Allowed
+        characters: %1$s
+    </string>
     <string name="expiration_kind">Expiration kind</string>
     <string name="search">Search</string>
     <string name="selected">Selected</string>
@@ -59,7 +66,9 @@
     <string name="confirm">Confirm</string>
     <string name="date">Date</string>
     <string name="unit">Unit</string>
-    <string name="validation_expiration_date_empty">Expiration date can\'t be empty when \"best by\" or \"use by\" kind are selected</string>
+    <string name="validation_expiration_date_empty">Expiration date can\'t be empty when \"best by\" or \"use by\" kind
+        are selected
+    </string>
     <string name="expires_today">Expires today</string>
     <string name="change_amount_for">Change amount for</string>
     <string name="expiration_unknown">Expiration unknown</string>

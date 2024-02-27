@@ -92,10 +92,7 @@ public class CachedEfCoreCategoryRepository : ICategoryRepository
             .Include(c => c.Photo)
             .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
 
-        if (category is not null)
-        {
-            _cache.Set(cacheKey, category, _cacheEntryOptions);
-        }
+        if (category is not null) _cache.Set(cacheKey, category, _cacheEntryOptions);
 
         return category;
     }

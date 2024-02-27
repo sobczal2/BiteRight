@@ -29,7 +29,8 @@ public class Unit : AggregateRoot<UnitId>
     private Unit(
         UnitId id,
         UnitSystem unitSystem
-    ) : base(id)
+    )
+        : base(id)
     {
         UnitSystem = unitSystem;
         Translations = default!;
@@ -52,14 +53,18 @@ public class Unit : AggregateRoot<UnitId>
         return unit;
     }
 
-    public string GetName(LanguageId languageId)
+    public string GetName(
+        LanguageId languageId
+    )
     {
         return Translations
             .SingleOrDefault(t => Equals(t.LanguageId, languageId))
             ?.Name ?? throw new InvalidOperationException();
     }
 
-    public string GetAbbreviation(LanguageId languageId)
+    public string GetAbbreviation(
+        LanguageId languageId
+    )
     {
         return Translations
             .SingleOrDefault(t => Equals(t.LanguageId, languageId))
