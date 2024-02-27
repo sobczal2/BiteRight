@@ -42,4 +42,13 @@
     <data name="internal_error" xml:space="preserve">
         <value>Błąd wewnętrzny</value>
     </data>
+    <data name="validation_error" xml:space="preserve">
+        <value>Błąd walidacji</value>
+    </data>
+    <data name="query_too_long" xml:space="preserve">
+        <value>Zapytanie nie może być dłuższe niż {0} znaków</value>
+    </data>
+    <data name="filtering_params_null" xml:space="preserve">
+        <value>Parametry filtrowania nie mogą być puste</value>
+    </data>
 </root>

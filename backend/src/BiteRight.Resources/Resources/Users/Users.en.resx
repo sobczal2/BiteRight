@@ -24,29 +24,29 @@
             PublicKeyToken=b77a5c561934e089
         </value>
     </resheader>
-    <data name="username_in_use" xml:space="preserve">
-        <value>Username is already in use</value>
-    </data>
     <data name="email_in_use" xml:space="preserve">
         <value>Email is already in use</value>
-    </data>
-    <data name="username_empty" xml:space="preserve">
-        <value>Username can't be empty</value>
-    </data>
-    <data name="username_characters_not_valid" xml:space="preserve">
-        <value>Username contains illegal characters. Allowed characters: {0}</value>
-    </data>
-    <data name="username_length_not_valid" xml:space="preserve">
-        <value>Username must be between {0} and {1} characters long</value>
     </data>
     <data name="email_not_valid" xml:space="preserve">
         <value>Email is not valid</value>
     </data>
-    <data name="user_already_exists" xml:space="preserve">
-        <value>User already exists</value>
-    </data>
     <data name="email_not_verified" xml:space="preserve">
         <value>Email is not verified</value>
+    </data>
+    <data name="username_characters_not_valid" xml:space="preserve">
+        <value>Username contains illegal characters. Allowed characters: {0}</value>
+    </data>
+    <data name="username_empty" xml:space="preserve">
+        <value>Username can't be empty</value>
+    </data>
+    <data name="username_in_use" xml:space="preserve">
+        <value>Username is already in use</value>
+    </data>
+    <data name="username_length_not_valid" xml:space="preserve">
+        <value>Username must be between {0} and {1} characters long</value>
+    </data>
+    <data name="user_already_exists" xml:space="preserve">
+        <value>User already exists</value>
     </data>
     <data name="language_not_found" xml:space="preserve">
         <value>Language not found</value>
@@ -59,5 +59,8 @@
     </data>
     <data name="time_zone_id_not_found" xml:space="preserve">
         <value>Time zone specified was not found</value>
+    </data>
+    <data name="time_zone_empty" xml:space="preserve">
+        <value>Time zone id can't be empty</value>
     </data>
 </root>
