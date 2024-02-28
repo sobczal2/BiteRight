@@ -6,6 +6,7 @@ import com.sobczal2.biteright.data.api.abstractions.ProductsApi
 import com.sobczal2.biteright.data.api.requests.products.ChangeAmountRequest
 import com.sobczal2.biteright.data.api.requests.products.CreateRequest
 import com.sobczal2.biteright.data.api.requests.products.DisposeRequest
+import com.sobczal2.biteright.data.api.requests.products.EditRequest
 import com.sobczal2.biteright.data.api.requests.products.GetDetailsRequest
 import com.sobczal2.biteright.data.api.requests.products.ListCurrentRequest
 import com.sobczal2.biteright.data.api.requests.products.RestoreRequest
@@ -13,6 +14,7 @@ import com.sobczal2.biteright.data.api.requests.products.SearchRequest
 import com.sobczal2.biteright.data.api.responses.products.ChangeAmountResponse
 import com.sobczal2.biteright.data.api.responses.products.CreateResponse
 import com.sobczal2.biteright.data.api.responses.products.DisposeResponse
+import com.sobczal2.biteright.data.api.responses.products.EditResponse
 import com.sobczal2.biteright.data.api.responses.products.GetDetailsResponse
 import com.sobczal2.biteright.data.api.responses.products.ListCurrentResponse
 import com.sobczal2.biteright.data.api.responses.products.RestoreResponse
@@ -76,6 +78,13 @@ class ProductRepositoryImpl @Inject constructor(
     override suspend fun getDetails(getDetailsRequest: GetDetailsRequest): Either<GetDetailsResponse, RepositoryError> =
         safeApiCall {
             productApi.getDetails(getDetailsRequest.productId).let { response ->
+                response.processResponse { it }
+            }
+        }
+
+    override suspend fun edit(editRequest: EditRequest): Either<EditResponse, RepositoryError> =
+        safeApiCall {
+            productApi.edit(editRequest.productId, editRequest).let { response ->
                 response.processResponse { it }
             }
         }

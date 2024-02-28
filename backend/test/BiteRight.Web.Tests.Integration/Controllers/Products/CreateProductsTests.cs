@@ -5,6 +5,8 @@
 // # Created: 13-02-2024
 // # ==============================================================================
 
+#region
+
 using System;
 using System.Net;
 using System.Net.Http;
@@ -21,13 +23,15 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
+#endregion
+
 namespace BiteRight.Web.Tests.Integration.Controllers.Products;
 
 [Collection("DatabaseCollection")]
 public class CreateProductsTests : IAsyncDisposable
 {
-    private readonly HttpClient _client;
     private readonly BiteRightBackendFactory _biteRightBackendFactory;
+    private readonly HttpClient _client;
 
     public CreateProductsTests(
         BiteRightBackendFactory biteRightBackendFactory
@@ -37,9 +41,6 @@ public class CreateProductsTests : IAsyncDisposable
         _client = biteRightBackendFactory.CreateClient();
     }
 
-    private static string GetUrl() =>
-        "api/Products";
-    
     public async ValueTask DisposeAsync()
     {
         if (_client is IAsyncDisposable clientAsyncDisposable)
@@ -52,6 +53,11 @@ public class CreateProductsTests : IAsyncDisposable
         await ProductsCleanup.Execute(dbContext);
 
         GC.SuppressFinalize(this);
+    }
+
+    private static string GetUrl()
+    {
+        return "api/Products";
     }
 
     [Fact]

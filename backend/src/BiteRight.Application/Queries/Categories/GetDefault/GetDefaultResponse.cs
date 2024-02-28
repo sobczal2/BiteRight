@@ -5,7 +5,11 @@
 // # Created: 19-02-2024
 // # ==============================================================================
 
+#region
+
 using BiteRight.Application.Dtos.Categories;
+
+#endregion
 
 namespace BiteRight.Application.Queries.Categories.GetDefault;
 

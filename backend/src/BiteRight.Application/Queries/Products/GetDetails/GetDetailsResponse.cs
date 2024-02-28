@@ -5,18 +5,22 @@
 // # Created: 25-02-2024
 // # ==============================================================================
 
+#region
+
 using BiteRight.Application.Dtos.Products;
+
+#endregion
 
 namespace BiteRight.Application.Queries.Products.GetDetails;
 
 public class GetDetailsResponse
 {
-    public DetailedProductDto Product { get; set; }
-
     public GetDetailsResponse(
         DetailedProductDto product
     )
     {
         Product = product;
     }
+
+    public DetailedProductDto Product { get; set; }
 }

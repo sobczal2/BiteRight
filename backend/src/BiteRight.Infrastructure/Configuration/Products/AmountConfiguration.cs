@@ -8,7 +8,6 @@
 #region
 
 using BiteRight.Domain.Products;
-using BiteRight.Domain.Units;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -44,7 +43,7 @@ public class AmountConfiguration : IEntityTypeConfiguration<Amount>
         builder.HasOne(amount => amount.Unit)
             .WithMany()
             .HasForeignKey(amount => amount.UnitId);
-        
+
         builder.Property(amount => amount.ProductId)
             .HasConversion(
                 productId => productId.Value,

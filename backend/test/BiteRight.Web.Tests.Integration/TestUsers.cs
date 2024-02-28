@@ -5,10 +5,14 @@
 // # Created: 12-02-2024
 // # ==============================================================================
 
+#region
+
 using System;
 using BiteRight.Domain.Users;
 using BiteRight.Infrastructure.Configuration.Currencies;
 using BiteRight.Infrastructure.Database;
+
+#endregion
 
 namespace BiteRight.Web.Tests.Integration;
 

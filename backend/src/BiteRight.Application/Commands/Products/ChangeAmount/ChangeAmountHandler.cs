@@ -5,6 +5,8 @@
 // # Created: 17-02-2024
 // # ==============================================================================
 
+#region
+
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,8 +17,9 @@ using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Domain.Products.Exceptions;
 using BiteRight.Infrastructure.Database;
 using FluentValidation;
-using MediatR;
 using Microsoft.Extensions.Localization;
+
+#endregion
 
 namespace BiteRight.Application.Commands.Products.ChangeAmount;
 
@@ -51,10 +54,8 @@ public class ChangeAmountHandler : CommandHandlerBase<ChangeAmountRequest, Chang
                           _productsLocalizer[nameof(Resources.Resources.Products.Products.product_not_found)]);
 
         if (!Equals(product.CreatedById, user.Id))
-        {
             throw ValidationException(nameof(request.ProductId),
                 _productsLocalizer[nameof(Resources.Resources.Products.Products.product_not_found)]);
-        }
 
         product.Amount.ChangeCurrent(request.Amount);
 

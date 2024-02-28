@@ -11,4 +11,5 @@ import androidx.compose.ui.tooling.preview.Preview
 @Preview(apiLevel = 33, name = "Light")
 @Preview(apiLevel = 33, name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(apiLevel = 33, name = "Light", fontScale = 2f)
+@Preview(apiLevel = 33, name = "Polish", locale = "pl")
 annotation class BiteRightPreview

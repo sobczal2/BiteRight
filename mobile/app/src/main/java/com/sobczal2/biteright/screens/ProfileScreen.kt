@@ -3,16 +3,21 @@ package com.sobczal2.biteright.screens
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -23,6 +28,7 @@ import com.sobczal2.biteright.dto.users.UserDto
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.events.ProfileScreenEvent
 import com.sobczal2.biteright.state.ProfileScreenState
+import com.sobczal2.biteright.ui.components.common.DisplayPair
 import com.sobczal2.biteright.ui.components.common.HomeLayout
 import com.sobczal2.biteright.ui.components.common.HomeLayoutTab
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
@@ -31,7 +37,6 @@ import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.humanize
 import com.sobczal2.biteright.viewmodels.ProfileViewModel
 import java.time.Instant
-import java.time.LocalDateTime
 import java.util.UUID
 
 @Composable
@@ -58,6 +63,7 @@ fun ProfileScreenContent(
     sendEvent: (ProfileScreenEvent) -> Unit = {},
     handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
+    val user = state.user!!;
     HomeLayout(
         currentTab = HomeLayoutTab.PROFILE,
         handleNavigationEvent = handleNavigationEvent,
@@ -67,48 +73,79 @@ fun ProfileScreenContent(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(MaterialTheme.dimension.md),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = stringResource(id = R.string.profile),
-                style = MaterialTheme.typography.displayMedium,
-            )
-            TextField(value = state.user?.username ?: "", onValueChange = { }, label = {
-                Text(stringResource(id = R.string.username))
-            }, modifier = Modifier.fillMaxWidth(), enabled = false
-            )
-            TextField(value = state.user?.email ?: "", onValueChange = { }, label = {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md),
+            ) {
                 Text(
-                    stringResource(id = R.string.email)
+                    text = stringResource(id = R.string.profile),
+                    style = MaterialTheme.typography.displaySmall.copy(
+                        textAlign = TextAlign.Center
+                    ),
+                    modifier = Modifier.fillMaxWidth()
                 )
-            }, modifier = Modifier.fillMaxWidth(), enabled = false
-
-            )
-            TextField(
-                value = state.user?.profile?.currency?.code ?: "",
-                onValueChange = { },
-                label = {
-                    Text(
-                        stringResource(id = R.string.currency)
-                    )
-                },
+                DisplayPair(
+                    label = stringResource(id = R.string.username),
+                    value = user.username,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                DisplayPair(
+                    label = stringResource(id = R.string.email),
+                    value = user.email,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                DisplayPair(
+                    label = stringResource(id = R.string.preferred_currency),
+                    value = user.profile.currency.name,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                DisplayPair(
+                    label = stringResource(id = R.string.time_zone),
+                    value = user.profile.timeZoneId,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                DisplayPair(
+                    label = stringResource(id = R.string.joined_at),
+                    value = user.joinedAt.humanize(),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                enabled = false
-            )
-            TextField(value = state.user?.profile?.timeZoneId ?: "", onValueChange = { }, label = {
-                Text(
-                    stringResource(id = R.string.time_zone)
-                )
-            }, modifier = Modifier.fillMaxWidth(), enabled = false
-            )
-            Text(
-                text = "${stringResource(id = R.string.joined_at)}: ${state.user?.joinedAt?.humanize() ?: ""}",
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Button(onClick = {
-                sendEvent(ProfileScreenEvent.OnLogoutClick)
-            }) {
-                Text(stringResource(id = R.string.logout))
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
+            ) {
+                Button(
+                    shape = MaterialTheme.shapes.extraSmall,
+                    onClick = {
+                        sendEvent(ProfileScreenEvent.OnEditProfileClick)
+                    },
+                    modifier = Modifier
+                        .weight(0.5f),
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.edit),
+                    )
+                }
+
+                Button(
+                    colors = ButtonDefaults.buttonColors().copy(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError
+                    ),
+                    shape = MaterialTheme.shapes.extraSmall,
+                    onClick = {
+                        sendEvent(ProfileScreenEvent.OnLogoutClick)
+                    },
+                    modifier = Modifier
+                        .weight(0.5f),
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.logout),
+                    )
+                }
             }
         }
     }

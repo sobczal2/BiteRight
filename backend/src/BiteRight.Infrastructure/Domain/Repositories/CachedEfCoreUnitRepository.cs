@@ -102,10 +102,7 @@ public class CachedEfCoreUnitRepository : IUnitRepository
             .Include(u => u.Translations.Where(t => t.LanguageId == languageId))
             .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
 
-        if (unit is not null)
-        {
-            _cache.Set(cacheKey, unit, _cacheEntryOptions);
-        }
+        if (unit is not null) _cache.Set(cacheKey, unit, _cacheEntryOptions);
 
         return unit;
     }

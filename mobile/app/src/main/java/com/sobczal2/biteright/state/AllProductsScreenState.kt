@@ -13,7 +13,7 @@ data class AllProductsScreenState(
     val paginatedProductSource: PaginationSource<SimpleProductDto, SearchQuery> = PaginationSource(
         initialPaginationParams = PaginationParams.Default
     ),
-    override val globalLoading: Boolean = false,
+    override val globalLoading: Boolean = true,
     override val globalError: String? = null,
 ) : ScreenState {
 

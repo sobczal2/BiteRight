@@ -5,11 +5,15 @@
 // # Created: 16-02-2024
 // # ==============================================================================
 
+#region
+
 using System;
 using System.Collections.Generic;
 using BiteRight.Application.Dtos.Common;
 using BiteRight.Application.Dtos.Products;
 using MediatR;
+
+#endregion
 
 namespace BiteRight.Application.Queries.Products.Search;
 
@@ -22,6 +26,7 @@ public class SearchRequest : IRequest<SearchResponse>
         SortingStrategy = ProductSortingStrategy.Default;
         PaginationParams = PaginationParams.Default;
     }
+
     public string Query { get; set; }
     public FilteringParams FilteringParams { get; set; }
     public ProductSortingStrategy SortingStrategy { get; set; }
@@ -38,6 +43,6 @@ public class FilteringParams
     }
 
     public List<Guid> CategoryIds { get; init; }
-    
+
     public static FilteringParams Default => new(new List<Guid>());
 }

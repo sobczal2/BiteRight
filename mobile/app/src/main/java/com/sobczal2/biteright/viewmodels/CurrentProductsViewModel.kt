@@ -11,7 +11,6 @@ import com.sobczal2.biteright.events.CurrentProductsScreenEvent
 import com.sobczal2.biteright.repositories.abstractions.ProductRepository
 import com.sobczal2.biteright.state.CurrentProductsScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,13 +37,7 @@ class CurrentProductsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val jobs = mutableListOf<Job>()
-
-            jobs.add(launch { events.collect { event -> handleEvent(event) } })
-            jobs.add(launch { fetchCurrentProducts() })
-
-            jobs.forEach { it.join() }
-            _state.update { it.copy(globalLoading = false) }
+            launch { events.collect { event -> handleEvent(event) } }
         }
     }
 
@@ -86,40 +79,42 @@ class CurrentProductsViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchCurrentProducts() {
-        _state.update {
-            it.copy(
-                globalLoading = true
-            )
-        }
-
-        val productsResult = productRepository.listCurrent(
-            ListCurrentRequest(
-                sortingStrategy = ProductSortingStrategy.ExpirationDateAsc
-            )
-        )
-
-        productsResult.fold(
-            { response ->
-                _state.update {
-                    it.copy(
-                        currentProducts = response.products
-                    )
-                }
-            },
-            { repositoryError ->
-                _state.update {
-                    it.copy(
-                        globalError = repositoryError.message
-                    )
-                }
+    fun fetchCurrentProducts() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    globalLoading = true
+                )
             }
-        )
 
-        _state.update {
-            it.copy(
-                globalLoading = false
+            val productsResult = productRepository.listCurrent(
+                ListCurrentRequest(
+                    sortingStrategy = ProductSortingStrategy.ExpirationDateAsc
+                )
             )
+
+            productsResult.fold(
+                { response ->
+                    _state.update {
+                        it.copy(
+                            currentProducts = response.products
+                        )
+                    }
+                },
+                { repositoryError ->
+                    _state.update {
+                        it.copy(
+                            globalError = repositoryError.message
+                        )
+                    }
+                }
+            )
+
+            _state.update {
+                it.copy(
+                    globalLoading = false
+                )
+            }
         }
     }
 

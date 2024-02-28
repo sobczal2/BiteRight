@@ -7,16 +7,12 @@
 
 #region
 
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Application.Common;
-using BiteRight.Application.Common.Exceptions;
 using BiteRight.Application.Dtos.Products;
 using BiteRight.Domain.Abstracts.Common;
-using BiteRight.Domain.Abstracts.Repositories;
-using BiteRight.Domain.Products;
 using BiteRight.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 

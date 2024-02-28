@@ -5,7 +5,11 @@
 // # Created: 25-02-2024
 // # ==============================================================================
 
+#region
+
 using BiteRight.Domain.Common.Exceptions;
+
+#endregion
 
 namespace BiteRight.Domain.Products.Exceptions;
 

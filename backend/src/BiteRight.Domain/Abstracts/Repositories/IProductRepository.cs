@@ -17,10 +17,17 @@ namespace BiteRight.Domain.Abstracts.Repositories;
 
 public interface IProductRepository
 {
-    void Add(Product product);
+    void Add(
+        Product product
+    );
 
     Task<Product?> FindById(
-        ProductId id,
+        ProductId productId,
         CancellationToken cancellationToken = default
+    );
+
+    void Delete(
+        Product product,
+        CancellationToken cancellationToken
     );
 }

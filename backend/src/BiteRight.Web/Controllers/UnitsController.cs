@@ -9,7 +9,6 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using BiteRight.Application.Dtos.Common;
 using BiteRight.Application.Queries.Units.Search;
 using BiteRight.Web.Authorization;
 using MediatR;
@@ -22,7 +21,10 @@ namespace BiteRight.Web.Controllers;
 
 public class UnitsController : WebController
 {
-    public UnitsController(IMediator mediator) : base(mediator)
+    public UnitsController(
+        IMediator mediator
+    )
+        : base(mediator)
     {
     }
 

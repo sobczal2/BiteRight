@@ -5,6 +5,8 @@
 // # Created: 13-02-2024
 // # ==============================================================================
 
+#region
+
 using System;
 using System.Linq;
 using System.Net;
@@ -19,13 +21,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
+#endregion
+
 namespace BiteRight.Web.Tests.Integration.Controllers.Users;
 
 [Collection("DatabaseCollection")]
 public class OnboardUsersTests : IAsyncDisposable
 {
-    private readonly HttpClient _client;
     private readonly BiteRightBackendFactory _biteRightBackendFactory;
+    private readonly HttpClient _client;
 
     public OnboardUsersTests(
         BiteRightBackendFactory biteRightBackendFactory
@@ -35,9 +39,6 @@ public class OnboardUsersTests : IAsyncDisposable
         _client = biteRightBackendFactory.CreateClient();
     }
 
-    private static string GetUrl() =>
-        "api/Users/onboard";
-
     public async ValueTask DisposeAsync()
     {
         if (_client is IAsyncDisposable clientAsyncDisposable)
@@ -46,6 +47,11 @@ public class OnboardUsersTests : IAsyncDisposable
             _client.Dispose();
 
         GC.SuppressFinalize(this);
+    }
+
+    private static string GetUrl()
+    {
+        return "api/Users/onboard";
     }
 
     [Fact]

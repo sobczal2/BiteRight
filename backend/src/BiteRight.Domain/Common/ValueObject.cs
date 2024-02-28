@@ -18,7 +18,9 @@ public abstract class ValueObject
 {
     protected abstract IEnumerable<object> GetEqualityComponents();
 
-    public override bool Equals(object? obj)
+    public override bool Equals(
+        object? obj
+    )
     {
         var valueObject = obj as ValueObject;
 
@@ -34,7 +36,10 @@ public abstract class ValueObject
     public override int GetHashCode()
     {
         return GetEqualityComponents()
-            .Aggregate(1, (current, obj) =>
+            .Aggregate(1, (
+                current,
+                obj
+            ) =>
             {
                 unchecked
                 {
@@ -43,7 +48,10 @@ public abstract class ValueObject
             });
     }
 
-    public static bool operator ==(ValueObject a, ValueObject b)
+    public static bool operator ==(
+        ValueObject a,
+        ValueObject b
+    )
     {
         if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
             return true;
@@ -54,7 +62,10 @@ public abstract class ValueObject
         return a.Equals(b);
     }
 
-    public static bool operator !=(ValueObject a, ValueObject b)
+    public static bool operator !=(
+        ValueObject a,
+        ValueObject b
+    )
     {
         return !(a == b);
     }

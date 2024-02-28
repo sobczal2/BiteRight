@@ -16,13 +16,6 @@ namespace BiteRight.Application.Dtos.Users;
 
 public class UserDto
 {
-    public Guid Id { get; set; }
-    public string IdentityId { get; set; }
-    public string Username { get; set; }
-    public string Email { get; set; }
-    public DateTime JoinedAt { get; set; }
-    public ProfileDto Profile { get; set; }
-
     public UserDto(
         Guid id,
         string identityId,
@@ -39,6 +32,14 @@ public class UserDto
         JoinedAt = joinedAt;
         Profile = profile;
     }
+
+    public Guid Id { get; set; }
+    public string IdentityId { get; set; }
+    public string Username { get; set; }
+    public string Email { get; set; }
+    public DateTime JoinedAt { get; set; }
+    public ProfileDto Profile { get; set; }
+
     public static UserDto FromDomain(
         User user
     )

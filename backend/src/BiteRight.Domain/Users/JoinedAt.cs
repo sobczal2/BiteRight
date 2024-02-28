@@ -63,12 +63,16 @@ public class JoinedAt : ValueObject
         if (value.Kind != DateTimeKind.Utc) throw new AddedDateTimeInvalidKindException();
     }
 
-    public static implicit operator DateTime(JoinedAt joinedAt)
+    public static implicit operator DateTime(
+        JoinedAt joinedAt
+    )
     {
         return joinedAt.Value;
     }
 
-    public static implicit operator JoinedAt(DateTime value)
+    public static implicit operator JoinedAt(
+        DateTime value
+    )
     {
         return Create(value);
     }

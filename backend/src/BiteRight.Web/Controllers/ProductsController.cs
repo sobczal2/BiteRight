@@ -11,6 +11,7 @@ using System;
 using System.Threading.Tasks;
 using BiteRight.Application.Commands.Products.ChangeAmount;
 using BiteRight.Application.Commands.Products.Create;
+using BiteRight.Application.Commands.Products.Delete;
 using BiteRight.Application.Commands.Products.Dispose;
 using BiteRight.Application.Commands.Products.Edit;
 using BiteRight.Application.Commands.Products.Restore;
@@ -42,19 +43,18 @@ public class ProductsController : WebController
     /// <param name="request"></param>
     /// <returns>New product id.</returns>
     /// <remarks>
-    /// Sample request:
-    /// 
+    ///     Sample request:
     ///     POST /Products
     ///     {
-    ///        "Name": "Example Product",
-    ///        "Description": "This is an example product description.",
-    ///        "Price": 19.99,
-    ///        "CurrencyId": "3B56A6DE-3B41-4B10-934F-469CA12F4FE3",
-    ///        "ExpirationDate": "2024-12-31",
-    ///        "ExpirationDateKind": 2,
-    ///        "CategoryId": "E8C78317-70AC-4051-805E-ECE2BB37656F",
-    ///        "maximumAmountValue": 100,
-    ///        "amountUnitId": "B6D4D4DD-C035-4047-B8EE-48937CB1F368"
+    ///     "Name": "Example Product",
+    ///     "Description": "This is an example product description.",
+    ///     "Price": 19.99,
+    ///     "CurrencyId": "3B56A6DE-3B41-4B10-934F-469CA12F4FE3",
+    ///     "ExpirationDate": "2024-12-31",
+    ///     "ExpirationDateKind": 2,
+    ///     "CategoryId": "E8C78317-70AC-4051-805E-ECE2BB37656F",
+    ///     "maximumAmountValue": 100,
+    ///     "amountUnitId": "B6D4D4DD-C035-4047-B8EE-48937CB1F368"
     ///     }
     /// </remarks>
     [HttpPost]
@@ -159,6 +159,19 @@ public class ProductsController : WebController
     )
     {
         request.ProductId = productId;
+        var response = await Mediator.Send(request);
+        return Ok(response);
+    }
+    
+    [HttpDelete("{productId:guid}")]
+    [AuthorizeUserExists]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Delete(
+        [FromRoute] Guid productId
+    )
+    {
+        var request = new DeleteRequest(productId);
         var response = await Mediator.Send(request);
         return Ok(response);
     }

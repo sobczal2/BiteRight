@@ -5,6 +5,8 @@
 // # Created: 13-02-2024
 // # ==============================================================================
 
+#region
+
 using System;
 using System.Net;
 using System.Net.Http;
@@ -12,6 +14,8 @@ using System.Threading.Tasks;
 using BiteRight.Web.Tests.Integration.TestHelpers;
 using FluentAssertions;
 using Xunit;
+
+#endregion
 
 namespace BiteRight.Web.Tests.Integration.Controllers.Languages;
 
@@ -27,17 +31,19 @@ public class ListLanguagesTests : IAsyncDisposable
         _client = biteRightBackendFactory.CreateClient();
     }
 
-    private static string GetUrl() =>
-        "api/Languages";
-    
     public async ValueTask DisposeAsync()
     {
         if (_client is IAsyncDisposable clientAsyncDisposable)
             await clientAsyncDisposable.DisposeAsync();
         else
             _client.Dispose();
-        
+
         GC.SuppressFinalize(this);
+    }
+
+    private static string GetUrl()
+    {
+        return "api/Languages";
     }
 
     [Fact]

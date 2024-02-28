@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Restore
@@ -79,6 +80,7 @@ fun ExpirationText(expirationDateKindDto: ExpirationDateKindDto, expirationDate:
         )
         ExpirationDateKindDto.Infinite -> Text(
             text = stringResource(id = R.string.expiration_infinite),
+
         )
         ExpirationDateKindDto.BestBefore -> Text(
             text = expirationDate!!.toExpirationString(),

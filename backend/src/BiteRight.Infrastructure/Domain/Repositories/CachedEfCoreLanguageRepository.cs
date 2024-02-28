@@ -7,7 +7,6 @@
 
 #region
 
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Domain.Abstracts.Repositories;
@@ -53,10 +52,7 @@ public class CachedEfCoreLanguageRepository : ILanguageRepository
         var language = await _appDbContext.Languages
             .FirstOrDefaultAsync(lang => lang.Code == code, cancellationToken);
 
-        if (language is not null)
-        {
-            _cache.Set(cacheKey, language, _cacheEntryOptions);
-        }
+        if (language is not null) _cache.Set(cacheKey, language, _cacheEntryOptions);
 
         return language;
     }
@@ -74,14 +70,10 @@ public class CachedEfCoreLanguageRepository : ILanguageRepository
         var language = await _appDbContext.Languages
             .FirstOrDefaultAsync(lang => lang.Id == id, cancellationToken);
 
-        if (language != null)
-        {
-            _cache.Set(cacheKey, language, _cacheEntryOptions);
-        }
+        if (language != null) _cache.Set(cacheKey, language, _cacheEntryOptions);
 
         return language;
     }
-
 
 
     public Task<bool> ExistsById(

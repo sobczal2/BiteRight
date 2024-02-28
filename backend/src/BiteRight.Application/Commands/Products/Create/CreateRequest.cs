@@ -17,16 +17,6 @@ namespace BiteRight.Application.Commands.Products.Create;
 
 public class CreateRequest : IRequest<CreateResponse>
 {
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public double? PriceValue { get; set; }
-    public Guid? PriceCurrencyId { get; set; }
-    public ExpirationDateKindDto ExpirationDateKind { get; set; }
-    public DateOnly? ExpirationDate { get; set; }
-    public Guid CategoryId { get; set; }
-    public double AmountMaxValue { get; set; }
-    public Guid AmountUnitId { get; set; }
-
     public CreateRequest(
         string name,
         string description,
@@ -36,7 +26,8 @@ public class CreateRequest : IRequest<CreateResponse>
         DateOnly? expirationDate,
         Guid categoryId,
         double amountMaxValue,
-        Guid amountUnitId)
+        Guid amountUnitId
+    )
     {
         Name = name;
         Description = description;
@@ -48,4 +39,14 @@ public class CreateRequest : IRequest<CreateResponse>
         AmountMaxValue = amountMaxValue;
         AmountUnitId = amountUnitId;
     }
+
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public double? PriceValue { get; set; }
+    public Guid? PriceCurrencyId { get; set; }
+    public ExpirationDateKindDto ExpirationDateKind { get; set; }
+    public DateOnly? ExpirationDate { get; set; }
+    public Guid CategoryId { get; set; }
+    public double AmountMaxValue { get; set; }
+    public Guid AmountUnitId { get; set; }
 }

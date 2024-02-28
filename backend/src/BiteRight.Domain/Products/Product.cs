@@ -69,7 +69,7 @@ public class Product : AggregateRoot<ProductId>
     public CategoryId CategoryId { get; private set; }
     public virtual Category Category { get; private set; }
     public AddedDateTime AddedDateTime { get; private set; }
-    public virtual Amount Amount { get; private set; }
+    public virtual Amount Amount { get; }
     public UserId CreatedById { get; private set; }
     public virtual User CreatedBy { get; private set; }
     public DisposedState DisposedState { get; private set; }
@@ -181,7 +181,7 @@ public class Product : AggregateRoot<ProductId>
             amountCurrentValue,
             amountMaxValue
         );
-        
+
         Amount.UpdateUnit(
             amountUnitId
         );

@@ -5,19 +5,23 @@
 // # Created: 13-02-2024
 // # ==============================================================================
 
+#region
+
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BiteRight.Web.Tests.Integration.TestHelpers;
 using Xunit;
 
+#endregion
+
 namespace BiteRight.Web.Tests.Integration.Controllers.Users;
 
 [Collection("DatabaseCollection")]
 public class MeUsersTests : IAsyncDisposable
 {
-    private readonly HttpClient _client;
     private readonly BiteRightBackendFactory _biteRightBackendFactory;
+    private readonly HttpClient _client;
 
     public MeUsersTests(
         BiteRightBackendFactory biteRightBackendFactory
@@ -26,10 +30,7 @@ public class MeUsersTests : IAsyncDisposable
         _biteRightBackendFactory = biteRightBackendFactory;
         _client = biteRightBackendFactory.CreateClient();
     }
-    
-    private static string GetUrl() =>
-        "api/Users/me";
-    
+
     public async ValueTask DisposeAsync()
     {
         if (_client is IAsyncDisposable clientAsyncDisposable)
@@ -39,7 +40,12 @@ public class MeUsersTests : IAsyncDisposable
 
         GC.SuppressFinalize(this);
     }
-    
+
+    private static string GetUrl()
+    {
+        return "api/Users/me";
+    }
+
     [Fact]
     public async Task Me_ReturnsOK_WhenRequestIsValid()
     {

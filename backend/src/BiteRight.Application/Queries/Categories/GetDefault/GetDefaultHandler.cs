@@ -5,12 +5,16 @@
 // # Created: 19-02-2024
 // # ==============================================================================
 
+#region
+
 using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Application.Common;
 using BiteRight.Application.Dtos.Categories;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
+
+#endregion
 
 namespace BiteRight.Application.Queries.Categories.GetDefault;
 

@@ -24,7 +24,7 @@ class ProfileViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     private val _events = Channel<ProfileScreenEvent>()
-    private val events = _events.receiveAsFlow()
+    val events = _events.receiveAsFlow()
 
     init {
         viewModelScope.launch {
@@ -42,6 +42,7 @@ class ProfileViewModel @Inject constructor(
     private fun handleEvent(event: ProfileScreenEvent) {
         when (event) {
             is ProfileScreenEvent.OnLogoutClick -> logout()
+            is ProfileScreenEvent.OnEditProfileClick -> Unit
         }
     }
 

@@ -54,10 +54,7 @@ public class CachedEfCoreCurrencyRepository : ICurrencyRepository
         var currency = await _appDbContext.Currencies
             .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
 
-        if (currency is not null)
-        {
-            _idCache.Set(cacheKey, currency, _cacheEntryOptions);
-        }
+        if (currency is not null) _idCache.Set(cacheKey, currency, _cacheEntryOptions);
 
         return currency;
     }
@@ -91,15 +88,15 @@ public class CachedEfCoreCurrencyRepository : ICurrencyRepository
                             || ((string)currency.Symbol).ToLower().Contains(query.ToLower())
 #pragma warning restore CA1862
             );
-        
+
         var totalCount = await baseQuery.CountAsync(cancellationToken);
-        
+
         var currencies = await baseQuery
             .OrderBy(currency => currency.Name)
             .Skip(pageNumber * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
-        
+
         return (currencies, totalCount);
     }
 

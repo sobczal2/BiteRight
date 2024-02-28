@@ -69,7 +69,9 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
         new TranslationId(Guid.Parse("368FB52E-06D7-4B33-ACEB-C7EDFDF865AD"))
     );
 
-    public void Configure(EntityTypeBuilder<Translation> builder)
+    public void Configure(
+        EntityTypeBuilder<Translation> builder
+    )
     {
         builder.ToTable("unit_translations", "unit");
         builder.HasKey(translation => translation.Id);

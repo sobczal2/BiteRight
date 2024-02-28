@@ -22,8 +22,8 @@ namespace BiteRight.Web.Filters;
 
 public class ApplicationExceptionFilter : IExceptionFilter
 {
-    private readonly IHostEnvironment _environment;
     private readonly IStringLocalizer<Resources.Resources.Common.Common> _commonLocalizer;
+    private readonly IHostEnvironment _environment;
     private readonly ILogger<ApplicationExceptionFilter> _logger;
 
     public ApplicationExceptionFilter(
@@ -84,7 +84,8 @@ public class ApplicationExceptionFilter : IExceptionFilter
     )
     {
         _logger.LogError(exception, "Internal error");
-        var response = ErrorResponse.FromMessage(_commonLocalizer[nameof(Resources.Resources.Common.Common.internal_error)]);
+        var response =
+            ErrorResponse.FromMessage(_commonLocalizer[nameof(Resources.Resources.Common.Common.internal_error)]);
         context.Result = new ObjectResult(response)
         {
             StatusCode = 500
@@ -99,7 +100,8 @@ public class ApplicationExceptionFilter : IExceptionFilter
         if (_environment.IsDevelopment()) return;
 
         _logger.LogError(context.Exception, "Unknown exception");
-        var response = ErrorResponse.FromMessage(_commonLocalizer[nameof(Resources.Resources.Common.Common.unknown_error)]);
+        var response =
+            ErrorResponse.FromMessage(_commonLocalizer[nameof(Resources.Resources.Common.Common.unknown_error)]);
         context.Result = new ObjectResult(response)
         {
             StatusCode = 500

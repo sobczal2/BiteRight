@@ -5,9 +5,13 @@
 // # Created: 25-02-2024
 // # ==============================================================================
 
+#region
+
 using BiteRight.Domain.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+#endregion
 
 namespace BiteRight.Infrastructure.Configuration.Products;
 

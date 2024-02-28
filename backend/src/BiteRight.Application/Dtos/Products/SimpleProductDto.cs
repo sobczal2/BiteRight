@@ -17,17 +17,6 @@ namespace BiteRight.Application.Dtos.Products;
 
 public class SimpleProductDto
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public ExpirationDateKindDto ExpirationDateKind { get; set; }
-    public DateOnly? ExpirationDate { get; set; }
-    public Guid CategoryId { get; set; }
-    public DateTime AddedDateTime { get; set; }
-    public double CurrentAmount { get; set; }
-    public double MaxAmount { get; set; }
-    public string UnitAbbreviation { get; set; }
-    public bool Disposed { get; set; }
-
     public SimpleProductDto(
         Guid id,
         string name,
@@ -52,6 +41,17 @@ public class SimpleProductDto
         UnitAbbreviation = unitAbbreviation;
         Disposed = disposed;
     }
+
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public ExpirationDateKindDto ExpirationDateKind { get; set; }
+    public DateOnly? ExpirationDate { get; set; }
+    public Guid CategoryId { get; set; }
+    public DateTime AddedDateTime { get; set; }
+    public double CurrentAmount { get; set; }
+    public double MaxAmount { get; set; }
+    public string UnitAbbreviation { get; set; }
+    public bool Disposed { get; set; }
 
     public static SimpleProductDto FromDomain(
         Product product,

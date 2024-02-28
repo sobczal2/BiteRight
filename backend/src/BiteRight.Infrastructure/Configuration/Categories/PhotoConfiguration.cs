@@ -45,17 +45,17 @@ public class PhotoConfiguration : IEntityTypeConfiguration<Photo>
         new PhotoId(Guid.Parse("2BFD1C0C-8882-44FA-B73D-8588AD8EC50B")),
         "fish.webp"
     );
-    
+
     public static Photo BeveragePhoto { get; } = Photo.Create(
         new PhotoId(Guid.Parse("A186163E-0551-4968-8706-543C470DB6DB")),
         "beverage.webp"
     );
-    
+
     public static Photo SnackPhoto { get; } = Photo.Create(
         new PhotoId(Guid.Parse("4CECA44A-B13B-456A-9315-46B506076AF4")),
         "snack.webp"
     );
-    
+
     public static Photo WheatPhoto { get; } = Photo.Create(
         new PhotoId(Guid.Parse("A2F14BA8-B9BE-40CD-9BE0-B3C587BE2FC3")),
         "wheat.webp"

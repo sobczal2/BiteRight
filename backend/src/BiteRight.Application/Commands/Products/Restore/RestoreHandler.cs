@@ -5,14 +5,17 @@
 // # Created: 15-02-2024
 // # ==============================================================================
 
+#region
+
 using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Application.Common;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Domain.Abstracts.Repositories;
 using BiteRight.Infrastructure.Database;
-using MediatR;
 using Microsoft.Extensions.Localization;
+
+#endregion
 
 namespace BiteRight.Application.Commands.Products.Restore;
 

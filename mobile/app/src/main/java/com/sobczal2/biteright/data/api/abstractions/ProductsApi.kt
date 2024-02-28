@@ -2,10 +2,12 @@ package com.sobczal2.biteright.data.api.abstractions
 
 import com.sobczal2.biteright.data.api.requests.products.ChangeAmountRequest
 import com.sobczal2.biteright.data.api.requests.products.CreateRequest
+import com.sobczal2.biteright.data.api.requests.products.EditRequest
 import com.sobczal2.biteright.data.api.requests.products.SearchRequest
 import com.sobczal2.biteright.data.api.responses.products.ChangeAmountResponse
 import com.sobczal2.biteright.data.api.responses.products.CreateResponse
 import com.sobczal2.biteright.data.api.responses.products.DisposeResponse
+import com.sobczal2.biteright.data.api.responses.products.EditResponse
 import com.sobczal2.biteright.data.api.responses.products.GetDetailsResponse
 import com.sobczal2.biteright.data.api.responses.products.ListCurrentResponse
 import com.sobczal2.biteright.data.api.responses.products.RestoreResponse
@@ -41,4 +43,7 @@ interface ProductsApi {
 
     @GET("products/{productId}/details")
     suspend fun getDetails(@Path("productId") productId: UUID): Response<GetDetailsResponse>
+
+    @PUT("products/{productId}")
+    suspend fun edit(@Path("productId") productId: UUID, @Body request: EditRequest): Response<EditResponse>
 }

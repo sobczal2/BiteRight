@@ -63,12 +63,16 @@ public class AddedDateTime : ValueObject
         if (value.Kind != DateTimeKind.Utc) throw new AddedDateTimeInvalidKindException();
     }
 
-    public static implicit operator DateTime(AddedDateTime addedDateTime)
+    public static implicit operator DateTime(
+        AddedDateTime addedDateTime
+    )
     {
         return addedDateTime.Value;
     }
 
-    public static implicit operator AddedDateTime(DateTime value)
+    public static implicit operator AddedDateTime(
+        DateTime value
+    )
     {
         return Create(value);
     }

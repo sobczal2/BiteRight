@@ -5,8 +5,12 @@
 // # Created: 15-02-2024
 // # ==============================================================================
 
+#region
+
 using System;
 using MediatR;
+
+#endregion
 
 namespace BiteRight.Application.Commands.Products.Restore;
 

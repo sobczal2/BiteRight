@@ -16,10 +16,6 @@ namespace BiteRight.Application.Dtos.Languages;
 
 public class LanguageDto
 {
-    public Guid Id { get; set; }
-    public string EnglishName { get; set; }
-    public string Code { get; set; }
-
     public LanguageDto(
         Guid id,
         string englishName,
@@ -30,6 +26,10 @@ public class LanguageDto
         EnglishName = englishName;
         Code = code;
     }
+
+    public Guid Id { get; set; }
+    public string EnglishName { get; set; }
+    public string Code { get; set; }
 
     public static LanguageDto FromDomain(
         Language language

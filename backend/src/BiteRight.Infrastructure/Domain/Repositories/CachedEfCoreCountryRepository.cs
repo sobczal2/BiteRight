@@ -52,10 +52,7 @@ public class CachedEfCoreCountryRepository : ICountryRepository
         var country = await _appDbContext.Countries
             .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
 
-        if (country is not null)
-        {
-            _cache.Set(cacheKey, country, _cacheEntryOptions);
-        }
+        if (country is not null) _cache.Set(cacheKey, country, _cacheEntryOptions);
 
         return country;
     }

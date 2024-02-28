@@ -36,12 +36,23 @@ public class EfCoreProductRepository : IProductRepository
         _appDbContext.Products.Add(product);
     }
 
-    public async Task<Product?> FindById(ProductId id, CancellationToken cancellationToken = default)
+    public async Task<Product?> FindById(
+        ProductId productId,
+        CancellationToken cancellationToken = default
+    )
     {
         return await _appDbContext
             .Products
             .Include(product => product.Amount)
             .Include(product => product.Price)
-            .FirstOrDefaultAsync(product => product.Id == id, cancellationToken);
+            .FirstOrDefaultAsync(product => product.Id == productId, cancellationToken);
+    }
+
+    public void Delete(
+        Product product,
+        CancellationToken cancellationToken
+    )
+    {
+        _appDbContext.Products.Remove(product);
     }
 }

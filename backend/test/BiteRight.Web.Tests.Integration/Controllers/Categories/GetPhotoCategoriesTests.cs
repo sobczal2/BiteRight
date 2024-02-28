@@ -5,6 +5,8 @@
 // # Created: 12-02-2024
 // # ==============================================================================
 
+#region
+
 using System;
 using System.Net;
 using System.Net.Http;
@@ -12,6 +14,8 @@ using System.Threading.Tasks;
 using BiteRight.Infrastructure.Configuration.Categories;
 using FluentAssertions;
 using Xunit;
+
+#endregion
 
 namespace BiteRight.Web.Tests.Integration.Controllers.Categories;
 
@@ -27,19 +31,21 @@ public class GetPhotoCategoriesTests : IAsyncDisposable
         _client = biteRightBackendFactory.CreateClient();
     }
 
-    private static string GetUrl(
-        Guid categoryId
-    ) =>
-        $"api/Categories/{categoryId}/photo";
-    
     public async ValueTask DisposeAsync()
     {
         if (_client is IAsyncDisposable clientAsyncDisposable)
             await clientAsyncDisposable.DisposeAsync();
         else
             _client.Dispose();
-        
+
         GC.SuppressFinalize(this);
+    }
+
+    private static string GetUrl(
+        Guid categoryId
+    )
+    {
+        return $"api/Categories/{categoryId}/photo";
     }
 
     [Fact]

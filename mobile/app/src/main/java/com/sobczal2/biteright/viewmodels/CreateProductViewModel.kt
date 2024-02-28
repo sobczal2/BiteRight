@@ -20,7 +20,7 @@ import com.sobczal2.biteright.repositories.abstractions.UserRepository
 import com.sobczal2.biteright.repositories.common.ApiRepositoryError
 import com.sobczal2.biteright.state.CreateProductScreenState
 import com.sobczal2.biteright.ui.components.products.ExpirationDate
-import com.sobczal2.biteright.ui.components.products.FormAmountWithUnit
+import com.sobczal2.biteright.ui.components.products.FormMaxAmountWithUnit
 import com.sobczal2.biteright.ui.components.products.FormPriceWithCurrency
 import com.sobczal2.biteright.util.CommonRegexes
 import com.sobczal2.biteright.util.StringProvider
@@ -60,7 +60,6 @@ class CreateProductViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             launch { _events.receiveAsFlow().collect { handleEvent(it) } }
-            _state.update { it.copy(globalLoading = true) }
 
             val fetchInitialSearchDataJob = launch { fetchInitialSearchData() }
             val fetchDefaultCategoryJob = launch { fetchDefaultCategory() }
@@ -72,8 +71,8 @@ class CreateProductViewModel @Inject constructor(
 
             _state.update { currentState ->
                 currentState.copy(
-                    amountFormFieldState = currentState.amountFormFieldState.copy(
-                        value = FormAmountWithUnit.Empty.copy(
+                    maxAmountFieldState = currentState.maxAmountFieldState.copy(
+                        value = FormMaxAmountWithUnit.Empty.copy(
                             unit = currentState.startingUnits?.items?.firstOrNull() ?: UnitDto.Empty
                         )
                     )
@@ -159,10 +158,10 @@ class CreateProductViewModel @Inject constructor(
         }
     }
 
-    private fun onAmountChange(value: FormAmountWithUnit) {
+    private fun onAmountChange(value: FormMaxAmountWithUnit) {
         _state.update {
             it.copy(
-                amountFormFieldState = it.amountFormFieldState.copy(
+                maxAmountFieldState = it.maxAmountFieldState.copy(
                     value = value,
                     error = null,
                 )
@@ -387,8 +386,8 @@ class CreateProductViewModel @Inject constructor(
             expirationDateKind = state.value.expirationDateFieldState.value.expirationDateKind,
             expirationDate = state.value.expirationDateFieldState.value.localDate,
             categoryId = state.value.categoryFieldState.value.id,
-            amountMaxValue = state.value.amountFormFieldState.value.amount!!,
-            amountUnitId = state.value.amountFormFieldState.value.unit.id
+            amountMaxValue = state.value.maxAmountFieldState.value.maxAmount!!,
+            amountUnitId = state.value.maxAmountFieldState.value.unit.id
         )
 
         val createResult = productRepository.create(request)
@@ -474,7 +473,7 @@ class CreateProductViewModel @Inject constructor(
                             CreateRequest::amountMaxValue.name.lowercase() -> {
                                 _state.update {
                                     it.copy(
-                                        amountFormFieldState = it.amountFormFieldState.copy(
+                                        maxAmountFieldState = it.maxAmountFieldState.copy(
                                             error = value.firstOrNull()
                                         )
                                     )
@@ -484,9 +483,17 @@ class CreateProductViewModel @Inject constructor(
                             CreateRequest::amountUnitId.name.lowercase() -> {
                                 _state.update {
                                     it.copy(
-                                        amountFormFieldState = it.amountFormFieldState.copy(
+                                        maxAmountFieldState = it.maxAmountFieldState.copy(
                                             error = value.firstOrNull()
                                         )
+                                    )
+                                }
+                            }
+
+                            else -> {
+                                _state.update {
+                                    it.copy(
+                                        globalError = value.firstOrNull()
                                     )
                                 }
                             }
@@ -509,6 +516,7 @@ class CreateProductViewModel @Inject constructor(
         }
     }
 
+    // TODO: Move to a separate class
     private fun validate(): Boolean {
         var isValid = true
 
@@ -516,18 +524,18 @@ class CreateProductViewModel @Inject constructor(
         if (!validateDescriptionField()) isValid = false
         if (!validatePriceField()) isValid = false
         if (!validateCategoryField()) isValid = false
-        if (!validateAmountField()) isValid = false
+        if (!validateMaxAmountField()) isValid = false
         if (!validateExpirationDateField()) isValid = false
 
         return isValid
     }
 
-    private fun validateAmountField(): Boolean {
+    private fun validateMaxAmountField(): Boolean {
         var isValid = true
-        if (state.value.amountFormFieldState.value.amount == null) {
+        if (state.value.maxAmountFieldState.value.maxAmount == null) {
             _state.update {
                 it.copy(
-                    amountFormFieldState = it.amountFormFieldState.copy(
+                    maxAmountFieldState = it.maxAmountFieldState.copy(
                         error = stringProvider.getString(R.string.validation_amount_empty)
                     )
                 )
@@ -552,7 +560,7 @@ class CreateProductViewModel @Inject constructor(
                 it.copy(
                     priceFieldState = it.priceFieldState.copy(
                         error = stringProvider.getString(
-                            R.string.validation_price_not_valid,
+                            R.string.validation_price_value_not_valid,
                             minPrice,
                             maxPrice
                         )
