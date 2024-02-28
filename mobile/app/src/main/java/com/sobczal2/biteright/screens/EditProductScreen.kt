@@ -19,12 +19,30 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.dto.categories.CategoryDto
+import com.sobczal2.biteright.dto.common.PaginatedList
+import com.sobczal2.biteright.dto.common.PaginationParams
+import com.sobczal2.biteright.dto.common.emptyPaginatedList
+import com.sobczal2.biteright.dto.currencies.CurrencyDto
+import com.sobczal2.biteright.dto.products.DetailedProductDto
+import com.sobczal2.biteright.dto.products.ExpirationDateKindDto
+import com.sobczal2.biteright.dto.units.UnitDto
+import com.sobczal2.biteright.dto.units.UnitSystemDto
+import com.sobczal2.biteright.events.CreateProductScreenEvent
 import com.sobczal2.biteright.events.EditProductScreenEvent
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.state.EditProductScreenState
+import com.sobczal2.biteright.ui.components.categories.CategoryFormField
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
+import com.sobczal2.biteright.ui.components.common.forms.TextFormField
+import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
+import com.sobczal2.biteright.ui.components.products.ExpirationDateFormField
+import com.sobczal2.biteright.ui.components.products.PriceFormField
 import com.sobczal2.biteright.ui.theme.dimension
+import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.viewmodels.EditProductViewModel
+import java.time.Instant
+import java.time.LocalDate
 import java.util.UUID
 
 @Composable
@@ -43,6 +61,9 @@ fun EditProductScreen(
         EditProductScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,
+            searchCategories = viewModel::searchCategories,
+            searchCurrencies = viewModel::searchCurrencies,
+            searchUnits = viewModel::searchUnits,
             handleNavigationEvent = handleNavigationEvent,
         )
     }
@@ -52,9 +73,11 @@ fun EditProductScreen(
 fun EditProductScreenContent(
     state: EditProductScreenState = EditProductScreenState(),
     sendEvent: (EditProductScreenEvent) -> Unit = {},
+    searchCategories: suspend (String, PaginationParams) -> PaginatedList<CategoryDto> = { _, _ -> emptyPaginatedList() },
+    searchCurrencies: suspend (String, PaginationParams) -> PaginatedList<CurrencyDto> = { _, _ -> emptyPaginatedList() },
+    searchUnits: suspend (String, PaginationParams) -> PaginatedList<UnitDto> = { _, _ -> emptyPaginatedList() },
     handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
-    val product = state.product!!
     Scaffold { paddingValues ->
         Column(
             modifier = Modifier
@@ -75,7 +98,55 @@ fun EditProductScreenContent(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Text(text = product.name)
+                TextFormField(
+                    modifier = Modifier.fillMaxWidth(),
+                    state = state.nameFieldState,
+                    onChange = {
+                        sendEvent(EditProductScreenEvent.OnNameChange(it))
+                    },
+                    options = TextFormFieldOptions(
+                        label = { Text(text = stringResource(id = R.string.name)) },
+                    )
+                )
+
+                CategoryFormField(
+                    state = state.categoryFieldState,
+                    onChange = {
+                        sendEvent(EditProductScreenEvent.OnCategoryChange(it))
+                    },
+                    searchCategories = searchCategories,
+                    imageRequestBuilder = state.imageRequestBuilder
+                )
+
+                ExpirationDateFormField(
+                    modifier = Modifier,
+                    state = state.expirationDateFieldState,
+                    onChange = {
+                        sendEvent(EditProductScreenEvent.OnExpirationDateChange(it))
+                    },
+                )
+
+                PriceFormField(
+                    state = state.priceFieldState,
+                    onChange = {
+                        sendEvent(EditProductScreenEvent.OnPriceChange(it))
+                    },
+                    searchCurrencies = searchCurrencies
+                )
+
+                TextFormField(
+                    modifier = Modifier.fillMaxWidth(),
+                    state = state.descriptionFieldState,
+                    onChange = {
+                        sendEvent(EditProductScreenEvent.OnDescriptionChange(it))
+                    },
+                    options = TextFormFieldOptions(
+                        label = { Text(text = stringResource(id = R.string.description)) },
+                        singleLine = false,
+                        minLines = 3,
+                        maxLines = 5,
+                    )
+                )
             }
 
             Row(
@@ -105,4 +176,12 @@ fun EditProductScreenContent(
             }
         }
     }
+}
+
+@Composable
+@BiteRightPreview
+fun EditProductScreenPreview() {
+    EditProductScreenContent(
+        state = EditProductScreenState(),
+    )
 }

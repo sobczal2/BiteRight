@@ -12,7 +12,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,7 +27,6 @@ import com.sobczal2.biteright.ui.components.common.BiteRightLogo
 import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
 import com.sobczal2.biteright.ui.components.common.ErrorBox
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
-import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
@@ -93,8 +91,7 @@ fun StartScreenContent(
                 onClick = {
                     sendEvent(StartScreenEvent.OnNextClick {
                         handleNavigationEvent(NavigationEvent.NavigateToCurrentProducts)
-                    }
-                    )
+                    })
                 },
                 loading = state.formSubmitting,
                 content = {

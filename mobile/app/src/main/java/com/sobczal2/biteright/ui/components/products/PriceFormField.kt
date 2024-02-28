@@ -70,12 +70,11 @@ fun PriceFormField(
 
     val moneyTypingRegex = Regex("""^\d+(\.\d{0,2})?$""")
 
-    LaunchedEffect(priceTextFieldState) {
-        onChange(
-            state.value.copy(
-                price = priceTextFieldState.value.toDoubleOrNull()
+    LaunchedEffect(state.value) {
+        if (state.value.price != null && priceTextFieldState.value != "%.2f".format(state.value.price))
+            priceTextFieldState = priceTextFieldState.copy(
+                value = "%.2f".format(state.value.price)
             )
-        )
     }
 
 
@@ -131,8 +130,13 @@ fun PriceFormField(
                                                 value = "%.2f".format(price)
                                             )
                                         }
-
                                     }
+
+                                onChange(
+                                    state.value.copy(
+                                        price = priceTextFieldState.value.toDoubleOrNull()
+                                    )
+                                )
                             }
                         }
                 )

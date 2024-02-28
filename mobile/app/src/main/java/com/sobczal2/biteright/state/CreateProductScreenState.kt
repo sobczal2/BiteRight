@@ -25,6 +25,6 @@ data class CreateProductScreenState(
     val startingCategories: PaginatedList<CategoryDto>? = null,
     val startingCurrencies: PaginatedList<CurrencyDto>? = null,
     val startingUnits: PaginatedList<UnitDto>? = null,
-    override val globalLoading: Boolean = false,
+    override val globalLoading: Boolean = true,
     override val globalError: String? = null,
 ) : ScreenState

@@ -159,7 +159,7 @@ fun CreateProductScreenContent(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
             ) {
                 OutlinedButton(
-                    onClick = { handleNavigationEvent(NavigationEvent.NavigateToCurrentProducts) },
+                    onClick = { handleNavigationEvent(NavigationEvent.NavigateBack) },
                     modifier = Modifier.weight(0.5f),
                     shape = MaterialTheme.shapes.extraSmall,
                 ) {
@@ -172,7 +172,7 @@ fun CreateProductScreenContent(
                         sendEvent(
                             CreateProductScreenEvent.OnSubmitClick(
                                 onSuccess = {
-                                    handleNavigationEvent(NavigationEvent.NavigateToCurrentProducts)
+                                    handleNavigationEvent(NavigationEvent.NavigateBack)
                                 }
                             )
                         )

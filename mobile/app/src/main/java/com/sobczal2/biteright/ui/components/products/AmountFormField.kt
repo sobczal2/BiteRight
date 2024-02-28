@@ -70,14 +70,12 @@ fun AmountFormField(
 
     val amountTypingRegex = Regex("""^\d+(\.\d{0,2})?$""")
 
-    LaunchedEffect(amountTextFieldState) {
-        onChange(
-            state.value.copy(
-                amount = amountTextFieldState.value.toDoubleOrNull(),
+    LaunchedEffect(state.value) {
+        if (state.value.amount != null && amountTextFieldState.value != "%.2f".format(state.value.amount))
+            amountTextFieldState = amountTextFieldState.copy(
+                value = "%.2f".format(state.value.amount)
             )
-        )
     }
-
 
     Column(
         modifier = modifier
@@ -132,6 +130,11 @@ fun AmountFormField(
                                             )
                                         }
                                     }
+                                onChange(
+                                    state.value.copy(
+                                        amount = amountTextFieldState.value.toDoubleOrNull()
+                                    )
+                                )
                             }
                         }
                 )

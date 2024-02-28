@@ -13,7 +13,7 @@
         liczby lub podkreślniki
     </string>
     <string name="today">Dzisiaj</string>
-    <string name="expired_for">Przeterminowane od</string>
-    <string name="expires_in">Przeterminuje się za</string>
+    <string name="expired_for">Przeterminowane od %s</string>
+    <string name="expires_in">Przeterminuje się za %s</string>
     <string name="add_product">Dodaj produkt</string>
 </resources>

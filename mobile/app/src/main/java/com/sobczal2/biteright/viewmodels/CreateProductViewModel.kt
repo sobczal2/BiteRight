@@ -60,7 +60,6 @@ class CreateProductViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             launch { _events.receiveAsFlow().collect { handleEvent(it) } }
-            _state.update { it.copy(globalLoading = true) }
 
             val fetchInitialSearchDataJob = launch { fetchInitialSearchData() }
             val fetchDefaultCategoryJob = launch { fetchDefaultCategory() }
