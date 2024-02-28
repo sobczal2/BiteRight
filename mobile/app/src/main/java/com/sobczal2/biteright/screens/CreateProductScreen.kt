@@ -13,9 +13,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -36,7 +34,7 @@ import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
-import com.sobczal2.biteright.ui.components.products.AmountFormField
+import com.sobczal2.biteright.ui.components.products.MaxAmountFormField
 import com.sobczal2.biteright.ui.components.products.ExpirationDateFormField
 import com.sobczal2.biteright.ui.components.products.PriceFormField
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
@@ -124,8 +122,8 @@ fun CreateProductScreenContent(
                     },
                 )
 
-                AmountFormField(
-                    state = state.amountFormFieldState,
+                MaxAmountFormField(
+                    state = state.maxAmountFieldState,
                     onChange = {
                         sendEvent(CreateProductScreenEvent.OnAmountChange(it))
                     },

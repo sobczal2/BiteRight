@@ -44,7 +44,7 @@
     </string>
     <string name="validation_price_empty_when_currency_provided">Price can\'t be empty when currency was provided
     </string>
-    <string name="validation_price_not_valid">Price must be between %1$f and %2$2f</string>
+    <string name="validation_price_value_not_valid">Price value must be between %1$f and %2$2f</string>
     <string name="validation_category_empty">Category can\'t be empty</string>
     <string name="validation_amount_empty">Amount can\'t be empty</string>
     <string name="validation_unit_empty">Unit can\'t be empty</string>
@@ -81,4 +81,9 @@
     <string name="preferred_currency">Preferred currency</string>
     <string name="edit_profile">Edit profile</string>
     <string name="coming_soon">Coming soon</string>
+    <string name="validation_price_value_empty">Price value can\'t be empty</string>
+    <string name="validation_price_currency_empty">Price currency can\'t be empty</string>
+    <string name="validation_max_amount_empty">Max amount can\'t be empty</string>
+    <string name="validation_current_amount_empty">Current amount can\'t be empty</string>
+    <string name="validation_current_amount_greater_than_max_amount">Current amount can\'t be greater than max amount</string>
 </resources>

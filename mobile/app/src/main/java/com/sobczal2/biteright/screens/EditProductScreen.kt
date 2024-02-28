@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -14,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,25 +27,21 @@ import com.sobczal2.biteright.dto.common.PaginatedList
 import com.sobczal2.biteright.dto.common.PaginationParams
 import com.sobczal2.biteright.dto.common.emptyPaginatedList
 import com.sobczal2.biteright.dto.currencies.CurrencyDto
-import com.sobczal2.biteright.dto.products.DetailedProductDto
-import com.sobczal2.biteright.dto.products.ExpirationDateKindDto
 import com.sobczal2.biteright.dto.units.UnitDto
-import com.sobczal2.biteright.dto.units.UnitSystemDto
-import com.sobczal2.biteright.events.CreateProductScreenEvent
 import com.sobczal2.biteright.events.EditProductScreenEvent
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.state.EditProductScreenState
 import com.sobczal2.biteright.ui.components.categories.CategoryFormField
+import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
+import com.sobczal2.biteright.ui.components.products.AmountFormField
 import com.sobczal2.biteright.ui.components.products.ExpirationDateFormField
 import com.sobczal2.biteright.ui.components.products.PriceFormField
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.viewmodels.EditProductViewModel
-import java.time.Instant
-import java.time.LocalDate
 import java.util.UUID
 
 @Composable
@@ -78,16 +77,19 @@ fun EditProductScreenContent(
     searchUnits: suspend (String, PaginationParams) -> PaginatedList<UnitDto> = { _, _ -> emptyPaginatedList() },
     handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
+    val focusManager = LocalFocusManager.current
+
     Scaffold { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(MaterialTheme.dimension.md),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
             ) {
                 Text(
@@ -124,6 +126,14 @@ fun EditProductScreenContent(
                     onChange = {
                         sendEvent(EditProductScreenEvent.OnExpirationDateChange(it))
                     },
+                )
+
+                AmountFormField(
+                    state = state.amountFieldState,
+                    onChange = {
+                        sendEvent(EditProductScreenEvent.OnAmountChange(it))
+                    },
+                    searchUnits = searchUnits
                 )
 
                 PriceFormField(
@@ -164,9 +174,15 @@ fun EditProductScreenContent(
                     Text(text = stringResource(id = R.string.cancel))
                 }
 
-                Button(
+                ButtonWithLoader(
+                    loading = state.formSubmitting,
                     onClick = {
-                        // TODO: Implement save product
+                        focusManager.clearFocus()
+                        sendEvent(EditProductScreenEvent.OnSubmitClick(
+                            onSuccess = {
+                                handleNavigationEvent(NavigationEvent.NavigateBack)
+                            }
+                        ))
                     },
                     modifier = Modifier.weight(0.5f),
                     shape = MaterialTheme.shapes.extraSmall,

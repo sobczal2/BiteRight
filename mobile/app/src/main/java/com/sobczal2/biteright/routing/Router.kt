@@ -1,7 +1,9 @@
 package com.sobczal2.biteright.routing
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,6 +21,8 @@ import com.sobczal2.biteright.screens.StartScreen
 import com.sobczal2.biteright.screens.WelcomeScreen
 import com.sobczal2.biteright.ui.components.common.ComingSoonBanner
 import com.sobczal2.biteright.util.getUUID
+import com.sobczal2.biteright.viewmodels.AllProductsViewModel
+import com.sobczal2.biteright.viewmodels.CurrentProductsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,12 +52,22 @@ fun Router(authManager: AuthManager) {
             )
         }
         composable(Routes.CURRENT_PRODUCTS) {
+            val viewModel = hiltViewModel<CurrentProductsViewModel>()
+            LaunchedEffect(navController.currentDestination) {
+                viewModel.fetchCurrentProducts()
+            }
             CurrentProductsScreen(
+                viewModel = viewModel,
                 handleNavigationEvent = handleNavigationEvent
             )
         }
         composable(Routes.ALL_PRODUCTS) {
+            val viewModel = hiltViewModel<AllProductsViewModel>()
+            LaunchedEffect(navController.currentDestination) {
+                viewModel.fetchAllProducts()
+            }
             AllProductsScreen(
+                viewModel = viewModel,
                 handleNavigationEvent = handleNavigationEvent
             )
         }

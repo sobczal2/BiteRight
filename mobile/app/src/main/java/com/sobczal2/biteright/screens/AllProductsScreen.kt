@@ -44,7 +44,6 @@ fun AllProductsScreen(
     handleNavigationEvent: (NavigationEvent) -> Unit,
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
-
     ScaffoldLoader(loading = state.value.globalLoading) {
         AllProductsScreenContent(
             state = state.value,

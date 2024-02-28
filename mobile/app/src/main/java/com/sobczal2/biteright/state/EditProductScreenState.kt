@@ -21,6 +21,8 @@ data class EditProductScreenState(
     val priceFieldState: PriceFormFieldState = PriceFormFieldState(FormPriceWithCurrency.Empty),
     val expirationDateFieldState: ExpirationDateFormFieldState = ExpirationDateFormFieldState(),
     val categoryFieldState: CategoryFormFieldState = CategoryFormFieldState(CategoryDto.Empty),
+    val amountFieldState: AmountFormFieldState = AmountFormFieldState(FormAmountWithUnit.Empty),
+    val formSubmitting: Boolean = false,
     val imageRequestBuilder: ImageRequest.Builder? = null,
     val startingCategories: PaginatedList<CategoryDto>? = null,
     val startingCurrencies: PaginatedList<CurrencyDto>? = null,

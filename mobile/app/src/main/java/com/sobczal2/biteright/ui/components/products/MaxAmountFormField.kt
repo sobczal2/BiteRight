@@ -24,43 +24,44 @@ import androidx.compose.ui.unit.dp
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.common.PaginatedList
 import com.sobczal2.biteright.dto.common.PaginationParams
-import com.sobczal2.biteright.dto.currencies.CurrencyDto
+import com.sobczal2.biteright.dto.units.UnitDto
+import com.sobczal2.biteright.dto.units.UnitSystemDto
 import com.sobczal2.biteright.ui.components.common.forms.SearchDialog
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
-import com.sobczal2.biteright.ui.components.currencies.CurrencyListItem
-import com.sobczal2.biteright.ui.components.currencies.SimplifiedCurrencyItem
+import com.sobczal2.biteright.ui.components.units.SimplifiedUnitItem
+import com.sobczal2.biteright.ui.components.units.UnitListItem
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
-import com.sobczal2.biteright.ui.theme.extraSmallTop
 import com.sobczal2.biteright.util.BiteRightPreview
 import java.util.UUID
 
-data class FormPriceWithCurrency(
-    val price: Double?, val currency: CurrencyDto
+data class FormMaxAmountWithUnit(
+    val maxAmount: Double?, val unit: UnitDto
 ) {
     companion object {
-        val Empty = FormPriceWithCurrency(
-            price = null, currency = CurrencyDto.Empty
+        val Empty = FormMaxAmountWithUnit(
+            maxAmount = null,
+            unit = UnitDto.Empty
         )
     }
 }
 
-data class PriceFormFieldState(
-    var value: FormPriceWithCurrency,
+data class MaxAmountFormFieldState(
+    var value: FormMaxAmountWithUnit,
     val error: String? = null,
 )
 
 @Composable
-fun PriceFormField(
-    state: PriceFormFieldState,
-    onChange: (FormPriceWithCurrency) -> Unit,
-    searchCurrencies: suspend (String, PaginationParams) -> PaginatedList<CurrencyDto>,
-    modifier: Modifier = Modifier,
+fun MaxAmountFormField(
+    state: MaxAmountFormFieldState,
+    onChange: (FormMaxAmountWithUnit) -> Unit,
+    searchUnits: suspend (String, PaginationParams) -> PaginatedList<UnitDto>,
+    modifier: Modifier = Modifier
 ) {
     var dialogOpen by remember { mutableStateOf(false) }
-    var priceTextFieldState by remember {
+    var maxAmountTextFieldState by remember {
         mutableStateOf(
             TextFormFieldState(
                 value = ""
@@ -68,15 +69,14 @@ fun PriceFormField(
         )
     }
 
-    val moneyTypingRegex = Regex("""^\d+(\.\d{0,2})?$""")
+    val maxAmountTypingRegex = Regex("""^\d+(\.\d{0,2})?$""")
 
     LaunchedEffect(state.value) {
-        if (state.value.price != null && priceTextFieldState.value != "%.2f".format(state.value.price))
-            priceTextFieldState = priceTextFieldState.copy(
-                value = "%.2f".format(state.value.price)
+        if (state.value.maxAmount != null && maxAmountTextFieldState.value != "%.2f".format(state.value.maxAmount))
+            maxAmountTextFieldState = maxAmountTextFieldState.copy(
+                value = "%.2f".format(state.value.maxAmount)
             )
     }
-
 
     Column(
         modifier = modifier
@@ -92,65 +92,67 @@ fun PriceFormField(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 TextFormField(
-                    state = priceTextFieldState,
+                    state = maxAmountTextFieldState,
                     onChange = {
-                        if (it.isEmpty() || moneyTypingRegex.matches(it)) {
-                            priceTextFieldState = priceTextFieldState.copy(
+                        if (it.isEmpty() || maxAmountTypingRegex.matches(it)) {
+                            maxAmountTextFieldState = maxAmountTextFieldState.copy(
                                 value = it
                             )
                         }
                     },
                     options = TextFormFieldOptions(
-                        label = { Text(text = stringResource(id = R.string.price)) },
-                        shape = MaterialTheme.shapes.extraSmallTop.copy(
-                            topEnd = CornerSize(0.dp)
+                        label = { Text(text = stringResource(id = R.string.amount)) },
+                        shape = MaterialTheme.shapes.extraSmall.copy(
+                            topEnd = CornerSize(0.dp),
+                            bottomEnd = CornerSize(0.dp),
+                            bottomStart = CornerSize(0.dp)
                         ),
                         trailingIcon = {
-                            Text(text = state.value.currency.symbol)
+                            Text(text = state.value.unit.abbreviation)
                         },
                         keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Number,
-
-                            ),
+                            keyboardType = KeyboardType.Number
+                        ),
                     ),
                     modifier = Modifier
                         .weight(0.6f)
                         .onFocusChanged {
                             if (!it.isFocused) {
-                                priceTextFieldState =
-                                    when (val price = priceTextFieldState.value.toDoubleOrNull()) {
+                                maxAmountTextFieldState =
+                                    when (val price =
+                                        maxAmountTextFieldState.value.toDoubleOrNull()) {
                                         null -> {
-                                            priceTextFieldState.copy(
+                                            maxAmountTextFieldState.copy(
                                                 value = "",
                                             )
                                         }
 
                                         else -> {
-                                            priceTextFieldState.copy(
+                                            maxAmountTextFieldState.copy(
                                                 value = "%.2f".format(price)
                                             )
                                         }
                                     }
-
                                 onChange(
                                     state.value.copy(
-                                        price = priceTextFieldState.value.toDoubleOrNull()
+                                        maxAmount = maxAmountTextFieldState.value.toDoubleOrNull()
                                     )
                                 )
                             }
                         }
                 )
-                SimplifiedCurrencyItem(
-                    currency = state.value.currency,
+                SimplifiedUnitItem(
+                    unit = state.value.unit,
                     selected = false,
                     onClick = {
                         dialogOpen = true
                     },
-                    label = stringResource(id = R.string.currency),
+                    label = stringResource(id = R.string.unit),
                     modifier = Modifier
                         .weight(0.4f)
                         .padding(start = MaterialTheme.dimension.sm)
                 )
+
             }
         }
         if (state.error != null) {
@@ -165,48 +167,53 @@ fun PriceFormField(
 
     if (dialogOpen) {
         SearchDialog(
-            search = searchCurrencies,
+            search = searchUnits,
             keySelector = { it.id },
             onDismissRequest = { dialogOpen = false },
-            selectedItem = state.value.currency,
-        ) { currency, selected ->
-            CurrencyListItem(
-                currency = currency,
-                selected = selected,
-                modifier = Modifier
-                    .clickable {
-                        onChange(state.value.copy(currency = currency))
-                        dialogOpen = false
-                    }
-            )
+            selectedItem = state.value.unit,
+        ) { unit, selected ->
+            UnitListItem(unit = unit, selected = selected, modifier = Modifier.clickable {
+                onChange(
+                    state.value.copy(
+                        unit = unit
+                    )
+                )
+                dialogOpen = false
+            })
         }
     }
 }
 
 @Composable
 @BiteRightPreview
-fun PriceFormFieldPreview() {
-    val currencies = listOf(
-        CurrencyDto(
-            id = UUID.randomUUID(), code = "USD", name = "US Dollar", symbol = "$"
-        ),
-        CurrencyDto(
-            id = UUID.randomUUID(), code = "EUR", name = "Euro", symbol = "€"
-        ),
-        CurrencyDto(
-            id = UUID.randomUUID(), code = "PLN", name = "Polish Zloty", symbol = "zł"
-        ),
+fun AmountFormFieldPreview() {
+    val units = listOf(
+        UnitDto(
+            id = UUID.randomUUID(),
+            name = "Gram",
+            abbreviation = "g",
+            unitSystem = UnitSystemDto.Metric
+        ), UnitDto(
+            id = UUID.randomUUID(),
+            name = "Kilogram",
+            abbreviation = "kg",
+            unitSystem = UnitSystemDto.Metric
+        ), UnitDto(
+            id = UUID.randomUUID(),
+            name = "Pound",
+            abbreviation = "lb",
+            unitSystem = UnitSystemDto.Metric
+        )
     )
 
     BiteRightTheme {
-        PriceFormField(state = PriceFormFieldState(
-            value = FormPriceWithCurrency(
-                price = 20.0, currency = currencies.first(),
-            ),
-            error = "Error",
-        ), onChange = {}, searchCurrencies = { _, _ ->
+        MaxAmountFormField(state = MaxAmountFormFieldState(
+            value = FormMaxAmountWithUnit(
+                maxAmount = 20.0, unit = units.first()
+            ), error = "Amount is required"
+        ), onChange = {}, searchUnits = { _, _ ->
             PaginatedList(
-                items = currencies,
+                items = units,
                 pageNumber = 0,
                 pageSize = 3,
                 totalPages = 1,

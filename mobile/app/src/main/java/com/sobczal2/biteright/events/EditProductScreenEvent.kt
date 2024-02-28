@@ -2,6 +2,7 @@ package com.sobczal2.biteright.events
 
 import com.sobczal2.biteright.dto.categories.CategoryDto
 import com.sobczal2.biteright.ui.components.products.ExpirationDate
+import com.sobczal2.biteright.ui.components.products.FormAmountWithUnit
 import com.sobczal2.biteright.ui.components.products.FormPriceWithCurrency
 import java.util.UUID
 
@@ -12,4 +13,6 @@ sealed class EditProductScreenEvent {
     data class OnExpirationDateChange(val value: ExpirationDate) : EditProductScreenEvent()
     data class OnPriceChange(val value: FormPriceWithCurrency) : EditProductScreenEvent()
     data class OnDescriptionChange(val value: String) : EditProductScreenEvent()
+    data class OnAmountChange(val value: FormAmountWithUnit) : EditProductScreenEvent()
+    data class OnSubmitClick(val onSuccess: () -> Unit) : EditProductScreenEvent()
 }

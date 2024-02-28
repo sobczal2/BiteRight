@@ -40,15 +40,10 @@ class AllProductsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            launch { events.collect { event -> handleEvent(event) } }
-            launch {
-                _state.value.paginatedProductSource.fetchInitialItems(
-                    _state.value.searchQuery,
-                    ::searchProducts
-                )
-            }
+            events.collect { event -> handleEvent(event) }
         }
     }
+
 
     fun sendEvent(event: AllProductsScreenEvent) {
         viewModelScope.launch {
@@ -77,6 +72,21 @@ class AllProductsViewModel @Inject constructor(
                         ::searchProducts
                     )
                 }
+            }
+        }
+    }
+
+    fun fetchAllProducts() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(globalLoading = true)
+            }
+            _state.value.paginatedProductSource.fetchInitialItems(
+                _state.value.searchQuery,
+                ::searchProducts
+            )
+            _state.update {
+                it.copy(globalLoading = false)
             }
         }
     }
