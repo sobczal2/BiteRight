@@ -48,7 +48,7 @@ fun StartScreen(
     }
 
     ScaffoldLoader(
-        loading = state.value.globalLoading
+        loading = state.value.isLoading(),
     ) {
         StartScreenContent(
             state = state.value,

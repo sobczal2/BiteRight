@@ -136,8 +136,8 @@ fun ExpirationDateFormField(
                 readOnly = true,
                 interactionSource = interactionSource,
                 colors = TextFieldDefaults.colors().copy(
-                        errorTextColor = MaterialTheme.colorScheme.error
-                    ),
+                    errorTextColor = MaterialTheme.colorScheme.error
+                ),
                 label = {
                     Text(
                         text = stringResource(id = R.string.expiration_kind),
@@ -155,7 +155,8 @@ fun ExpirationDateFormField(
                 .onGloballyPositioned {
                     textFieldSize = it.size.toSize()
                 })
-            DropdownMenu(expanded = dropDownExpanded,
+            DropdownMenu(
+                expanded = dropDownExpanded,
                 onDismissRequest = {
                     dropDownExpanded = false
                 },
@@ -237,24 +238,31 @@ fun ExpirationDateFormField(
                 datePickerDialogOpen = false
             },
             confirmButton = {
-                Button(onClick = {
-                    datePickerDialogOpen = false
-                    onChange(
-                        state.value.copy(
-                            localDate = datePickerState.selectedDateMillis?.toLocalDate()
+                Button(
+                    onClick = {
+                        datePickerDialogOpen = false
+                        onChange(
+                            state.value.copy(
+                                localDate = datePickerState.selectedDateMillis?.toLocalDate()
+                            )
                         )
-                    )
-                }) {
+                    },
+                    shape = MaterialTheme.shapes.extraSmall,
+                ) {
                     Text(text = stringResource(id = R.string.confirm))
                 }
             },
             dismissButton = {
-                OutlinedButton(onClick = {
-                    datePickerDialogOpen = false
-                }) {
+                OutlinedButton(
+                    onClick = {
+                        datePickerDialogOpen = false
+                    },
+                    shape = MaterialTheme.shapes.extraSmall,
+                ) {
                     Text(text = stringResource(id = R.string.cancel))
                 }
             },
+            shape = MaterialTheme.shapes.extraSmall,
         ) {
             DatePicker(
                 state = datePickerState, modifier = Modifier

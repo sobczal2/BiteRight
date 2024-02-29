@@ -60,31 +60,20 @@ class CreateProductViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             launch { _events.receiveAsFlow().collect { handleEvent(it) } }
-
-            val fetchInitialSearchDataJob = launch { fetchInitialSearchData() }
-            val fetchDefaultCategoryJob = launch { fetchDefaultCategory() }
-            val fetchCurrentUserJob = launch { fetchCurrentUser() }
-
-            fetchInitialSearchDataJob.join()
-            fetchDefaultCategoryJob.join()
-            fetchCurrentUserJob.join()
-
-            _state.update { currentState ->
-                currentState.copy(
-                    maxAmountFieldState = currentState.maxAmountFieldState.copy(
-                        value = FormMaxAmountWithUnit.Empty.copy(
-                            unit = currentState.startingUnits?.items?.firstOrNull() ?: UnitDto.Empty
-                        )
-                    )
-                )
-            }
-
-
-            _state.update { it.copy(globalLoading = false) }
+            launch { fetchInitialSearchData() }
+            launch { fetchDefaultCategory() }
+            launch { fetchCurrentUser() }
         }
     }
 
     private suspend fun fetchInitialSearchData() {
+
+        _state.update {
+            it.copy(
+                ongoingLoadingActions = it.ongoingLoadingActions + CreateProductViewModel::fetchInitialSearchData.name,
+            )
+        }
+
         coroutineScope {
             val fetchCategoriesJob = launch {
                 val result = searchCategories("", PaginationParams.Default)
@@ -115,6 +104,17 @@ class CreateProductViewModel @Inject constructor(
             fetchCategoriesJob.join()
             fetchCurrenciesJob.join()
             fetchUnitsJob.join()
+
+            _state.update { currentState ->
+                currentState.copy(
+                    maxAmountFieldState = currentState.maxAmountFieldState.copy(
+                        value = FormMaxAmountWithUnit.Empty.copy(
+                            unit = currentState.startingUnits?.items?.firstOrNull() ?: UnitDto.Empty
+                        )
+                    ),
+                    ongoingLoadingActions = currentState.ongoingLoadingActions - CreateProductViewModel::fetchInitialSearchData.name,
+                )
+            }
         }
     }
 
@@ -226,6 +226,12 @@ class CreateProductViewModel @Inject constructor(
     }
 
     private suspend fun fetchDefaultCategory() {
+        _state.update {
+            it.copy(
+                ongoingLoadingActions = it.ongoingLoadingActions + CreateProductViewModel::fetchDefaultCategory.name,
+            )
+        }
+
         val defaultCategoryResult = categoryRepository.getDefault()
 
         defaultCategoryResult.fold(
@@ -246,9 +252,21 @@ class CreateProductViewModel @Inject constructor(
                 }
             }
         )
+
+        _state.update {
+            it.copy(
+                ongoingLoadingActions = it.ongoingLoadingActions - CreateProductViewModel::fetchDefaultCategory.name,
+            )
+        }
     }
 
     private suspend fun fetchCurrentUser() {
+        _state.update {
+            it.copy(
+                ongoingLoadingActions = it.ongoingLoadingActions + CreateProductViewModel::fetchCurrentUser.name,
+            )
+        }
+
         val currentUserResult = userRepository.me()
 
         currentUserResult.fold(
@@ -271,6 +289,12 @@ class CreateProductViewModel @Inject constructor(
                 }
             }
         )
+
+        _state.update {
+            it.copy(
+                ongoingLoadingActions = it.ongoingLoadingActions - CreateProductViewModel::fetchCurrentUser.name,
+            )
+        }
     }
 
     suspend fun searchCategories(

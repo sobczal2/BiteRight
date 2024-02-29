@@ -13,9 +13,11 @@ data class AllProductsScreenState(
     val paginatedProductSource: PaginationSource<SimpleProductDto, SearchQuery> = PaginationSource(
         initialPaginationParams = PaginationParams.Default
     ),
-    override val globalLoading: Boolean = true,
+    override val ongoingLoadingActions: Set<String> = setOf(),
     override val globalError: String? = null,
 ) : ScreenState {
+
+    fun isLoading(): Boolean = ongoingLoadingActions.isNotEmpty()
 
     class SearchQuery(
         val query: String,

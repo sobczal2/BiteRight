@@ -50,6 +50,9 @@ class ProductDetailsViewModel @Inject constructor(
     }
 
     private fun loadDetails(productId: UUID) {
+        _state.value = _state.value.copy(
+            ongoingLoadingActions = _state.value.ongoingLoadingActions + ProductDetailsViewModel::loadDetails.name,
+        )
         viewModelScope.launch {
             val getDetailsResult = productRepository.getDetails(
                 GetDetailsRequest(productId)
@@ -73,7 +76,7 @@ class ProductDetailsViewModel @Inject constructor(
             )
 
             _state.value = _state.value.copy(
-                globalLoading = false
+                ongoingLoadingActions = _state.value.ongoingLoadingActions - ProductDetailsViewModel::loadDetails.name,
             )
         }
     }

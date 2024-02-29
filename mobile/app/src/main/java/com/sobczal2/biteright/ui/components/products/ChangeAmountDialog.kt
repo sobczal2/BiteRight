@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -22,6 +23,7 @@ import com.sobczal2.biteright.R
 import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.BiteRightPreview
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,7 +61,7 @@ fun ChangeAmountDialog(
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
-                    text = "${"%.2f".format(sliderState.value.value)} / ${"%.2f".format(maxAmount)} $unitName",
+                    text = "${"%.2f".format(Locale.US, sliderState.value.value)} / ${"%.2f".format(maxAmount, Locale.US)} $unitName",
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier
                 )
@@ -74,7 +76,10 @@ fun ChangeAmountDialog(
                 ) {
                     OutlinedButton(
                         onClick = onDismiss,
-                        shape = MaterialTheme.shapes.extraSmall
+                        shape = MaterialTheme.shapes.extraSmall,
+                        colors = ButtonDefaults.outlinedButtonColors().copy(
+                            contentColor = MaterialTheme.colorScheme.error,
+                        )
                     ) {
                         Text(text = stringResource(id = R.string.cancel))
                     }

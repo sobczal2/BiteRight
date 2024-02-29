@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -56,7 +57,7 @@ fun EditProductScreen(
         viewModel.sendEvent(EditProductScreenEvent.LoadDetails(productId))
     }
 
-    ScaffoldLoader(loading = state.value.globalLoading) {
+    ScaffoldLoader(loading = state.value.isLoading()) {
         EditProductScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,
@@ -84,12 +85,14 @@ fun EditProductScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(MaterialTheme.dimension.md),
+                .padding(MaterialTheme.dimension.md)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState()),
+                    .fillMaxWidth()
+                    .padding(bottom = MaterialTheme.dimension.xl),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
             ) {
                 Text(
@@ -159,35 +162,63 @@ fun EditProductScreenContent(
                 )
             }
 
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
             ) {
-                OutlinedButton(
-                    onClick = {
-                        handleNavigationEvent(NavigationEvent.NavigateBack)
-                    },
-                    modifier = Modifier.weight(0.5f),
-                    shape = MaterialTheme.shapes.extraSmall,
-                )
-                {
-                    Text(text = stringResource(id = R.string.cancel))
-                }
-
                 ButtonWithLoader(
-                    loading = state.formSubmitting,
                     onClick = {
-                        focusManager.clearFocus()
-                        sendEvent(EditProductScreenEvent.OnSubmitClick(
-                            onSuccess = {
-                                handleNavigationEvent(NavigationEvent.NavigateBack)
-                            }
-                        ))
+                        sendEvent(
+                            EditProductScreenEvent.OnDeleteClick(
+                                onSuccess = {
+                                    handleNavigationEvent(NavigationEvent.NavigateBack)
+                                    handleNavigationEvent(NavigationEvent.NavigateBack)
+                                }
+                            )
+                        )
                     },
-                    modifier = Modifier.weight(0.5f),
+                    modifier = Modifier.fillMaxWidth(),
                     shape = MaterialTheme.shapes.extraSmall,
+                    colors = ButtonDefaults.buttonColors().copy(
+                        contentColor = MaterialTheme.colorScheme.onError,
+                        containerColor = MaterialTheme.colorScheme.error
+                    ),
+                    loading = state.deleteSubmitting
                 ) {
-                    Text(text = stringResource(id = R.string.save))
+                    Text(text = stringResource(id = R.string.delete))
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
+                ) {
+                    OutlinedButton(
+                        onClick = {
+                            handleNavigationEvent(NavigationEvent.NavigateBack)
+                        },
+                        modifier = Modifier.weight(0.5f),
+                        shape = MaterialTheme.shapes.extraSmall,
+                        colors = ButtonDefaults.outlinedButtonColors().copy(
+                            contentColor = MaterialTheme.colorScheme.error,
+                        )
+                    )
+                    {
+                        Text(text = stringResource(id = R.string.cancel))
+                    }
+
+                    ButtonWithLoader(
+                        loading = state.formSubmitting,
+                        onClick = {
+                            focusManager.clearFocus()
+                            sendEvent(EditProductScreenEvent.OnSubmitClick(
+                                onSuccess = {
+                                    handleNavigationEvent(NavigationEvent.NavigateBack)
+                                }
+                            ))
+                        },
+                        modifier = Modifier.weight(0.5f),
+                        shape = MaterialTheme.shapes.extraSmall,
+                    ) {
+                        Text(text = stringResource(id = R.string.save))
+                    }
                 }
             }
         }

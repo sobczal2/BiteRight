@@ -29,7 +29,7 @@ fun EditProfileScreen(
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
 
-    ScaffoldLoader(loading = state.value.globalLoading) {
+    ScaffoldLoader(loading = state.value.isLoading()) {
         EditProfileScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,

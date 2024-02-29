@@ -42,16 +42,33 @@ class ProfileViewModel @Inject constructor(
     private fun handleEvent(event: ProfileScreenEvent) {
         when (event) {
             is ProfileScreenEvent.OnLogoutClick -> logout()
-            is ProfileScreenEvent.OnEditProfileClick -> Unit
         }
     }
 
     private suspend fun fetchUserData() {
-        _state.update { it.copy(globalLoading = true) }
+        _state.update {
+            it.copy(
+                ongoingLoadingActions = it.ongoingLoadingActions + ProfileViewModel::fetchUserData.name,
+            )
+        }
         val meResponse = userRepository.me()
-        meResponse.fold({ response -> _state.update { it.copy(user = response.user) } },
-            { error -> _state.update { it.copy(globalError = error.message) } })
-        _state.update { it.copy(globalLoading = false) }
+        meResponse.fold(
+            { response ->
+                _state.update {
+                    it.copy(user = response.user)
+                }
+            },
+            { error ->
+                _state.update {
+                    it.copy(globalError = error.message)
+                }
+            }
+        )
+        _state.update {
+            it.copy(
+                ongoingLoadingActions = it.ongoingLoadingActions - ProfileViewModel::fetchUserData.name,
+            )
+        }
     }
 
     private fun logout() {

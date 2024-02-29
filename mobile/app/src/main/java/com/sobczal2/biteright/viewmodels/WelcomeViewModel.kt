@@ -58,7 +58,9 @@ class WelcomeViewModel @Inject constructor(
         onSuccess: () -> Unit
     ) {
         _state.update {
-            it.copy(globalLoading = true)
+            it.copy(
+                ongoingLoadingActions = it.ongoingLoadingActions + WelcomeViewModel::onGetStartedClick.name,
+            )
         }
         viewModelScope.launch {
             val loginResult = CompletableDeferred<Either<Unit, Int>>()
@@ -83,7 +85,9 @@ class WelcomeViewModel @Inject constructor(
                 }
             )
             _state.update {
-                it.copy(globalLoading = false)
+                it.copy(
+                    ongoingLoadingActions = it.ongoingLoadingActions - WelcomeViewModel::onGetStartedClick.name,
+                )
             }
         }
     }

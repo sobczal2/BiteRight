@@ -79,14 +79,19 @@ class AllProductsViewModel @Inject constructor(
     fun fetchAllProducts() {
         viewModelScope.launch {
             _state.update {
-                it.copy(globalLoading = true)
+                it.copy(
+                    ongoingLoadingActions = it.ongoingLoadingActions + AllProductsViewModel::fetchAllProducts.name,
+                )
             }
+            _state.value.paginatedProductSource.clearLastQueryData()
             _state.value.paginatedProductSource.fetchInitialItems(
                 _state.value.searchQuery,
                 ::searchProducts
             )
             _state.update {
-                it.copy(globalLoading = false)
+                it.copy(
+                    ongoingLoadingActions = it.ongoingLoadingActions - AllProductsViewModel::fetchAllProducts.name,
+                )
             }
         }
     }

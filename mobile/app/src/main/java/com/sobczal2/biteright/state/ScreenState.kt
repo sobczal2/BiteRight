@@ -1,6 +1,6 @@
 package com.sobczal2.biteright.state
 
 interface ScreenState {
-    val globalLoading: Boolean
+    val ongoingLoadingActions: Set<String>
     val globalError: String?
 }

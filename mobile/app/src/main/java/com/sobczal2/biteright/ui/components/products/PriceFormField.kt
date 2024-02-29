@@ -35,6 +35,7 @@ import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.ui.theme.extraSmallTop
 import com.sobczal2.biteright.util.BiteRightPreview
+import java.util.Locale
 import java.util.UUID
 
 data class FormPriceWithCurrency(
@@ -71,9 +72,9 @@ fun PriceFormField(
     val moneyTypingRegex = Regex("""^\d+(\.\d{0,2})?$""")
 
     LaunchedEffect(state.value) {
-        if (state.value.price != null && priceTextFieldState.value != "%.2f".format(state.value.price))
+        if (state.value.price != null && priceTextFieldState.value != "%.2f".format(Locale.US, state.value.price))
             priceTextFieldState = priceTextFieldState.copy(
-                value = "%.2f".format(state.value.price)
+                value = "%.2f".format(Locale.US, state.value.price)
             )
     }
 
@@ -127,7 +128,7 @@ fun PriceFormField(
 
                                         else -> {
                                             priceTextFieldState.copy(
-                                                value = "%.2f".format(price)
+                                                value = "%.2f".format(Locale.US, price)
                                             )
                                         }
                                     }

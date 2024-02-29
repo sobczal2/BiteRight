@@ -3,6 +3,7 @@ package com.sobczal2.biteright.repositories.abstractions
 import arrow.core.Either
 import com.sobczal2.biteright.data.api.requests.products.ChangeAmountRequest
 import com.sobczal2.biteright.data.api.requests.products.CreateRequest
+import com.sobczal2.biteright.data.api.requests.products.DeleteRequest
 import com.sobczal2.biteright.data.api.requests.products.DisposeRequest
 import com.sobczal2.biteright.data.api.requests.products.EditRequest
 import com.sobczal2.biteright.data.api.requests.products.GetDetailsRequest
@@ -11,6 +12,7 @@ import com.sobczal2.biteright.data.api.requests.products.RestoreRequest
 import com.sobczal2.biteright.data.api.requests.products.SearchRequest
 import com.sobczal2.biteright.data.api.responses.products.ChangeAmountResponse
 import com.sobczal2.biteright.data.api.responses.products.CreateResponse
+import com.sobczal2.biteright.data.api.responses.products.DeleteResponse
 import com.sobczal2.biteright.data.api.responses.products.DisposeResponse
 import com.sobczal2.biteright.data.api.responses.products.EditResponse
 import com.sobczal2.biteright.data.api.responses.products.GetDetailsResponse
@@ -28,4 +30,5 @@ interface ProductRepository {
     suspend fun changeAmount(changeAmountRequest: ChangeAmountRequest): Either<ChangeAmountResponse, RepositoryError>
     suspend fun getDetails(getDetailsRequest: GetDetailsRequest): Either<GetDetailsResponse, RepositoryError>
     suspend fun edit(editRequest: EditRequest): Either<EditResponse, RepositoryError>
+    suspend fun delete(deleteRequest: DeleteRequest): Either<DeleteResponse, RepositoryError>
 }

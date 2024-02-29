@@ -15,4 +15,5 @@ sealed class EditProductScreenEvent {
     data class OnDescriptionChange(val value: String) : EditProductScreenEvent()
     data class OnAmountChange(val value: FormAmountWithUnit) : EditProductScreenEvent()
     data class OnSubmitClick(val onSuccess: () -> Unit) : EditProductScreenEvent()
+    data class OnDeleteClick(val onSuccess: () -> Unit) : EditProductScreenEvent()
 }

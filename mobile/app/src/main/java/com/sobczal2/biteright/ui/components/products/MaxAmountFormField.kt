@@ -35,6 +35,7 @@ import com.sobczal2.biteright.ui.components.units.UnitListItem
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.BiteRightPreview
+import java.util.Locale
 import java.util.UUID
 
 data class FormMaxAmountWithUnit(
@@ -74,7 +75,7 @@ fun MaxAmountFormField(
     LaunchedEffect(state.value) {
         if (state.value.maxAmount != null && maxAmountTextFieldState.value != "%.2f".format(state.value.maxAmount))
             maxAmountTextFieldState = maxAmountTextFieldState.copy(
-                value = "%.2f".format(state.value.maxAmount)
+                value = "%.2f".format(Locale.US, state.value.maxAmount)
             )
     }
 
@@ -129,7 +130,7 @@ fun MaxAmountFormField(
 
                                         else -> {
                                             maxAmountTextFieldState.copy(
-                                                value = "%.2f".format(price)
+                                                value = "%.2f".format(Locale.US, price)
                                             )
                                         }
                                     }
