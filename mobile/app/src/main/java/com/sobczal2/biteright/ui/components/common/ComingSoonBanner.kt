@@ -48,8 +48,8 @@ fun ComingSoonBanner(
                 onClick = onBackClicked,
                 shape = MaterialTheme.shapes.extraSmall,
                 modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .padding(top = MaterialTheme.dimension.md),
+                    .padding(top = MaterialTheme.dimension.md)
+                    .fillMaxWidth(),
             ) {
                 Text(
                     text = stringResource(id = R.string.back),

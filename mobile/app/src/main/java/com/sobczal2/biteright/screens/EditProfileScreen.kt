@@ -69,8 +69,8 @@ fun EditProfileScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(MaterialTheme.dimension.md)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(MaterialTheme.dimension.md),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
@@ -108,6 +108,20 @@ fun EditProfileScreenContent(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
             ) {
+                OutlinedButton(
+                    onClick = {
+                        handleNavigationEvent(NavigationEvent.NavigateBack)
+                    },
+                    modifier = Modifier.weight(0.5f),
+                    shape = MaterialTheme.shapes.extraSmall,
+                    colors = ButtonDefaults.outlinedButtonColors().copy(
+                        contentColor = MaterialTheme.colorScheme.error,
+                    )
+                )
+                {
+                    Text(text = stringResource(id = R.string.cancel))
+                }
+
                 ButtonWithLoader(
                     loading = state.formSubmitting,
                     onClick = {
@@ -124,20 +138,6 @@ fun EditProfileScreenContent(
                     shape = MaterialTheme.shapes.extraSmall,
                 ) {
                     Text(text = stringResource(id = R.string.save))
-                }
-
-                OutlinedButton(
-                    onClick = {
-                        handleNavigationEvent(NavigationEvent.NavigateBack)
-                    },
-                    modifier = Modifier.weight(0.5f),
-                    shape = MaterialTheme.shapes.extraSmall,
-                    colors = ButtonDefaults.outlinedButtonColors().copy(
-                        contentColor = MaterialTheme.colorScheme.error,
-                    )
-                )
-                {
-                    Text(text = stringResource(id = R.string.cancel))
                 }
             }
         }

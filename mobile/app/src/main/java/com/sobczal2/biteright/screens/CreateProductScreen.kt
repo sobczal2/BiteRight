@@ -80,8 +80,8 @@ fun CreateProductScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(MaterialTheme.dimension.md)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(MaterialTheme.dimension.md),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
@@ -184,7 +184,7 @@ fun CreateProductScreenContent(
                     loading = state.formSubmitting,
                     modifier = Modifier.weight(0.5f),
                 ) {
-                    Text(text = stringResource(id = R.string.create_product))
+                    Text(text = stringResource(id = R.string.save))
                 }
             }
         }

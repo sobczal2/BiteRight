@@ -82,8 +82,8 @@ fun StartScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(MaterialTheme.dimension.md)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(MaterialTheme.dimension.md),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(

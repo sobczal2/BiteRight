@@ -73,12 +73,14 @@ fun ProfileScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
                 .padding(MaterialTheme.dimension.md),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState()),
+                    .fillMaxWidth()
+                    .padding(bottom = MaterialTheme.dimension.xl),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md),
             ) {
                 Text(
@@ -114,9 +116,8 @@ fun ProfileScreenContent(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md)
             ) {
                 Button(
                     shape = MaterialTheme.shapes.extraSmall,
@@ -124,7 +125,7 @@ fun ProfileScreenContent(
                         handleNavigationEvent(NavigationEvent.NavigateToEditProfile)
                     },
                     modifier = Modifier
-                        .weight(0.5f),
+                        .fillMaxWidth(),
                 ) {
                     Text(
                         text = stringResource(id = R.string.edit),
@@ -141,7 +142,7 @@ fun ProfileScreenContent(
                         sendEvent(ProfileScreenEvent.OnLogoutClick)
                     },
                     modifier = Modifier
-                        .weight(0.5f),
+                        .fillMaxWidth(),
                 ) {
                     Text(
                         text = stringResource(id = R.string.logout),

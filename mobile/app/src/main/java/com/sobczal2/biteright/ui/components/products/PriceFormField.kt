@@ -64,7 +64,7 @@ fun PriceFormField(
     var priceTextFieldState by remember {
         mutableStateOf(
             TextFormFieldState(
-                value = ""
+                value = state.value.price?.let { "%.2f".format(Locale.US, it) } ?: "",
             )
         )
     }
