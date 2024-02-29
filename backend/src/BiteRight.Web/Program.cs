@@ -7,6 +7,7 @@
 
 #region
 
+using AspNetCoreRateLimit;
 using BiteRight.Web.Middleware;
 using BiteRight.Web.Registration;
 using Microsoft.AspNetCore.Builder;
@@ -32,6 +33,7 @@ DomainRegistrations.AddBiteRightDomain(builder.Services);
 
 var app = builder.Build();
 app.UseMiddleware<CorrelationIdMiddleware>();
+
 app.UseSerilogRequestLogging(opt =>
 {
     opt.MessageTemplate =
@@ -55,6 +57,9 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<IdentityIdHeaderMiddleware>();
+app.UseClientRateLimiting();
 
 app.MapControllers();
 app.Run();
