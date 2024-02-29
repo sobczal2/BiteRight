@@ -34,4 +34,8 @@ public interface ICurrencyRepository
         int paginationParamsPageSize,
         CancellationToken cancellationToken
     );
+    
+    Task<Currency> GetDefault(
+        CancellationToken cancellationToken
+    );
 }

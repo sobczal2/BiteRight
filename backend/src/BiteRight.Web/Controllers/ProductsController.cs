@@ -8,6 +8,7 @@
 #region
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Application.Commands.Products.ChangeAmount;
 using BiteRight.Application.Commands.Products.Create;
@@ -41,6 +42,7 @@ public class ProductsController : WebController
     ///     Create a new product.
     /// </summary>
     /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns>New product id.</returns>
     /// <remarks>
     ///     Sample request:
@@ -61,10 +63,11 @@ public class ProductsController : WebController
     [AuthorizeUserExists]
     [ProducesResponseType(typeof(CreateResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> Create(
-        [FromBody] CreateRequest request
+        [FromBody] CreateRequest request,
+        CancellationToken cancellationToken
     )
     {
-        var response = await Mediator.Send(request);
+        var response = await Mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 
@@ -73,14 +76,15 @@ public class ProductsController : WebController
     [ProducesResponseType(typeof(ListCurrentResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ListCurrent(
-        [FromQuery] ProductSortingStrategy sortingStrategy
+        [FromQuery] ProductSortingStrategy sortingStrategy,
+        CancellationToken cancellationToken
     )
     {
         var request = new ListCurrentRequest
         {
             SortingStrategy = sortingStrategy
         };
-        var response = await Mediator.Send(request);
+        var response = await Mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 
@@ -89,11 +93,12 @@ public class ProductsController : WebController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Dispose(
-        Guid productId
+        [FromRoute] Guid productId,
+        CancellationToken cancellationToken
     )
     {
         var request = new DisposeRequest(productId);
-        var response = await Mediator.Send(request);
+        var response = await Mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 
@@ -102,11 +107,12 @@ public class ProductsController : WebController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Restore(
-        Guid productId
+        [FromRoute] Guid productId,
+        CancellationToken cancellationToken
     )
     {
         var request = new RestoreRequest(productId);
-        var response = await Mediator.Send(request);
+        var response = await Mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 
@@ -115,10 +121,11 @@ public class ProductsController : WebController
     [ProducesResponseType(typeof(SearchResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Search(
-        [FromBody] SearchRequest request
+        [FromBody] SearchRequest request,
+        CancellationToken cancellationToken
     )
     {
-        var response = await Mediator.Send(request);
+        var response = await Mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 
@@ -128,11 +135,12 @@ public class ProductsController : WebController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ChangeAmount(
         [FromRoute] Guid productId,
-        [FromBody] ChangeAmountRequest request
+        [FromBody] ChangeAmountRequest request,
+        CancellationToken cancellationToken
     )
     {
         request.ProductId = productId;
-        var response = await Mediator.Send(request);
+        var response = await Mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 
@@ -141,11 +149,12 @@ public class ProductsController : WebController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetDetails(
-        [FromRoute] Guid productId
+        [FromRoute] Guid productId,
+        CancellationToken cancellationToken
     )
     {
         var request = new GetDetailsRequest(productId);
-        var response = await Mediator.Send(request);
+        var response = await Mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 
@@ -155,11 +164,12 @@ public class ProductsController : WebController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Edit(
         [FromRoute] Guid productId,
-        [FromBody] EditRequest request
+        [FromBody] EditRequest request,
+        CancellationToken cancellationToken
     )
     {
         request.ProductId = productId;
-        var response = await Mediator.Send(request);
+        var response = await Mediator.Send(request, cancellationToken);
         return Ok(response);
     }
     
@@ -168,11 +178,12 @@ public class ProductsController : WebController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Delete(
-        [FromRoute] Guid productId
+        [FromRoute] Guid productId,
+        CancellationToken cancellationToken
     )
     {
         var request = new DeleteRequest(productId);
-        var response = await Mediator.Send(request);
+        var response = await Mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 }

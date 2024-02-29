@@ -9,9 +9,11 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using BiteRight.Application.Queries.Currencies.GetDefault;
 using BiteRight.Application.Queries.Currencies.Search;
 using BiteRight.Web.Authorization;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +31,7 @@ public class CurrenciesController : WebController
     }
 
     [HttpPost("search")]
-    [AuthorizeUserExists]
+    [Authorize]
     [ProducesResponseType(typeof(SearchResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Search(
@@ -39,6 +41,22 @@ public class CurrenciesController : WebController
     {
         var response = await Mediator.Send(
             request,
+            cancellationToken
+        );
+
+        return Ok(response);
+    }
+
+    [HttpGet("default")]
+    [Authorize]
+    [ProducesResponseType(typeof(GetDefaultResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetDefault(
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Mediator.Send(
+            new GetDefaultRequest(),
             cancellationToken
         );
 

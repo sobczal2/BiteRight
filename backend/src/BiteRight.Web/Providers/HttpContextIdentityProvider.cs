@@ -53,7 +53,7 @@ public class HttpContextIdentityProvider : IIdentityProvider
     )
     {
         var identityId = RequireCurrent();
-        var user = await _userRepository.FindByIdentityId(identityId, cancellationToken);
+        var user = await _userRepository.FindByIdentityId(identityId, cancellationToken: cancellationToken);
         if (user is null) throw new InvalidOperationException("User not found");
 
         return user;

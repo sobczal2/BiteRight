@@ -7,6 +7,7 @@
 
 #region
 
+using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Application.Commands.Users.Onboard;
 using BiteRight.Application.Commands.Users.UpdateProfile;
@@ -34,10 +35,11 @@ public class UsersController : WebController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Onboard(
-        OnboardRequest request
+        [FromBody] OnboardRequest request,
+        CancellationToken cancellationToken
     )
     {
-        var response = await Mediator.Send(request);
+        var response = await Mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 
@@ -45,10 +47,12 @@ public class UsersController : WebController
     [AuthorizeNamePresent]
     [ProducesResponseType(typeof(MeResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Me()
+    public async Task<IActionResult> Me(
+        CancellationToken cancellationToken
+    )
     {
         var request = new MeRequest();
-        var response = await Mediator.Send(request);
+        var response = await Mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 
@@ -57,10 +61,11 @@ public class UsersController : WebController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateProfile(
-        [FromBody] UpdateProfileRequest request
+        [FromBody] UpdateProfileRequest request,
+        CancellationToken cancellationToken
     )
     {
-        var response = await Mediator.Send(request);
+        var response = await Mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 }

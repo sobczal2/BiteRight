@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -20,6 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.dto.common.PaginatedList
+import com.sobczal2.biteright.dto.common.PaginationParams
+import com.sobczal2.biteright.dto.common.emptyPaginatedList
+import com.sobczal2.biteright.dto.currencies.CurrencyDto
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.events.StartScreenEvent
 import com.sobczal2.biteright.state.StartScreenState
@@ -29,9 +35,12 @@ import com.sobczal2.biteright.ui.components.common.ErrorBox
 import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
+import com.sobczal2.biteright.ui.components.currencies.CurrencyFormField
+import com.sobczal2.biteright.ui.components.users.TimeZoneFormField
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.viewmodels.StartViewModel
+import java.util.TimeZone
 
 
 @Composable
@@ -53,6 +62,8 @@ fun StartScreen(
         StartScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,
+            searchCurrencies = viewModel::searchCurrencies,
+            searchTimeZones = viewModel::searchTimeZones,
             handleNavigationEvent = handleNavigationEvent,
         )
     }
@@ -62,6 +73,8 @@ fun StartScreen(
 fun StartScreenContent(
     state: StartScreenState = StartScreenState(),
     sendEvent: (StartScreenEvent) -> Unit = {},
+    searchCurrencies: suspend (String, PaginationParams) -> PaginatedList<CurrencyDto> = { _, _ -> emptyPaginatedList() },
+    searchTimeZones: suspend (String, PaginationParams) -> PaginatedList<TimeZone> = { _, _ -> emptyPaginatedList() },
     handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
     Scaffold { paddingValues ->
@@ -69,24 +82,46 @@ fun StartScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(MaterialTheme.dimension.md),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround
+                .padding(MaterialTheme.dimension.md)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            BiteRightLogo(
+            Column(
                 modifier = Modifier
-                    .size(300.dp)
-            )
-            TextFormField(
-                state = state.usernameFieldState,
-                onChange = {
-                    sendEvent(StartScreenEvent.OnUsernameChange(it))
-                },
-                options = TextFormFieldOptions(
-                    label = { Text(text = stringResource(id = R.string.username)) },
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
+                    .fillMaxWidth()
+                    .padding(bottom = MaterialTheme.dimension.xl),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                BiteRightLogo(
+                    modifier = Modifier
+                        .size(200.dp)
+                )
+                TextFormField(
+                    state = state.usernameFieldState,
+                    onChange = {
+                        sendEvent(StartScreenEvent.OnUsernameChange(it))
+                    },
+                    options = TextFormFieldOptions(
+                        label = { Text(text = stringResource(id = R.string.username)) },
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                CurrencyFormField(
+                    state = state.currencyFieldState,
+                    onChange = {
+                        sendEvent(StartScreenEvent.OnCurrencyChange(it))
+                    },
+                    searchCurrencies = searchCurrencies
+                )
+                TimeZoneFormField(
+                    state = state.timeZoneFieldState,
+                    onChange = {
+                        sendEvent(StartScreenEvent.OnTimeZoneChange(it))
+                    },
+                    searchTimeZones = searchTimeZones
+                )
+            }
             ButtonWithLoader(
                 onClick = {
                     sendEvent(StartScreenEvent.OnNextClick {
@@ -94,14 +129,16 @@ fun StartScreenContent(
                     })
                 },
                 loading = state.formSubmitting,
+                shape = MaterialTheme.shapes.extraSmall,
                 content = {
                     Text(
                         text = stringResource(id = R.string.next),
-                        style = MaterialTheme.typography.displaySmall
+                        style = MaterialTheme.typography.bodyLarge
                     )
-                }
+                },
+                modifier = Modifier.fillMaxWidth(),
             )
-            ErrorBox(error = state.globalError)
+            ErrorBox(error = state.globalError) // TODO fix error boxes
         }
     }
 }
@@ -111,6 +148,11 @@ fun StartScreenContent(
 @Preview("Dark Theme", apiLevel = 33, uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun StartScreenPreview() {
     BiteRightTheme {
-        StartScreenContent()
+        StartScreenContent(
+            state = StartScreenState()
+                .copy(
+                    formSubmitting = true,
+                )
+        )
     }
 }

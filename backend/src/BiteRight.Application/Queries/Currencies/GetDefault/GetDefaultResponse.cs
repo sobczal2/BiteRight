@@ -2,23 +2,19 @@
 // # Solution: BiteRight
 // # File: GetDefaultResponse.cs
 // # Author: Łukasz Sobczak
-// # Created: 19-02-2024
+// # Created: 29-02-2024
 // # ==============================================================================
 
-#region
+using BiteRight.Application.Dtos.Currencies;
 
-using BiteRight.Application.Dtos.Categories;
-
-#endregion
-
-namespace BiteRight.Application.Queries.Categories.GetDefault;
+namespace BiteRight.Application.Queries.Currencies.GetDefault;
 
 public class GetDefaultResponse
 {
-    public CategoryDto Category { get; set; }
+    public CurrencyDto Currency { get; set; }
     
-    public GetDefaultResponse(CategoryDto category)
+    public GetDefaultResponse(CurrencyDto currency)
     {
-        Category = category;
+        Currency = currency;
     }
 }

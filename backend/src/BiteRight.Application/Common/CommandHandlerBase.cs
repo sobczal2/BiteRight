@@ -49,14 +49,3 @@ public abstract class CommandHandlerBase<TRequest, TResponse> : HandlerBase<TReq
         }
     }
 }
-
-public abstract class CommandHandlerBase<TRequest> : CommandHandlerBase<TRequest, Unit>
-    where TRequest : IRequest<Unit>
-{
-    protected CommandHandlerBase(
-        AppDbContext appDbContext
-    )
-        : base(appDbContext)
-    {
-    }
-}

@@ -8,6 +8,7 @@ import com.sobczal2.biteright.data.api.requests.categories.SearchRequest
 import com.sobczal2.biteright.data.api.requests.products.DeleteRequest
 import com.sobczal2.biteright.data.api.requests.products.EditRequest
 import com.sobczal2.biteright.data.api.requests.products.GetDetailsRequest
+import com.sobczal2.biteright.data.api.requests.users.MeRequest
 import com.sobczal2.biteright.dto.categories.CategoryDto
 import com.sobczal2.biteright.dto.common.PaginatedList
 import com.sobczal2.biteright.dto.common.PaginationParams
@@ -171,7 +172,9 @@ class EditProductViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            val meResult = userRepository.me()
+            val meResult = userRepository.me(
+                MeRequest()
+            )
 
             val userDto = meResult.fold(
                 { response ->

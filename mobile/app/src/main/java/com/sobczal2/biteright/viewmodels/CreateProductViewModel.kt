@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.request.ImageRequest
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.data.api.requests.categories.GetDefaultRequest
 import com.sobczal2.biteright.data.api.requests.products.CreateRequest
+import com.sobczal2.biteright.data.api.requests.users.MeRequest
 import com.sobczal2.biteright.dto.categories.CategoryDto
 import com.sobczal2.biteright.dto.common.PaginatedList
 import com.sobczal2.biteright.dto.common.PaginationParams
@@ -232,7 +234,9 @@ class CreateProductViewModel @Inject constructor(
             )
         }
 
-        val defaultCategoryResult = categoryRepository.getDefault()
+        val defaultCategoryResult = categoryRepository.getDefault(
+            GetDefaultRequest()
+        )
 
         defaultCategoryResult.fold(
             { response ->
@@ -267,7 +271,9 @@ class CreateProductViewModel @Inject constructor(
             )
         }
 
-        val currentUserResult = userRepository.me()
+        val currentUserResult = userRepository.me(
+            MeRequest()
+        )
 
         currentUserResult.fold(
             { response ->

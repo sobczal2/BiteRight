@@ -30,9 +30,11 @@ fun LocalDate.toExpirationString(
     }
 }
 
-fun Instant.humanize(): String {
+fun Instant.humanize(
+    timeZone: TimeZone
+): String {
     val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-    return this.atZone(TimeZone.getDefault().toZoneId()).format(dateFormat)
+    return this.atZone(timeZone.toZoneId()).format(dateFormat)
 }
 
 fun LocalDate.humanize(): String {

@@ -23,6 +23,7 @@ public interface IUserRepository
 
     Task<User?> FindByIdentityId(
         IdentityId identityId,
+        bool useCache = true,
         CancellationToken cancellationToken = default
     );
 
@@ -34,5 +35,9 @@ public interface IUserRepository
     Task<bool> ExistsByUsername(
         Username username,
         CancellationToken cancellationToken = default
+    );
+    
+    void ClearCacheByIdentityId(
+        IdentityId identityId
     );
 }

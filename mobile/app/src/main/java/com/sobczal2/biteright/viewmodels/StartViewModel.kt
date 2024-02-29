@@ -3,14 +3,22 @@ package com.sobczal2.biteright.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sobczal2.biteright.R
+import com.sobczal2.biteright.data.api.requests.currencies.GetDefaultRequest
+import com.sobczal2.biteright.data.api.requests.users.MeRequest
 import com.sobczal2.biteright.data.api.requests.users.OnboardRequest
+import com.sobczal2.biteright.dto.common.PaginatedList
+import com.sobczal2.biteright.dto.common.PaginationParams
+import com.sobczal2.biteright.dto.common.emptyPaginatedList
+import com.sobczal2.biteright.dto.currencies.CurrencyDto
 import com.sobczal2.biteright.events.StartScreenEvent
+import com.sobczal2.biteright.repositories.abstractions.CurrencyRepository
 import com.sobczal2.biteright.repositories.abstractions.UserRepository
 import com.sobczal2.biteright.repositories.common.ApiRepositoryError
 import com.sobczal2.biteright.state.StartScreenState
 import com.sobczal2.biteright.util.StringProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -22,8 +30,10 @@ import javax.inject.Inject
 @HiltViewModel
 class StartViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val stringProvider: StringProvider
-) : ViewModel() {
+    private val stringProvider: StringProvider,
+    private val currencyRepository: CurrencyRepository,
+
+    ) : ViewModel() {
     private val _state = MutableStateFlow(StartScreenState())
     val state = _state.asStateFlow()
 
@@ -32,9 +42,51 @@ class StartViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            events.collect { event ->
-                handleEvent(event)
+            launch {
+                events.collect { event ->
+                    handleEvent(event)
+                }
             }
+            launch { fetchInitialSearchData() }
+            launch { fetchDefaultCurrency() }
+        }
+    }
+
+    private suspend fun fetchDefaultCurrency() {
+        _state.update {
+            it.copy(
+                ongoingLoadingActions = it.ongoingLoadingActions + StartViewModel::fetchDefaultCurrency.name,
+            )
+        }
+
+        val defaultCurrencyResult = currencyRepository.getDefault(
+            GetDefaultRequest()
+        )
+
+        defaultCurrencyResult.fold(
+            { response ->
+                _state.update {
+                    it.copy(
+                        currencyFieldState = it.currencyFieldState.copy(
+                            value = response.currency,
+                            error = null,
+                        )
+                    )
+                }
+            },
+            { repositoryError ->
+                _state.update {
+                    it.copy(
+                        globalError = repositoryError.message
+                    )
+                }
+            }
+        )
+
+        _state.update {
+            it.copy(
+                ongoingLoadingActions = it.ongoingLoadingActions - StartViewModel::fetchDefaultCurrency.name,
+            )
         }
     }
 
@@ -46,12 +98,36 @@ class StartViewModel @Inject constructor(
 
     private fun handleEvent(event: StartScreenEvent) {
         when (event) {
-            is StartScreenEvent.OnUsernameChange -> onUsernameChange(event.value)
-            is StartScreenEvent.OnNextClick -> onNextClick(event.onSuccess)
+            is StartScreenEvent.OnUsernameChange -> handleUsernameChange(event.value)
+            is StartScreenEvent.OnNextClick -> handleNextClick(event.onSuccess)
+            is StartScreenEvent.OnCurrencyChange -> handleCurrencyChange(event.value)
+            is StartScreenEvent.OnTimeZoneChange -> handleTimeZoneChange(event.value)
         }
     }
 
-    private fun onUsernameChange(username: String) {
+    private fun handleTimeZoneChange(value: TimeZone) {
+        _state.update {
+            it.copy(
+                timeZoneFieldState = it.timeZoneFieldState.copy(
+                    value = value,
+                    error = null,
+                )
+            )
+        }
+    }
+
+    private fun handleCurrencyChange(value: CurrencyDto) {
+        _state.update {
+            it.copy(
+                currencyFieldState = it.currencyFieldState.copy(
+                    value = value,
+                    error = null,
+                )
+            )
+        }
+    }
+
+    private fun handleUsernameChange(username: String) {
         _state.update {
             it.copy(
                 usernameFieldState = it.usernameFieldState.copy(
@@ -95,7 +171,7 @@ class StartViewModel @Inject constructor(
         return isValid
     }
 
-    private fun onNextClick(onSuccess: () -> Unit) {
+    private fun handleNextClick(onSuccess: () -> Unit) {
         validate()
 
         if (_state.value.usernameFieldState.error != null) {
@@ -154,7 +230,9 @@ class StartViewModel @Inject constructor(
             )
         }
 
-        val meResult = userRepository.me()
+        val meResult = userRepository.me(
+            MeRequest()
+        )
 
         val isOnboarded = meResult.fold(
             {
@@ -183,5 +261,94 @@ class StartViewModel @Inject constructor(
 
 
         return isOnboarded
+    }
+
+    suspend fun searchCurrencies(
+        query: String,
+        paginationParams: PaginationParams
+    ): PaginatedList<CurrencyDto> {
+
+        if (_state.value.startingCurrencies != null && query == "" && paginationParams == PaginationParams.Default) {
+            return _state.value.startingCurrencies!!
+        }
+
+        val currenciesResult = currencyRepository.search(
+            com.sobczal2.biteright.data.api.requests.currencies.SearchRequest(
+                query = query,
+                paginationParams = paginationParams
+            )
+        )
+
+        currenciesResult.fold(
+            { response ->
+                return response.currencies
+            },
+            { repositoryError ->
+                _state.update { state ->
+                    state.copy(
+                        globalError = repositoryError.message
+                    )
+                }
+            }
+        )
+        return emptyPaginatedList()
+    }
+
+    fun searchTimeZones(
+        query: String,
+        paginationParams: PaginationParams
+    ): PaginatedList<TimeZone> {
+        if (query.isEmpty()) {
+            return PaginatedList(
+                items = _state.value.availableTimeZones
+                    .drop(
+                        paginationParams.pageNumber * paginationParams.pageSize
+                    )
+                    .take(paginationParams.pageSize),
+                pageNumber = paginationParams.pageNumber,
+                pageSize = paginationParams.pageSize,
+                totalCount = _state.value.availableTimeZones.size,
+                totalPages = _state.value.availableTimeZones.size / paginationParams.pageSize
+            )
+        }
+        val result = _state.value.availableTimeZones.filter { it.id.contains(query) }
+
+        return PaginatedList(
+            items = result
+                .drop(
+                    paginationParams.pageNumber * paginationParams.pageSize
+                )
+                .take(paginationParams.pageSize),
+            pageNumber = paginationParams.pageNumber,
+            pageSize = paginationParams.pageSize,
+            totalCount = result.size,
+            totalPages = result.size / paginationParams.pageSize
+        )
+    }
+
+    private suspend fun fetchInitialSearchData() {
+        _state.update {
+            it.copy(
+                ongoingLoadingActions = it.ongoingLoadingActions + StartViewModel::fetchInitialSearchData.name,
+            )
+        }
+
+        coroutineScope {
+            val fetchCurrenciesJob = launch {
+                val result = searchCurrencies("", PaginationParams.Default)
+
+                _state.update {
+                    it.copy(startingCurrencies = result)
+                }
+            }
+
+            fetchCurrenciesJob.join()
+
+            _state.update {
+                it.copy(
+                    ongoingLoadingActions = it.ongoingLoadingActions - StartViewModel::fetchInitialSearchData.name,
+                )
+            }
+        }
     }
 }
