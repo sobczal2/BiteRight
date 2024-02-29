@@ -33,6 +33,7 @@ import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
 import com.sobczal2.biteright.ui.components.units.SimplifiedUnitItem
 import com.sobczal2.biteright.ui.components.units.UnitListItem
 import com.sobczal2.biteright.ui.theme.dimension
+import java.util.Locale
 
 data class FormAmountWithUnit(
     val currentAmount: Double?,
@@ -80,19 +81,19 @@ fun AmountFormField(
 
     LaunchedEffect(state.value) {
         if (state.value.currentAmount != null && currentAmountTextFieldState.value != "%.2f".format(
-                state.value.currentAmount
+                Locale.US, state.value.currentAmount
             )
         )
             currentAmountTextFieldState = currentAmountTextFieldState.copy(
-                value = "%.2f".format(state.value.currentAmount)
+                value = "%.2f".format(Locale.US, state.value.currentAmount)
             )
 
         if (state.value.maxAmount != null && maxAmountTextFieldState.value != "%.2f".format(
-                state.value.maxAmount
+                Locale.US, state.value.maxAmount
             )
         )
             maxAmountTextFieldState = maxAmountTextFieldState.copy(
-                value = "%.2f".format(state.value.maxAmount)
+                value = "%.2f".format(Locale.US, state.value.maxAmount)
             )
     }
 
@@ -150,7 +151,7 @@ fun AmountFormField(
 
                                             else -> {
                                                 currentAmountTextFieldState.copy(
-                                                    value = "%.2f".format(price)
+                                                    value = "%.2f".format(Locale.US, price)
                                                 )
                                             }
                                         }
@@ -217,7 +218,7 @@ fun AmountFormField(
 
                                             else -> {
                                                 maxAmountTextFieldState.copy(
-                                                    value = "%.2f".format(price)
+                                                    value = "%.2f".format(Locale.US, price)
                                                 )
                                             }
                                         }

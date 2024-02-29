@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -50,7 +51,7 @@ fun CreateProductScreen(
     val state = viewModel.state.collectAsStateWithLifecycle()
 
     ScaffoldLoader(
-        loading = state.value.globalLoading
+        loading = state.value.isLoading()
     ) {
         CreateProductScreenContent(
             state = state.value,
@@ -79,12 +80,14 @@ fun CreateProductScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(MaterialTheme.dimension.md),
+                .padding(MaterialTheme.dimension.md)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState()),
+                    .fillMaxWidth()
+                    .padding(bottom = MaterialTheme.dimension.xl),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.md),
             ) {
                 Text(
@@ -160,6 +163,9 @@ fun CreateProductScreenContent(
                     onClick = { handleNavigationEvent(NavigationEvent.NavigateBack) },
                     modifier = Modifier.weight(0.5f),
                     shape = MaterialTheme.shapes.extraSmall,
+                    colors = ButtonDefaults.outlinedButtonColors().copy(
+                        contentColor = MaterialTheme.colorScheme.error,
+                    )
                 ) {
                     Text(text = stringResource(id = R.string.cancel))
                 }

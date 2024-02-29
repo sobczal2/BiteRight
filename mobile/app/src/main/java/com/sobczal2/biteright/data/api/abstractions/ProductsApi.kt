@@ -6,6 +6,7 @@ import com.sobczal2.biteright.data.api.requests.products.EditRequest
 import com.sobczal2.biteright.data.api.requests.products.SearchRequest
 import com.sobczal2.biteright.data.api.responses.products.ChangeAmountResponse
 import com.sobczal2.biteright.data.api.responses.products.CreateResponse
+import com.sobczal2.biteright.data.api.responses.products.DeleteResponse
 import com.sobczal2.biteright.data.api.responses.products.DisposeResponse
 import com.sobczal2.biteright.data.api.responses.products.EditResponse
 import com.sobczal2.biteright.data.api.responses.products.GetDetailsResponse
@@ -15,6 +16,7 @@ import com.sobczal2.biteright.data.api.responses.products.SearchResponse
 import com.sobczal2.biteright.dto.products.ProductSortingStrategy
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -46,4 +48,7 @@ interface ProductsApi {
 
     @PUT("products/{productId}")
     suspend fun edit(@Path("productId") productId: UUID, @Body request: EditRequest): Response<EditResponse>
+
+    @DELETE("products/{productId}")
+    suspend fun delete(@Path("productId") productId: UUID): Response<DeleteResponse>
 }

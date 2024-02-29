@@ -23,10 +23,14 @@ data class EditProductScreenState(
     val categoryFieldState: CategoryFormFieldState = CategoryFormFieldState(CategoryDto.Empty),
     val amountFieldState: AmountFormFieldState = AmountFormFieldState(FormAmountWithUnit.Empty),
     val formSubmitting: Boolean = false,
+    val deleteSubmitting: Boolean = false,
     val imageRequestBuilder: ImageRequest.Builder? = null,
     val startingCategories: PaginatedList<CategoryDto>? = null,
     val startingCurrencies: PaginatedList<CurrencyDto>? = null,
     val startingUnits: PaginatedList<UnitDto>? = null,
-    override val globalLoading: Boolean = true,
+    val detailsLoading: Boolean = false,
+    override val ongoingLoadingActions: Set<String> = emptySet(),
     override val globalError: String? = null,
-) : ScreenState
+) : ScreenState {
+    fun isLoading(): Boolean = ongoingLoadingActions.isNotEmpty()
+}

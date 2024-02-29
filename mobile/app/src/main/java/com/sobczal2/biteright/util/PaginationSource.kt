@@ -29,8 +29,15 @@ class PaginationSource<TItem, TQuery>(
 
     private var lastQueryData: QueryData<TQuery>? = null
 
+    fun clearLastQueryData() {
+        lastQueryData = null
+    }
+
     fun isFetching() = _initialFetching.value || _moreFetching.value
-    suspend fun fetchInitialItems(query: TQuery, search: suspend (TQuery, PaginationParams) -> PaginatedList<TItem>) {
+    suspend fun fetchInitialItems(
+        query: TQuery,
+        search: suspend (TQuery, PaginationParams) -> PaginatedList<TItem>
+    ) {
         val queryData = QueryData(query, _paginationParams.value)
         if (isFetching() || !isQueryDataChanged(queryData)) return
         _initialFetching.value = true

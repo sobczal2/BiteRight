@@ -80,7 +80,7 @@ fun <T> SearchDialog(
     ) {
         Surface(
             modifier = modifier,
-            shape = MaterialTheme.shapes.medium,
+            shape = MaterialTheme.shapes.extraSmall,
         ) {
             Column(
                 modifier = Modifier

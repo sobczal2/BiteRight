@@ -4,6 +4,8 @@ import com.sobczal2.biteright.dto.products.DetailedProductDto
 
 data class ProductDetailsScreenState(
     val product: DetailedProductDto? = null,
-    override val globalLoading: Boolean = true,
+    override val ongoingLoadingActions: Set<String> = emptySet(),
     override val globalError: String? = null
-) : ScreenState
+) : ScreenState {
+    fun isLoading(): Boolean = ongoingLoadingActions.isNotEmpty()
+}

@@ -47,7 +47,7 @@ fun ProfileScreen(
     val state = viewModel.state.collectAsStateWithLifecycle()
 
     ScaffoldLoader(
-        loading = state.value.globalLoading
+        loading = state.value.isLoading(),
     ) {
         ProfileScreenContent(
             state = state.value,
@@ -120,7 +120,7 @@ fun ProfileScreenContent(
                 Button(
                     shape = MaterialTheme.shapes.extraSmall,
                     onClick = {
-                        sendEvent(ProfileScreenEvent.OnEditProfileClick)
+                        handleNavigationEvent(NavigationEvent.NavigateToEditProfile)
                     },
                     modifier = Modifier
                         .weight(0.5f),

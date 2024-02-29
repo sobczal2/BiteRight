@@ -53,8 +53,9 @@ fun Router(authManager: AuthManager) {
         }
         composable(Routes.CURRENT_PRODUCTS) {
             val viewModel = hiltViewModel<CurrentProductsViewModel>()
-            LaunchedEffect(navController.currentDestination) {
-                viewModel.fetchCurrentProducts()
+            LaunchedEffect(navController.currentBackStackEntry?.destination?.route) {
+                if (navController.currentBackStackEntry?.destination?.route == Routes.CURRENT_PRODUCTS)
+                    viewModel.fetchCurrentProducts()
             }
             CurrentProductsScreen(
                 viewModel = viewModel,
@@ -63,8 +64,9 @@ fun Router(authManager: AuthManager) {
         }
         composable(Routes.ALL_PRODUCTS) {
             val viewModel = hiltViewModel<AllProductsViewModel>()
-            LaunchedEffect(navController.currentDestination) {
-                viewModel.fetchAllProducts()
+            LaunchedEffect(navController.currentBackStackEntry?.destination?.route) {
+                if (navController.currentBackStackEntry?.destination?.route == Routes.ALL_PRODUCTS)
+                    viewModel.fetchAllProducts()
             }
             AllProductsScreen(
                 viewModel = viewModel,
@@ -110,23 +112,15 @@ private fun handleNavigationEvent(
     navigationEvent: NavigationEvent,
     navController: NavController
 ) {
+    if (navController.currentDestination?.route == navigationEvent.route) return
     CoroutineScope(Dispatchers.Main).launch {
-        when (navigationEvent) {
-            is NavigationEvent.NavigateBack -> navController.popBackStack()
-            is NavigationEvent.NavigateToWelcome -> navController.navigate(Routes.WELCOME)
-            is NavigationEvent.NavigateToStart -> navController.navigate(Routes.START)
-            is NavigationEvent.NavigateToCurrentProducts -> navController.navigate(Routes.CURRENT_PRODUCTS)
-            is NavigationEvent.NavigateToAllProducts -> navController.navigate(Routes.ALL_PRODUCTS)
-            is NavigationEvent.NavigateToTemplates -> navController.navigate(Routes.TEMPLATES)
-            is NavigationEvent.NavigateToProfile -> navController.navigate(Routes.PROFILE)
-            is NavigationEvent.NavigateToCreateProduct -> navController.navigate(Routes.CREATE_PRODUCT)
-            is NavigationEvent.NavigateToProductDetails -> navController.navigate(
-                Routes.productDetails(navigationEvent.productId)
-            )
-
-            is NavigationEvent.NavigateToEditProduct -> navController.navigate(
-                Routes.editProduct(navigationEvent.productId)
-            )
+        if (navigationEvent.route == null) {
+            when (navigationEvent) {
+                NavigationEvent.NavigateBack -> navController.popBackStack()
+                else -> throw IllegalArgumentException("Unknown navigation event: $navigationEvent")
+            }
+        } else {
+            navController.navigate(navigationEvent.route)
         }
     }
 }

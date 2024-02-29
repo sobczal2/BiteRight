@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.sobczal2.biteright.data.api.abstractions.ProductsApi
 import com.sobczal2.biteright.data.api.requests.products.ChangeAmountRequest
 import com.sobczal2.biteright.data.api.requests.products.CreateRequest
+import com.sobczal2.biteright.data.api.requests.products.DeleteRequest
 import com.sobczal2.biteright.data.api.requests.products.DisposeRequest
 import com.sobczal2.biteright.data.api.requests.products.EditRequest
 import com.sobczal2.biteright.data.api.requests.products.GetDetailsRequest
@@ -13,6 +14,7 @@ import com.sobczal2.biteright.data.api.requests.products.RestoreRequest
 import com.sobczal2.biteright.data.api.requests.products.SearchRequest
 import com.sobczal2.biteright.data.api.responses.products.ChangeAmountResponse
 import com.sobczal2.biteright.data.api.responses.products.CreateResponse
+import com.sobczal2.biteright.data.api.responses.products.DeleteResponse
 import com.sobczal2.biteright.data.api.responses.products.DisposeResponse
 import com.sobczal2.biteright.data.api.responses.products.EditResponse
 import com.sobczal2.biteright.data.api.responses.products.GetDetailsResponse
@@ -88,4 +90,11 @@ class ProductRepositoryImpl @Inject constructor(
                 response.processResponse { it }
             }
         }
+
+    override suspend fun delete(deleteRequest: DeleteRequest): Either<DeleteResponse, RepositoryError> =
+        safeApiCall {
+            productApi.delete(deleteRequest.productId).let { response ->
+                response.processResponse { it }
+            }
+    }
 }

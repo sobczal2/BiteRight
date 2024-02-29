@@ -62,7 +62,7 @@ fun CurrentProductsScreen(
     val state = viewModel.state.collectAsStateWithLifecycle()
 
     ScaffoldLoader(
-        loading = state.value.globalLoading
+        loading = state.value.isLoading()
     ) {
         CurrentProductsScreenContent(
             state = state.value,

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import coil.request.ImageRequest
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.data.api.requests.categories.SearchRequest
+import com.sobczal2.biteright.data.api.requests.products.DeleteRequest
 import com.sobczal2.biteright.data.api.requests.products.EditRequest
 import com.sobczal2.biteright.data.api.requests.products.GetDetailsRequest
 import com.sobczal2.biteright.dto.categories.CategoryDto
@@ -13,7 +14,6 @@ import com.sobczal2.biteright.dto.common.PaginationParams
 import com.sobczal2.biteright.dto.common.emptyPaginatedList
 import com.sobczal2.biteright.dto.currencies.CurrencyDto
 import com.sobczal2.biteright.dto.units.UnitDto
-import com.sobczal2.biteright.events.CreateProductScreenEvent
 import com.sobczal2.biteright.events.EditProductScreenEvent
 import com.sobczal2.biteright.repositories.abstractions.CategoryRepository
 import com.sobczal2.biteright.repositories.abstractions.CurrencyRepository
@@ -61,20 +61,17 @@ class EditProductViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             launch { events.collect { handleEvent(it) } }
-
-            val fetchInitialSearchDataJob = launch { fetchInitialSearchData() }
-
-            fetchInitialSearchDataJob.join()
-
-            _state.update {
-                it.copy(
-                    globalLoading = false
-                )
-            }
+            launch { fetchInitialSearchData() }
         }
     }
 
     private suspend fun fetchInitialSearchData() {
+        _state.update {
+            it.copy(
+                ongoingLoadingActions = it.ongoingLoadingActions + EditProductViewModel::fetchInitialSearchData.name,
+            )
+        }
+
         coroutineScope {
             val fetchCategoriesJob = launch {
                 val result = searchCategories("", PaginationParams.Default)
@@ -105,6 +102,12 @@ class EditProductViewModel @Inject constructor(
             fetchCategoriesJob.join()
             fetchCurrenciesJob.join()
             fetchUnitsJob.join()
+
+            _state.update {
+                it.copy(
+                    ongoingLoadingActions = it.ongoingLoadingActions - EditProductViewModel::fetchInitialSearchData.name,
+                )
+            }
         }
     }
 
@@ -149,16 +152,24 @@ class EditProductViewModel @Inject constructor(
                     submitForm(event.onSuccess)
                 }
             }
+
+            is EditProductScreenEvent.OnDeleteClick -> {
+                viewModelScope.launch {
+                    deleteProduct(event.onSuccess)
+                }
+            }
         }
     }
 
     private fun loadDetails(productId: UUID) {
+        _state.update {
+            it.copy(
+                productId = productId,
+                ongoingLoadingActions = it.ongoingLoadingActions + EditProductViewModel::loadDetails.name,
+            )
+        }
+
         viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    productId = productId,
-                )
-            }
 
             val meResult = userRepository.me()
 
@@ -225,9 +236,11 @@ class EditProductViewModel @Inject constructor(
                 }
             )
 
-            _state.value = _state.value.copy(
-                globalLoading = false
-            )
+            _state.update {
+                it.copy(
+                    ongoingLoadingActions = it.ongoingLoadingActions - EditProductViewModel::loadDetails.name,
+                )
+            }
         }
     }
 
@@ -732,5 +745,40 @@ class EditProductViewModel @Inject constructor(
         }
 
         return true
+    }
+
+    private suspend fun deleteProduct(
+        onSuccess: () -> Unit
+    ) {
+        _state.update {
+            it.copy(
+                deleteSubmitting = true
+            )
+        }
+
+        val deleteResult = productRepository.delete(
+            DeleteRequest(
+                productId = state.value.productId!!
+            )
+        )
+
+        deleteResult.fold(
+            { _ ->
+                onSuccess()
+            },
+            { repositoryError ->
+                _state.update {
+                    it.copy(
+                        globalError = repositoryError.message
+                    )
+                }
+            }
+        )
+
+        _state.update {
+            it.copy(
+                deleteSubmitting = false
+            )
+        }
     }
 }

@@ -150,7 +150,7 @@ class StartViewModel @Inject constructor(
     suspend fun isOnboarded(): Boolean {
         _state.update {
             it.copy(
-                globalLoading = true
+                ongoingLoadingActions = it.ongoingLoadingActions + StartViewModel::isOnboarded.name,
             )
         }
 
@@ -163,7 +163,7 @@ class StartViewModel @Inject constructor(
             { repositoryError ->
                 _state.update {
                     it.copy(
-                        globalLoading = false
+                        ongoingLoadingActions = it.ongoingLoadingActions - StartViewModel::isOnboarded.name,
                     )
                 }
 

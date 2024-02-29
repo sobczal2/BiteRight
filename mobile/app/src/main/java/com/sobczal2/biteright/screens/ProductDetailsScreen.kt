@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -41,6 +42,7 @@ import com.sobczal2.biteright.util.humanize
 import com.sobczal2.biteright.viewmodels.ProductDetailsViewModel
 import java.time.Instant
 import java.time.LocalDate
+import java.util.Locale
 import java.util.UUID
 
 @Composable
@@ -55,7 +57,7 @@ fun ProductDetailsScreen(
         viewModel.sendEvent(ProductDetailsScreenEvent.LoadDetails(productId))
     }
 
-    ScaffoldLoader(loading = state.value.globalLoading) {
+    ScaffoldLoader(loading = state.value.isLoading()) {
         ProductDetailsScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,
@@ -70,7 +72,7 @@ fun ProductDetailsScreenContent(
     sendEvent: (ProductDetailsScreenEvent) -> Unit = {},
     handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
-    val product = state.product!!
+    val product = state.product ?: return
     Scaffold { paddingValues ->
         Column(
             modifier = Modifier
@@ -122,7 +124,7 @@ fun ProductDetailsScreenContent(
                         if (product.priceValue != null && product.priceCurrency != null) {
                             DisplayPair(
                                 label = "${stringResource(id = R.string.price)}:",
-                                value = "${"%.2f".format(product.priceValue)} ${product.priceCurrency.symbol}",
+                                value = "${"%.2f".format(Locale.US, product.priceValue)} ${product.priceCurrency.symbol}",
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }
@@ -141,13 +143,13 @@ fun ProductDetailsScreenContent(
 
                         DisplayPair(
                             label = "${stringResource(id = R.string.current_amount)}:",
-                            value = "${"%.2f".format(product.amountCurrentValue)} ${product.amountUnit.abbreviation}",
+                            value = "${"%.2f".format(Locale.US, product.amountCurrentValue)} ${product.amountUnit.abbreviation}",
                             modifier = Modifier.fillMaxWidth()
                         )
 
                         DisplayPair(
                             label = "${stringResource(id = R.string.max_amount)}:",
-                            value = "${"%.2f".format(product.amountMaxValue)} ${product.amountUnit.abbreviation}",
+                            value = "${"%.2f".format(Locale.US, product.amountMaxValue)} ${product.amountUnit.abbreviation}",
                             modifier = Modifier.fillMaxWidth()
                         )
 
@@ -202,6 +204,9 @@ fun ProductDetailsScreenContent(
                     },
                     modifier = Modifier.weight(0.5f),
                     shape = MaterialTheme.shapes.extraSmall,
+                    colors = ButtonDefaults.outlinedButtonColors().copy(
+                        contentColor = MaterialTheme.colorScheme.error,
+                    )
                 )
                 {
                     Text(text = stringResource(id = R.string.back))

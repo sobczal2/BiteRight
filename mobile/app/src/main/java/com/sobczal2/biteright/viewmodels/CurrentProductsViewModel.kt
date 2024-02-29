@@ -83,7 +83,7 @@ class CurrentProductsViewModel @Inject constructor(
         viewModelScope.launch {
             _state.update {
                 it.copy(
-                    globalLoading = true
+                    ongoingLoadingActions = it.ongoingLoadingActions + CurrentProductsViewModel::fetchCurrentProducts.name,
                 )
             }
 
@@ -112,7 +112,7 @@ class CurrentProductsViewModel @Inject constructor(
 
             _state.update {
                 it.copy(
-                    globalLoading = false
+                    ongoingLoadingActions = it.ongoingLoadingActions - CurrentProductsViewModel::fetchCurrentProducts.name,
                 )
             }
         }

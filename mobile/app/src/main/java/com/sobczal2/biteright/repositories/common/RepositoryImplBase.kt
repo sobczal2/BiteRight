@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.data.api.common.ApiError
 import com.sobczal2.biteright.util.StringProvider
+import kotlinx.coroutines.delay
 import retrofit2.Response
 
 open class RepositoryImplBase(
