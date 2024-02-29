@@ -10,7 +10,10 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
+using BiteRight.Application.Dtos.Common;
+using BiteRight.Application.Queries.Units.Search;
 using BiteRight.Web.Tests.Integration.TestHelpers;
 using FluentAssertions;
 using Xunit;
@@ -41,13 +44,9 @@ public class SearchUnitsTests : IAsyncDisposable
         GC.SuppressFinalize(this);
     }
 
-    private static string GetUrl(
-        int pageNumber,
-        int pageSize,
-        string query
-    )
+    private static string GetUrl()
     {
-        return $"api/Units/search?query={query}&pageNumber={pageNumber}&pageSize={pageSize}";
+        return $"api/Units/search";
     }
 
     [Fact]
@@ -56,8 +55,13 @@ public class SearchUnitsTests : IAsyncDisposable
         // Arrange
         var pageNumber = 1;
         var pageSize = 10;
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, GetUrl(pageNumber, pageSize, string.Empty))
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, GetUrl())
             .AuthorizeAsOnboardedUser();
+        
+        httpRequestMessage.Content = JsonContent.Create(new SearchRequest
+        {
+            PaginationParams = new PaginationParams(pageNumber, pageSize)
+        });
 
         // Act
         var httpResponse =

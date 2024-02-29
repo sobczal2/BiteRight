@@ -31,4 +31,8 @@
         <ProjectReference Include="..\..\src\BiteRight.Web\BiteRight.Web.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Controllers\Currencies\" />
+    </ItemGroup>
+
 </Project>
