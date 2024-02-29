@@ -8,12 +8,14 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using AspNetCoreRateLimit;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Options;
 using BiteRight.Web.Authorization;
@@ -48,6 +50,7 @@ public static class WebRegistrations
         AddCommon(services);
         AddLocalization(services);
         AddOptions(services, configuration);
+        AddRateLimiting(services);
     }
 
     private static void AddControllers(
@@ -143,6 +146,7 @@ public static class WebRegistrations
     )
     {
         services.AddScoped<CorrelationIdMiddleware>();
+        services.AddScoped<IdentityIdHeaderMiddleware>();
     }
 
     private static void AddCommon(
@@ -183,5 +187,38 @@ public static class WebRegistrations
     {
         services.Configure<Auth0Options>(configuration.GetSection(Auth0Options.SectionName));
         services.Configure<CacheOptions>(configuration.GetSection(CacheOptions.SectionName));
+    }
+    
+    private static void AddRateLimiting(
+        IServiceCollection services
+    )
+    {
+        services.Configure<ClientRateLimitOptions>(opt =>
+        {
+            opt.ClientIdHeader = IdentityIdHeaderMiddleware.IdentityIdHeader;
+            opt.ClientWhitelist = new List<string>
+            {
+                IdentityIdHeaderMiddleware.DefaultIdentityId
+            };
+            opt.GeneralRules = new List<RateLimitRule>
+            {
+                new()
+                {
+                    Endpoint = "*",
+                    Limit = 250,
+                    Period = "1m"
+                },
+                new()
+                {
+                    Endpoint = "*",
+                    Limit = 10_000,
+                    Period = "1d"
+                }
+            };
+        });
+
+        services.AddInMemoryRateLimiting();
+        
+        services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
     }
 }
