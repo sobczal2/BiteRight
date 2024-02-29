@@ -12,6 +12,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BiteRight.Infrastructure.Configuration.Categories;
+using BiteRight.Web.Tests.Integration.TestHelpers;
 using FluentAssertions;
 using Xunit;
 
@@ -53,9 +54,10 @@ public class GetPhotoCategoriesTests : IAsyncDisposable
     {
         // Arrange
         var categoryId = CategoryConfiguration.Dairy.Id;
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, GetUrl(categoryId)).AuthorizeAsOnboardedUser();
 
         // Act
-        var httpResponse = await _client.GetAsync(GetUrl(categoryId));
+        var httpResponse = await _client.SendAsync(httpRequestMessage);
 
         // Assert
         httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);

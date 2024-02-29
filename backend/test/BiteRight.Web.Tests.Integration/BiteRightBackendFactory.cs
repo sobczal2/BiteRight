@@ -58,6 +58,10 @@ public class BiteRightBackendFactory : WebApplicationFactory<IWebAssemblyMarker>
 
         builder.ConfigureTestServices(services =>
         {
+            services.RemoveAll<IFileProvider>();
+            
+            services.AddSingleton<IFileProvider, TestFileProvider>();
+            
             services.AddAuthentication("Test")
                 .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", _ => { });
 
