@@ -10,15 +10,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,9 +45,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.UUID
-import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun CurrentProductsScreen(
@@ -120,12 +113,14 @@ fun CurrentProductsScreenContent(
         ) {
             Text(
                 text = stringResource(id = R.string.current_products),
-                style = MaterialTheme.typography.displayMedium.plus(
+                style = MaterialTheme.typography.displaySmall.plus(
                     TextStyle(textAlign = TextAlign.Center)
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(bottom = MaterialTheme.dimension.md)
             )
+
             LazyColumn(
                 content = {
                     items(

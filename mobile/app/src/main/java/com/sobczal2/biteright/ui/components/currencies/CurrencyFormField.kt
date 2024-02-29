@@ -40,7 +40,7 @@ fun CurrencyFormField(
         Card(
             shape = MaterialTheme.shapes.extraSmall
         ) {
-            SimplifiedCurrencyItem(
+            FullCurrencyItem(
                 currency = state.value,
                 selected = false,
                 onClick = {

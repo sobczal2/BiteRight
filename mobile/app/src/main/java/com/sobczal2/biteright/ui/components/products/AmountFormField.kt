@@ -65,14 +65,14 @@ fun AmountFormField(
     var currentAmountTextFieldState by remember {
         mutableStateOf(
             TextFormFieldState(
-                value = ""
+                value = state.value.currentAmount?.let { "%.2f".format(Locale.US, it) } ?: ""
             )
         )
     }
     var maxAmountTextFieldState by remember {
         mutableStateOf(
             TextFormFieldState(
-                value = ""
+                value = state.value.maxAmount?.let { "%.2f".format(Locale.US, it) } ?: ""
             )
         )
     }
@@ -95,6 +95,54 @@ fun AmountFormField(
             maxAmountTextFieldState = maxAmountTextFieldState.copy(
                 value = "%.2f".format(Locale.US, state.value.maxAmount)
             )
+    }
+
+    fun handleFocusLost() {
+        val newCurrentAmount = currentAmountTextFieldState.value.toDoubleOrNull()
+        val newMaxAmount = maxAmountTextFieldState.value.toDoubleOrNull()
+        when {
+            newCurrentAmount == null && newMaxAmount == null -> {
+                onChange(
+                    state.value.copy(
+                        currentAmount = null,
+                        maxAmount = null
+                    )
+                )
+            }
+            newCurrentAmount == null && newMaxAmount != null -> {
+                onChange(
+                    state.value.copy(
+                        currentAmount = newMaxAmount,
+                        maxAmount = newMaxAmount
+                    )
+                )
+            }
+            newCurrentAmount != null && newMaxAmount == null -> {
+                onChange(
+                    state.value.copy(
+                        currentAmount = newCurrentAmount,
+                        maxAmount = newCurrentAmount
+                    )
+                )
+            }
+            newCurrentAmount != null && newMaxAmount != null -> {
+                if (newCurrentAmount > newMaxAmount) {
+                    onChange(
+                        state.value.copy(
+                            currentAmount = newMaxAmount,
+                            maxAmount = newMaxAmount
+                        )
+                    )
+                } else {
+                    onChange(
+                        state.value.copy(
+                            currentAmount = newCurrentAmount,
+                            maxAmount = newMaxAmount
+                        )
+                    )
+                }
+            }
+        }
     }
 
     Column(
@@ -140,48 +188,7 @@ fun AmountFormField(
                         modifier = Modifier
                             .onFocusChanged {
                                 if (!it.isFocused) {
-                                    currentAmountTextFieldState =
-                                        when (val price =
-                                            currentAmountTextFieldState.value.toDoubleOrNull()) {
-                                            null -> {
-                                                currentAmountTextFieldState.copy(
-                                                    value = "",
-                                                )
-                                            }
-
-                                            else -> {
-                                                currentAmountTextFieldState.copy(
-                                                    value = "%.2f".format(Locale.US, price)
-                                                )
-                                            }
-                                        }
-                                    when (val newAmount =
-                                        currentAmountTextFieldState.value.toDoubleOrNull()) {
-                                        null -> {
-                                            onChange(
-                                                state.value.copy(
-                                                    currentAmount = null
-                                                )
-                                            )
-                                        }
-
-                                        else -> {
-                                            if (state.value.maxAmount == null || newAmount > state.value.maxAmount!!) {
-                                                onChange(
-                                                    state.value.copy(
-                                                        currentAmount = newAmount,
-                                                        maxAmount = newAmount
-                                                    )
-                                                )
-                                            } else {
-                                                onChange(
-                                                    state.value.copy(
-                                                        currentAmount = newAmount
-                                                    )
-                                                )
-                                            }
-                                        }
-                                    }
+                                    handleFocusLost()
                                 }
                             }
                     )
@@ -207,48 +214,7 @@ fun AmountFormField(
                         modifier = Modifier
                             .onFocusChanged {
                                 if (!it.isFocused) {
-                                    maxAmountTextFieldState =
-                                        when (val price =
-                                            maxAmountTextFieldState.value.toDoubleOrNull()) {
-                                            null -> {
-                                                maxAmountTextFieldState.copy(
-                                                    value = "",
-                                                )
-                                            }
-
-                                            else -> {
-                                                maxAmountTextFieldState.copy(
-                                                    value = "%.2f".format(Locale.US, price)
-                                                )
-                                            }
-                                        }
-                                    when (val newAmount =
-                                        maxAmountTextFieldState.value.toDoubleOrNull()) {
-                                        null -> {
-                                            onChange(
-                                                state.value.copy(
-                                                    maxAmount = null
-                                                )
-                                            )
-                                        }
-
-                                        else -> {
-                                            if (state.value.currentAmount == null || newAmount < state.value.currentAmount!!) {
-                                                onChange(
-                                                    state.value.copy(
-                                                        maxAmount = newAmount,
-                                                        currentAmount = newAmount
-                                                    )
-                                                )
-                                            } else {
-                                                onChange(
-                                                    state.value.copy(
-                                                        maxAmount = newAmount
-                                                    )
-                                                )
-                                            }
-                                        }
-                                    }
+                                    handleFocusLost()
                                 }
                             }
                     )

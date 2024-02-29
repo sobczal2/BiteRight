@@ -20,7 +20,7 @@ import androidx.core.view.WindowCompat
 @Composable
 fun BiteRightTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false,
+    dynamicColor: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     val colorScheme = when {

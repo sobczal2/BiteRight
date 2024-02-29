@@ -32,6 +32,9 @@ InfrastructureRegistrations.AddBiteRightInfrastructure(builder.Services, builder
 DomainRegistrations.AddBiteRightDomain(builder.Services);
 
 var app = builder.Build();
+
+app.UseHttpsRedirection();
+
 app.UseMiddleware<CorrelationIdMiddleware>();
 
 app.UseSerilogRequestLogging(opt =>
@@ -53,8 +56,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseRequestLocalization();
 
-app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -62,4 +63,5 @@ app.UseMiddleware<IdentityIdHeaderMiddleware>();
 app.UseClientRateLimiting();
 
 app.MapControllers();
+
 app.Run();
