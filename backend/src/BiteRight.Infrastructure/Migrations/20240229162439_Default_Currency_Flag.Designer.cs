@@ -3,6 +3,7 @@ using System;
 using BiteRight.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BiteRight.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240229162439_Default_Currency_Flag")]
+    partial class Default_Currency_Flag
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -525,7 +528,7 @@ namespace BiteRight.Infrastructure.Migrations
                         {
                             Id = new Guid("e862f33f-a04a-4b4e-a4bb-9542b1db3eeb"),
                             ISO4217Code = "USD",
-                            IsDefault = true,
+                            IsDefault = false,
                             Name = "United States dollar",
                             Symbol = "$"
                         });

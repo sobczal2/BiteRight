@@ -35,6 +35,7 @@ public class Currency : AggregateRoot<CurrencyId>
         Name = name;
         Symbol = symbol;
         ISO4217Code = iso4217Code;
+        IsDefault = isDefault;
     }
 
     public Name Name { get; private set; }

@@ -133,9 +133,10 @@ fun StartScreenContent(
                 content = {
                     Text(
                         text = stringResource(id = R.string.next),
-                        style = MaterialTheme.typography.displaySmall
+                        style = MaterialTheme.typography.bodyLarge
                     )
-                }
+                },
+                modifier = Modifier.fillMaxWidth(),
             )
             ErrorBox(error = state.globalError) // TODO fix error boxes
         }
@@ -147,6 +148,11 @@ fun StartScreenContent(
 @Preview("Dark Theme", apiLevel = 33, uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun StartScreenPreview() {
     BiteRightTheme {
-        StartScreenContent()
+        StartScreenContent(
+            state = StartScreenState()
+                .copy(
+                    formSubmitting = true,
+                )
+        )
     }
 }

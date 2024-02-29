@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using BiteRight.Application.Queries.Units.Search;
 using BiteRight.Web.Authorization;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +30,7 @@ public class UnitsController : WebController
     }
 
     [HttpPost("search")]
-    [AuthorizeUserExists]
+    [Authorize]
     [ProducesResponseType(typeof(SearchResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Search(

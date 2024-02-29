@@ -13,6 +13,7 @@ using BiteRight.Application.Queries.Currencies.GetDefault;
 using BiteRight.Application.Queries.Currencies.Search;
 using BiteRight.Web.Authorization;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,7 +31,7 @@ public class CurrenciesController : WebController
     }
 
     [HttpPost("search")]
-    [AuthorizeUserExists]
+    [Authorize]
     [ProducesResponseType(typeof(SearchResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Search(
@@ -47,7 +48,7 @@ public class CurrenciesController : WebController
     }
 
     [HttpGet("default")]
-    [AuthorizeUserExists]
+    [Authorize]
     [ProducesResponseType(typeof(GetDefaultResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetDefault(

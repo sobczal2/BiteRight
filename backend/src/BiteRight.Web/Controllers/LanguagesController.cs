@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using BiteRight.Application.Queries.Languages.List;
 using BiteRight.Web.Authorization;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +30,7 @@ public class LanguagesController : WebController
     }
 
     [HttpGet]
-    [AuthorizeUserExists]
+    [Authorize]
     [ProducesResponseType(typeof(ListResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> List(CancellationToken cancellationToken)
     {

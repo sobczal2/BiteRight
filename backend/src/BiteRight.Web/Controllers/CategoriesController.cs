@@ -16,6 +16,7 @@ using BiteRight.Application.Queries.Categories.GetPhoto;
 using BiteRight.Application.Queries.Categories.Search;
 using BiteRight.Web.Authorization;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +34,7 @@ public class CategoriesController : WebController
     }
 
     [HttpPost("search")]
-    [AuthorizeUserExists]
+    [Authorize]
     [ProducesResponseType(typeof(SearchResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Search(
@@ -50,7 +51,7 @@ public class CategoriesController : WebController
     }
 
     [HttpGet("{categoryId:guid}/photo")]
-    [AuthorizeUserExists]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetPhoto(
@@ -70,7 +71,7 @@ public class CategoriesController : WebController
     }
 
     [HttpGet("default")]
-    [AuthorizeUserExists]
+    [Authorize]
     [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetDefault(
