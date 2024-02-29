@@ -58,6 +58,7 @@ public class UpdateProfileUsersTest : IAsyncDisposable
         // Arrange
         var onboardRequest = new OnboardRequest(
             TestUsers.EmailVerifiedUser.Username,
+            CurrencyConfiguration.USD.Id,
             TimeZoneInfo.Utc.Id
         );
         var onboardHttpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "api/Users/onboard")

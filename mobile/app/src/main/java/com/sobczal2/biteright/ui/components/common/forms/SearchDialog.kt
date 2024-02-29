@@ -15,7 +15,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,8 +27,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.common.PaginatedList
 import com.sobczal2.biteright.dto.common.PaginationParams
-import com.sobczal2.biteright.util.PaginationSource
 import com.sobczal2.biteright.ui.theme.dimension
+import com.sobczal2.biteright.util.PaginationSource
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
@@ -67,11 +66,14 @@ fun <T> SearchDialog(
     var initialized by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
+        paginationSource.fetchInitialItems(queryFieldStateFlow.value.value, search)
         queryFieldStateFlow
-            .debounce(if (initialized) debounceDuration else Duration.ZERO)
+            .debounce(debounceDuration)
             .collect {
+                if (initialized) {
+                    paginationSource.fetchInitialItems(it.value, search)
+                }
                 initialized = true
-                paginationSource.fetchInitialItems(queryFieldStateFlow.value.value, search)
             }
     }
 
@@ -132,7 +134,10 @@ fun <T> SearchDialog(
                                 }
                                 LaunchedEffect(Unit) {
                                     coroutineScope.launch {
-                                        paginationSource.fetchMoreItems(queryFieldState.value.value, search)
+                                        paginationSource.fetchMoreItems(
+                                            queryFieldState.value.value,
+                                            search
+                                        )
                                     }
                                 }
                             }

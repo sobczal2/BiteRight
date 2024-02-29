@@ -14,6 +14,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using BiteRight.Application.Commands.Users.Onboard;
+using BiteRight.Infrastructure.Configuration.Currencies;
 using BiteRight.Infrastructure.Database;
 using BiteRight.Web.Tests.Integration.TestHelpers;
 using FluentAssertions;
@@ -60,6 +61,7 @@ public class OnboardUsersTests : IAsyncDisposable
         // Arrange
         var request = new OnboardRequest(
             TestUsers.EmailVerifiedUser.Username,
+            CurrencyConfiguration.USD.Id,
             TimeZoneInfo.Utc.Id
         );
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, GetUrl())

@@ -186,7 +186,8 @@ class StartViewModel @Inject constructor(
 
         val onboardRequest = OnboardRequest(
             username = state.value.usernameFieldState.value,
-            timeZoneId = TimeZone.getDefault().id
+            currencyId = state.value.currencyFieldState.value.id,
+            timeZoneId = state.value.timeZoneFieldState.value.id
         )
 
         viewModelScope.launch {
@@ -311,7 +312,7 @@ class StartViewModel @Inject constructor(
                 totalPages = _state.value.availableTimeZones.size / paginationParams.pageSize
             )
         }
-        val result = _state.value.availableTimeZones.filter { it.id.contains(query) }
+        val result = _state.value.availableTimeZones.filter { it.id.lowercase().contains(query.lowercase()) }
 
         return PaginatedList(
             items = result

@@ -205,7 +205,7 @@ class EditProfileViewModel @Inject constructor(
                 totalPages = _state.value.availableTimeZones.size / paginationParams.pageSize
             )
         }
-        val result = _state.value.availableTimeZones.filter { it.id.contains(query) }
+        val result = _state.value.availableTimeZones.filter { it.id.lowercase().contains(query.lowercase()) }
 
         return PaginatedList(
             items = result

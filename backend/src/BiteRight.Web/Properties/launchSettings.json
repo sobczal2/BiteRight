@@ -21,14 +21,14 @@
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
     },
-    "local-network": {
+    "local-network-dev": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
       "launchUrl": "swagger",
       "applicationUrl": "http://0.0.0.0:5072",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }
