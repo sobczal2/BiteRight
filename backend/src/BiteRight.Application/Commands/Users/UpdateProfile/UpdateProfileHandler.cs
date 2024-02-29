@@ -23,7 +23,7 @@ using Microsoft.Extensions.Localization;
 
 namespace BiteRight.Application.Commands.Users.UpdateProfile;
 
-public class UpdateProfileHandler : CommandHandlerBase<UpdateProfileRequest>
+public class UpdateProfileHandler : CommandHandlerBase<UpdateProfileRequest, UpdateProfileResponse>
 {
     private readonly IStringLocalizer<Currencies> _currenciesLocalizer;
     private readonly ICurrencyRepository _currencyRepository;
@@ -48,7 +48,7 @@ public class UpdateProfileHandler : CommandHandlerBase<UpdateProfileRequest>
         _identityProvider = identityProvider;
     }
 
-    protected override async Task<Unit> HandleImpl(
+    protected override async Task<UpdateProfileResponse> HandleImpl(
         UpdateProfileRequest request,
         CancellationToken cancellationToken
     )
@@ -58,7 +58,7 @@ public class UpdateProfileHandler : CommandHandlerBase<UpdateProfileRequest>
             throw ValidationException(
                 _currenciesLocalizer[nameof(Currencies.currency_not_found)]);
 
-        var user = await _userRepository.FindByIdentityId(_identityProvider.RequireCurrent(), cancellationToken);
+        var user = await _userRepository.FindByIdentityId(_identityProvider.RequireCurrent(), false, cancellationToken);
 
         if (user is null) throw new InternalErrorException();
 
@@ -70,7 +70,9 @@ public class UpdateProfileHandler : CommandHandlerBase<UpdateProfileRequest>
             request.CurrencyId,
             timeZone
         );
+        
+        _userRepository.ClearCacheByIdentityId(user.IdentityId);
 
-        return Unit.Value;
+        return new UpdateProfileResponse();
     }
 }

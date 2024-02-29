@@ -7,6 +7,7 @@
 
 #region
 
+using System.Threading;
 using System.Threading.Tasks;
 using BiteRight.Application.Queries.Countries.List;
 using BiteRight.Web.Authorization;
@@ -30,9 +31,9 @@ public class CountriesController : WebController
     [HttpGet]
     [AuthorizeUserExists]
     [ProducesResponseType(typeof(ListResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> List()
+    public async Task<IActionResult> List(CancellationToken cancellationToken)
     {
-        var response = await Mediator.Send(new ListRequest());
+        var response = await Mediator.Send(new ListRequest(), cancellationToken);
         return Ok(response);
     }
 }

@@ -9,6 +9,7 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using BiteRight.Application.Queries.Currencies.GetDefault;
 using BiteRight.Application.Queries.Currencies.Search;
 using BiteRight.Web.Authorization;
 using MediatR;
@@ -39,6 +40,22 @@ public class CurrenciesController : WebController
     {
         var response = await Mediator.Send(
             request,
+            cancellationToken
+        );
+
+        return Ok(response);
+    }
+
+    [HttpGet("default")]
+    [AuthorizeUserExists]
+    [ProducesResponseType(typeof(GetDefaultResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetDefault(
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await Mediator.Send(
+            new GetDefaultRequest(),
             cancellationToken
         );
 

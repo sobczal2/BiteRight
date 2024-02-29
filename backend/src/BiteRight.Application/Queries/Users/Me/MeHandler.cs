@@ -39,7 +39,7 @@ public class MeHandler : QueryHandlerBase<MeRequest, MeResponse>
     )
     {
         var currentIdentityId = _identityProvider.RequireCurrent();
-        var user = await _userRepository.FindByIdentityId(currentIdentityId, cancellationToken);
+        var user = await _userRepository.FindByIdentityId(currentIdentityId, cancellationToken: cancellationToken);
 
         if (user == null) throw new NotFoundException();
 

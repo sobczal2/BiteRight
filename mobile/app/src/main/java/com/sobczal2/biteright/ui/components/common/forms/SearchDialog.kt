@@ -71,7 +71,7 @@ fun <T> SearchDialog(
             .debounce(if (initialized) debounceDuration else Duration.ZERO)
             .collect {
                 initialized = true
-                paginationSource.fetchInitialItems(queryFieldState.value.value, search)
+                paginationSource.fetchInitialItems(queryFieldStateFlow.value.value, search)
             }
     }
 
@@ -126,7 +126,9 @@ fun <T> SearchDialog(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.Center
                                 ) {
-                                    CircularProgressIndicator()
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.padding(top = MaterialTheme.dimension.sm)
+                                    )
                                 }
                                 LaunchedEffect(Unit) {
                                     coroutineScope.launch {

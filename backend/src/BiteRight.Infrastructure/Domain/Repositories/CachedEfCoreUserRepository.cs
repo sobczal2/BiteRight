@@ -49,14 +49,16 @@ public class CachedEfCoreUserRepository : IUserRepository
 
     public async Task<User?> FindByIdentityId(
         IdentityId identityId,
+        bool useCache = true,
         CancellationToken cancellationToken = default
     )
     {
         var cacheKey = GetCacheKey(identityId);
 
-        if (_cache.TryGetValue(cacheKey, out User? cachedUser)) return cachedUser;
+        if (useCache && _cache.TryGetValue(cacheKey, out User? cachedUser)) return cachedUser;
 
         var user = await _appDbContext.Users
+            .AsTracking(useCache ? QueryTrackingBehavior.NoTracking : QueryTrackingBehavior.TrackAll)
             .Include(u => u.Profile)
             .ThenInclude(u => u.Currency)
             .FirstOrDefaultAsync(u => u.IdentityId == identityId, cancellationToken);
@@ -91,6 +93,13 @@ public class CachedEfCoreUserRepository : IUserRepository
                 user => user.Username == username,
                 cancellationToken
             );
+    }
+
+    public void ClearCacheByIdentityId(
+        IdentityId identityId
+    )
+    {
+        _cache.Remove(GetCacheKey(identityId));
     }
 
     private static string GetCacheKey(

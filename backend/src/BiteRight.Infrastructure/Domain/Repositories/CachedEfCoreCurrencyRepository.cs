@@ -100,6 +100,14 @@ public class CachedEfCoreCurrencyRepository : ICurrencyRepository
         return (currencies, totalCount);
     }
 
+    public async Task<Currency> GetDefault(
+        CancellationToken cancellationToken
+    )
+    {
+        return await _appDbContext.Currencies
+            .SingleAsync(currency => currency.IsDefault, cancellationToken);
+    }
+
     private static string GetCacheKey(
         CurrencyId id
     )

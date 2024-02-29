@@ -3,6 +3,7 @@ package com.sobczal2.biteright.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sobczal2.biteright.AuthManager
+import com.sobczal2.biteright.data.api.requests.users.MeRequest
 import com.sobczal2.biteright.events.ProfileScreenEvent
 import com.sobczal2.biteright.repositories.abstractions.UserRepository
 import com.sobczal2.biteright.state.ProfileScreenState
@@ -29,7 +30,6 @@ class ProfileViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             launch { events.collect { event -> handleEvent(event) } }
-            launch { fetchUserData() }
         }
     }
 
@@ -45,13 +45,15 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchUserData() {
+    suspend fun fetchUserData() {
         _state.update {
             it.copy(
                 ongoingLoadingActions = it.ongoingLoadingActions + ProfileViewModel::fetchUserData.name,
             )
         }
-        val meResponse = userRepository.me()
+        val meResponse = userRepository.me(
+            MeRequest()
+        )
         meResponse.fold(
             { response ->
                 _state.update {

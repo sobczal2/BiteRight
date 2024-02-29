@@ -37,6 +37,7 @@ import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.humanize
 import com.sobczal2.biteright.viewmodels.ProfileViewModel
 import java.time.Instant
+import java.util.TimeZone
 import java.util.UUID
 
 @Composable
@@ -63,7 +64,7 @@ fun ProfileScreenContent(
     sendEvent: (ProfileScreenEvent) -> Unit = {},
     handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
-    val user = state.user!!;
+    val user = state.user ?: return
     HomeLayout(
         currentTab = HomeLayoutTab.PROFILE,
         handleNavigationEvent = handleNavigationEvent,
@@ -109,7 +110,7 @@ fun ProfileScreenContent(
                 )
                 DisplayPair(
                     label = stringResource(id = R.string.joined_at),
-                    value = user.joinedAt.humanize(),
+                    value = user.joinedAt.humanize(TimeZone.getTimeZone(user.profile.timeZoneId)),
                     modifier = Modifier.fillMaxWidth()
                 )
             }

@@ -29,6 +29,8 @@ import com.sobczal2.biteright.dto.products.DetailedProductDto
 import com.sobczal2.biteright.dto.products.ExpirationDateKindDto
 import com.sobczal2.biteright.dto.units.UnitDto
 import com.sobczal2.biteright.dto.units.UnitSystemDto
+import com.sobczal2.biteright.dto.users.ProfileDto
+import com.sobczal2.biteright.dto.users.UserDto
 import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.events.ProductDetailsScreenEvent
 import com.sobczal2.biteright.state.ProductDetailsScreenState
@@ -43,6 +45,7 @@ import com.sobczal2.biteright.viewmodels.ProductDetailsViewModel
 import java.time.Instant
 import java.time.LocalDate
 import java.util.Locale
+import java.util.TimeZone
 import java.util.UUID
 
 @Composable
@@ -73,6 +76,7 @@ fun ProductDetailsScreenContent(
     handleNavigationEvent: (NavigationEvent) -> Unit = {},
 ) {
     val product = state.product ?: return
+    val user = state.user ?: return
     Scaffold { paddingValues ->
         Column(
             modifier = Modifier
@@ -155,7 +159,7 @@ fun ProductDetailsScreenContent(
 
                         DisplayPair(
                             label = "${stringResource(id = R.string.added_at)}:",
-                            value = product.addedDateTime.humanize(),
+                            value = product.addedDateTime.humanize(TimeZone.getTimeZone(user.profile.timeZoneId)),
                             modifier = Modifier.fillMaxWidth()
                         )
 
@@ -186,7 +190,7 @@ fun ProductDetailsScreenContent(
                         if (product.disposedStateValue) {
                             DisplayPair(
                                 label = "${stringResource(id = R.string.disposed_at)}:",
-                                value = product.disposedStateDateTime!!.humanize(),
+                                value = product.disposedStateDateTime!!.humanize(TimeZone.getTimeZone(user.profile.timeZoneId)),
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }
@@ -259,6 +263,22 @@ fun ProductDetailsScreenPreview() {
                 ),
                 false,
                 null
+            ),
+            user = UserDto(
+                UUID.randomUUID(),
+                "test",
+                "test",
+                "test",
+                Instant.now(),
+                ProfileDto(
+                    currency = CurrencyDto(
+                        UUID.randomUUID(),
+                        "Złoty",
+                        "zł",
+                        "PLN"
+                    ),
+                    timeZoneId = "Europe/Warsaw"
+                )
             )
         )
     )

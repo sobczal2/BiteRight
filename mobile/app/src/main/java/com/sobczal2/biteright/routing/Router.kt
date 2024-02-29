@@ -23,6 +23,8 @@ import com.sobczal2.biteright.ui.components.common.ComingSoonBanner
 import com.sobczal2.biteright.util.getUUID
 import com.sobczal2.biteright.viewmodels.AllProductsViewModel
 import com.sobczal2.biteright.viewmodels.CurrentProductsViewModel
+import com.sobczal2.biteright.viewmodels.EditProfileViewModel
+import com.sobczal2.biteright.viewmodels.ProfileViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -74,7 +76,13 @@ fun Router(authManager: AuthManager) {
             )
         }
         composable(Routes.PROFILE) {
+            val viewModel = hiltViewModel<ProfileViewModel>()
+            LaunchedEffect(navController.currentBackStackEntry?.destination?.route) {
+                if (navController.currentBackStackEntry?.destination?.route == Routes.PROFILE)
+                    viewModel.fetchUserData()
+            }
             ProfileScreen(
+                viewModel = viewModel,
                 handleNavigationEvent = handleNavigationEvent
             )
         }
@@ -96,7 +104,13 @@ fun Router(authManager: AuthManager) {
             )
         }
         composable(Routes.EDIT_PROFILE) {
+            val viewModel = hiltViewModel<EditProfileViewModel>()
+            LaunchedEffect(navController.currentBackStackEntry?.destination?.route) {
+                if (navController.currentBackStackEntry?.destination?.route == Routes.EDIT_PROFILE)
+                    viewModel.fetchUserData()
+            }
             EditProfileScreen(
+                viewModel = viewModel,
                 handleNavigationEvent = handleNavigationEvent
             )
         }

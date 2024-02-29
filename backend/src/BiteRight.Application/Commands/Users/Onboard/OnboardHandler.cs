@@ -25,7 +25,7 @@ using Microsoft.Extensions.Localization;
 
 namespace BiteRight.Application.Commands.Users.Onboard;
 
-public class OnboardHandler : CommandHandlerBase<OnboardRequest>
+public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse>
 {
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IIdentityManager _identityManager;
@@ -50,13 +50,14 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
         _localizer = localizer;
     }
 
-    protected override async Task<Unit> HandleImpl(
+    protected override async Task<OnboardResponse> HandleImpl(
         OnboardRequest request,
         CancellationToken cancellationToken
     )
     {
         var currentIdentityId = _identityProvider.RequireCurrent();
-        var existingUser = await _userRepository.FindByIdentityId(currentIdentityId, cancellationToken);
+        var existingUser =
+            await _userRepository.FindByIdentityId(currentIdentityId, cancellationToken: cancellationToken);
 
         if (existingUser != null)
             throw ValidationException(
@@ -110,7 +111,7 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest>
 
         _userRepository.Add(user);
 
-        return Unit.Value;
+        return new OnboardResponse();
     }
 
     protected override ValidationException MapExceptionToValidationException(
