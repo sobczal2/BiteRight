@@ -25,7 +25,10 @@ class StartRouterViewModel @Inject constructor(
         topLevelNavigate: (Routes) -> Unit
     ) {
         viewModelScope.launch {
-            if (!authManager.loggedIn) return@launch
+            if (!authManager.loggedIn) {
+                startNavigate(Routes.StartGraph.Welcome)
+                return@launch
+            }
 
             _loading.value = true
 

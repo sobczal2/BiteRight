@@ -20,12 +20,15 @@ fun StartRouter(
     topLevelNavigate: (Routes) -> Unit,
 ) {
     val navController = rememberNavController()
+    val currentBackStackEntry = navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(null)
 
     fun startNavigate(route: Routes.StartGraph) {
+        if (route.routeWithParams == currentBackStackEntry.value?.destination?.route) return
         navController.navigate(route.route)
     }
 
-    LaunchedEffect(Unit) {
+
+    LaunchedEffect(currentBackStackEntry.value) {
         viewModel.navigateAccordingToUserAuthProgress(
             startNavigate = ::startNavigate,
             topLevelNavigate = topLevelNavigate

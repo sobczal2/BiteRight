@@ -24,12 +24,13 @@ fun HomeRouter(
     topLevelNavigate: (Routes) -> Unit,
 ) {
     val navController = rememberNavController()
+    val currentBackStackEntry = navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(null)
 
     fun homeNavigate(route: Routes.HomeGraph) {
+        if (route.routeWithParams == currentBackStackEntry.value?.destination?.route) return
         navController.navigate(route.routeWithParams)
     }
 
-    val currentBackStackEntry = navController.currentBackStackEntryFlow.collectAsStateWithLifecycle(null)
 
     HomeLayout(
         currentRoute = currentBackStackEntry.value?.destination.toRoute(),

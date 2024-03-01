@@ -126,6 +126,22 @@ fun AmountFormField(
                 )
             }
             newCurrentAmount != null && newMaxAmount != null -> {
+                if (newCurrentAmount == state.value.currentAmount) {
+                    currentAmountTextFieldState = currentAmountTextFieldState.copy(
+                        value = "%.2f".format(Locale.US, state.value.currentAmount)
+                    )
+                }
+
+                if (newMaxAmount == state.value.maxAmount) {
+                    maxAmountTextFieldState = maxAmountTextFieldState.copy(
+                        value = "%.2f".format(Locale.US, state.value.maxAmount)
+                    )
+                }
+
+                if (newCurrentAmount == state.value.currentAmount && newMaxAmount == state.value.maxAmount) {
+                    return
+                }
+
                 if (newCurrentAmount > newMaxAmount) {
                     onChange(
                         state.value.copy(
