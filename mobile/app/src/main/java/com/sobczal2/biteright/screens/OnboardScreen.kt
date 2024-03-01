@@ -12,12 +12,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sobczal2.biteright.R
@@ -28,9 +26,7 @@ import com.sobczal2.biteright.dto.currencies.CurrencyDto
 import com.sobczal2.biteright.events.OnboardScreenEvent
 import com.sobczal2.biteright.routing.Routes
 import com.sobczal2.biteright.state.OnboardScreenState
-import com.sobczal2.biteright.ui.components.common.BiteRightLogo
 import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
-import com.sobczal2.biteright.ui.components.common.ErrorBox
 import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
@@ -127,7 +123,6 @@ fun OnboardScreenContent(
             },
             modifier = Modifier.fillMaxWidth(),
         )
-        ErrorBox(error = state.globalError) // TODO fix error boxes
     }
 }
 

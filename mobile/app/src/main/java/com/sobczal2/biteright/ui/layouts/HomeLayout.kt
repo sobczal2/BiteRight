@@ -11,12 +11,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.routing.Routes
+import com.sobczal2.biteright.ui.components.common.ErrorSnackbarHost
 import com.sobczal2.biteright.ui.components.products.AddProductActionButton
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.util.BiteRightPreview
@@ -26,9 +30,15 @@ fun HomeLayout(
     currentRoute: Routes?,
     homeNavigate: (Routes.HomeGraph) -> Unit,
     topLevelNavigate: (Routes) -> Unit,
-    content: @Composable (PaddingValues) -> Unit,
+    content: @Composable (PaddingValues, SnackbarHostState) -> Unit,
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
+        snackbarHost = {
+            ErrorSnackbarHost(
+                snackbarHostState = snackbarHostState,
+            )
+        },
         bottomBar = {
             NavigationBar(
                 modifier = Modifier
@@ -99,7 +109,7 @@ fun HomeLayout(
             }
         },
     ) { paddingValues ->
-        content(paddingValues)
+        content(paddingValues, snackbarHostState)
     }
 }
 
@@ -109,7 +119,7 @@ fun HomeLayoutPreview() {
     BiteRightTheme {
         HomeLayout(
             currentRoute = Routes.HomeGraph.CurrentProducts,
-            content = {},
+            content = { _, _ -> },
             homeNavigate = {},
             topLevelNavigate = {},
         )

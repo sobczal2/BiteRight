@@ -1,10 +1,10 @@
 package com.sobczal2.biteright.viewmodels
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.data.api.requests.currencies.GetDefaultRequest
-import com.sobczal2.biteright.data.api.requests.users.MeRequest
 import com.sobczal2.biteright.data.api.requests.users.OnboardRequest
 import com.sobczal2.biteright.dto.common.PaginatedList
 import com.sobczal2.biteright.dto.common.PaginationParams
@@ -32,8 +32,8 @@ class OnboardViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val stringProvider: StringProvider,
     private val currencyRepository: CurrencyRepository,
-
-    ) : ViewModel() {
+) : ViewModel() {
+    lateinit var snackbarHostState: SnackbarHostState
     private val _state = MutableStateFlow(OnboardScreenState())
     val state = _state.asStateFlow()
 
@@ -75,11 +75,9 @@ class OnboardViewModel @Inject constructor(
                 }
             },
             { repositoryError ->
-                _state.update {
-                    it.copy(
-                        globalError = repositoryError.message
-                    )
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
 
@@ -206,11 +204,9 @@ class OnboardViewModel @Inject constructor(
                             )
                         }
                     } else {
-                        _state.update {
-                            it.copy(
-                                globalError = repositoryError.message
-                            )
-                        }
+                        snackbarHostState.showSnackbar(
+                            message = repositoryError.message,
+                        )
                     }
 
                     _state.update {
@@ -245,11 +241,9 @@ class OnboardViewModel @Inject constructor(
                 return response.currencies
             },
             { repositoryError ->
-                _state.update { state ->
-                    state.copy(
-                        globalError = repositoryError.message
-                    )
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
         return emptyPaginatedList()
@@ -272,7 +266,8 @@ class OnboardViewModel @Inject constructor(
                 totalPages = _state.value.availableTimeZones.size / paginationParams.pageSize
             )
         }
-        val result = _state.value.availableTimeZones.filter { it.id.lowercase().contains(query.lowercase()) }
+        val result =
+            _state.value.availableTimeZones.filter { it.id.lowercase().contains(query.lowercase()) }
 
         return PaginatedList(
             items = result

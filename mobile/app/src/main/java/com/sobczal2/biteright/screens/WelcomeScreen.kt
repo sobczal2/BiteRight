@@ -19,7 +19,6 @@ import com.sobczal2.biteright.R
 import com.sobczal2.biteright.events.WelcomeScreenEvent
 import com.sobczal2.biteright.routing.Routes
 import com.sobczal2.biteright.state.WelcomeScreenState
-import com.sobczal2.biteright.ui.components.common.ErrorBox
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.util.BiteRightPreview
@@ -73,7 +72,6 @@ fun WelcomeScreenContent(
                 style = MaterialTheme.typography.displaySmall
             )
         }
-        ErrorBox(error = state.globalError)
     }
 }
 

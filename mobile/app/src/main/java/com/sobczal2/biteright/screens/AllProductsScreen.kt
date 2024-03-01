@@ -28,7 +28,6 @@ import com.sobczal2.biteright.R
 import com.sobczal2.biteright.events.AllProductsScreenEvent
 import com.sobczal2.biteright.routing.Routes
 import com.sobczal2.biteright.state.AllProductsScreenState
-import com.sobczal2.biteright.ui.components.common.ErrorBox
 import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.components.products.SwipeableProductListItem
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
@@ -99,8 +98,6 @@ fun AllProductsScreenContent(
                     .fillMaxWidth()
             )
         }
-
-        ErrorBox(error = state.globalError)
 
         LazyColumn(content = {
             items(items = state.paginatedProductSource.items,

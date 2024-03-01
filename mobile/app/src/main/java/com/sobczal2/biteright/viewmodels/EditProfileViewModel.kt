@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.viewmodels
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sobczal2.biteright.data.api.requests.users.MeRequest
@@ -28,6 +29,7 @@ class EditProfileViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val currencyRepository: CurrencyRepository
 ) : ViewModel() {
+    lateinit var snackbarHostState: SnackbarHostState
     private val _state = MutableStateFlow(EditProfileScreenState())
     val state = _state.asStateFlow()
 
@@ -79,9 +81,9 @@ class EditProfileViewModel @Inject constructor(
                     }
                 },
                 { error ->
-                    _state.update {
-                        it.copy(globalError = error.message)
-                    }
+                    snackbarHostState.showSnackbar(
+                        message = error.message
+                    )
                 }
             )
             _state.update {
@@ -122,12 +124,9 @@ class EditProfileViewModel @Inject constructor(
                     onSuccess()
                 },
                 { error ->
-                    _state.update {
-                        it.copy(
-                            formSubmitting = false,
-                            globalError = error.message
-                        )
-                    }
+                    snackbarHostState.showSnackbar(
+                        message = error.message
+                    )
                 }
             )
         }
@@ -180,11 +179,9 @@ class EditProfileViewModel @Inject constructor(
                 return response.currencies
             },
             { repositoryError ->
-                _state.update { state ->
-                    state.copy(
-                        globalError = repositoryError.message
-                    )
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message
+                )
             }
         )
         return emptyPaginatedList()

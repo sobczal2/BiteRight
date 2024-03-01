@@ -26,7 +26,6 @@ data class CreateProductScreenState(
     val startingCurrencies: PaginatedList<CurrencyDto>? = null,
     val startingUnits: PaginatedList<UnitDto>? = null,
     override val ongoingLoadingActions: Set<String> = emptySet(),
-    override val globalError: String? = null,
 ) : ScreenState {
     fun isLoading(): Boolean = ongoingLoadingActions.isNotEmpty()
 }

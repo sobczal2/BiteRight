@@ -14,7 +14,6 @@ data class AllProductsScreenState(
         initialPaginationParams = PaginationParams.Default
     ),
     override val ongoingLoadingActions: Set<String> = setOf(),
-    override val globalError: String? = null,
 ) : ScreenState {
 
     fun isLoading(): Boolean = ongoingLoadingActions.isNotEmpty()

@@ -24,4 +24,23 @@ data class DetailedProductDto(
     @SerializedName("amountUnit") val amountUnit: UnitDto,
     @SerializedName("disposedStateValue") val disposedStateValue: Boolean,
     @SerializedName("disposedStateDateTime") val disposedStateDateTime: Instant?
-)
+) {
+    companion object {
+        val Empty: DetailedProductDto = DetailedProductDto(
+            id = UUID(0,0),
+            name = "",
+            description = "",
+            priceValue = null,
+            priceCurrency = null,
+            expirationDateKind = ExpirationDateKindDto.Unknown,
+            expirationDateValue = null,
+            category = CategoryDto.Empty,
+            addedDateTime = Instant.now(),
+            amountCurrentValue = 0.0,
+            amountMaxValue = 0.0,
+            amountUnit = UnitDto.Empty,
+            disposedStateValue = false,
+            disposedStateDateTime = null
+        )
+    }
+}

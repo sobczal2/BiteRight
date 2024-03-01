@@ -1,9 +1,7 @@
 package com.sobczal2.biteright.routing
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
@@ -13,6 +11,8 @@ import com.sobczal2.biteright.screens.OnboardScreen
 import com.sobczal2.biteright.screens.WelcomeScreen
 import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.layouts.StartLayout
+import com.sobczal2.biteright.viewmodels.OnboardViewModel
+import com.sobczal2.biteright.viewmodels.WelcomeViewModel
 
 @Composable
 fun StartRouter(
@@ -37,7 +37,7 @@ fun StartRouter(
 
     val loading = viewModel.loading.collectAsStateWithLifecycle()
 
-    StartLayout{
+    StartLayout{snackbarHostState ->
         SurfaceLoader(
             loading = loading.value,
         ) {
@@ -46,13 +46,19 @@ fun StartRouter(
                 startDestination = Routes.StartGraph.Welcome.route,
             ) {
                 composable(Routes.StartGraph.Welcome.route) {
+                    val vm = hiltViewModel<WelcomeViewModel>()
+                    vm.snackbarHostState = snackbarHostState
                     WelcomeScreen(
+                        viewModel = vm,
                         startNavigate = ::startNavigate
                     )
                 }
 
                 composable(Routes.StartGraph.Onboard.route) {
+                    val vm = hiltViewModel<OnboardViewModel>()
+                    vm.snackbarHostState = snackbarHostState
                     OnboardScreen(
+                        viewModel = vm,
                         topLevelNavigate = topLevelNavigate
                     )
                 }

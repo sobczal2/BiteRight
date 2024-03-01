@@ -13,7 +13,6 @@ data class EditProfileScreenState(
     val startingCurrencies: PaginatedList<CurrencyDto>? = null,
     val availableTimeZones: List<TimeZone> = TimeZone.getAvailableIDs().map { TimeZone.getTimeZone(it) }.sortedBy { it.id },
     override val ongoingLoadingActions: Set<String> = setOf(),
-    override val globalError: String? = null,
 ) : ScreenState {
     fun isLoading(): Boolean = ongoingLoadingActions.isNotEmpty()
 }

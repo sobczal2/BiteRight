@@ -36,13 +36,14 @@ fun HomeRouter(
         currentRoute = currentBackStackEntry.value?.destination.toRoute(),
         homeNavigate = ::homeNavigate,
         topLevelNavigate = topLevelNavigate,
-    ) { paddingValues ->
+    ) { paddingValues, snackbarHostState ->
         NavHost(
             navController = navController,
             startDestination = Routes.HomeGraph.CurrentProducts.route,
         ) {
             composable(Routes.HomeGraph.CurrentProducts.route) {
                 val viewModel = hiltViewModel<CurrentProductsViewModel>()
+                viewModel.snackbarHostState = snackbarHostState
                 RunOnNavigate(
                     navController = navController,
                     route = Routes.HomeGraph.CurrentProducts.route
@@ -57,6 +58,7 @@ fun HomeRouter(
             }
             composable(Routes.HomeGraph.AllProducts.route) {
                 val viewModel = hiltViewModel<AllProductsViewModel>()
+                viewModel.snackbarHostState = snackbarHostState
                 RunOnNavigate(
                     navController = navController,
                     route = Routes.HomeGraph.AllProducts.route
@@ -78,6 +80,7 @@ fun HomeRouter(
             }
             composable(Routes.HomeGraph.Profile.route) {
                 val viewModel = hiltViewModel<ProfileViewModel>()
+                viewModel.snackbarHostState = snackbarHostState
                 RunOnNavigate(
                     navController = navController,
                     route = Routes.HomeGraph.Profile.route
