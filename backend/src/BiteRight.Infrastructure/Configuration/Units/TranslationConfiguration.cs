@@ -68,6 +68,78 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
         Abbreviation.CreateSkipValidation("kg"),
         new TranslationId(Guid.Parse("368FB52E-06D7-4B33-ACEB-C7EDFDF865AD"))
     );
+    
+    public static Translation GramEn { get; } = Translation.Create(
+        UnitConfiguration.Gram.Id,
+        LanguageConfiguration.English.Id,
+        Name.CreateSkipValidation("Gram"),
+        Abbreviation.CreateSkipValidation("g"),
+        new TranslationId(Guid.Parse("CA64BA08-93BB-432D-AFC2-869F6C543922"))
+    );
+    
+    public static Translation GramPl { get; } = Translation.Create(
+        UnitConfiguration.Gram.Id,
+        LanguageConfiguration.Polish.Id,
+        Name.CreateSkipValidation("Gram"),
+        Abbreviation.CreateSkipValidation("g"),
+        new TranslationId(Guid.Parse("0164A42A-A4B7-4E1F-8DB8-8158B4605DBC"))
+    );
+    
+    public static Translation GramDe { get; } = Translation.Create(
+        UnitConfiguration.Gram.Id,
+        LanguageConfiguration.German.Id,
+        Name.CreateSkipValidation("Gramm"),
+        Abbreviation.CreateSkipValidation("g"),
+        new TranslationId(Guid.Parse("B6101A50-6F20-42CF-B58D-1A69D77FFDFC"))
+    );
+    
+    public static Translation MilliliterEn { get; } = Translation.Create(
+        UnitConfiguration.Milliliter.Id,
+        LanguageConfiguration.English.Id,
+        Name.CreateSkipValidation("Milliliter"),
+        Abbreviation.CreateSkipValidation("ml"),
+        new TranslationId(Guid.Parse("3BF5D07A-6004-4F50-9BC4-59E8831F5E90"))
+    );
+    
+    public static Translation MilliliterPl { get; } = Translation.Create(
+        UnitConfiguration.Milliliter.Id,
+        LanguageConfiguration.Polish.Id,
+        Name.CreateSkipValidation("Mililitr"),
+        Abbreviation.CreateSkipValidation("ml"),
+        new TranslationId(Guid.Parse("67CEFC87-B43A-4262-9D16-9E12AAC5DB5E"))
+    );
+    
+    public static Translation MilliliterDe { get; } = Translation.Create(
+        UnitConfiguration.Milliliter.Id,
+        LanguageConfiguration.German.Id,
+        Name.CreateSkipValidation("Milliliter"),
+        Abbreviation.CreateSkipValidation("ml"),
+        new TranslationId(Guid.Parse("DC8020FA-C5C1-4E88-8658-752E5A922C3D"))
+    );
+    
+    public static Translation PieceEn { get; } = Translation.Create(
+        UnitConfiguration.Piece.Id,
+        LanguageConfiguration.English.Id,
+        Name.CreateSkipValidation("Piece"),
+        Abbreviation.CreateSkipValidation("pc"),
+        new TranslationId(Guid.Parse("C9194190-521F-40BA-836F-6A8DACCB418E"))
+    );
+    
+    public static Translation PiecePl { get; } = Translation.Create(
+        UnitConfiguration.Piece.Id,
+        LanguageConfiguration.Polish.Id,
+        Name.CreateSkipValidation("Sztuka"),
+        Abbreviation.CreateSkipValidation("szt"),
+        new TranslationId(Guid.Parse("256783E0-D6BA-4A6F-B0CC-52E3B908820C"))
+    );
+    
+    public static Translation PieceDe { get; } = Translation.Create(
+        UnitConfiguration.Piece.Id,
+        LanguageConfiguration.German.Id,
+        Name.CreateSkipValidation("Stück"),
+        Abbreviation.CreateSkipValidation("st"),
+        new TranslationId(Guid.Parse("831090A9-1736-4264-93FB-449AA3D3D02D"))
+    );
 
     public void Configure(
         EntityTypeBuilder<Translation> builder
@@ -125,5 +197,14 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
         yield return KilogramEn;
         yield return KilogramPl;
         yield return KilogramDe;
+        yield return GramEn;
+        yield return GramPl;
+        yield return GramDe;
+        yield return MilliliterEn;
+        yield return MilliliterPl;
+        yield return MilliliterDe;
+        yield return PieceEn;
+        yield return PiecePl;
+        yield return PieceDe;
     }
 }

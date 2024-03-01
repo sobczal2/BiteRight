@@ -3,6 +3,7 @@ using System;
 using BiteRight.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BiteRight.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240301132120_More_Currencies")]
+    partial class More_Currencies
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,21 +215,21 @@ namespace BiteRight.Infrastructure.Migrations
                             Id = new Guid("f7b5e10f-0719-4731-831a-ffe0a1a1ed07"),
                             CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
                             LanguageId = new Guid("454faf9a-644c-445c-89e3-b57203957c1a"),
-                            Name = "Other"
+                            Name = "None"
                         },
                         new
                         {
                             Id = new Guid("abed62c9-41b4-462f-866b-06d714dec958"),
                             CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
                             LanguageId = new Guid("24d48691-7325-4703-b69f-8db933a6736d"),
-                            Name = "Inne"
+                            Name = "Brak"
                         },
                         new
                         {
                             Id = new Guid("206a3c95-fb6d-4127-a37b-9f328c021021"),
                             CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
                             LanguageId = new Guid("c1dd0a3b-70d3-4aa1-b53e-4c08a03b57c3"),
-                            Name = "Andere"
+                            Name = "Keine"
                         },
                         new
                         {

@@ -60,6 +60,11 @@ public class PhotoConfiguration : IEntityTypeConfiguration<Photo>
         new PhotoId(Guid.Parse("A2F14BA8-B9BE-40CD-9BE0-B3C587BE2FC3")),
         "wheat.webp"
     );
+    
+    public static Photo DishPhoto { get; } = Photo.Create(
+        new PhotoId(Guid.Parse("02F43B77-F3FC-4D97-A53C-A45FAC195171")),
+        "dish.webp"
+    );
 
     public void Configure(
         EntityTypeBuilder<Photo> builder
@@ -88,5 +93,6 @@ public class PhotoConfiguration : IEntityTypeConfiguration<Photo>
         yield return BeveragePhoto;
         yield return SnackPhoto;
         yield return WheatPhoto;
+        yield return DishPhoto;
     }
 }

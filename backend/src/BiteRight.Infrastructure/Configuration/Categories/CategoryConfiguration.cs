@@ -19,7 +19,7 @@ namespace BiteRight.Infrastructure.Configuration.Categories;
 
 public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
-    public static Category None { get; } = Category.Create(
+    public static Category Other { get; } = Category.Create(
         null,
         true,
         new CategoryId(Guid.Parse("C82E0550-26CF-410D-8CEC-5CF62BADA757"))
@@ -72,6 +72,12 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         false,
         new CategoryId(Guid.Parse("BF69966B-0CBC-4F5D-9388-C05926775CBF"))
     );
+    
+    public static Category Dish { get; } = Category.Create(
+        PhotoConfiguration.DishPhoto.Id,
+        false,
+        new CategoryId(Guid.Parse("854CD0F7-4CEA-4AD3-B68C-A3E84948CD3E"))
+    );
 
     public void Configure(
         EntityTypeBuilder<Category> builder
@@ -105,7 +111,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 
     private static IEnumerable<Category> GetSeedData()
     {
-        yield return None;
+        yield return Other;
         yield return Dairy;
         yield return Fruit;
         yield return Vegetable;
@@ -114,5 +120,6 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         yield return Beverage;
         yield return Snack;
         yield return Wheat;
+        yield return Dish;
     }
 }
