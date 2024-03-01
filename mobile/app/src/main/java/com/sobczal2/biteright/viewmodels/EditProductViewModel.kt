@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.viewmodels
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.request.ImageRequest
@@ -49,6 +50,7 @@ class EditProductViewModel @Inject constructor(
     private val stringProvider: StringProvider,
     imageRequestBuilder: ImageRequest.Builder,
 ) : ViewModel() {
+    lateinit var snackbarHostState: SnackbarHostState
     private val _state = MutableStateFlow(
         EditProductScreenState(
             imageRequestBuilder = imageRequestBuilder
@@ -181,14 +183,12 @@ class EditProductViewModel @Inject constructor(
                     response.user
                 },
                 { error ->
-                    _state.update {
-                        it.copy(
-                            globalError = error.message,
-                        )
-                    }
-                    null
+                    snackbarHostState.showSnackbar(
+                        message = error.message,
+                    )
+                    return@launch
                 }
-            ) ?: return@launch
+            )
 
             val getDetailsResult = productRepository.getDetails(
                 GetDetailsRequest(productId)
@@ -231,11 +231,9 @@ class EditProductViewModel @Inject constructor(
                     }
                 },
                 { error ->
-                    _state.update {
-                        it.copy(
-                            globalError = error.message,
-                        )
-                    }
+                    snackbarHostState.showSnackbar(
+                        message = error.message,
+                    )
                 }
             )
 
@@ -268,11 +266,9 @@ class EditProductViewModel @Inject constructor(
                 return response.categories
             },
             { repositoryError ->
-                _state.update { state ->
-                    state.copy(
-                        globalError = repositoryError.message
-                    )
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
         return emptyPaginatedList()
@@ -299,11 +295,9 @@ class EditProductViewModel @Inject constructor(
                 return response.currencies
             },
             { repositoryError ->
-                _state.update { state ->
-                    state.copy(
-                        globalError = repositoryError.message
-                    )
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
         return emptyPaginatedList()
@@ -330,11 +324,9 @@ class EditProductViewModel @Inject constructor(
                 return response.units
             },
             { repositoryError ->
-                _state.update { state ->
-                    state.copy(
-                        globalError = repositoryError.message
-                    )
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
 
@@ -544,20 +536,17 @@ class EditProductViewModel @Inject constructor(
                             }
 
                             else -> {
-                                _state.update {
-                                    it.copy(
-                                        globalError = value.firstOrNull()
-                                    )
-                                }
+                                snackbarHostState.showSnackbar(
+                                    message = value.firstOrNull()
+                                        ?: stringProvider.getString(R.string.unknown_error)
+                                )
                             }
                         }
                     }
                 } else {
-                    _state.update {
-                        it.copy(
-                            globalError = repositoryError.message
-                        )
-                    }
+                    snackbarHostState.showSnackbar(
+                        message = repositoryError.message
+                    )
                 }
             }
         )
@@ -770,11 +759,9 @@ class EditProductViewModel @Inject constructor(
                 onSuccess()
             },
             { repositoryError ->
-                _state.update {
-                    it.copy(
-                        globalError = repositoryError.message
-                    )
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message
+                )
             }
         )
 

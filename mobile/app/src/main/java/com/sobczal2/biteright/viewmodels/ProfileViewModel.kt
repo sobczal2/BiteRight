@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.viewmodels
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sobczal2.biteright.AuthManager
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val authManager: AuthManager, private val userRepository: UserRepository
 ) : ViewModel() {
+    lateinit var snackbarHostState: SnackbarHostState
 
     private val _state = MutableStateFlow(ProfileScreenState())
     val state = _state.asStateFlow()
@@ -62,9 +64,9 @@ class ProfileViewModel @Inject constructor(
                     }
                 },
                 { error ->
-                    _state.update {
-                        it.copy(globalError = error.message)
-                    }
+                    snackbarHostState.showSnackbar(
+                        message = error.message
+                    )
                 }
             )
             _state.update {

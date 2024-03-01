@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.viewmodels
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.request.ImageRequest
@@ -25,6 +26,8 @@ class CurrentProductsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     imageRequestBuilder: ImageRequest.Builder
 ) : ViewModel() {
+    lateinit var snackbarHostState: SnackbarHostState
+
     private val _state = MutableStateFlow(
         CurrentProductsScreenState(
             imageRequestBuilder = imageRequestBuilder
@@ -102,11 +105,9 @@ class CurrentProductsViewModel @Inject constructor(
                     }
                 },
                 { repositoryError ->
-                    _state.update {
-                        it.copy(
-                            globalError = repositoryError.message
-                        )
-                    }
+                    snackbarHostState.showSnackbar(
+                        message = repositoryError.message,
+                    )
                 }
             )
 
@@ -136,11 +137,9 @@ class CurrentProductsViewModel @Inject constructor(
                 }
             },
             { repositoryError ->
-                _state.update {
-                    it.copy(
-                        globalError = repositoryError.message
-                    )
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
     }
@@ -176,11 +175,9 @@ class CurrentProductsViewModel @Inject constructor(
                 }
             },
             { repositoryError ->
-                _state.update {
-                    it.copy(
-                        globalError = repositoryError.message,
-                    )
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
 

@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.viewmodels
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.request.ImageRequest
@@ -49,6 +50,8 @@ class CreateProductViewModel @Inject constructor(
     private val stringProvider: StringProvider,
     imageRequestBuilder: ImageRequest.Builder,
 ) : ViewModel() {
+    lateinit var snackbarHostState: SnackbarHostState
+
     private val _state = MutableStateFlow(
         CreateProductScreenState(
             imageRequestBuilder = imageRequestBuilder
@@ -249,11 +252,9 @@ class CreateProductViewModel @Inject constructor(
                 }
             },
             { repositoryError ->
-                _state.update { state ->
-                    state.copy(
-                        globalError = repositoryError.message
-                    )
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
 
@@ -288,11 +289,9 @@ class CreateProductViewModel @Inject constructor(
                 }
             },
             { repositoryError ->
-                _state.update { state ->
-                    state.copy(
-                        globalError = repositoryError.message
-                    )
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
 
@@ -324,11 +323,9 @@ class CreateProductViewModel @Inject constructor(
                 return response.categories
             },
             { repositoryError ->
-                _state.update { state ->
-                    state.copy(
-                        globalError = repositoryError.message
-                    )
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
         return emptyPaginatedList()
@@ -355,11 +352,9 @@ class CreateProductViewModel @Inject constructor(
                 return response.currencies
             },
             { repositoryError ->
-                _state.update { state ->
-                    state.copy(
-                        globalError = repositoryError.message
-                    )
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
         return emptyPaginatedList()
@@ -386,11 +381,9 @@ class CreateProductViewModel @Inject constructor(
                 return response.units
             },
             { repositoryError ->
-                _state.update { state ->
-                    state.copy(
-                        globalError = repositoryError.message
-                    )
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
 
@@ -521,20 +514,16 @@ class CreateProductViewModel @Inject constructor(
                             }
 
                             else -> {
-                                _state.update {
-                                    it.copy(
-                                        globalError = value.firstOrNull()
-                                    )
-                                }
+                                snackbarHostState.showSnackbar(
+                                    message = repositoryError.message,
+                                )
                             }
                         }
                     }
                 } else {
-                    _state.update {
-                        it.copy(
-                            globalError = repositoryError.message
-                        )
-                    }
+                    snackbarHostState.showSnackbar(
+                        message = repositoryError.message,
+                    )
                 }
             }
         )

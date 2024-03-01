@@ -12,9 +12,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -33,6 +36,7 @@ import com.sobczal2.biteright.routing.Routes
 import com.sobczal2.biteright.state.EditProductScreenState
 import com.sobczal2.biteright.ui.components.categories.CategoryFormField
 import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
+import com.sobczal2.biteright.ui.components.common.ErrorSnackbarHost
 import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
@@ -51,6 +55,8 @@ fun EditProductScreen(
     productId: UUID
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    viewModel.snackbarHostState = snackbarHostState
 
     LaunchedEffect(Unit) {
         viewModel.sendEvent(EditProductScreenEvent.LoadDetails(productId))
@@ -63,7 +69,8 @@ fun EditProductScreen(
             searchCategories = viewModel::searchCategories,
             searchCurrencies = viewModel::searchCurrencies,
             searchUnits = viewModel::searchUnits,
-            topLevelNavigate = topLevelNavigate
+            topLevelNavigate = topLevelNavigate,
+            snackbarHostState = snackbarHostState
         )
     }
 }
@@ -75,11 +82,18 @@ fun EditProductScreenContent(
     searchCategories: suspend (String, PaginationParams) -> PaginatedList<CategoryDto> = { _, _ -> emptyPaginatedList() },
     searchCurrencies: suspend (String, PaginationParams) -> PaginatedList<CurrencyDto> = { _, _ -> emptyPaginatedList() },
     searchUnits: suspend (String, PaginationParams) -> PaginatedList<UnitDto> = { _, _ -> emptyPaginatedList() },
-    topLevelNavigate: (Routes) -> Unit = {}
+    topLevelNavigate: (Routes) -> Unit = {},
+    snackbarHostState: SnackbarHostState,
 ) {
     val focusManager = LocalFocusManager.current
 
-    Scaffold { paddingValues ->
+    Scaffold(
+        snackbarHost = {
+            ErrorSnackbarHost(
+                snackbarHostState = snackbarHostState,
+            )
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -229,5 +243,6 @@ fun EditProductScreenContent(
 fun EditProductScreenPreview() {
     EditProductScreenContent(
         state = EditProductScreenState(),
+        snackbarHostState = SnackbarHostState()
     )
 }

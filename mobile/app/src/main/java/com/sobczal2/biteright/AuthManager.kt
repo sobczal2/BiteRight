@@ -1,7 +1,6 @@
 package com.sobczal2.biteright
 
 import android.content.Context
-import android.util.Log
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.AuthenticationException
@@ -11,6 +10,7 @@ import com.auth0.android.authentication.storage.SharedPreferencesStorage
 import com.auth0.android.callback.Callback
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
+import com.sobczal2.biteright.util.StringProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlin.coroutines.suspendCoroutine
 
@@ -34,7 +34,8 @@ class AuthManager(
 
     fun login(
         onSuccess: (credentials: Credentials) -> Unit,
-        onFailure: (errorStringId: Int) -> Unit,
+        onFailure: (message: String) -> Unit,
+        stringProvider: StringProvider,
         activityContext: Context
     ) {
         WebAuthProvider
@@ -45,18 +46,17 @@ class AuthManager(
                     when (error.getCode()) {
                         "access_denied" -> {
                             when (error.getDescription()) {
-                                "email_not_verified" -> onFailure(R.string.verify_your_email)
-                                else -> onFailure(R.string.unknown_error)
+                                "email_not_verified" -> onFailure(stringProvider.getString(R.string.verify_your_email))
+                                else -> onFailure(stringProvider.getString(R.string.unknown_error))
                             }
                         }
 
-                        "a0.authentication_canceled" -> onFailure(R.string.login_canceled)
-                        else -> onFailure(R.string.unknown_error)
+                        "a0.authentication_canceled" -> onFailure(stringProvider.getString(R.string.login_canceled))
+                        else -> onFailure(stringProvider.getString(R.string.unknown_error))
                     }
                 }
 
                 override fun onSuccess(result: Credentials) {
-                    Log.d("AuthManager", "Login successful: $result")
                     onSuccess(result)
                     credentialsManager.saveCredentials(result)
                 }

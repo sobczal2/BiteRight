@@ -10,7 +10,6 @@ data class CurrentProductsScreenState(
     val changeAmountDialogTargetId: UUID? = null,
     val changeAmountDialogLoading: Boolean = false,
     override val ongoingLoadingActions: Set<String> = emptySet(),
-    override val globalError: String? = null,
 ) : ScreenState {
     fun isLoading(): Boolean = ongoingLoadingActions.isNotEmpty()
 }

@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.viewmodels
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.request.ImageRequest
@@ -28,6 +29,7 @@ class AllProductsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     imageRequestBuilder: ImageRequest.Builder
 ) : ViewModel() {
+    lateinit var snackbarHostState: SnackbarHostState
     private val _state = MutableStateFlow(
         AllProductsScreenState(
             imageRequestBuilder = imageRequestBuilder
@@ -113,9 +115,9 @@ class AllProductsViewModel @Inject constructor(
         productsResult.fold(
             { response -> return response.products },
             { repositoryError ->
-                _state.update {
-                    it.copy(globalError = repositoryError.message)
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
         return emptyPaginatedList()
@@ -135,9 +137,9 @@ class AllProductsViewModel @Inject constructor(
                 ) { it.id == productId }
             },
             { repositoryError ->
-                _state.update {
-                    it.copy(globalError = repositoryError.message)
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
     }
@@ -156,9 +158,9 @@ class AllProductsViewModel @Inject constructor(
                 ) { it.id == productId }
             },
             { repositoryError ->
-                _state.update {
-                    it.copy(globalError = repositoryError.message)
-                }
+                snackbarHostState.showSnackbar(
+                    message = repositoryError.message,
+                )
             }
         )
     }

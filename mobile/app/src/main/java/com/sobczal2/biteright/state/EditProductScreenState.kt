@@ -30,7 +30,6 @@ data class EditProductScreenState(
     val startingUnits: PaginatedList<UnitDto>? = null,
     val detailsLoading: Boolean = false,
     override val ongoingLoadingActions: Set<String> = emptySet(),
-    override val globalError: String? = null,
 ) : ScreenState {
     fun isLoading(): Boolean = ongoingLoadingActions.isNotEmpty()
 }

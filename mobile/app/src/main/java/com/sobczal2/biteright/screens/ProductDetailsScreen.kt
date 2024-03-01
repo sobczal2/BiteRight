@@ -14,10 +14,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,6 +39,7 @@ import com.sobczal2.biteright.routing.Routes
 import com.sobczal2.biteright.state.ProductDetailsScreenState
 import com.sobczal2.biteright.ui.components.categories.CategoryImage
 import com.sobczal2.biteright.ui.components.common.DisplayPair
+import com.sobczal2.biteright.ui.components.common.ErrorSnackbarHost
 import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.ui.theme.mediumStart
@@ -55,6 +59,8 @@ fun ProductDetailsScreen(
     productId: UUID
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    viewModel.snackbarHostState = snackbarHostState
 
     LaunchedEffect(Unit) {
         viewModel.sendEvent(ProductDetailsScreenEvent.LoadDetails(productId))
@@ -64,7 +70,8 @@ fun ProductDetailsScreen(
         ProductDetailsScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,
-            topLevelNavigate = topLevelNavigate
+            topLevelNavigate = topLevelNavigate,
+            snackbarHostState = snackbarHostState
         )
     }
 }
@@ -73,11 +80,18 @@ fun ProductDetailsScreen(
 fun ProductDetailsScreenContent(
     state: ProductDetailsScreenState = ProductDetailsScreenState(),
     sendEvent: (ProductDetailsScreenEvent) -> Unit = {},
-    topLevelNavigate: (Routes) -> Unit = {}
+    topLevelNavigate: (Routes) -> Unit = {},
+    snackbarHostState: SnackbarHostState,
 ) {
-    val product = state.product ?: return
-    val user = state.user ?: return
-    Scaffold { paddingValues ->
+    val product = state.product ?: DetailedProductDto.Empty
+    val user = state.user ?: UserDto.Empty
+    Scaffold(
+        snackbarHost = {
+            ErrorSnackbarHost(
+                snackbarHostState = snackbarHostState,
+            )
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -280,6 +294,7 @@ fun ProductDetailsScreenPreview() {
                     timeZoneId = "Europe/Warsaw"
                 )
             )
-        )
+        ),
+        snackbarHostState = SnackbarHostState()
     )
 }
