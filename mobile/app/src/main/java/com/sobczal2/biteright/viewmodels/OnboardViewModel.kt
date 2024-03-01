@@ -10,11 +10,11 @@ import com.sobczal2.biteright.dto.common.PaginatedList
 import com.sobczal2.biteright.dto.common.PaginationParams
 import com.sobczal2.biteright.dto.common.emptyPaginatedList
 import com.sobczal2.biteright.dto.currencies.CurrencyDto
-import com.sobczal2.biteright.events.StartScreenEvent
+import com.sobczal2.biteright.events.OnboardScreenEvent
 import com.sobczal2.biteright.repositories.abstractions.CurrencyRepository
 import com.sobczal2.biteright.repositories.abstractions.UserRepository
 import com.sobczal2.biteright.repositories.common.ApiRepositoryError
-import com.sobczal2.biteright.state.StartScreenState
+import com.sobczal2.biteright.state.OnboardScreenState
 import com.sobczal2.biteright.util.StringProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -28,16 +28,16 @@ import java.util.TimeZone
 import javax.inject.Inject
 
 @HiltViewModel
-class StartViewModel @Inject constructor(
+class OnboardViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val stringProvider: StringProvider,
     private val currencyRepository: CurrencyRepository,
 
     ) : ViewModel() {
-    private val _state = MutableStateFlow(StartScreenState())
+    private val _state = MutableStateFlow(OnboardScreenState())
     val state = _state.asStateFlow()
 
-    private val _events = Channel<StartScreenEvent>()
+    private val _events = Channel<OnboardScreenEvent>()
     private val events = _events.receiveAsFlow()
 
     init {
@@ -55,7 +55,7 @@ class StartViewModel @Inject constructor(
     private suspend fun fetchDefaultCurrency() {
         _state.update {
             it.copy(
-                ongoingLoadingActions = it.ongoingLoadingActions + StartViewModel::fetchDefaultCurrency.name,
+                ongoingLoadingActions = it.ongoingLoadingActions + OnboardViewModel::fetchDefaultCurrency.name,
             )
         }
 
@@ -85,23 +85,23 @@ class StartViewModel @Inject constructor(
 
         _state.update {
             it.copy(
-                ongoingLoadingActions = it.ongoingLoadingActions - StartViewModel::fetchDefaultCurrency.name,
+                ongoingLoadingActions = it.ongoingLoadingActions - OnboardViewModel::fetchDefaultCurrency.name,
             )
         }
     }
 
-    fun sendEvent(event: StartScreenEvent) {
+    fun sendEvent(event: OnboardScreenEvent) {
         viewModelScope.launch {
             _events.send(event)
         }
     }
 
-    private fun handleEvent(event: StartScreenEvent) {
+    private fun handleEvent(event: OnboardScreenEvent) {
         when (event) {
-            is StartScreenEvent.OnUsernameChange -> handleUsernameChange(event.value)
-            is StartScreenEvent.OnNextClick -> handleNextClick(event.onSuccess)
-            is StartScreenEvent.OnCurrencyChange -> handleCurrencyChange(event.value)
-            is StartScreenEvent.OnTimeZoneChange -> handleTimeZoneChange(event.value)
+            is OnboardScreenEvent.OnUsernameChange -> handleUsernameChange(event.value)
+            is OnboardScreenEvent.OnNextClick -> handleNextClick(event.onSuccess)
+            is OnboardScreenEvent.OnCurrencyChange -> handleCurrencyChange(event.value)
+            is OnboardScreenEvent.OnTimeZoneChange -> handleTimeZoneChange(event.value)
         }
     }
 
@@ -224,46 +224,6 @@ class StartViewModel @Inject constructor(
 
     }
 
-    suspend fun isOnboarded(): Boolean {
-        _state.update {
-            it.copy(
-                ongoingLoadingActions = it.ongoingLoadingActions + StartViewModel::isOnboarded.name,
-            )
-        }
-
-        val meResult = userRepository.me(
-            MeRequest()
-        )
-
-        val isOnboarded = meResult.fold(
-            {
-                true
-            },
-            { repositoryError ->
-                _state.update {
-                    it.copy(
-                        ongoingLoadingActions = it.ongoingLoadingActions - StartViewModel::isOnboarded.name,
-                    )
-                }
-
-                if (repositoryError is ApiRepositoryError && repositoryError.apiErrorCode == 404) {
-                    false
-                } else {
-                    _state.update {
-                        it.copy(
-                            globalError = repositoryError.message
-                        )
-                    }
-                    false
-                }
-            }
-        )
-
-
-
-        return isOnboarded
-    }
-
     suspend fun searchCurrencies(
         query: String,
         paginationParams: PaginationParams
@@ -330,7 +290,7 @@ class StartViewModel @Inject constructor(
     private suspend fun fetchInitialSearchData() {
         _state.update {
             it.copy(
-                ongoingLoadingActions = it.ongoingLoadingActions + StartViewModel::fetchInitialSearchData.name,
+                ongoingLoadingActions = it.ongoingLoadingActions + OnboardViewModel::fetchInitialSearchData.name,
             )
         }
 
@@ -347,7 +307,7 @@ class StartViewModel @Inject constructor(
 
             _state.update {
                 it.copy(
-                    ongoingLoadingActions = it.ongoingLoadingActions - StartViewModel::fetchInitialSearchData.name,
+                    ongoingLoadingActions = it.ongoingLoadingActions - OnboardViewModel::fetchInitialSearchData.name,
                 )
             }
         }

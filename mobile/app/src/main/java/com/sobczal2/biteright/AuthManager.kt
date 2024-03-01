@@ -12,9 +12,6 @@ import com.auth0.android.callback.Callback
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlin.coroutines.suspendCoroutine
 
 class AuthManager(
@@ -32,7 +29,7 @@ class AuthManager(
         SharedPreferencesStorage(context)
     )
 
-    val isLoggedIn: Boolean
+    val loggedIn: Boolean
         get() = credentialsManager.hasValidCredentials()
 
     fun login(

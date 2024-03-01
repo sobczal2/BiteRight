@@ -7,4 +7,11 @@ import java.util.UUID
 data class ProfileDto(
     @SerializedName("currency") val currency: CurrencyDto,
     @SerializedName("timeZoneId") val timeZoneId: String,
-)
+) {
+    companion object {
+        val Empty: ProfileDto = ProfileDto(
+            currency = CurrencyDto.Empty,
+            timeZoneId = ""
+        )
+    }
+}

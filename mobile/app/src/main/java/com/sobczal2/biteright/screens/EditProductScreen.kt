@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -30,11 +29,11 @@ import com.sobczal2.biteright.dto.common.emptyPaginatedList
 import com.sobczal2.biteright.dto.currencies.CurrencyDto
 import com.sobczal2.biteright.dto.units.UnitDto
 import com.sobczal2.biteright.events.EditProductScreenEvent
-import com.sobczal2.biteright.events.NavigationEvent
+import com.sobczal2.biteright.routing.Routes
 import com.sobczal2.biteright.state.EditProductScreenState
 import com.sobczal2.biteright.ui.components.categories.CategoryFormField
 import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
-import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
+import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.products.AmountFormField
@@ -48,7 +47,7 @@ import java.util.UUID
 @Composable
 fun EditProductScreen(
     viewModel: EditProductViewModel = hiltViewModel(),
-    handleNavigationEvent: (NavigationEvent) -> Unit,
+    topLevelNavigate: (Routes) -> Unit,
     productId: UUID
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
@@ -57,14 +56,14 @@ fun EditProductScreen(
         viewModel.sendEvent(EditProductScreenEvent.LoadDetails(productId))
     }
 
-    ScaffoldLoader(loading = state.value.isLoading()) {
+    SurfaceLoader(loading = state.value.isLoading()) {
         EditProductScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,
             searchCategories = viewModel::searchCategories,
             searchCurrencies = viewModel::searchCurrencies,
             searchUnits = viewModel::searchUnits,
-            handleNavigationEvent = handleNavigationEvent,
+            topLevelNavigate = topLevelNavigate
         )
     }
 }
@@ -76,7 +75,7 @@ fun EditProductScreenContent(
     searchCategories: suspend (String, PaginationParams) -> PaginatedList<CategoryDto> = { _, _ -> emptyPaginatedList() },
     searchCurrencies: suspend (String, PaginationParams) -> PaginatedList<CurrencyDto> = { _, _ -> emptyPaginatedList() },
     searchUnits: suspend (String, PaginationParams) -> PaginatedList<UnitDto> = { _, _ -> emptyPaginatedList() },
-    handleNavigationEvent: (NavigationEvent) -> Unit = {},
+    topLevelNavigate: (Routes) -> Unit = {}
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -169,9 +168,9 @@ fun EditProductScreenContent(
                     onClick = {
                         sendEvent(
                             EditProductScreenEvent.OnDeleteClick(
-                                onSuccess = {
-                                    handleNavigationEvent(NavigationEvent.NavigateBack)
-                                    handleNavigationEvent(NavigationEvent.NavigateBack)
+                                onSuccess =
+                                {
+                                    topLevelNavigate(Routes.HomeGraph())
                                 }
                             )
                         )
@@ -192,7 +191,7 @@ fun EditProductScreenContent(
                 ) {
                     OutlinedButton(
                         onClick = {
-                            handleNavigationEvent(NavigationEvent.NavigateBack)
+                            topLevelNavigate(Routes.ProductDetails(state.productId!!))
                         },
                         modifier = Modifier.weight(0.5f),
                         shape = MaterialTheme.shapes.extraSmall,
@@ -210,7 +209,7 @@ fun EditProductScreenContent(
                             focusManager.clearFocus()
                             sendEvent(EditProductScreenEvent.OnSubmitClick(
                                 onSuccess = {
-                                    handleNavigationEvent(NavigationEvent.NavigateBack)
+                                    topLevelNavigate(Routes.ProductDetails(state.productId!!))
                                 }
                             ))
                         },

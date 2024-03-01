@@ -1,4 +1,4 @@
-package com.sobczal2.biteright.ui.components.common
+package com.sobczal2.biteright.ui.layouts
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,8 +7,6 @@ import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.FormatListNumbered
 import androidx.compose.material.icons.filled.GridOn
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -17,23 +15,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.sobczal2.biteright.R
-import com.sobczal2.biteright.events.NavigationEvent
+import com.sobczal2.biteright.routing.Routes
+import com.sobczal2.biteright.ui.components.products.AddProductActionButton
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
-
-enum class HomeLayoutTab {
-    CURRENT_PRODUCTS,
-    ALL_PRODUCTS,
-    TEMPLATES,
-    PROFILE,
-}
+import com.sobczal2.biteright.util.BiteRightPreview
 
 @Composable
 fun HomeLayout(
-    currentTab: HomeLayoutTab,
-    handleNavigationEvent: (NavigationEvent) -> Unit,
-    floatingActionButton: @Composable (() -> Unit)? = null,
+    currentRoute: Routes?,
+    homeNavigate: (Routes.HomeGraph) -> Unit,
+    topLevelNavigate: (Routes) -> Unit,
     content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(
@@ -43,12 +35,9 @@ fun HomeLayout(
                     .fillMaxWidth(),
             ) {
                 NavigationBarItem(
-                    selected = currentTab == HomeLayoutTab.CURRENT_PRODUCTS,
+                    selected = currentRoute == Routes.HomeGraph.CurrentProducts,
                     onClick = {
-                        navigateIfNotCurrentTab(
-                            currentTab,
-                            HomeLayoutTab.CURRENT_PRODUCTS
-                        ) { handleNavigationEvent(NavigationEvent.NavigateToCurrentProducts) }
+                        homeNavigate(Routes.HomeGraph.CurrentProducts)
                     },
                     icon = {
                         Icon(
@@ -59,12 +48,9 @@ fun HomeLayout(
                     label = { Text(stringResource(id = R.string.current)) }
                 )
                 NavigationBarItem(
-                    selected = currentTab == HomeLayoutTab.ALL_PRODUCTS,
+                    selected = currentRoute == Routes.HomeGraph.AllProducts,
                     onClick = {
-                        navigateIfNotCurrentTab(
-                            currentTab,
-                            HomeLayoutTab.ALL_PRODUCTS,
-                        ) { handleNavigationEvent(NavigationEvent.NavigateToAllProducts) }
+                        homeNavigate(Routes.HomeGraph.AllProducts)
                     },
                     icon = {
                         Icon(
@@ -75,12 +61,9 @@ fun HomeLayout(
                     label = { Text(stringResource(id = R.string.all)) }
                 )
                 NavigationBarItem(
-                    selected = currentTab == HomeLayoutTab.TEMPLATES,
+                    selected = currentRoute == Routes.HomeGraph.Templates,
                     onClick = {
-                        navigateIfNotCurrentTab(
-                            currentTab,
-                            HomeLayoutTab.TEMPLATES,
-                        ) { handleNavigationEvent(NavigationEvent.NavigateToTemplates) }
+                        homeNavigate(Routes.HomeGraph.Templates)
                     },
                     icon = {
                         Icon(
@@ -91,12 +74,9 @@ fun HomeLayout(
                     label = { Text(stringResource(id = R.string.templates)) }
                 )
                 NavigationBarItem(
-                    selected = currentTab == HomeLayoutTab.PROFILE,
+                    selected = currentRoute == Routes.HomeGraph.Profile,
                     onClick = {
-                        navigateIfNotCurrentTab(
-                            currentTab,
-                            HomeLayoutTab.PROFILE,
-                        ) { handleNavigationEvent(NavigationEvent.NavigateToProfile) }
+                        homeNavigate(Routes.HomeGraph.Profile)
                     },
                     icon = {
                         Icon(
@@ -108,36 +88,30 @@ fun HomeLayout(
                 )
             }
         },
-        floatingActionButton = { floatingActionButton?.let { it() } },
-    ) {
-        content(it)
-    }
-}
-
-fun navigateIfNotCurrentTab(
-    currentTab: HomeLayoutTab,
-    tab: HomeLayoutTab,
-    navigate: () -> Unit,
-) {
-    if (currentTab != tab) {
-        navigate()
+        floatingActionButton = {
+            if (
+                currentRoute == Routes.HomeGraph.CurrentProducts
+                || currentRoute == Routes.HomeGraph.AllProducts
+            ) {
+                AddProductActionButton {
+                    topLevelNavigate(Routes.CreateProduct)
+                }
+            }
+        },
+    ) { paddingValues ->
+        content(paddingValues)
     }
 }
 
 @Composable
-@Preview(apiLevel = 33)
-@Preview("Dark Theme", apiLevel = 33, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@BiteRightPreview
 fun HomeLayoutPreview() {
     BiteRightTheme {
         HomeLayout(
-            currentTab = HomeLayoutTab.CURRENT_PRODUCTS,
+            currentRoute = Routes.HomeGraph.CurrentProducts,
             content = {},
-            handleNavigationEvent = {},
-            floatingActionButton = {
-                FloatingActionButton(onClick = { }) {
-                    Icon(Icons.Rounded.Add, contentDescription = "Add")
-                }
-            }
+            homeNavigate = {},
+            topLevelNavigate = {},
         )
     }
 }

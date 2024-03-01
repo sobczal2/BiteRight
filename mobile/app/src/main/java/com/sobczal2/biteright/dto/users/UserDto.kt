@@ -14,4 +14,15 @@ data class UserDto(
     @SerializedName("email") val email: String,
     @SerializedName("joinedAt") val joinedAt: Instant,
     @SerializedName("profile") val profile: ProfileDto
-)
+) {
+    companion object {
+        val Empty: UserDto = UserDto(
+            id = UUID(0, 0),
+            identityId = "",
+            username = "",
+            email = "",
+            joinedAt = Instant.now(),
+            profile = ProfileDto.Empty
+        )
+    }
+}

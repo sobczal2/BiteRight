@@ -18,7 +18,7 @@ import com.sobczal2.biteright.R
 fun SurfaceLoader(
     loading: Boolean,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable (Modifier) -> Unit
 ) {
     if (loading) {
         Surface(
@@ -38,34 +38,6 @@ fun SurfaceLoader(
             }
         }
     } else {
-        content()
-    }
-}
-
-@Composable
-fun ScaffoldLoader(
-    loading: Boolean,
-    content: @Composable () -> Unit
-) {
-    if (loading) {
-        Scaffold(
-            modifier = Modifier.fillMaxSize()
-        ) { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                )
-                Text(text = stringResource(id = R.string.loading))
-            }
-        }
-    } else {
-        content()
+        content(modifier)
     }
 }

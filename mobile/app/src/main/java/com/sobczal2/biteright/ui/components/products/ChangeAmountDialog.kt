@@ -1,23 +1,34 @@
 package com.sobczal2.biteright.ui.components.products
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SliderState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.ui.components.common.ButtonWithLoader
@@ -50,28 +61,66 @@ fun ChangeAmountDialog(
     ) {
         Surface(
             modifier = modifier,
-            shape = MaterialTheme.shapes.medium,
+            shape = MaterialTheme.shapes.extraSmall,
         ) {
             Column(
-                modifier = Modifier
-                    .padding(MaterialTheme.dimension.md)
+                modifier = Modifier,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                var mainTextSize by remember { mutableStateOf(IntSize.Zero) }
                 Text(
                     text = "${stringResource(id = R.string.change_amount_for)} $productName",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Text(
-                    text = "${"%.2f".format(Locale.US, sliderState.value.value)} / ${"%.2f".format(maxAmount, Locale.US)} $unitName",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.headlineSmall.copy(
+                        textAlign = TextAlign.Center
+                    ),
                     modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = MaterialTheme.dimension.md,
+                            start = MaterialTheme.dimension.md,
+                            end = MaterialTheme.dimension.md,
+                        )
+                        .onGloballyPositioned {
+                            mainTextSize = it.size
+                        },
                 )
+                val sliderInteractionSource = remember { MutableInteractionSource() }
+                var thumbTextSize by remember { mutableStateOf(IntSize.Zero) }
                 Slider(
                     state = sliderState.value,
+                    interactionSource = sliderInteractionSource,
+                    thumb = {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .padding(top = MaterialTheme.dimension.sm)
+                        ) {
+                            SliderDefaults.Thumb(
+                                interactionSource = sliderInteractionSource
+                            )
+                            Text(
+                                text = "${"%.2f".format(Locale.US, sliderState.value.value)} $unitName",
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    textAlign = TextAlign.Center
+                                ),
+                                modifier = Modifier
+                                    .width(50.dp)
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(MaterialTheme.dimension.sm)
                 )
 
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(
+                            start = MaterialTheme.dimension.md,
+                            end = MaterialTheme.dimension.md,
+                            bottom = MaterialTheme.dimension.md,
+                        ),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     OutlinedButton(

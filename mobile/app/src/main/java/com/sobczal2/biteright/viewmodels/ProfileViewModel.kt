@@ -45,36 +45,37 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    suspend fun fetchUserData() {
-        _state.update {
-            it.copy(
-                ongoingLoadingActions = it.ongoingLoadingActions + ProfileViewModel::fetchUserData.name,
-            )
-        }
-        val meResponse = userRepository.me(
-            MeRequest()
-        )
-        meResponse.fold(
-            { response ->
-                _state.update {
-                    it.copy(user = response.user)
-                }
-            },
-            { error ->
-                _state.update {
-                    it.copy(globalError = error.message)
-                }
+    fun fetchUserData() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    ongoingLoadingActions = it.ongoingLoadingActions + ProfileViewModel::fetchUserData.name,
+                )
             }
-        )
-        _state.update {
-            it.copy(
-                ongoingLoadingActions = it.ongoingLoadingActions - ProfileViewModel::fetchUserData.name,
+            val meResponse = userRepository.me(
+                MeRequest()
             )
+            meResponse.fold(
+                { response ->
+                    _state.update {
+                        it.copy(user = response.user)
+                    }
+                },
+                { error ->
+                    _state.update {
+                        it.copy(globalError = error.message)
+                    }
+                }
+            )
+            _state.update {
+                it.copy(
+                    ongoingLoadingActions = it.ongoingLoadingActions - ProfileViewModel::fetchUserData.name,
+                )
+            }
         }
     }
 
     private fun logout() {
         authManager.logout()
     }
-
 }

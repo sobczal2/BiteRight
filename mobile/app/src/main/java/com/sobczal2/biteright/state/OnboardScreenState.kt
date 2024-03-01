@@ -7,7 +7,7 @@ import com.sobczal2.biteright.ui.components.currencies.CurrencyFormFieldState
 import com.sobczal2.biteright.ui.components.users.TimeZoneFormFieldState
 import java.util.TimeZone
 
-data class StartScreenState(
+data class OnboardScreenState(
     val usernameFieldState: TextFormFieldState = TextFormFieldState(),
     val currencyFieldState: CurrencyFormFieldState = CurrencyFormFieldState(CurrencyDto.Empty),
     val timeZoneFieldState: TimeZoneFormFieldState = TimeZoneFormFieldState(TimeZone.getDefault()),

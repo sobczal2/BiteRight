@@ -55,38 +55,40 @@ class EditProfileViewModel @Inject constructor(
         }
     }
 
-    suspend fun fetchUserData() {
-        _state.update {
-            it.copy(
-                ongoingLoadingActions = it.ongoingLoadingActions + EditProfileViewModel::fetchUserData.name,
+    fun fetchUserData() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    ongoingLoadingActions = it.ongoingLoadingActions + EditProfileViewModel::fetchUserData.name,
+                )
+            }
+            val meResponse = userRepository.me(
+                MeRequest()
             )
-        }
-        val meResponse = userRepository.me(
-            MeRequest()
-        )
-        meResponse.fold(
-            { response ->
-                _state.update {
-                    it.copy(
-                        currencyFieldState = it.currencyFieldState.copy(value = response.user.profile.currency),
-                        timeZoneFieldState = it.timeZoneFieldState.copy(
-                            value = TimeZone.getTimeZone(
-                                response.user.profile.timeZoneId
+            meResponse.fold(
+                { response ->
+                    _state.update {
+                        it.copy(
+                            currencyFieldState = it.currencyFieldState.copy(value = response.user.profile.currency),
+                            timeZoneFieldState = it.timeZoneFieldState.copy(
+                                value = TimeZone.getTimeZone(
+                                    response.user.profile.timeZoneId
+                                )
                             )
                         )
-                    )
+                    }
+                },
+                { error ->
+                    _state.update {
+                        it.copy(globalError = error.message)
+                    }
                 }
-            },
-            { error ->
-                _state.update {
-                    it.copy(globalError = error.message)
-                }
-            }
-        )
-        _state.update {
-            it.copy(
-                ongoingLoadingActions = it.ongoingLoadingActions - EditProfileViewModel::fetchUserData.name,
             )
+            _state.update {
+                it.copy(
+                    ongoingLoadingActions = it.ongoingLoadingActions - EditProfileViewModel::fetchUserData.name,
+                )
+            }
         }
     }
 
@@ -205,7 +207,8 @@ class EditProfileViewModel @Inject constructor(
                 totalPages = _state.value.availableTimeZones.size / paginationParams.pageSize
             )
         }
-        val result = _state.value.availableTimeZones.filter { it.id.lowercase().contains(query.lowercase()) }
+        val result =
+            _state.value.availableTimeZones.filter { it.id.lowercase().contains(query.lowercase()) }
 
         return PaginatedList(
             items = result
