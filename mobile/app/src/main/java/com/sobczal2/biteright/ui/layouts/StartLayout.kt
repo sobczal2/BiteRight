@@ -21,10 +21,10 @@ fun StartLayout(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(paddingValues)
-                .padding(top = MaterialTheme.dimension.xxxl),
+                .padding(top = MaterialTheme.dimension.xxl),
         ) {
             BiteRightLogo(
-                modifier = Modifier.size(300.dp)
+                modifier = Modifier.size(250.dp)
             )
             content()
         }
