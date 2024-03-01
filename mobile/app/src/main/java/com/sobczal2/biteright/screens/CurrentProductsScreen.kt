@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,12 +30,9 @@ import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.products.ExpirationDateKindDto
 import com.sobczal2.biteright.dto.products.SimpleProductDto
 import com.sobczal2.biteright.events.CurrentProductsScreenEvent
-import com.sobczal2.biteright.events.NavigationEvent
+import com.sobczal2.biteright.routing.Routes
 import com.sobczal2.biteright.state.CurrentProductsScreenState
-import com.sobczal2.biteright.ui.components.common.HomeLayout
-import com.sobczal2.biteright.ui.components.common.HomeLayoutTab
-import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
-import com.sobczal2.biteright.ui.components.products.AddProductActionButton
+import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.components.products.ChangeAmountDialog
 import com.sobczal2.biteright.ui.components.products.SwipeableProductListItem
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
@@ -50,17 +48,24 @@ import java.util.UUID
 @Composable
 fun CurrentProductsScreen(
     viewModel: CurrentProductsViewModel = hiltViewModel(),
-    handleNavigationEvent: (NavigationEvent) -> Unit,
+    topLevelNavigate: (Routes) -> Unit,
+    paddingValues: PaddingValues
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
 
-    ScaffoldLoader(
-        loading = state.value.isLoading()
+    SurfaceLoader(
+        loading = state.value.isLoading(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues),
     ) {
         CurrentProductsScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,
-            handleNavigationEvent = handleNavigationEvent,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            topLevelNavigate = topLevelNavigate
         )
     }
 }
@@ -68,9 +73,10 @@ fun CurrentProductsScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CurrentProductsScreenContent(
+    modifier: Modifier = Modifier,
     state: CurrentProductsScreenState = CurrentProductsScreenState(),
     sendEvent: (CurrentProductsScreenEvent) -> Unit = {},
-    handleNavigationEvent: (NavigationEvent) -> Unit = {},
+    topLevelNavigate: (Routes) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -92,94 +98,82 @@ fun CurrentProductsScreenContent(
         )
     }
 
-    HomeLayout(
-        currentTab = HomeLayoutTab.CURRENT_PRODUCTS,
-        handleNavigationEvent = handleNavigationEvent,
-        floatingActionButton = {
-            AddProductActionButton {
-                handleNavigationEvent(NavigationEvent.NavigateToCreateProduct)
-            }
-        }
-    ) { paddingValues ->
-        Column(
+    Column(
+        modifier = modifier
+            .padding(
+                start = MaterialTheme.dimension.md,
+                end = MaterialTheme.dimension.md,
+                top = MaterialTheme.dimension.md
+            ),
+    ) {
+        Text(
+            text = stringResource(id = R.string.current_products),
+            style = MaterialTheme.typography.displaySmall.plus(
+                TextStyle(textAlign = TextAlign.Center)
+            ),
             modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(
-                    start = MaterialTheme.dimension.md,
-                    end = MaterialTheme.dimension.md,
-                    top = MaterialTheme.dimension.md
-                ),
-        ) {
-            Text(
-                text = stringResource(id = R.string.current_products),
-                style = MaterialTheme.typography.displaySmall.plus(
-                    TextStyle(textAlign = TextAlign.Center)
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = MaterialTheme.dimension.md)
-            )
+                .fillMaxWidth()
+                .padding(bottom = MaterialTheme.dimension.md)
+        )
 
-            LazyColumn(
-                content = {
-                    items(
-                        items = state.currentProducts,
-                        key = { it.id }
-                    ) { simpleProductDto ->
-                        var visible by remember { mutableStateOf(true) }
-                        SwipeableProductListItem(
-                            simpleProductDto = simpleProductDto,
-                            onDispose = { animationDuration ->
-                                visible = false
-                                coroutineScope.launch {
-                                    delay(animationDuration.toLong())
+        LazyColumn(
+            content = {
+                items(
+                    items = state.currentProducts,
+                    key = { it.id }
+                ) { simpleProductDto ->
+                    var visible by remember { mutableStateOf(true) }
+                    SwipeableProductListItem(
+                        simpleProductDto = simpleProductDto,
+                        onDispose = { animationDuration ->
+                            visible = false
+                            coroutineScope.launch {
+                                delay(animationDuration.toLong())
+                                sendEvent(
+                                    CurrentProductsScreenEvent.OnProductDispose(
+                                        simpleProductDto.id
+                                    )
+                                )
+                            }
+                            true
+                        },
+                        imageRequestBuilder = state.imageRequestBuilder,
+                        visible = visible,
+                        modifier = Modifier
+                            .combinedClickable(
+                                onClick = {
+                                    topLevelNavigate(
+                                        Routes.ProductDetails(
+                                            productId = simpleProductDto.id
+                                        )
+                                    )
+                                },
+                                onLongClick = {
                                     sendEvent(
-                                        CurrentProductsScreenEvent.OnProductDispose(
+                                        CurrentProductsScreenEvent.OnProductLongClick(
                                             simpleProductDto.id
                                         )
                                     )
                                 }
-                                true
-                            },
-                            imageRequestBuilder = state.imageRequestBuilder,
-                            visible = visible,
-                            modifier = Modifier
-                                .combinedClickable(
-                                    onClick = {
-                                        handleNavigationEvent(
-                                            NavigationEvent.NavigateToProductDetails(
-                                                simpleProductDto.id
-                                            )
-                                        )
-                                    },
-                                    onLongClick = {
-                                        sendEvent(
-                                            CurrentProductsScreenEvent.OnProductLongClick(
-                                                simpleProductDto.id
-                                            )
-                                        )
-                                    }
-                                )
-                        )
-
-                        if (simpleProductDto != state.currentProducts.last()) {
-                            HorizontalDivider(
-                                modifier = Modifier.fillMaxWidth(),
-                                color = MaterialTheme.colorScheme.onSurface
                             )
-                        }
-                    }
+                    )
 
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .height(MaterialTheme.dimension.xxl)
+                    if (simpleProductDto != state.currentProducts.last()) {
+                        HorizontalDivider(
+                            modifier = Modifier.fillMaxWidth(),
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
-                },
-            )
-        }
+                }
+
+                item {
+                    Box(
+                        modifier = Modifier
+                            .height(MaterialTheme.dimension.xxl)
+                    )
+                }
+            },
+        )
     }
 }
 

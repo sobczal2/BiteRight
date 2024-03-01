@@ -4,27 +4,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sobczal2.biteright.AuthManager
-import com.sobczal2.biteright.events.NavigationEvent
-import com.sobczal2.biteright.screens.AllProductsScreen
 import com.sobczal2.biteright.screens.CreateProductScreen
-import com.sobczal2.biteright.screens.CurrentProductsScreen
 import com.sobczal2.biteright.screens.EditProductScreen
 import com.sobczal2.biteright.screens.EditProfileScreen
 import com.sobczal2.biteright.screens.ProductDetailsScreen
-import com.sobczal2.biteright.screens.ProfileScreen
-import com.sobczal2.biteright.screens.StartScreen
-import com.sobczal2.biteright.screens.WelcomeScreen
-import com.sobczal2.biteright.ui.components.common.ComingSoonBanner
 import com.sobczal2.biteright.util.getUUID
-import com.sobczal2.biteright.viewmodels.AllProductsViewModel
-import com.sobczal2.biteright.viewmodels.CurrentProductsViewModel
 import com.sobczal2.biteright.viewmodels.EditProfileViewModel
-import com.sobczal2.biteright.viewmodels.ProfileViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,109 +21,67 @@ import kotlinx.coroutines.launch
 @Composable
 fun Router(authManager: AuthManager) {
     val navController = rememberNavController()
-    authManager.subscribeToLogoutEvent {
-        handleNavigationEvent(NavigationEvent.NavigateToWelcome, navController)
+
+    fun topLevelNavigate(route: Routes) {
+        navController.navigate(route.routeWithParams)
     }
+
+    LaunchedEffect(Unit) {
+        authManager.subscribeToLogoutEvent {
+            CoroutineScope(Dispatchers.Main).launch {
+                navController.navigate(Routes.StartGraph().routeWithParams)
+            }
+        }
+    }
+
     NavHost(
         navController = navController,
-        startDestination = if (authManager.isLoggedIn) Routes.START else Routes.WELCOME,
+        startDestination = Routes.StartGraph().route,
         modifier = Modifier
     ) {
-        val handleNavigationEvent: (NavigationEvent) -> Unit = { event ->
-            handleNavigationEvent(event, navController)
-        }
-        composable(Routes.WELCOME) {
-            WelcomeScreen(
-                handleNavigationEvent = handleNavigationEvent
+        composable(
+            route = Routes.StartGraph().route,
+        ) {
+            StartRouter(
+                topLevelNavigate = ::topLevelNavigate
             )
         }
-        composable(Routes.START) {
-            StartScreen(
-                handleNavigationEvent = handleNavigationEvent
+        composable(
+            route = Routes.HomeGraph().route
+        ) {
+            HomeRouter(
+                topLevelNavigate = ::topLevelNavigate
             )
         }
-        composable(Routes.CURRENT_PRODUCTS) {
-            val viewModel = hiltViewModel<CurrentProductsViewModel>()
-            LaunchedEffect(navController.currentBackStackEntry?.destination?.route) {
-                if (navController.currentBackStackEntry?.destination?.route == Routes.CURRENT_PRODUCTS)
-                    viewModel.fetchCurrentProducts()
-            }
-            CurrentProductsScreen(
-                viewModel = viewModel,
-                handleNavigationEvent = handleNavigationEvent
-            )
-        }
-        composable(Routes.ALL_PRODUCTS) {
-            val viewModel = hiltViewModel<AllProductsViewModel>()
-            LaunchedEffect(navController.currentBackStackEntry?.destination?.route) {
-                if (navController.currentBackStackEntry?.destination?.route == Routes.ALL_PRODUCTS)
-                    viewModel.fetchAllProducts()
-            }
-            AllProductsScreen(
-                viewModel = viewModel,
-                handleNavigationEvent = handleNavigationEvent
-            )
-        }
-        composable(Routes.PROFILE) {
-            val viewModel = hiltViewModel<ProfileViewModel>()
-            LaunchedEffect(navController.currentBackStackEntry?.destination?.route) {
-                if (navController.currentBackStackEntry?.destination?.route == Routes.PROFILE)
-                    viewModel.fetchUserData()
-            }
-            ProfileScreen(
-                viewModel = viewModel,
-                handleNavigationEvent = handleNavigationEvent
-            )
-        }
-        composable(Routes.CREATE_PRODUCT) {
+        composable(Routes.CreateProduct.route) {
             CreateProductScreen(
-                handleNavigationEvent = handleNavigationEvent
+                topLevelNavigate = ::topLevelNavigate
             )
         }
-        composable(Routes.PRODUCT_DETAILS) {
+        composable(Routes.ProductDetails().route) {
             ProductDetailsScreen(
-                handleNavigationEvent = handleNavigationEvent,
-                productId = it.arguments?.getUUID("productId")!!
+                productId = it.arguments?.getUUID("productId")!!,
+                topLevelNavigate = ::topLevelNavigate,
             )
         }
-        composable(Routes.EDIT_PRODUCT) {
+        composable(Routes.EditProduct().route) {
             EditProductScreen(
-                handleNavigationEvent = handleNavigationEvent,
-                productId = it.arguments?.getUUID("productId")!!
+                productId = it.arguments?.getUUID("productId")!!,
+                topLevelNavigate = ::topLevelNavigate
             )
         }
-        composable(Routes.EDIT_PROFILE) {
+        composable(Routes.EditProfile.route) {
             val viewModel = hiltViewModel<EditProfileViewModel>()
-            LaunchedEffect(navController.currentBackStackEntry?.destination?.route) {
-                if (navController.currentBackStackEntry?.destination?.route == Routes.EDIT_PROFILE)
-                    viewModel.fetchUserData()
+            RouterHelper.RunOnNavigate(
+                navController = navController,
+                route = Routes.EditProfile.route
+            ) {
+                viewModel.fetchUserData()
             }
             EditProfileScreen(
                 viewModel = viewModel,
-                handleNavigationEvent = handleNavigationEvent
+                topLevelNavigate = ::topLevelNavigate
             )
-        }
-        composable(Routes.TEMPLATES) {
-            ComingSoonBanner {
-                handleNavigationEvent(NavigationEvent.NavigateBack, navController)
-            }
-        }
-    }
-}
-
-private fun handleNavigationEvent(
-    navigationEvent: NavigationEvent,
-    navController: NavController
-) {
-    if (navController.currentDestination?.route == navigationEvent.route) return
-    CoroutineScope(Dispatchers.Main).launch {
-        if (navigationEvent.route == null) {
-            when (navigationEvent) {
-                NavigationEvent.NavigateBack -> navController.popBackStack()
-                else -> throw IllegalArgumentException("Unknown navigation event: $navigationEvent")
-            }
-        } else {
-            navController.navigate(navigationEvent.route)
         }
     }
 }

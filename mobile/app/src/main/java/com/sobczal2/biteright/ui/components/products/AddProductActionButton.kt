@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.sobczal2.biteright.R
-import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.ui.theme.dimension
 
 @Composable

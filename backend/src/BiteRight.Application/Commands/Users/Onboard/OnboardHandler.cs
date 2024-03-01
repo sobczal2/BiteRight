@@ -30,15 +30,19 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IIdentityManager _identityManager;
     private readonly IIdentityProvider _identityProvider;
-    private readonly IStringLocalizer<Resources.Resources.Users.Users> _localizer;
+    private readonly IStringLocalizer<Resources.Resources.Users.Users> _usersLocalizer;
+    private readonly IStringLocalizer<Resources.Resources.Currencies.Currencies> _currenciesLocalizer;
     private readonly IUserRepository _userRepository;
+    private readonly ICurrencyRepository _currencyRepository;
 
     public OnboardHandler(
         IIdentityManager identityManager,
         IIdentityProvider identityProvider,
         IDateTimeProvider dateTimeProvider,
         IUserRepository userRepository,
-        IStringLocalizer<Resources.Resources.Users.Users> localizer,
+        ICurrencyRepository currencyRepository,
+        IStringLocalizer<Resources.Resources.Users.Users> usersLocalizer,
+        IStringLocalizer<Resources.Resources.Currencies.Currencies> currenciesLocalizer,
         AppDbContext appAppDbContext
     )
         : base(appAppDbContext)
@@ -47,7 +51,9 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
         _identityProvider = identityProvider;
         _dateTimeProvider = dateTimeProvider;
         _userRepository = userRepository;
-        _localizer = localizer;
+        _currencyRepository = currencyRepository;
+        _usersLocalizer = usersLocalizer;
+        _currenciesLocalizer = currenciesLocalizer;
     }
 
     protected override async Task<OnboardResponse> HandleImpl(
@@ -61,14 +67,14 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
 
         if (existingUser != null)
             throw ValidationException(
-                _localizer[nameof(Resources.Resources.Users.Users.user_already_exists)]
+                _usersLocalizer[nameof(Resources.Resources.Users.Users.user_already_exists)]
             );
 
         var (email, isVerified) = await _identityManager.GetEmail(currentIdentityId, cancellationToken);
 
         if (!isVerified)
             throw ValidationException(
-                _localizer[nameof(Resources.Resources.Users.Users.email_not_verified)]
+                _usersLocalizer[nameof(Resources.Resources.Users.Users.email_not_verified)]
             );
 
         var username = Username.Create(request.Username);
@@ -76,27 +82,34 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
         var existsByUsername = await _userRepository.ExistsByUsername(username, cancellationToken);
         if (existsByUsername)
             throw ValidationException(
-                _localizer[nameof(Resources.Resources.Users.Users.username)],
-                _localizer[nameof(Resources.Resources.Users.Users.username_in_use)]
+                _usersLocalizer[nameof(Resources.Resources.Users.Users.username)],
+                _usersLocalizer[nameof(Resources.Resources.Users.Users.username_in_use)]
             );
 
         var existsByEmail = await _userRepository.ExistsByEmail(email, cancellationToken);
         if (existsByEmail)
             throw ValidationException(
-                _localizer[nameof(Resources.Resources.Users.Users.email_in_use)]
+                _usersLocalizer[nameof(Resources.Resources.Users.Users.email_in_use)]
+            );
+        
+        var currencyExists = await _currencyRepository.ExistsById(request.CurrencyId, cancellationToken);
+        if (!currencyExists)
+            throw ValidationException(
+                nameof(OnboardRequest.CurrencyId),
+                _currenciesLocalizer[nameof(Resources.Resources.Currencies.Currencies.currency_not_found)]
             );
 
         if (!TimeZoneInfo.TryFindSystemTimeZoneById(request.TimeZoneId, out var timeZone))
             throw ValidationException(
                 nameof(OnboardRequest.TimeZoneId),
-                _localizer[nameof(Resources.Resources.Users.Users.time_zone_id_not_found)]
+                _usersLocalizer[nameof(Resources.Resources.Users.Users.time_zone_id_not_found)]
             );
 
         var userId = new UserId();
 
         var profile = Profile.Create(
             userId,
-            CurrencyConfiguration.USD.Id,
+            request.CurrencyId,
             timeZone
         );
 
@@ -121,20 +134,20 @@ public class OnboardHandler : CommandHandlerBase<OnboardRequest, OnboardResponse
         return exception switch
         {
             EmailNotValidException => ValidationException(
-                _localizer[nameof(Resources.Resources.Users.Users.email_not_valid)]
+                _usersLocalizer[nameof(Resources.Resources.Users.Users.email_not_valid)]
             ),
             UsernameEmptyException => ValidationException(
                 nameof(OnboardRequest.Username),
-                _localizer[nameof(Resources.Resources.Users.Users.username_empty)]
+                _usersLocalizer[nameof(Resources.Resources.Users.Users.username_empty)]
             ),
             UsernameInvalidLengthException usernameLengthNotValidException => ValidationException(
                 nameof(OnboardRequest.Username),
-                string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_length_not_valid)],
+                string.Format(_usersLocalizer[nameof(Resources.Resources.Users.Users.username_length_not_valid)],
                     usernameLengthNotValidException.MinLength, usernameLengthNotValidException.MaxLength)
             ),
             UsernameInvalidCharactersException usernameCharactersNotValidException => ValidationException(
                 nameof(OnboardRequest.Username),
-                string.Format(_localizer[nameof(Resources.Resources.Users.Users.username_characters_not_valid)],
+                string.Format(_usersLocalizer[nameof(Resources.Resources.Users.Users.username_characters_not_valid)],
                     usernameCharactersNotValidException.ValidCharacters)
             ),
             _ => base.MapExceptionToValidationException(exception)

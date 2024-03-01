@@ -31,12 +31,12 @@ import com.sobczal2.biteright.dto.units.UnitDto
 import com.sobczal2.biteright.dto.units.UnitSystemDto
 import com.sobczal2.biteright.dto.users.ProfileDto
 import com.sobczal2.biteright.dto.users.UserDto
-import com.sobczal2.biteright.events.NavigationEvent
 import com.sobczal2.biteright.events.ProductDetailsScreenEvent
+import com.sobczal2.biteright.routing.Routes
 import com.sobczal2.biteright.state.ProductDetailsScreenState
 import com.sobczal2.biteright.ui.components.categories.CategoryImage
 import com.sobczal2.biteright.ui.components.common.DisplayPair
-import com.sobczal2.biteright.ui.components.common.ScaffoldLoader
+import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.theme.dimension
 import com.sobczal2.biteright.ui.theme.mediumStart
 import com.sobczal2.biteright.util.BiteRightPreview
@@ -51,7 +51,7 @@ import java.util.UUID
 @Composable
 fun ProductDetailsScreen(
     viewModel: ProductDetailsViewModel = hiltViewModel(),
-    handleNavigationEvent: (NavigationEvent) -> Unit,
+    topLevelNavigate: (Routes) -> Unit,
     productId: UUID
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
@@ -60,11 +60,11 @@ fun ProductDetailsScreen(
         viewModel.sendEvent(ProductDetailsScreenEvent.LoadDetails(productId))
     }
 
-    ScaffoldLoader(loading = state.value.isLoading()) {
+    SurfaceLoader(loading = state.value.isLoading()) {
         ProductDetailsScreenContent(
             state = state.value,
             sendEvent = viewModel::sendEvent,
-            handleNavigationEvent = handleNavigationEvent,
+            topLevelNavigate = topLevelNavigate
         )
     }
 }
@@ -73,7 +73,7 @@ fun ProductDetailsScreen(
 fun ProductDetailsScreenContent(
     state: ProductDetailsScreenState = ProductDetailsScreenState(),
     sendEvent: (ProductDetailsScreenEvent) -> Unit = {},
-    handleNavigationEvent: (NavigationEvent) -> Unit = {},
+    topLevelNavigate: (Routes) -> Unit = {}
 ) {
     val product = state.product ?: return
     val user = state.user ?: return
@@ -204,7 +204,7 @@ fun ProductDetailsScreenContent(
             ) {
                 OutlinedButton(
                     onClick = {
-                        handleNavigationEvent(NavigationEvent.NavigateBack)
+                        topLevelNavigate(Routes.HomeGraph())
                     },
                     modifier = Modifier.weight(0.5f),
                     shape = MaterialTheme.shapes.extraSmall,
@@ -218,7 +218,7 @@ fun ProductDetailsScreenContent(
 
                 Button(
                     onClick = {
-                        handleNavigationEvent(NavigationEvent.NavigateToEditProduct(productId = product.id))
+                        topLevelNavigate(Routes.EditProduct(product.id))
                     },
                     modifier = Modifier.weight(0.5f),
                     shape = MaterialTheme.shapes.extraSmall,

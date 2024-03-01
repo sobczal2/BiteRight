@@ -7,6 +7,7 @@
 
 #region
 
+using System;
 using MediatR;
 
 #endregion
@@ -15,5 +16,6 @@ namespace BiteRight.Application.Commands.Users.Onboard;
 
 public record OnboardRequest(
     string Username,
+    Guid CurrencyId,
     string TimeZoneId
 ) : IRequest<OnboardResponse>;
