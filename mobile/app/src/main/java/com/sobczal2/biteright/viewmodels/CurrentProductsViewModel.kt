@@ -120,6 +120,11 @@ class CurrentProductsViewModel @Inject constructor(
     }
 
     private suspend fun disposeProduct(productId: UUID) {
+
+        if (!_state.value.currentProducts.any { it.id == productId }) { // TODO: This is a workaround for a bug in the UI
+            return
+        }
+
         val disposeResponse = productRepository.dispose(
             DisposeRequest(
                 productId = productId
