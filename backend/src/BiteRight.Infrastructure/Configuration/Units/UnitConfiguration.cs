@@ -28,6 +28,21 @@ public class UnitConfiguration : IEntityTypeConfiguration<Unit>
         UnitSystem.Metric,
         new UnitId(Guid.Parse("CDE52E6C-5D9D-4876-978A-BF67C02CC8BE"))
     );
+    
+    public static Unit Gram { get; } = Unit.Create(
+        UnitSystem.Metric,
+        new UnitId(Guid.Parse("84770558-3345-4D05-9814-21C61FBDBB09"))
+    );
+    
+    public static Unit Milliliter { get; } = Unit.Create(
+        UnitSystem.Metric,
+        new UnitId(Guid.Parse("F13143DB-0380-4B90-8B8D-AAD8C9EA7D48"))
+    );
+    
+    public static Unit Piece { get; } = Unit.Create(
+        UnitSystem.Both,
+        new UnitId(Guid.Parse("F8920B2A-D1EE-4351-A708-4B82584257F1"))
+    );
 
     public void Configure(
         EntityTypeBuilder<Unit> builder
@@ -50,5 +65,8 @@ public class UnitConfiguration : IEntityTypeConfiguration<Unit>
     {
         yield return Liter;
         yield return Kilogram;
+        yield return Gram;
+        yield return Milliliter;
+        yield return Piece;
     }
 }

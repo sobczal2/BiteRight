@@ -3,6 +3,7 @@ using System;
 using BiteRight.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BiteRight.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240301131332_More_Units")]
+    partial class More_Units
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,21 +215,21 @@ namespace BiteRight.Infrastructure.Migrations
                             Id = new Guid("f7b5e10f-0719-4731-831a-ffe0a1a1ed07"),
                             CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
                             LanguageId = new Guid("454faf9a-644c-445c-89e3-b57203957c1a"),
-                            Name = "Other"
+                            Name = "None"
                         },
                         new
                         {
                             Id = new Guid("abed62c9-41b4-462f-866b-06d714dec958"),
                             CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
                             LanguageId = new Guid("24d48691-7325-4703-b69f-8db933a6736d"),
-                            Name = "Inne"
+                            Name = "Brak"
                         },
                         new
                         {
                             Id = new Guid("206a3c95-fb6d-4127-a37b-9f328c021021"),
                             CategoryId = new Guid("c82e0550-26cf-410d-8cec-5cf62bada757"),
                             LanguageId = new Guid("c1dd0a3b-70d3-4aa1-b53e-4c08a03b57c3"),
-                            Name = "Andere"
+                            Name = "Keine"
                         },
                         new
                         {
@@ -559,127 +562,7 @@ namespace BiteRight.Infrastructure.Migrations
                             ISO4217Code = "USD",
                             IsDefault = true,
                             Name = "United States dollar",
-                            Symbol = "US$"
-                        },
-                        new
-                        {
-                            Id = new Guid("776c1e32-3a9d-4e91-869f-81e89bc17465"),
-                            ISO4217Code = "JPY",
-                            IsDefault = false,
-                            Name = "Japanese yen",
-                            Symbol = "¥"
-                        },
-                        new
-                        {
-                            Id = new Guid("5efc5c7c-872d-4559-a3f3-ecc53f8ae59e"),
-                            ISO4217Code = "AUD",
-                            IsDefault = false,
-                            Name = "Australian dollar",
-                            Symbol = "A$"
-                        },
-                        new
-                        {
-                            Id = new Guid("f7e66c98-4dc8-43d8-b77b-8f9848a3888f"),
-                            ISO4217Code = "CAD",
-                            IsDefault = false,
-                            Name = "Canadian dollar",
-                            Symbol = "C$"
-                        },
-                        new
-                        {
-                            Id = new Guid("a418ccb9-82aa-4e69-963b-4736ff1e815a"),
-                            ISO4217Code = "CHF",
-                            IsDefault = false,
-                            Name = "Swiss franc",
-                            Symbol = "Fr"
-                        },
-                        new
-                        {
-                            Id = new Guid("9490768d-a205-4dcc-bb66-6a007f661b98"),
-                            ISO4217Code = "CNY",
-                            IsDefault = false,
-                            Name = "Chinese yuan",
-                            Symbol = "¥"
-                        },
-                        new
-                        {
-                            Id = new Guid("9c32a5f5-dc05-4e83-ab12-d26bdd8d0663"),
-                            ISO4217Code = "SEK",
-                            IsDefault = false,
-                            Name = "Swedish krona",
-                            Symbol = "kr"
-                        },
-                        new
-                        {
-                            Id = new Guid("2bc7bbbc-881b-4460-a099-1d082d11b78b"),
-                            ISO4217Code = "NZD",
-                            IsDefault = false,
-                            Name = "New Zealand dollar",
-                            Symbol = "NZ$"
-                        },
-                        new
-                        {
-                            Id = new Guid("06fc7d4a-ac95-40e9-a685-0434fda14085"),
-                            ISO4217Code = "MXN",
-                            IsDefault = false,
-                            Name = "Mexican peso",
                             Symbol = "$"
-                        },
-                        new
-                        {
-                            Id = new Guid("dd1e997a-bef8-4f62-86ea-6f45bedcccb0"),
-                            ISO4217Code = "NOK",
-                            IsDefault = false,
-                            Name = "Norwegian krone",
-                            Symbol = "kr"
-                        },
-                        new
-                        {
-                            Id = new Guid("d9b9b44c-1731-4496-8aec-1eb6f32689f0"),
-                            ISO4217Code = "SGD",
-                            IsDefault = false,
-                            Name = "Singapore dollar",
-                            Symbol = "S$"
-                        },
-                        new
-                        {
-                            Id = new Guid("d502fd4e-77cc-4749-b8b0-cca05f6c7d1c"),
-                            ISO4217Code = "HKD",
-                            IsDefault = false,
-                            Name = "Hong Kong dollar",
-                            Symbol = "HK$"
-                        },
-                        new
-                        {
-                            Id = new Guid("a353e300-89d7-47b0-9c55-f4c73ad12d98"),
-                            ISO4217Code = "KRW",
-                            IsDefault = false,
-                            Name = "South Korean won",
-                            Symbol = "₩"
-                        },
-                        new
-                        {
-                            Id = new Guid("f1b638fd-f37f-47c0-943e-a35f44edc2cc"),
-                            ISO4217Code = "TRY",
-                            IsDefault = false,
-                            Name = "Turkish lira",
-                            Symbol = "₺"
-                        },
-                        new
-                        {
-                            Id = new Guid("9d2c8e61-f2be-43af-8939-8a0700ea7bda"),
-                            ISO4217Code = "INR",
-                            IsDefault = false,
-                            Name = "Indian rupee",
-                            Symbol = "₹"
-                        },
-                        new
-                        {
-                            Id = new Guid("0cf996fa-3f23-4209-9bad-367d21a1c79a"),
-                            ISO4217Code = "BRL",
-                            IsDefault = false,
-                            Name = "Brazilian real",
-                            Symbol = "R$"
                         });
                 });
 

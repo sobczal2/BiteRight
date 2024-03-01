@@ -13,7 +13,6 @@ enum class ExpirationDateKindDto(val value: Int) {
         Infinite -> R.string.infinite
         BestBefore -> R.string.best_before
         UseBy -> R.string.use_by
-        else -> throw IllegalArgumentException("Unknown expiration date kind: $this")
     }
 
     fun shouldIncludeDate() = when (this) {
@@ -21,6 +20,5 @@ enum class ExpirationDateKindDto(val value: Int) {
         Infinite -> false
         BestBefore -> true
         UseBy -> true
-        else -> throw IllegalArgumentException("Unknown expiration date kind: $this")
     }
 }

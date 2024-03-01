@@ -21,24 +21,24 @@ namespace BiteRight.Infrastructure.Configuration.Categories;
 
 public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
 {
-    public static Translation NoneEn { get; } = Translation.Create(
-        CategoryConfiguration.None.Id,
+    public static Translation OtherEn { get; } = Translation.Create(
+        CategoryConfiguration.Other.Id,
         LanguageConfiguration.English.Id,
-        Name.Create("None"),
+        Name.Create("Other"),
         new TranslationId(Guid.Parse("F7B5E10F-0719-4731-831A-FFE0A1A1ED07"))
     );
 
-    public static Translation NonePl { get; } = Translation.Create(
-        CategoryConfiguration.None.Id,
+    public static Translation OtherPl { get; } = Translation.Create(
+        CategoryConfiguration.Other.Id,
         LanguageConfiguration.Polish.Id,
-        Name.Create("Brak"),
+        Name.Create("Inne"),
         new TranslationId(Guid.Parse("ABED62C9-41B4-462F-866B-06D714DEC958"))
     );
 
-    public static Translation NoneDe { get; } = Translation.Create(
-        CategoryConfiguration.None.Id,
+    public static Translation OtherDe { get; } = Translation.Create(
+        CategoryConfiguration.Other.Id,
         LanguageConfiguration.German.Id,
-        Name.Create("Keine"),
+        Name.Create("Andere"),
         new TranslationId(Guid.Parse("206A3C95-FB6D-4127-A37B-9F328C021021"))
     );
 
@@ -209,6 +209,27 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
         Name.Create("Weizen"),
         new TranslationId(Guid.Parse("24BA2BC6-8BC6-4A11-96DC-0DE686DE742F"))
     );
+    
+    public static Translation DishEn { get; } = Translation.Create(
+        CategoryConfiguration.Dish.Id,
+        LanguageConfiguration.English.Id,
+        Name.Create("Dish"),
+        new TranslationId(Guid.Parse("BFB53DFB-CB0F-4BA4-9EC6-4052B4E3AE98"))
+    );
+    
+    public static Translation DishPl { get; } = Translation.Create(
+        CategoryConfiguration.Dish.Id,
+        LanguageConfiguration.Polish.Id,
+        Name.Create("Danie"),
+        new TranslationId(Guid.Parse("3C2F5D1E-16F6-4109-B42F-EC4F1731EA62"))
+    );
+    
+    public static Translation DishDe { get; } = Translation.Create(
+        CategoryConfiguration.Dish.Id,
+        LanguageConfiguration.German.Id,
+        Name.Create("Gericht"),
+        new TranslationId(Guid.Parse("6729644A-7232-4483-BD90-7839732F6C7B"))
+    );
 
     public void Configure(
         EntityTypeBuilder<Translation> builder
@@ -254,9 +275,9 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
 
     private static IEnumerable<Translation> GetSeedData()
     {
-        yield return NoneEn;
-        yield return NonePl;
-        yield return NoneDe;
+        yield return OtherEn;
+        yield return OtherPl;
+        yield return OtherDe;
         yield return DairyEn;
         yield return DairyPl;
         yield return DairyDe;
@@ -281,5 +302,8 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
         yield return WheatEn;
         yield return WheatPl;
         yield return WheatDe;
+        yield return DishEn;
+        yield return DishPl;
+        yield return DishDe;
     }
 }
