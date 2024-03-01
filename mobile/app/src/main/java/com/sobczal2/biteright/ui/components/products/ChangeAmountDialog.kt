@@ -67,7 +67,6 @@ fun ChangeAmountDialog(
                 modifier = Modifier,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                var mainTextSize by remember { mutableStateOf(IntSize.Zero) }
                 Text(
                     text = "${stringResource(id = R.string.change_amount_for)} $productName",
                     style = MaterialTheme.typography.headlineSmall.copy(
@@ -79,13 +78,9 @@ fun ChangeAmountDialog(
                             top = MaterialTheme.dimension.md,
                             start = MaterialTheme.dimension.md,
                             end = MaterialTheme.dimension.md,
-                        )
-                        .onGloballyPositioned {
-                            mainTextSize = it.size
-                        },
+                        ),
                 )
                 val sliderInteractionSource = remember { MutableInteractionSource() }
-                var thumbTextSize by remember { mutableStateOf(IntSize.Zero) }
                 Slider(
                     state = sliderState.value,
                     interactionSource = sliderInteractionSource,
