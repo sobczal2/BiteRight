@@ -111,7 +111,8 @@ fun ProductDetailsScreenContent(
                         CategoryImage(
                             categoryId = product.category.id,
                             shape = MaterialTheme.shapes.mediumStart,
-                            modifier = Modifier.size(MaterialTheme.dimension.xxxl)
+                            modifier = Modifier.size(MaterialTheme.dimension.xxxl),
+                            imageRequestBuilder = state.imageRequestBuilder
                         )
                         Column(
                             modifier = Modifier

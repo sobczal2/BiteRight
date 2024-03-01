@@ -3,6 +3,7 @@ package com.sobczal2.biteright.viewmodels
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.request.ImageRequest
 import com.sobczal2.biteright.data.api.requests.products.GetDetailsRequest
 import com.sobczal2.biteright.data.api.requests.users.MeRequest
 import com.sobczal2.biteright.events.ProductDetailsScreenEvent
@@ -22,10 +23,15 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductDetailsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    imageRequestBuilder: ImageRequest.Builder,
 ) : ViewModel() {
     lateinit var snackbarHostState: SnackbarHostState
-    private val _state = MutableStateFlow(ProductDetailsScreenState())
+    private val _state = MutableStateFlow(
+        ProductDetailsScreenState(
+            imageRequestBuilder = imageRequestBuilder,
+        )
+    )
     val state = _state.asStateFlow()
 
     private val _events = Channel<ProductDetailsScreenEvent>()
