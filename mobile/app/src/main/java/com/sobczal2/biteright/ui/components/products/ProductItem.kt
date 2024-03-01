@@ -78,13 +78,16 @@ fun ExpirationText(expirationDateKindDto: ExpirationDateKindDto, expirationDate:
         ExpirationDateKindDto.Unknown -> Text(
             text = stringResource(id = R.string.expiration_unknown),
         )
+
         ExpirationDateKindDto.Infinite -> Text(
             text = stringResource(id = R.string.expiration_infinite),
 
-        )
+            )
+
         ExpirationDateKindDto.BestBefore -> Text(
             text = expirationDate!!.toExpirationString(),
         )
+
         ExpirationDateKindDto.UseBy -> Text(
             text = expirationDate!!.toExpirationString(),
         )

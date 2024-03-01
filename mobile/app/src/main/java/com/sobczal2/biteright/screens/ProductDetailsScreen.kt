@@ -140,14 +140,6 @@ fun ProductDetailsScreenContent(
                             .padding(MaterialTheme.dimension.md),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.sm)
                     ) {
-                        if (product.priceValue != null && product.priceCurrency != null) {
-                            DisplayPair(
-                                label = "${stringResource(id = R.string.price)}:",
-                                value = "${"%.2f".format(Locale.US, product.priceValue)} ${product.priceCurrency.symbol}",
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-
                         DisplayPair(
                             label = "${stringResource(id = R.string.expiration_date)}:",
                             value = "${stringResource(product.expirationDateKind.toLocalizedResourceID())} ${product.expirationDateValue?.humanize() ?: ""}",
@@ -171,6 +163,14 @@ fun ProductDetailsScreenContent(
                             value = "${"%.2f".format(Locale.US, product.amountMaxValue)} ${product.amountUnit.abbreviation}",
                             modifier = Modifier.fillMaxWidth()
                         )
+
+                        if (product.priceValue != null && product.priceCurrency != null) {
+                            DisplayPair(
+                                label = "${stringResource(id = R.string.price)}:",
+                                value = "${"%.2f".format(Locale.US, product.priceValue)} ${product.priceCurrency.symbol}",
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
 
                         DisplayPair(
                             label = "${stringResource(id = R.string.added_at)}:",
