@@ -4,9 +4,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.sobczal2.biteright.dto.units.UnitDto
 import com.sobczal2.biteright.ui.components.common.LabeledItem
 
@@ -15,15 +17,15 @@ fun SimplifiedUnitItem(
     unit: UnitDto,
     selected: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
     label: String? = null,
+    labelColor: Color = LocalContentColor.current
 ) {
     LabeledItem(
         text = unit.name,
         selected = selected,
         modifier = modifier,
-        onClick = onClick,
-        label = label
+        label = label,
+        labelColor = labelColor
     )
 }
 
@@ -39,7 +41,6 @@ fun FullUnitItem(
         text = "${unit.name} - ${unit.abbreviation}",
         selected = selected,
         modifier = modifier,
-        onClick = onClick,
         label = label
     )
 }

@@ -29,11 +29,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -46,6 +51,8 @@ import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.util.toEpochMillis
 import com.sobczal2.biteright.util.toLocalDate
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -70,6 +77,8 @@ fun ExpirationDateFormField(
     onChange: (ExpirationDate) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val focusManager = LocalFocusManager.current
+
     var dropDownExpanded by remember { mutableStateOf(false) }
     val dropDownTextFieldState by remember {
         mutableStateOf(
@@ -195,6 +204,17 @@ fun ExpirationDateFormField(
             }
         }
 
+        val focusRequester = remember { FocusRequester() }
+
+        LaunchedEffect(state.value.expirationDateKind) {
+            if (state.value.expirationDateKind.shouldIncludeDate()) {
+                focusRequester.requestFocus()
+            }
+            else {
+                focusManager.moveFocus(FocusDirection.Next)
+            }
+        }
+
         if (state.value.expirationDateKind.shouldIncludeDate()) {
             val interactionSource = remember { MutableInteractionSource() }
             val isPressed by interactionSource.collectIsPressedAsState()
@@ -228,6 +248,7 @@ fun ExpirationDateFormField(
                     }),
                 modifier = Modifier
                     .weight(0.5f)
+                    .focusRequester(focusRequester)
             )
         }
     }
@@ -245,6 +266,7 @@ fun ExpirationDateFormField(
                                 localDate = datePickerState.selectedDateMillis?.toLocalDate()
                             )
                         )
+                        focusManager.moveFocus(FocusDirection.Next)
                     },
                     shape = MaterialTheme.shapes.extraSmall,
                 ) {

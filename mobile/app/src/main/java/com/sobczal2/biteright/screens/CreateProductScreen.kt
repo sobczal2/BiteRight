@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
@@ -133,7 +134,6 @@ fun CreateProductScreenContent(
                     state = state.categoryFieldState,
                     onChange = {
                         sendEvent(CreateProductScreenEvent.OnCategoryChange(it))
-                        focusManager.moveFocus(FocusDirection.Next)
                     },
                     searchCategories = searchCategories,
                     imageRequestBuilder = state.imageRequestBuilder,
@@ -165,7 +165,8 @@ fun CreateProductScreenContent(
                 )
 
                 TextFormField(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     state = state.descriptionFieldState,
                     onChange = {
                         sendEvent(CreateProductScreenEvent.OnDescriptionChange(it))
@@ -175,6 +176,15 @@ fun CreateProductScreenContent(
                         singleLine = false,
                         minLines = 3,
                         maxLines = 5,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            imeAction = ImeAction.Done,
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                            }
+                        )
                     )
                 )
             }

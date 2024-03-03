@@ -14,9 +14,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
@@ -44,6 +46,7 @@ fun CategoryFormField(
     modifier: Modifier = Modifier,
     imageRequestBuilder: ImageRequest.Builder? = null,
 ) {
+    val focusManager = LocalFocusManager.current
     var dialogOpen by remember { mutableStateOf(false) }
     val focusRequester = remember {
         FocusRequester()
@@ -76,7 +79,7 @@ fun CategoryFormField(
             )
         }
         HorizontalDivider(
-            thickness = 1.dp,
+            thickness = if (focused) 2.dp else 1.dp,
             color = color
         )
     }
@@ -96,6 +99,7 @@ fun CategoryFormField(
                     .clickable {
                         onChange(category)
                         dialogOpen = false
+                        focusManager.moveFocus(FocusDirection.Next)
                     },
                 inPreview = state.inPreview,
                 imageRequestBuilder = imageRequestBuilder

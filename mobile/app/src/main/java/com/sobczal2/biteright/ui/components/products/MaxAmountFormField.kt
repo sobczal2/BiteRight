@@ -1,14 +1,21 @@
 package com.sobczal2.biteright.ui.components.products
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -17,9 +24,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.common.PaginatedList
@@ -34,6 +49,7 @@ import com.sobczal2.biteright.ui.components.units.SimplifiedUnitItem
 import com.sobczal2.biteright.ui.components.units.UnitListItem
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
+import com.sobczal2.biteright.ui.theme.extraSmallTop
 import com.sobczal2.biteright.util.BiteRightPreview
 import java.util.Locale
 import java.util.UUID
@@ -61,6 +77,8 @@ fun MaxAmountFormField(
     searchUnits: suspend (String, PaginationParams) -> PaginatedList<UnitDto>,
     modifier: Modifier = Modifier
 ) {
+    val focusManager = LocalFocusManager.current
+
     var dialogOpen by remember { mutableStateOf(false) }
     var maxAmountTextFieldState by remember {
         mutableStateOf(
@@ -83,15 +101,16 @@ fun MaxAmountFormField(
         modifier = modifier
     ) {
         Card(
-            shape = MaterialTheme.shapes.extraSmall.copy(
-                bottomStart = CornerSize(0.dp),
-            ),
+            shape = MaterialTheme.shapes.extraSmallTop,
             modifier = Modifier
         ) {
             Row(
                 modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                var textFieldSize by remember {
+                    mutableStateOf(IntSize.Zero)
+                }
                 TextFormField(
                     state = maxAmountTextFieldState,
                     onChange = {
@@ -112,7 +131,8 @@ fun MaxAmountFormField(
                             Text(text = state.value.unit.abbreviation)
                         },
                         keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Number
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next,
                         ),
                     ),
                     modifier = Modifier
@@ -141,19 +161,56 @@ fun MaxAmountFormField(
                                 )
                             }
                         }
-                )
-                SimplifiedUnitItem(
-                    unit = state.value.unit,
-                    selected = false,
-                    onClick = {
-                        dialogOpen = true
-                    },
-                    label = stringResource(id = R.string.unit),
-                    modifier = Modifier
-                        .weight(0.4f)
-                        .padding(start = MaterialTheme.dimension.sm)
+                        .onGloballyPositioned {
+                            textFieldSize = it.size
+                        }
                 )
 
+                val focusRequester = remember {
+                    FocusRequester()
+                }
+                var focused by remember { mutableStateOf(false) }
+                val color =
+                    if (focused) TextFieldDefaults.colors().focusedLabelColor else TextFieldDefaults.colors().unfocusedLabelColor
+
+                Box(
+                    modifier = Modifier
+                        .weight(0.4f)
+                        .height(
+                            with(LocalDensity.current) {
+                                textFieldSize.height.toDp()
+                            }
+                        )
+                        .clickable {
+                            dialogOpen = true
+                            focusRequester.requestFocus()
+                        }
+                        .focusRequester(focusRequester)
+                        .onFocusChanged {
+                            focused = it.isFocused
+                        }
+                        .focusable(),
+                    contentAlignment = Alignment.BottomStart
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        SimplifiedUnitItem(
+                            unit = state.value.unit,
+                            selected = false,
+                            label = stringResource(id = R.string.unit),
+                            labelColor = color,
+                            modifier = Modifier.padding(start = MaterialTheme.dimension.sm)
+                        )
+                    }
+
+                    HorizontalDivider(
+                        thickness = if (focused) 2.dp else 1.dp,
+                        color = color
+                    )
+                }
             }
         }
         if (state.error != null) {
@@ -180,6 +237,7 @@ fun MaxAmountFormField(
                     )
                 )
                 dialogOpen = false
+                focusManager.moveFocus(FocusDirection.Next)
             })
         }
     }

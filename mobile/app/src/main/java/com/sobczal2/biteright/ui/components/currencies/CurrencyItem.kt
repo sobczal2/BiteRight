@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.currencies.CurrencyDto
@@ -30,13 +31,11 @@ fun SimplifiedCurrencyItem(
     currency: CurrencyDto,
     selected: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
     label: String? = null,
+    labelColor: Color = LocalContentColor.current
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column {
@@ -44,7 +43,7 @@ fun SimplifiedCurrencyItem(
                 Text(
                     text = label,
                     style = MaterialTheme.typography.bodySmall.copy(
-                        color = LocalContentColor.current
+                        color = labelColor
                     )
                 )
             }
@@ -159,6 +158,5 @@ fun SimplifiedCurrencyItemPreview() {
         ),
         selected = true,
         label = "Currency",
-        onClick = {},
     )
 }
