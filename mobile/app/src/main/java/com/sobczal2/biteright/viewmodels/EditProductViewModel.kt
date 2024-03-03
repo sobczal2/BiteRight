@@ -127,27 +127,27 @@ class EditProductViewModel @Inject constructor(
             }
 
             is EditProductScreenEvent.OnNameChange -> {
-                onNameChange(event.value)
+                handleNameChange(event.value)
             }
 
             is EditProductScreenEvent.OnCategoryChange -> {
-                onCategoryChange(event.value)
+                handleCategoryChange(event.value)
             }
 
             is EditProductScreenEvent.OnExpirationDateChange -> {
-                onExpirationDateChange(event.value)
+                handleExpirationDateChange(event.value)
             }
 
             is EditProductScreenEvent.OnPriceChange -> {
-                onPriceChange(event.value)
+                handlePriceChange(event.value)
             }
 
             is EditProductScreenEvent.OnDescriptionChange -> {
-                onDescriptionChange(event.value)
+                handleDescriptionChange(event.value)
             }
 
             is EditProductScreenEvent.OnAmountChange -> {
-                onAmountChange(event.value)
+                handleAmountChange(event.value)
             }
 
             is EditProductScreenEvent.OnSubmitClick -> {
@@ -333,7 +333,7 @@ class EditProductViewModel @Inject constructor(
         return emptyPaginatedList()
     }
 
-    private fun onCategoryChange(value: CategoryDto) {
+    private fun handleCategoryChange(value: CategoryDto) {
         _state.update {
             it.copy(
                 categoryFieldState = it.categoryFieldState.copy(
@@ -344,7 +344,7 @@ class EditProductViewModel @Inject constructor(
         }
     }
 
-    private fun onExpirationDateChange(value: ExpirationDate) {
+    private fun handleExpirationDateChange(value: ExpirationDate) {
         _state.update {
             it.copy(
                 expirationDateFieldState = it.expirationDateFieldState.copy(
@@ -356,7 +356,7 @@ class EditProductViewModel @Inject constructor(
         }
     }
 
-    private fun onNameChange(value: String) {
+    private fun handleNameChange(value: String) {
         _state.update {
             it.copy(
                 nameFieldState = it.nameFieldState.copy(
@@ -367,7 +367,7 @@ class EditProductViewModel @Inject constructor(
         }
     }
 
-    private fun onDescriptionChange(value: String) {
+    private fun handleDescriptionChange(value: String) {
         _state.update {
             it.copy(
                 descriptionFieldState = it.descriptionFieldState.copy(
@@ -378,7 +378,7 @@ class EditProductViewModel @Inject constructor(
         }
     }
 
-    private fun onPriceChange(value: FormPriceWithCurrency) {
+    private fun handlePriceChange(value: FormPriceWithCurrency) {
         _state.update {
             it.copy(
                 priceFieldState = it.priceFieldState.copy(
@@ -389,7 +389,7 @@ class EditProductViewModel @Inject constructor(
         }
     }
 
-    private fun onAmountChange(value: FormAmountWithUnit) {
+    private fun handleAmountChange(value: FormAmountWithUnit) {
         _state.update {
             it.copy(
                 amountFieldState = it.amountFieldState.copy(
