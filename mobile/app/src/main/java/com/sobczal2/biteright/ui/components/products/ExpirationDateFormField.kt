@@ -1,6 +1,5 @@
 package com.sobczal2.biteright.ui.components.products
 
-import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -36,8 +35,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.sobczal2.biteright.R
@@ -46,6 +43,7 @@ import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
+import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.util.toEpochMillis
 import com.sobczal2.biteright.util.toLocalDate
 import java.time.LocalDate
@@ -150,11 +148,12 @@ fun ExpirationDateFormField(
                         MaterialTheme.shapes.extraSmall.bottomEnd
                     }, bottomEnd = CornerSize(0.dp), bottomStart = CornerSize(0.dp)
                 ),
-            ), modifier = Modifier
-                .fillMaxWidth()
-                .onGloballyPositioned {
-                    textFieldSize = it.size.toSize()
-                })
+            ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onGloballyPositioned {
+                        textFieldSize = it.size.toSize()
+                    })
             DropdownMenu(
                 expanded = dropDownExpanded,
                 onDismissRequest = {
@@ -272,9 +271,7 @@ fun ExpirationDateFormField(
 }
 
 @Composable
-@PreviewLightDark
-@Preview(apiLevel = 33)
-@Preview(apiLevel = 33, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@BiteRightPreview
 fun ExpirationDateFormFieldPreview() {
     BiteRightTheme {
         ExpirationDateFormField(

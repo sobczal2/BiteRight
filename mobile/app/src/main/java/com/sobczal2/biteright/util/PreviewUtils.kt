@@ -8,8 +8,8 @@ import androidx.compose.ui.tooling.preview.Preview
     AnnotationTarget.ANNOTATION_CLASS,
     AnnotationTarget.FUNCTION
 )
-@Preview(apiLevel = 33, name = "Light")
-@Preview(apiLevel = 33, name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(apiLevel = 33, name = "Light", fontScale = 2f)
-@Preview(apiLevel = 33, name = "Polish", locale = "pl")
+@Preview(name = "Light")
+@Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Light", fontScale = 2f)
+@Preview(name = "Polish", locale = "pl")
 annotation class BiteRightPreview
