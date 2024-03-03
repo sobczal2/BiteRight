@@ -1,6 +1,5 @@
 package com.sobczal2.biteright.ui.components.currencies
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,13 +73,11 @@ fun FullCurrencyItem(
     currency: CurrencyDto,
     selected: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
     label: String? = null,
+    labelColor: Color = LocalContentColor.current
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -89,7 +86,7 @@ fun FullCurrencyItem(
                 Text(
                     text = label,
                     style = MaterialTheme.typography.bodySmall.copy(
-                        color = LocalContentColor.current
+                        color = labelColor
                     )
                 )
             }

@@ -169,6 +169,7 @@ fun PriceFormField(
                 var focused by remember { mutableStateOf(false) }
                 val color =
                     if (focused) TextFieldDefaults.colors().focusedLabelColor else TextFieldDefaults.colors().unfocusedLabelColor
+
                 Box(
                     modifier = Modifier
                         .weight(0.4f)
@@ -225,9 +226,9 @@ fun PriceFormField(
                 selected = selected,
                 modifier = Modifier
                     .clickable {
+                        focusManager.moveFocus(FocusDirection.Next)
                         onChange(state.value.copy(currency = currency))
                         dialogOpen = false
-                        focusManager.moveFocus(FocusDirection.Next)
                     }
             )
         }

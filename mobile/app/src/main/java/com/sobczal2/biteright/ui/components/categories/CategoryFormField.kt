@@ -97,9 +97,9 @@ fun CategoryFormField(
                 selected = selected,
                 modifier = Modifier
                     .clickable {
+                        focusManager.moveFocus(FocusDirection.Next)
                         onChange(category)
                         dialogOpen = false
-                        focusManager.moveFocus(FocusDirection.Next)
                     },
                 inPreview = state.inPreview,
                 imageRequestBuilder = imageRequestBuilder

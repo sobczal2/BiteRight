@@ -29,7 +29,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -51,8 +50,6 @@ import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.util.toEpochMillis
 import com.sobczal2.biteright.util.toLocalDate
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -260,13 +257,13 @@ fun ExpirationDateFormField(
             confirmButton = {
                 Button(
                     onClick = {
+                        focusManager.moveFocus(FocusDirection.Next)
                         datePickerDialogOpen = false
                         onChange(
                             state.value.copy(
                                 localDate = datePickerState.selectedDateMillis?.toLocalDate()
                             )
                         )
-                        focusManager.moveFocus(FocusDirection.Next)
                     },
                     shape = MaterialTheme.shapes.extraSmall,
                 ) {

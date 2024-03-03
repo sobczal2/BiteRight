@@ -12,7 +12,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -115,6 +114,7 @@ fun EditProfileScreenContent(
                     state = state.timeZoneFieldState,
                     onChange = {
                         sendEvent(EditProfileScreenEvent.OnTimeZoneChange(it))
+                        focusManager.clearFocus()
                     },
                     searchTimeZones = searchTimeZones,
                 )

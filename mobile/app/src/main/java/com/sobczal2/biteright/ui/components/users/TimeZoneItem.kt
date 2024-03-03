@@ -1,10 +1,8 @@
 package com.sobczal2.biteright.ui.components.users
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -16,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.ui.theme.dimension
@@ -45,13 +44,11 @@ fun TimeZoneItem(
     timeZone: TimeZone,
     selected: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
     label: String? = null,
+    labelColor: Color = LocalContentColor.current
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column {
@@ -59,7 +56,7 @@ fun TimeZoneItem(
                 Text(
                     text = label,
                     style = MaterialTheme.typography.bodySmall.copy(
-                        color = LocalContentColor.current
+                        color = labelColor
                     )
                 )
             }
