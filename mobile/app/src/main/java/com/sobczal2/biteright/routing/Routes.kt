@@ -31,6 +31,7 @@ sealed class Routes(open val route: String) {
     }
 
     data object EditProfile : Routes("edit_profile")
+    data object Help : Routes("help")
 }
 
 fun NavDestination?.toRoute(): Routes? {

@@ -1,6 +1,5 @@
 package com.sobczal2.biteright.ui.components.products
 
-import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -32,12 +31,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.sobczal2.biteright.R
@@ -46,6 +47,7 @@ import com.sobczal2.biteright.ui.components.common.forms.TextFormField
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldOptions
 import com.sobczal2.biteright.ui.components.common.forms.TextFormFieldState
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
+import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.util.toEpochMillis
 import com.sobczal2.biteright.util.toLocalDate
 import java.time.LocalDate
@@ -72,6 +74,8 @@ fun ExpirationDateFormField(
     onChange: (ExpirationDate) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val focusManager = LocalFocusManager.current
+
     var dropDownExpanded by remember { mutableStateOf(false) }
     val dropDownTextFieldState by remember {
         mutableStateOf(
@@ -150,11 +154,12 @@ fun ExpirationDateFormField(
                         MaterialTheme.shapes.extraSmall.bottomEnd
                     }, bottomEnd = CornerSize(0.dp), bottomStart = CornerSize(0.dp)
                 ),
-            ), modifier = Modifier
-                .fillMaxWidth()
-                .onGloballyPositioned {
-                    textFieldSize = it.size.toSize()
-                })
+            ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onGloballyPositioned {
+                        textFieldSize = it.size.toSize()
+                    })
             DropdownMenu(
                 expanded = dropDownExpanded,
                 onDismissRequest = {
@@ -196,6 +201,17 @@ fun ExpirationDateFormField(
             }
         }
 
+        val focusRequester = remember { FocusRequester() }
+
+        LaunchedEffect(state.value.expirationDateKind) {
+            if (state.value.expirationDateKind.shouldIncludeDate()) {
+                focusRequester.requestFocus()
+            }
+            else {
+                focusManager.moveFocus(FocusDirection.Next)
+            }
+        }
+
         if (state.value.expirationDateKind.shouldIncludeDate()) {
             val interactionSource = remember { MutableInteractionSource() }
             val isPressed by interactionSource.collectIsPressedAsState()
@@ -229,6 +245,7 @@ fun ExpirationDateFormField(
                     }),
                 modifier = Modifier
                     .weight(0.5f)
+                    .focusRequester(focusRequester)
             )
         }
     }
@@ -240,6 +257,7 @@ fun ExpirationDateFormField(
             confirmButton = {
                 Button(
                     onClick = {
+                        focusManager.moveFocus(FocusDirection.Next)
                         datePickerDialogOpen = false
                         onChange(
                             state.value.copy(
@@ -272,9 +290,7 @@ fun ExpirationDateFormField(
 }
 
 @Composable
-@PreviewLightDark
-@Preview(apiLevel = 33)
-@Preview(apiLevel = 33, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@BiteRightPreview
 fun ExpirationDateFormFieldPreview() {
     BiteRightTheme {
         ExpirationDateFormField(

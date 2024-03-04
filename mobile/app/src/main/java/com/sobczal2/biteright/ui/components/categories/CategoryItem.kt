@@ -1,12 +1,12 @@
 package com.sobczal2.biteright.ui.components.categories
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
@@ -17,13 +17,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.categories.CategoryDto
 import com.sobczal2.biteright.ui.theme.dimension
-import com.sobczal2.biteright.ui.theme.extraSmallEnd
 import com.sobczal2.biteright.ui.theme.extraSmallStart
 import com.sobczal2.biteright.util.BiteRightPreview
 import java.util.UUID
@@ -32,16 +32,15 @@ import java.util.UUID
 fun CategoryItem(
     category: CategoryDto,
     selected: Boolean,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     label: String? = null,
+    labelColor: Color = LocalContentColor.current,
     inPreview: Boolean = false,
     imageRequestBuilder: ImageRequest.Builder? = null,
 ) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimension.sm),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -49,7 +48,9 @@ fun CategoryItem(
             categoryId = category.id,
             imageRequestBuilder = imageRequestBuilder,
             inPreview = inPreview,
-            shape = MaterialTheme.shapes.extraSmallStart,
+            shape = MaterialTheme.shapes.extraSmallStart.copy(
+                bottomStart = CornerSize(0.dp),
+            ),
             modifier = Modifier.size(MaterialTheme.dimension.xxl)
         )
         Row(
@@ -63,7 +64,7 @@ fun CategoryItem(
                     Text(
                         text = label,
                         style = MaterialTheme.typography.bodySmall.copy(
-                            color = LocalContentColor.current
+                            color = labelColor
                         )
                     )
                 }
@@ -81,7 +82,7 @@ fun CategoryItem(
                 ) {
                     Icon(
                         Icons.Default.Done,
-                        contentDescription = stringResource(id = R.string.selected),
+                        contentDescription = stringResource(id = R.string.selected_str),
                         modifier = Modifier.size(MaterialTheme.dimension.xxl),
                     )
                 }
@@ -128,7 +129,6 @@ fun CategoryItemPreview() {
             name = "Fruits",
         ),
         selected = false,
-        onClick = {},
         label = "Category",
         inPreview = true
     )

@@ -1,5 +1,6 @@
 package com.sobczal2.biteright.routing
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -12,6 +13,7 @@ import com.sobczal2.biteright.AuthManager
 import com.sobczal2.biteright.screens.CreateProductScreen
 import com.sobczal2.biteright.screens.EditProductScreen
 import com.sobczal2.biteright.screens.EditProfileScreen
+import com.sobczal2.biteright.screens.HelpScreen
 import com.sobczal2.biteright.screens.ProductDetailsScreen
 import com.sobczal2.biteright.util.getUUID
 import com.sobczal2.biteright.viewmodels.EditProfileViewModel
@@ -46,6 +48,7 @@ fun Router(authManager: AuthManager) {
         composable(
             route = Routes.StartGraph().route,
         ) {
+            BackHandler {}
             StartRouter(
                 topLevelNavigate = ::topLevelNavigate
             )
@@ -53,28 +56,33 @@ fun Router(authManager: AuthManager) {
         composable(
             route = Routes.HomeGraph().route
         ) {
+            BackHandler {}
             HomeRouter(
                 topLevelNavigate = ::topLevelNavigate
             )
         }
         composable(Routes.CreateProduct.route) {
+            BackHandler {}
             CreateProductScreen(
                 topLevelNavigate = ::topLevelNavigate
             )
         }
         composable(Routes.ProductDetails().route) {
+            BackHandler {}
             ProductDetailsScreen(
                 productId = it.arguments?.getUUID("productId")!!,
                 topLevelNavigate = ::topLevelNavigate,
             )
         }
         composable(Routes.EditProduct().route) {
+            BackHandler {}
             EditProductScreen(
                 productId = it.arguments?.getUUID("productId")!!,
                 topLevelNavigate = ::topLevelNavigate
             )
         }
         composable(Routes.EditProfile.route) {
+            BackHandler {}
             val viewModel = hiltViewModel<EditProfileViewModel>()
             RouterHelper.RunOnNavigate(
                 navController = navController,
@@ -84,6 +92,12 @@ fun Router(authManager: AuthManager) {
             }
             EditProfileScreen(
                 viewModel = viewModel,
+                topLevelNavigate = ::topLevelNavigate
+            )
+        }
+        composable(Routes.Help.route) {
+            BackHandler {}
+            HelpScreen(
                 topLevelNavigate = ::topLevelNavigate
             )
         }

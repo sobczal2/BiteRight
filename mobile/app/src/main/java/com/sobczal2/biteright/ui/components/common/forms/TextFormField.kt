@@ -2,6 +2,7 @@ package com.sobczal2.biteright.ui.components.common.forms
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +30,7 @@ data class TextFormFieldOptions(
     val minLines: Int = 1,
     val maxLines: Int = 1,
     val keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    val keyboardActions: KeyboardActions = KeyboardActions.Default,
     val shape: Shape? = null,
     val leadingIcon: @Composable (() -> Unit)? = null,
     val trailingIcon: @Composable (() -> Unit)? = null,
@@ -69,6 +71,7 @@ fun TextFormField(
         minLines = options.minLines,
         maxLines = options.maxLines,
         keyboardOptions = options.keyboardOptions,
+        keyboardActions = options.keyboardActions,
         shape = options.shape ?: MaterialTheme.shapes.extraSmallTop,
         leadingIcon = options.leadingIcon,
         trailingIcon = options.trailingIcon,

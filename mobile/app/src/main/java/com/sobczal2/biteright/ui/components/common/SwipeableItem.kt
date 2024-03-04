@@ -6,14 +6,13 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import coil.request.ImageRequest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwipeableItem(
     modifier: Modifier = Modifier,
-    onSwipeLeft: () -> Boolean,
-    onSwipeRight: () -> Boolean,
+    onSwipeLeft: () -> Unit,
+    onSwipeRight: () -> Unit,
     swipeLeftBackground: @Composable () -> Unit,
     swipeRightBackground: @Composable () -> Unit,
     canSwipeLeft: Boolean = true,
@@ -26,10 +25,12 @@ fun SwipeableItem(
             when (newValue) {
                 SwipeToDismissBoxValue.EndToStart -> {
                     onSwipeLeft()
+                    true
                 }
 
                 SwipeToDismissBoxValue.StartToEnd -> {
                     onSwipeRight()
+                    true
                 }
 
                 else -> false

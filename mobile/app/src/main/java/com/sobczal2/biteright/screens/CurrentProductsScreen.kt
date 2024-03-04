@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -126,17 +125,16 @@ fun CurrentProductsScreenContent(
                     var visible by remember { mutableStateOf(true) }
                     SwipeableProductListItem(
                         simpleProductDto = simpleProductDto,
-                        onDispose = { animationDuration ->
+                        onDispose = { animationDurationMillis ->
                             visible = false
                             coroutineScope.launch {
-                                delay(animationDuration.toLong())
+                                delay(animationDurationMillis.toLong())
                                 sendEvent(
                                     CurrentProductsScreenEvent.OnProductDispose(
                                         simpleProductDto.id
                                     )
                                 )
                             }
-                            true
                         },
                         imageRequestBuilder = state.imageRequestBuilder,
                         visible = visible,

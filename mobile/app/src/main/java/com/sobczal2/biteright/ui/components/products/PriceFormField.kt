@@ -1,14 +1,19 @@
 package com.sobczal2.biteright.ui.components.products
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -17,9 +22,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.sobczal2.biteright.R
 import com.sobczal2.biteright.dto.common.PaginatedList
@@ -60,6 +73,8 @@ fun PriceFormField(
     searchCurrencies: suspend (String, PaginationParams) -> PaginatedList<CurrencyDto>,
     modifier: Modifier = Modifier,
 ) {
+    val focusManager = LocalFocusManager.current
+
     var dialogOpen by remember { mutableStateOf(false) }
     var priceTextFieldState by remember {
         mutableStateOf(
@@ -72,7 +87,11 @@ fun PriceFormField(
     val moneyTypingRegex = Regex("""^\d+(\.\d{0,2})?$""")
 
     LaunchedEffect(state.value) {
-        if (state.value.price != null && priceTextFieldState.value != "%.2f".format(Locale.US, state.value.price))
+        if (state.value.price != null && priceTextFieldState.value != "%.2f".format(
+                Locale.US,
+                state.value.price
+            )
+        )
             priceTextFieldState = priceTextFieldState.copy(
                 value = "%.2f".format(Locale.US, state.value.price)
             )
@@ -83,15 +102,14 @@ fun PriceFormField(
         modifier = modifier
     ) {
         Card(
-            shape = MaterialTheme.shapes.extraSmall.copy(
-                bottomStart = CornerSize(0.dp),
-            ),
+            shape = MaterialTheme.shapes.extraSmallTop,
             modifier = Modifier
         ) {
             Row(
                 modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                var textFieldSize by remember { mutableStateOf(IntSize.Zero) }
                 TextFormField(
                     state = priceTextFieldState,
                     onChange = {
@@ -111,8 +129,8 @@ fun PriceFormField(
                         },
                         keyboardOptions = KeyboardOptions.Default.copy(
                             keyboardType = KeyboardType.Number,
-
-                            ),
+                            imeAction = ImeAction.Next
+                        ),
                     ),
                     modifier = Modifier
                         .weight(0.6f)
@@ -140,18 +158,50 @@ fun PriceFormField(
                                 )
                             }
                         }
+                        .onGloballyPositioned {
+                            textFieldSize = it.size
+                        }
                 )
-                SimplifiedCurrencyItem(
-                    currency = state.value.currency,
-                    selected = false,
-                    onClick = {
-                        dialogOpen = true
-                    },
-                    label = stringResource(id = R.string.currency),
+
+                val focusRequester = remember {
+                    FocusRequester()
+                }
+                var focused by remember { mutableStateOf(false) }
+                val color =
+                    if (focused) TextFieldDefaults.colors().focusedLabelColor else TextFieldDefaults.colors().unfocusedLabelColor
+
+                Box(
                     modifier = Modifier
                         .weight(0.4f)
-                        .padding(start = MaterialTheme.dimension.sm)
-                )
+                        .height(
+                            with(LocalDensity.current) {
+                                textFieldSize.height.toDp()
+                            }
+                        )
+                        .clickable {
+                            dialogOpen = true
+                            focusRequester.requestFocus()
+                        }
+                        .focusRequester(focusRequester)
+                        .onFocusChanged {
+                            focused = it.isFocused
+                        }
+                        .focusable(),
+                    contentAlignment = Alignment.BottomStart
+                ) {
+                    SimplifiedCurrencyItem(
+                        currency = state.value.currency,
+                        selected = false,
+                        label = stringResource(id = R.string.currency),
+                        labelColor = color,
+                        modifier = Modifier.padding(start = MaterialTheme.dimension.sm)
+                    )
+
+                    HorizontalDivider(
+                        thickness = if (focused) 2.dp else 1.dp,
+                        color = color
+                    )
+                }
             }
         }
         if (state.error != null) {
@@ -176,6 +226,7 @@ fun PriceFormField(
                 selected = selected,
                 modifier = Modifier
                     .clickable {
+                        focusManager.moveFocus(FocusDirection.Next)
                         onChange(state.value.copy(currency = currency))
                         dialogOpen = false
                     }

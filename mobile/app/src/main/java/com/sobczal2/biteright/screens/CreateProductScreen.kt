@@ -7,19 +7,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -119,7 +123,11 @@ fun CreateProductScreenContent(
                     },
                     options = TextFormFieldOptions(
                         label = { Text(text = stringResource(id = R.string.name)) },
-                    )
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            capitalization = KeyboardCapitalization.Words,
+                            imeAction = ImeAction.Next,
+                        ),
+                    ),
                 )
 
                 CategoryFormField(
@@ -128,7 +136,8 @@ fun CreateProductScreenContent(
                         sendEvent(CreateProductScreenEvent.OnCategoryChange(it))
                     },
                     searchCategories = searchCategories,
-                    imageRequestBuilder = state.imageRequestBuilder
+                    imageRequestBuilder = state.imageRequestBuilder,
+                    modifier = Modifier
                 )
 
                 ExpirationDateFormField(
@@ -156,7 +165,8 @@ fun CreateProductScreenContent(
                 )
 
                 TextFormField(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     state = state.descriptionFieldState,
                     onChange = {
                         sendEvent(CreateProductScreenEvent.OnDescriptionChange(it))
@@ -166,6 +176,15 @@ fun CreateProductScreenContent(
                         singleLine = false,
                         minLines = 3,
                         maxLines = 5,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            imeAction = ImeAction.Done,
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                            }
+                        )
                     )
                 )
             }
