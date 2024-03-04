@@ -1,11 +1,8 @@
 package com.sobczal2.biteright.ui.components.common
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -55,7 +52,7 @@ fun LabeledItem(
             if (selected) {
                 Icon(
                     Icons.Default.Done,
-                    contentDescription = stringResource(id = R.string.selected),
+                    contentDescription = stringResource(id = R.string.selected_str),
                     modifier = Modifier.size(MaterialTheme.dimension.xl),
                 )
             }

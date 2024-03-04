@@ -116,7 +116,7 @@ fun OnboardScreenContent(
             onClick = {
                 sendEvent(
                     OnboardScreenEvent.OnNextClick {
-                        topLevelNavigate(Routes.HomeGraph())
+                        topLevelNavigate(Routes.Help)
                     }
                 )
             },

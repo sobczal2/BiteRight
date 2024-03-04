@@ -60,7 +60,7 @@ fun SimplifiedCurrencyItem(
             if (selected) {
                 Icon(
                     Icons.Default.Done,
-                    contentDescription = stringResource(id = R.string.selected),
+                    contentDescription = stringResource(id = R.string.selected_str),
                     modifier = Modifier.size(MaterialTheme.dimension.xl),
                 )
             }
@@ -104,7 +104,7 @@ fun FullCurrencyItem(
             if (selected) {
                 Icon(
                     Icons.Default.Done,
-                    contentDescription = stringResource(id = R.string.selected),
+                    contentDescription = stringResource(id = R.string.selected_str),
                     modifier = Modifier.size(MaterialTheme.dimension.xl),
                 )
             }

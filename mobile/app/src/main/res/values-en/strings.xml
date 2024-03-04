@@ -89,4 +89,10 @@
     <string name="delete">Delete</string>
     <string name="filters">Filters</string>
     <string name="help">Help</string>
+    <string name="help_step_1_title">Add a product</string>
+    <string name="help_step_1_description">When buying a new product add it to this app to track its expiration date, amount and more</string>
+    <string name="help_step_2_title">Change amount</string>
+    <string name="help_step_2_description">Change product\'s amount by long clicking it on current products screen when using a product</string>
+    <string name="help_step_3_title">Dispose when done</string>
+    <string name="help_step_3_description">When throwing a product away you can mark it as disposed by swipping it on current products screen</string>
 </resources>
