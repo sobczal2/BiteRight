@@ -6,17 +6,18 @@
 // # ==============================================================================
 
 using System.IO;
+using System.Threading.Tasks;
 using BiteRight.Domain.Abstracts.Common;
 
 namespace BiteRight.Web.Tests.Integration.Dependencies;
 
 public class TestFileProvider : IFileProvider
 {
-    public Stream GetStream(
+    public Task<Stream> GetStream(
         string directory,
         string name
     )
     {
-        return new MemoryStream();
+        return Task.FromResult<Stream>(new MemoryStream());
     }
 }

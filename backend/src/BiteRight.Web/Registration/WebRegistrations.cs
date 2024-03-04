@@ -123,7 +123,8 @@ public static class WebRegistrations
                 opt.Audience = auth0Options.Audience;
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
-                    NameClaimType = ClaimTypes.NameIdentifier
+                    NameClaimType = ClaimTypes.NameIdentifier,
+                    ValidAudiences = new[] { auth0Options.Audience, auth0Options.MobileClientId }
                 };
             });
 
@@ -188,7 +189,7 @@ public static class WebRegistrations
         services.Configure<Auth0Options>(configuration.GetSection(Auth0Options.SectionName));
         services.Configure<CacheOptions>(configuration.GetSection(CacheOptions.SectionName));
     }
-    
+
     private static void AddRateLimiting(
         IServiceCollection services
     )
@@ -218,7 +219,7 @@ public static class WebRegistrations
         });
 
         services.AddInMemoryRateLimiting();
-        
+
         services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
     }
 }

@@ -7,20 +7,48 @@
 
 #region
 
+using System;
 using AspNetCoreRateLimit;
+using Azure.Identity;
+using Azure.Storage.Blobs;
 using BiteRight.Web.Middleware;
 using BiteRight.Web.Registration;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 
 #endregion
 
+Console.WriteLine("Starting BiteRight.Web");
+
 var builder = WebApplication.CreateBuilder(args);
 
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
+if (builder.Environment.IsProduction())
+{
+    builder.Configuration.AddAzureAppConfiguration(options =>
+    {
+        options.Connect(
+                builder.Configuration.GetConnectionString("AppConfig"))
+            .ConfigureKeyVault(kv => { kv.SetCredential(new DefaultAzureCredential()); });
+    });
+}
+
+var loggerConfiguration = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration);
+
+if (builder.Environment.IsProduction())
+{
+    var blobServiceClient = new BlobServiceClient(builder.Configuration.GetConnectionString("BlobStorage"));
+    loggerConfiguration = loggerConfiguration.WriteTo.AzureBlobStorage(
+        blobServiceClient,
+        storageContainerName: "logs",
+        restrictedToMinimumLevel: LogEventLevel.Information
+    );
+}
+
+Log.Logger = loggerConfiguration
     .CreateLogger();
 
 builder.Host.UseSerilog();

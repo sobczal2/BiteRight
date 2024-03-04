@@ -53,7 +53,7 @@ public class GetPhotoHandler : QueryHandlerBase<GetPhotoRequest, GetPhotoRespons
 
         var photoName = category.GetPhotoName();
         const string directory = Photo.Directory;
-        var fileStream = _fileProvider.GetStream(directory, photoName);
+        var fileStream = await _fileProvider.GetStream(directory, photoName);
 
         return new GetPhotoResponse(
             fileStream,
