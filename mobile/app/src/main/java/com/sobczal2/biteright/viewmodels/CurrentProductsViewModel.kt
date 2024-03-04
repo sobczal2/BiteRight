@@ -121,9 +121,12 @@ class CurrentProductsViewModel @Inject constructor(
 
     private suspend fun disposeProduct(productId: UUID) {
 
-        if (!_state.value.currentProducts.any { it.id == productId }) { // TODO: This is a workaround for a bug in the UI
-            return
-        }
+        val product = _state.value.currentProducts.find { it.id == productId } ?: return
+
+        if (product.disposed) return
+
+        product.disposed = true
+
 
         val disposeResponse = productRepository.dispose(
             DisposeRequest(
@@ -142,6 +145,7 @@ class CurrentProductsViewModel @Inject constructor(
                 }
             },
             { repositoryError ->
+                product.disposed = false
                 snackbarHostState.showSnackbar(
                     message = repositoryError.message,
                 )

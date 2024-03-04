@@ -1,6 +1,5 @@
 package com.sobczal2.biteright.viewmodels
 
-import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sobczal2.biteright.events.HelpScreenEvent
@@ -18,7 +17,6 @@ class HelpViewModel @Inject constructor(
 
 ) : ViewModel() {
 
-    lateinit var snackbarHostState: SnackbarHostState
     private val _state = MutableStateFlow(HelpScreenState())
     val state = _state.asStateFlow()
 

@@ -3,7 +3,7 @@
     <string name="get_started">Get started</string>
     <string name="verify_your_email">Verify your email</string>
     <string name="unknown_error">Unknown error</string>
-    <string name="api_url" translatable="false">http://10.0.2.2:5072/api/</string>
+    <string name="api_url" translatable="false">http://192.168.1.81:5072/api/</string>
     <string name="next">Next</string>
     <string name="username">Username</string>
     <string name="network_error">Network error</string>
@@ -59,7 +59,7 @@
     </string>
     <string name="expiration_kind">Expiration kind</string>
     <string name="search">Search</string>
-    <string name="selected">Selected</string>
+    <string name="selected_str">Selected</string>
     <string name="category">Category</string>
     <string name="deleted">Deleted</string>
     <string name="no_results">No results</string>
@@ -95,4 +95,5 @@
     <string name="validation_current_amount_greater_than_max_amount">Current amount can\'t be greater than max amount</string>
     <string name="delete">Delete</string>
     <string name="filters">Filters</string>
+    <string name="help">Help</string>
 </resources>

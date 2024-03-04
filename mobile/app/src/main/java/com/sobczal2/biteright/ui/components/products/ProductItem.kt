@@ -6,8 +6,8 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Restore
@@ -158,8 +158,8 @@ fun SwipeableProductListItem(
     modifier: Modifier = Modifier,
     inPreview: Boolean = false,
     imageRequestBuilder: ImageRequest.Builder? = null,
-    onDispose: (animationDurationMillis: Int) -> Boolean = { false },
-    onRestore: (animationDurationMillis: Int) -> Boolean = { false },
+    onDispose: (animationDurationMillis: Int) -> Unit = { },
+    onRestore: (animationDurationMillis: Int) -> Unit = { },
     visible: Boolean = true,
 ) {
     val animationDurationMillis = 300
@@ -181,7 +181,8 @@ fun SwipeableProductListItem(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.error),
+                        .background(MaterialTheme.colorScheme.error)
+                        .padding(end = MaterialTheme.dimension.md),
                     contentAlignment = Alignment.CenterEnd
                 ) {
                     Icon(imageVector = Icons.Default.Delete, contentDescription = null)
@@ -191,7 +192,8 @@ fun SwipeableProductListItem(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.primary),
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(start = MaterialTheme.dimension.md),
                     contentAlignment = Alignment.CenterStart
                 ) {
                     Icon(imageVector = Icons.Default.Restore, contentDescription = null)

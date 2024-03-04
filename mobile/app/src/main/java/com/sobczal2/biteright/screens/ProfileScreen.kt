@@ -1,6 +1,5 @@
 package com.sobczal2.biteright.screens
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sobczal2.biteright.R
@@ -31,6 +29,7 @@ import com.sobczal2.biteright.ui.components.common.DisplayPair
 import com.sobczal2.biteright.ui.components.common.SurfaceLoader
 import com.sobczal2.biteright.ui.theme.BiteRightTheme
 import com.sobczal2.biteright.ui.theme.dimension
+import com.sobczal2.biteright.util.BiteRightPreview
 import com.sobczal2.biteright.util.humanize
 import com.sobczal2.biteright.viewmodels.ProfileViewModel
 import java.time.Instant
@@ -118,6 +117,13 @@ fun ProfileScreenContent(
         Column(
             modifier = Modifier.fillMaxWidth(),
         ) {
+            Button(onClick = {
+                topLevelNavigate(Routes.Help)
+            }) {
+                Text(
+                    text = stringResource(id = R.string.help),
+                )
+            }
             Button(
                 shape = MaterialTheme.shapes.extraSmall,
                 onClick = {
@@ -152,8 +158,7 @@ fun ProfileScreenContent(
 }
 
 @Composable
-@Preview(apiLevel = 33)
-@Preview("Dark Theme", apiLevel = 33, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@BiteRightPreview
 fun ProfileScreenPreview() {
     BiteRightTheme {
         ProfileScreenContent(

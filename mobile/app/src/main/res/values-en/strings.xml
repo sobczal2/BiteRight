@@ -6,7 +6,7 @@
     <string name="next">Next</string>
     <string name="username">Username</string>
     <string name="network_error">Network error</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="login_canceled">Login has been cancelled</string>
     <string name="username_length_error">Username must be between %1$d and %2$d characters long</string>
     <string name="username_invalid_characters_error">Username must only contain lowercase letters, uppercase letters,
@@ -53,7 +53,7 @@
     </string>
     <string name="expiration_kind">Expiration kind</string>
     <string name="search">Search</string>
-    <string name="selected">Selected</string>
+    <string name="selected_str">Selected</string>
     <string name="category">Category</string>
     <string name="deleted">Deleted</string>
     <string name="confirm">Confirm</string>
@@ -88,4 +88,5 @@
     <string name="validation_current_amount_greater_than_max_amount">Current amount can\'t be greater than max amount</string>
     <string name="delete">Delete</string>
     <string name="filters">Filters</string>
+    <string name="help">Help</string>
 </resources>

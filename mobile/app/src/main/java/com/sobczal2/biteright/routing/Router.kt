@@ -12,6 +12,7 @@ import com.sobczal2.biteright.AuthManager
 import com.sobczal2.biteright.screens.CreateProductScreen
 import com.sobczal2.biteright.screens.EditProductScreen
 import com.sobczal2.biteright.screens.EditProfileScreen
+import com.sobczal2.biteright.screens.HelpScreen
 import com.sobczal2.biteright.screens.ProductDetailsScreen
 import com.sobczal2.biteright.util.getUUID
 import com.sobczal2.biteright.viewmodels.EditProfileViewModel
@@ -84,6 +85,11 @@ fun Router(authManager: AuthManager) {
             }
             EditProfileScreen(
                 viewModel = viewModel,
+                topLevelNavigate = ::topLevelNavigate
+            )
+        }
+        composable(Routes.Help.route) {
+            HelpScreen(
                 topLevelNavigate = ::topLevelNavigate
             )
         }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
@@ -47,7 +48,9 @@ fun CategoryItem(
             categoryId = category.id,
             imageRequestBuilder = imageRequestBuilder,
             inPreview = inPreview,
-            shape = MaterialTheme.shapes.extraSmallStart,
+            shape = MaterialTheme.shapes.extraSmallStart.copy(
+                bottomStart = CornerSize(0.dp),
+            ),
             modifier = Modifier.size(MaterialTheme.dimension.xxl)
         )
         Row(
@@ -79,7 +82,7 @@ fun CategoryItem(
                 ) {
                     Icon(
                         Icons.Default.Done,
-                        contentDescription = stringResource(id = R.string.selected),
+                        contentDescription = stringResource(id = R.string.selected_str),
                         modifier = Modifier.size(MaterialTheme.dimension.xxl),
                     )
                 }
