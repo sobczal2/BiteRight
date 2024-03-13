@@ -17,11 +17,11 @@ An app designed to track food expiration and more. This project consists of a we
 - TimeZone settings and localization (Currently app is fully localized for english language and partialy for polish and german)
 
 ## Screenshots
-<img src="https://raw.githubusercontent.com/sobczal2/BiteRight/main/docs/Screenshot_20240313_163619_BiteRight.jpg" alt="Current products" width="250" />
+<img src="https://raw.githubusercontent.com/sobczal2/BiteRight/main/docs/Screenshot_20240313_163619_BiteRight.jpg" alt="Current products" width="400" />
 
-![Current products](https://raw.githubusercontent.com/sobczal2/BiteRight/main/docs/Screenshot_20240313_163624_BiteRight.jpg)
+<img src="https://raw.githubusercontent.com/sobczal2/BiteRight/main/docs/Screenshot_20240313_163624_BiteRight.jpg" alt="Create a product" width="400" />
 
-![Current products](https://raw.githubusercontent.com/sobczal2/BiteRight/main/docs/Screenshot_20240313_163633_BiteRight.jpg)
+<img src="https://raw.githubusercontent.com/sobczal2/BiteRight/main/docs/Screenshot_20240313_163633_BiteRight.jpg" alt="Edit a product" width="400" />
 
-![Current products](https://raw.githubusercontent.com/sobczal2/BiteRight/main/docs/Screenshot_20240313_163646_BiteRight.jpg)
+<img src="https://raw.githubusercontent.com/sobczal2/BiteRight/main/docs/Screenshot_20240313_163646_BiteRight.jpg" alt="All products" width="400" />
 
