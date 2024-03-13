@@ -14,10 +14,10 @@ public class Auth0Options
     public string Audience { get; set; } = default!;
     public string ManagementApiClientId { get; set; } = default!;
     public string ManagementApiClientSecret { get; set; } = default!;
-    public string ManagementApiDomain { get; set; } = default!;
+    public string MobileClientId { get; set; } = default!;
 
     public string GetManagementApiAudience()
     {
-        return $"https://{ManagementApiDomain}/api/v2/";
+        return $"https://{Domain}/api/v2/";
     }
 }

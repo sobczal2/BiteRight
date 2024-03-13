@@ -8,6 +8,7 @@
 #region
 
 using System.IO;
+using System.Threading.Tasks;
 using BiteRight.Domain.Abstracts.Common;
 using BiteRight.Options;
 using Microsoft.Extensions.Options;
@@ -27,12 +28,12 @@ public class FileSystemFileProvider : IFileProvider
         _options = options.Value;
     }
 
-    public Stream GetStream(
+    public Task<Stream> GetStream(
         string directory,
         string name
     )
     {
         var path = Path.Combine(_options.RootPath, directory, name);
-        return File.OpenRead(path);
+        return Task.FromResult<Stream>(File.OpenRead(path));
     }
 }

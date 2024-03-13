@@ -8,6 +8,7 @@
 #region
 
 using System.IO;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -15,7 +16,7 @@ namespace BiteRight.Domain.Abstracts.Common;
 
 public interface IFileProvider
 {
-    Stream GetStream(
+    Task<Stream> GetStream(
         string directory,
         string name
     );

@@ -37,7 +37,7 @@ public static class InfrastructureRegistrations
         AddCommon(services);
         AddAuth0Management(services);
         AddRepositories(services);
-        AddFileProvider(services, configuration);
+        AddFileProvider(services, configuration, environment);
     }
 
     private static void AddDatabase(
@@ -50,7 +50,7 @@ public static class InfrastructureRegistrations
         {
             if (environment.IsDevelopment()) opt.EnableSensitiveDataLogging();
 
-            opt.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+            opt.UseNpgsql(configuration["ConnectionStrings:Database"]);
             opt.UseSnakeCaseNamingConvention();
         });
     }
@@ -85,11 +85,23 @@ public static class InfrastructureRegistrations
 
     private static void AddFileProvider(
         IServiceCollection services,
-        ConfigurationManager configuration
+        ConfigurationManager configuration,
+        IHostEnvironment environment
     )
     {
-        services.AddSingleton<IFileProvider, FileSystemFileProvider>();
-        services.Configure<FileSystemFileProviderOptions>(
-            configuration.GetSection(FileSystemFileProviderOptions.SectionName));
+        if (environment.IsDevelopment())
+        {
+            services.AddSingleton<IFileProvider, FileSystemFileProvider>();
+            services.Configure<FileSystemFileProviderOptions>(
+                configuration.GetSection(FileSystemFileProviderOptions.SectionName)
+            );
+        }
+        else
+        {
+            services.AddSingleton<IFileProvider, BlobStorageFileProvider>();
+            services.Configure<BlobStorageFileProviderOptions>(
+                configuration.GetSection(BlobStorageFileProviderOptions.SectionName)
+            );
+        }
     }
 }

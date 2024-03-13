@@ -38,7 +38,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            resValue("string", "com_auth0_scheme", "app")
+            resValue("string", "com_auth0_domain", "bite-right-dev.eu.auth0.com")
+            resValue("string", "com_auth0_client_id", "fv8jOqzREbYBcsP9Sp1arZFw7ASfEsPI")
             signingConfig = signingConfigs.getByName("debug")
+        }
+        debug {
+            resValue("string", "com_auth0_scheme", "app")
+            resValue("string", "com_auth0_domain", "bite-right-dev.eu.auth0.com")
+            resValue("string", "com_auth0_client_id", "fv8jOqzREbYBcsP9Sp1arZFw7ASfEsPI")
         }
     }
 
